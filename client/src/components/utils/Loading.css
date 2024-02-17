@@ -1,0 +1,33 @@
+/* Copyright © FINANCE SECURITY GmbH - All rights reserved. */
+
+.loading-animation-container {
+    z-index: 10;
+    position: sticky;
+    margin: auto;
+    top: Calc(50% - 32px);
+    left: Calc(50% - 32px);
+    width: 80px;
+    height: 80px;
+    display: inline-block;
+    overflow: hidden;
+    background: none;
+}
+
+.loader {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 4px solid #ef26b9;
+    border-top-color: transparent;
+    animation: loaderAnimation 0.8s linear infinite;
+}
+
+@keyframes loaderAnimation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

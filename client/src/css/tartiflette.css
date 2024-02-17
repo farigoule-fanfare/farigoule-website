@@ -1,0 +1,91 @@
+/* tartiflette.css : styles de l'interface du respo com */
+
+/* Menu de l'interface */
+.tableauAdmin
+{
+  text-align: center;
+  width: 900px;
+  margin: auto;
+}
+
+.caseTableauAdmin
+{
+  width: 180px;
+}
+
+.lienDeconnexion
+{
+  color: red;
+}
+
+/* Taille des vignettes d'aperçu pour l'interface d'édition du diaporama */
+.apercuDiapo
+{
+  width: 90px;
+  height: 50px;
+}
+
+/* Taille des vignettes d'aperçu pour l'interface d'édition des fanfarons */
+.apercuFanfaron
+{
+  width: 50px;
+  height: 50px;
+}
+
+/* Style de tous les tableaux d'édition de l'interface */
+.tableauDiapos, .tableauDates, .tableauFanfarons, .tableauCitations, .tableauVisites, .tableauGraphiques
+{
+  width: 800px;
+  margin: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  border: 1px solid black;
+  border-radius: 10px;
+  background-color: rgba(255,255,255,0.6);
+}
+
+.tableauFanfarons
+{
+  width: 950px;
+  font-size: 0.8em;
+}
+
+/* Interface de gestion de la page d'accueil */
+.lienAncreFormulaireDate
+{
+  text-align: center;
+}
+
+/* Interface d'édition des citations */
+.lienAncreFormulaireCitation
+{
+  text-align: center;
+}
+
+#contenuCitation
+{
+  width: 300px;
+}
+
+/* Interface d'édition des fanfarons */
+.lienAncreFormulaireFanfaron
+{
+  text-align: center;
+}
+
+#descriptionFanfaron
+{
+  width: 400px;
+  height: 100px;
+}
+
+/* Interface des statistiques de visites */
+#graphiqueVisites
+{
+  display: block;
+  margin: auto;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 10px;
+}

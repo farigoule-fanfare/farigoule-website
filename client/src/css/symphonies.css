@@ -1,0 +1,8 @@
+/* symphonies.css : styles pour la page symphonies.php */
+
+#lecteurCD
+{
+  display: block;
+  width: 900px;
+  margin: auto;
+}
