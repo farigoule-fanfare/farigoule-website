@@ -1,0 +1,7 @@
+/* contact.css : styles pour la page contact.php */
+
+#contenuMessage
+{
+  width: 300px;
+  height: 200px;
+}
