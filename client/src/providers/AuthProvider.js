@@ -6,6 +6,8 @@ import { AuthContext } from "@context/auth";
 import { postCheckAuthToken } from "@api/postCheckAuthToken"
 import { postLogout } from "@api/postLogout"
 
+import Loading from "@components/utils/Loading"
+
 function AuthProvider(props) {
     const navigate = useNavigate()
     const [user, setUser] = useState({ loading: true })
@@ -44,7 +46,7 @@ function AuthProvider(props) {
             localStorage.getItem("FarigouleToken")
         )
 
-        if (!storedUser) {
+        if (!storedUser || !storedUser?.id) {
             if (logoutOnFail) {
                 logout()
             }
@@ -73,8 +75,11 @@ function AuthProvider(props) {
                 return (newUser)
             }
             catch (e) {
-                logout()
+                if (logoutOnFail) {
+                    logout()
+                }
                 setLoading(false)
+                setUserFunction()
                 return ({})
             }
         }
@@ -85,6 +90,12 @@ function AuthProvider(props) {
         checkIfUserIsAuthenticated(true, false)
         // eslint-disable-next-line
     }, [])
+
+    if (loading) {
+        return (
+            <Loading />
+        )
+    }
 
     return (
         <AuthContext.Provider
