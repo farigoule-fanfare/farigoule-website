@@ -5,11 +5,11 @@ const test = async () => {
     try {
         // DO SOMETHING
         console.log("test")
-        const d = await testSqlite()
+        // const d = await testSqlite()
 
         console.log("d", d)
 
-        return { success: true, data: null }
+        return { success: true, data: { success: true } }
     }
     catch (e) {
         return ({ success: false, errorReason: errorReason, error: e })

@@ -14,13 +14,13 @@ const RequireAuth = lazy(() => import("@components/utils/RequireAuth"));
 function PageWrapper(props) {
     const [citationsArray, setCitationsArray] = useState([])
     const [citationObject, setCitationObject] = useState({ index: 0, citation: "", auteurCitation: "" })
+    const [president, setPresident] = useState({ nom: "", phone: "" })
     const location = useLocation()
 
-    // TODO load citations from server
-    // TODO load infos président depuis la liste des fanfarons avec le numéro de téléphone
     useEffect(() => {
-
-    })
+        getCitations()
+        getPresident()
+    }, [])
 
     // Toutes les x secondes change la citation active en lisant dans l'array des citations
     useEffect(() => {
@@ -33,6 +33,28 @@ function PageWrapper(props) {
 
         return () => clearInterval(interval);
     }, [citationsArray])
+
+    // TODO load citations from server
+    const getCitations = async () => {
+        try {
+
+            // setCitationsArray()
+        }
+        catch (e) {
+
+        }
+    }
+
+    // TODO load infos président depuis la liste des fanfarons avec le numéro de téléphone
+    const getPresident = async () => {
+        try {
+
+            // setPresident()
+        }
+        catch (e) {
+
+        }
+    }
 
     return (
         <Suspense fallback={<Loading />}>
@@ -51,7 +73,7 @@ function PageWrapper(props) {
                         {props.children}
                     </main>
                     <Footer
-                        president={{}}
+                        president={president}
                         isConnected={false}
                     />
                 </div>
