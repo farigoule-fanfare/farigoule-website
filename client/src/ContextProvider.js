@@ -1,6 +1,6 @@
 import React from 'react';
 
-import AuthProvider from '@providers/AuthProvider';
+import { AuthProvider } from './context/AuthContext'; // Correct path to our new AuthProvider
 
 // Provide the context and handle some app-wide state
 function ContextProvider(props) {
