@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import './Footer.css'
 
@@ -38,10 +39,16 @@ function Footer({ president, isConnected, isAdmin }) {
     )
 }
 
-Footer.defaultProps = {
-    president: { nom: "Prénom Nom", phone: "00 00 00 00 00" },
-    isConnected: false,
-    isAdmin: false // Default isAdmin to false
+// Footer.defaultProps = {
+//     president: { nom: "Prénom Nom", phone: "00 00 00 00 00" },
+//     isConnected: false,
+//     isAdmin: false // Default isAdmin to false
+// }
+
+Footer.propTypes = {
+    president: PropTypes.object.isRequired,
+    isConnected: PropTypes.bool.isRequired,
+    isAdmin: PropTypes.bool.isRequired
 }
 
 export default Footer

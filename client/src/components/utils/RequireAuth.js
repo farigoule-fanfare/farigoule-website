@@ -91,11 +91,6 @@ function RequireAuth(props) {
     return (props.children)
 }
 
-RequireAuth.defaultProps = {
-    privatePage: true,
-    requiredRole: []
-}
-
 RequireAuth.propTypes = {
     privatePage: PropTypes.bool,
     requiredRole: PropTypes.array
