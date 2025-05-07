@@ -10,8 +10,8 @@ const Header = lazy(() => import("@components/Header"));
 const Footer = lazy(() => import("@components/Footer"));
 const RequireAuth = lazy(() => import("@components/utils/RequireAuth"));
 
-// TODO load citations
-// TODO envoyer si l'utilisateur est connecté ou non + infos président
+// TODO envoyer si l'utilisateur est connecté ou non + 
+// TODO infos président
 function PageWrapper(props) {
     const [citationsArray, setCitationsArray] = useState([]);
     const [citationObject, setCitationObject] = useState({ citation: "", auteurCitation: "" });
