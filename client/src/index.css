@@ -1,13 +1,77 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+    sans-serif; */ /* Replaced by old global.css font */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Copied from old global.css */
+  background: url("./img/background.jpg"); /* Adjusted path to be relative to src/img */
+  font-family: 'Open Sans', sans-serif; /* Requires font import */
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Copied from old global.css */
+
+/* General HTML element styling */
+h1, h2, h3 {
+  font-family: 'Lobster', cursive; /* Requires font import */
+  text-align: center;
+}
+
+/* th styling was moved to Footer.css as .tableauFooter th */
+/* a styling was moved to Header.css and Footer.css, can be centralized if desired */
+
+strong {
+  font-weight: bold;
+}
+
+form {
+  width: 500px;
+  margin: auto;
+  text-align: center;
+  background-color: rgba(255,255,255,0.6);
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+/* Classe .container : enfant de la balise body, contient TOUT le contenu de chaque page */
+/* This can be applied to a top-level div in App.js or similar */
+.container {
+  width: 1000px; /* Consider responsive units e.g. 90% or max-width */
+  margin: auto;
+}
+
+/* Social media buttons styling from old global.css */
+/* These might be part of a specific component or general layout */
+.premierTitre, .blocSocial {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.premierTitre {
+  width: 860px; /* Consider responsiveness */
+  margin-top: 10px;
+}
+
+.blocSocial {
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.boutonFacebook, .boutonTwitter, .boutonYoutube {
+  width: 40px;
+  height: 40px;
+  /* Ensure these images are in /img/boutons/ or similar */
+}
+
+/* IMPORTANT: Font imports are needed for 'Open Sans', 'Lobster', 'Marck Script'. */
+/* These should be added, e.g., via Google Fonts <link> in public/index.html or @import in this CSS file. */
+
+/* Example @import for Google Fonts (place at the top of this file): */
+/* @import url('https://fonts.googleapis.com/css2?family=Lobster&family=Marck+Script&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap'); */

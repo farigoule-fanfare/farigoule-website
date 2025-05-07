@@ -1,7 +1,10 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+import './Footer.css'
 
 // president: {nom: String, phone: String}
-function Footer({ president, isConnected }) {
+// isAdmin: boolean (new prop to decide if admin link is shown)
+function Footer({ president, isConnected, isAdmin }) {
     return (
         <footer>
             <h1>Et sinon ?</h1>
@@ -19,11 +22,14 @@ function Footer({ president, isConnected }) {
                             {president.nom} <br />
                             Tél : {president.phone}
                         </td>
-                        <td><a href="chat.php">Accès fanfarons</a>
+                        <td><Link to="/chat">Accès fanfarons</Link>
                             {!!isConnected &&
                                 <>
-                                    <br />Connecté</>}
-
+                                    <br />(Connecté)</>}
+                            {isAdmin && // Conditionally show admin link
+                                <>
+                                    <br /><Link to="/admin">Accès admin</Link>
+                                </>}
                         </td>
                     </tr>
                 </tbody>
@@ -34,7 +40,8 @@ function Footer({ president, isConnected }) {
 
 Footer.defaultProps = {
     president: { nom: "Prénom Nom", phone: "00 00 00 00 00" },
-    isConnected: false
+    isConnected: false,
+    isAdmin: false // Default isAdmin to false
 }
 
 export default Footer
