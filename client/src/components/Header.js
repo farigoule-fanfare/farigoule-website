@@ -48,17 +48,15 @@ function Header(props) {
                     <p className="auteurCitation">{props.auteurCitation}</p>
                 </blockquote>
 
-                {/* Auth Status Display */}
+                {/* Auth Status Display - Connexion link removed */}
                 <div className="auth-status-header">
-                    {isAuthenticated ? (
+                    {isAuthenticated && (
                         <>
                             <span>Bienvenue, {currentUser?.surnom}!</span>
                             <button onClick={handleLogout} disabled={isLoading} className="logout-button-header">
                                 Déconnexion
                             </button>
                         </>
-                    ) : (
-                        <Link to="/login" className="login-link-header">Connexion</Link>
                     )}
                 </div>
 
