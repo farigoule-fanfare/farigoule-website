@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { useLocation } from "react-router-dom";
 
 import Loading from "@components/utils/Loading";
+import { axiosWrapper } from "../api/axiosUtils"; // Import axiosWrapper
 
 const Header = lazy(() => import("@components/Header"));
 const Footer = lazy(() => import("@components/Footer"));
@@ -13,7 +14,7 @@ const RequireAuth = lazy(() => import("@components/utils/RequireAuth"));
 // TODO envoyer si l'utilisateur est connecté ou non + infos président
 function PageWrapper(props) {
     const [citationsArray, setCitationsArray] = useState([]);
-    const [citationObject, setCitationObject] = useState({ citation: undefined, auteurCitation: undefined });
+    const [citationObject, setCitationObject] = useState({ citation: "", auteurCitation: "" });
     const [president, setPresident] = useState({ nom: "", phone: "" });
     const location = useLocation();
 
@@ -21,27 +22,24 @@ function PageWrapper(props) {
     useEffect(() => {
         const fetchAllCitations = async () => {
             try {
-                // TODO: Replace with actual API call to fetch all citations
-                // const response = await fetch('/api/citations'); // Example API endpoint
-                // if (!response.ok) {
-                //     throw new Error(`HTTP error! status: ${response.status}`);
-                // }
-                // const allCitations = await response.json(); 
+                const response = await axiosWrapper({
+                    url: "api/citations", // Path after REACT_APP_RESTAPI_SERVER_URI
+                    method: "get"
+                });
 
-                // MOCK DATA for now until API is ready:
-                const allCitations = [
-                    { citation: "La musique est la langue des émotions.", auteurCitation: "Emmanuel Kant" },
-                    { citation: "Sans la musique, la vie serait une erreur.", auteurCitation: "Friedrich Nietzsche" },
-                    { citation: "On ne vend pas la musique, on la partage.", auteurCitation: "Leonard Bernstein" }
-                ];
-
-                if (allCitations && allCitations.length > 0) {
+                if (response && response.success && response.data && response.data.length > 0) {
+                    const allCitations = response.data; // Assuming response.data is the array
                     setCitationsArray(allCitations);
-                    setCitationObject(allCitations[0]); // Set the first one initially
+                    const randomIndex = Math.floor(Math.random() * allCitations.length);
+                    setCitationObject(allCitations[randomIndex]);
+                } else {
+                    console.warn("No citations fetched or API call was not successful. Response:", response);
+                    setCitationsArray([]);
                 }
             }
-            catch (e) {
-                console.error("Failed to fetch citations:", e);
+            catch (e) { // This catch might not be strictly necessary if axiosWrapper already catches and formats errors
+                console.error("Error in fetchAllCitations calling axiosWrapper:", e);
+                setCitationsArray([]);
             }
         };
 
@@ -56,22 +54,21 @@ function PageWrapper(props) {
         const interval = setInterval(() => {
             if (citationsArray.length > 0) {
                 let randomIndex = Math.floor(Math.random() * citationsArray.length);
-                // If there's more than one citation, try to ensure the new one is different from the current one.
-                // This is a simple attempt; for a very small number of items, it might occasionally pick the same one if the first random pick is the current one.
+                // Simple way to try to avoid immediate repeat if more than one citation
                 if (citationsArray.length > 1 && citationsArray[randomIndex].citation === citationObject.citation) {
-                    randomIndex = (randomIndex + 1) % citationsArray.length; // Pick the next one as a simple way to change it
+                    randomIndex = (randomIndex + 1) % citationsArray.length;
                 }
                 setCitationObject(citationsArray[randomIndex]);
             }
         }, 10000); // Cycle every 10 seconds
 
         return () => clearInterval(interval); // Cleanup interval on component unmount
-    }, [citationsArray, citationObject.citation]); // Add citationObject.citation to dependency to help with the non-repeat logic
+    }, [citationsArray, citationObject.citation]);
 
     // TODO load infos président depuis la liste des fanfarons avec le numéro de téléphone
     const getPresident = async () => {
         try {
-            // setPresident()
+            // TODO: Implement president fetching
         }
         catch (e) {
             // console.error("Failed to fetch president info:", e);
