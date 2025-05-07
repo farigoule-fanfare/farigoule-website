@@ -2,6 +2,7 @@ const express = require('express');
 const compression = require('compression');
 const cors = require('cors'); // Import CORS middleware
 const cookieParser = require('cookie-parser'); // Added cookie-parser
+const path = require('path'); // Import path module
 const routes = require('./routes/routes');
 const authRoutes = require('./routes/authRoutes'); // Import auth routes
 const db = require('./database'); // Ensure DB is initialized when server starts
@@ -30,6 +31,10 @@ app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }));
+
+// --- Static File Serving --- 
+// Serve files from the server/public directory at the /public URL path
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // --- Routes --- 
 // All API routes are prefixed with /route as per this setup
