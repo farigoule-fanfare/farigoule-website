@@ -1,0 +1,63 @@
+ /* In client/src/components/LandingPage.css */
+    
+ .blocCarousel {
+    margin-bottom: 40px; /* Space below carousel */
+}
+
+.carousel-slide {
+    text-align: center;
+    position: relative; /* Needed for absolute positioning of caption if used */
+}
+.carousel-caption {
+    /* Example: Overlay caption */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 10px 15px;
+    font-size: 0.9em;
+    text-align: center;
+    z-index: 1;
+}
+
+.blocDates {
+    /* Styles for the dates section */
+    /* Example: Add some padding or border if desired */
+     padding: 20px;
+     border-top: 1px solid #eee; 
+     border-bottom: 1px solid #eee;
+}
+
+.blocDates h2, .blocDates h3 {
+    /* Style titles */
+    font-family: 'Lobster', cursive; /* Example */
+    color: #333;
+}
+
+.blocDates p {
+    margin-bottom: 15px; /* Space between date entries */
+}
+
+.blocDates .date {
+    font-weight: bold;
+    color: #c10000; /* Example color */
+}
+
+.blocDates .description {
+    font-style: italic;
+    color: #555;
+    font-size: 0.9em;
+    display: block; /* Ensure description is on its own line */
+    margin-top: 3px;
+}
+
+.error-message { /* General error message styling */
+    color: #c10000;
+    background-color: #fdd;
+    border: 1px solid #c10000;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0;
+}
