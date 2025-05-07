@@ -1,99 +1,53 @@
-import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
-import { useLocation, useNavigate } from "react-router-dom";
-
-import { useAuth } from "@context/auth";
-
-import Loading from "@components/utils/Loading";
+import React from 'react';
+import { useLocation, Navigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext'; // Adjusted path
+import Loading from './Loading'; // Assuming Loading component is in the same directory or adjust path
+import PropTypes from 'prop-types';
 
 //A reusable component to protect private pages if user not authenticated
 
 // TODO check if has required role from user data
-function RequireAuth(props) {
-    const location = useLocation()
-    const navigate = useNavigate()
-    const { user, checkIfUserIsAuthenticated } = useAuth();
+function RequireAuth({ children, requiredRole }) {
+    const { isAuthenticated, isLoading, currentUser } = useAuth();
+    const location = useLocation();
 
-    // loading, only used if "private page" while doing auth check
-    const [loading, setLoading] = useState(true)
+    if (isLoading) {
+        // This isLoading is from the AuthContext, which handles the initial auth check.
+        return <Loading />;
+    }
 
-    // If it's a private page, first check if user is authenticated
-    // Run the code every minute to logout the user if the session has expired
-    useEffect(() => {
-        if (props.privatePage) {
-            checkAuth(true)
+    if (!isAuthenticated) {
+        // Redirect them to the /login page, but save the current location they were
+        // trying to go to when they were redirected. This allows us to send them
+        // along to that page after they login, which is a nicer user experience
+        // than dropping them off on the home page.
+        return <Navigate to="/login" state={{ from: location }} replace />;
+    }
 
-            const checkAuthTimeout = setInterval(function () {
-                checkAuth(false)
-            }, 60000);
-
-            return () => {
-                clearInterval(checkAuthTimeout);
-            }
+    // Check for role authorization if a requiredRole is specified
+    if (requiredRole) {
+        if (!currentUser || !currentUser.roles) {
+            // Should not happen if authenticated, but good for safety
+            console.warn('RequireAuth: User is authenticated but has no roles data.');
+            return <Navigate to="/login" state={{ from: location }} replace />; // Or an unauthorized page
         }
-        // Do not add "checkAuth" to dependencies
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user, location, props.privatePage])
-
-    // Check if user is authenticated. 
-    // if he isn't, he get logged out (and redirected to public page)
-    // If he is, check if he has the required role
-    const checkAuth = async (shouldRefreshToken = true) => {
-        if (user.loading) return
-
-        try {
-            const auth = await checkIfUserIsAuthenticated(false, true, shouldRefreshToken)
-            // If not authenticated or error redirect to login page
-            if (!auth || !auth.id) {
-                navigate({
-                    to: `/`
-                })
-            }
-
-            if (!loading) {
-                return
-            }
-
-            // TODO check if has required role from user data
-            // Some pages require role "admin"
-            const hasRequiredRole = true
-
-
-            if (!hasRequiredRole) {
-                navigate(`/`)
-            }
-
-            // Has required role
-            setLoading(false)
-        }
-        catch (e) {
-            navigate({
-                to: `/`,
-                options: {
-                    state: { referer: location }
-                }
-            })
+        const userRoles = currentUser.roles.split(',').map(role => role.trim());
+        if (!userRoles.includes(requiredRole)) {
+            // User is authenticated but does not have the required role
+            console.warn(`RequireAuth: Access denied. User does not have the required role: ${requiredRole}. User roles: ${userRoles.join(', ')}`);
+            // Redirect to an unauthorized page or home page
+            // For now, redirecting to home. An <Unauthorized /> page would be better.
+            return <Navigate to="/" replace />; 
+            // Or: return <div>Access Denied: You do not have the required permissions.</div>;
         }
     }
 
-    // If is a public page, return the component without further checks
-    if (!props.privatePage) {
-        return (
-            props.children
-        )
-    }
-
-    // If user data is still loading
-    if ((user && user.loading) || loading) {
-        return <Loading />
-    }
-
-    return (props.children)
+    return children; // User is authenticated and (if required) authorized
 }
 
 RequireAuth.propTypes = {
-    privatePage: PropTypes.bool,
-    requiredRole: PropTypes.array
-}
+    children: PropTypes.node.isRequired,
+    requiredRole: PropTypes.string // Expect a single role string, e.g., "admin"
+};
 
-export default RequireAuth
+export default RequireAuth;
