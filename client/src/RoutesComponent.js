@@ -6,6 +6,7 @@ import PageWrapper from "./components/PageWrapper";
 import NotFound from "@components/NotFound";
 import LandingPage from "@components/LandingPage";
 import Chat from "@components/Chat";
+import LoginPage from "./components/auth/LoginPage";
 
 export function RoutesComponent(props) {
     const location = useLocation()
@@ -34,6 +35,9 @@ export function RoutesComponent(props) {
                         < LandingPage />
                     </PageWrapper>
                     } />
+                    
+                    {/* Login Page Route */}
+                    <Route path="login" element={<LoginPage />} />
 
                     <Route path="*" element={
                         <PageWrapper privatePage={false}>
@@ -43,10 +47,11 @@ export function RoutesComponent(props) {
                 </Route>
 
                 {/* CHAT */}
-                <Route path='/chat' element={<PageWrapper privatePage={true}>
-                    <Chat />
-                </PageWrapper>} />
-
+                <Route path='/chat' element={
+                    <PageWrapper privatePage={true}>
+                        <Chat />
+                    </PageWrapper>
+                } />
 
                 {/* 404 error component */}
                 <Route index={true} element={

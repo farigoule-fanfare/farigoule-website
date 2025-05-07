@@ -81,4 +81,64 @@ a {
 
 a:hover {
     text-decoration: underline; /* Example hover effect */
+}
+
+.auth-status-header {
+    text-align: right; /* Or align as preferred */
+    padding: 5px 10px;
+    font-size: 0.9em;
+    color: #333;
+    /* Position it appropriately. Example: absolute positioning within .blocHeader if needed */
+    /* position: absolute; */
+    /* top: 10px; */
+    /* right: 10px; */
+    margin-bottom: 5px; /* Space it out from the menu table */
+}
+
+.auth-status-header span {
+    margin-right: 10px;
+}
+
+.logout-button-header,
+.login-link-header {
+    padding: 5px 10px;
+    background-color: #c10000; /* Farigoule red */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.logout-button-header:hover,
+.login-link-header:hover {
+    background-color: #a10000; /* Darker red */
+}
+
+.logout-button-header:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Styling for the logout button in the Footer if it differs */
+.logout-button-footer {
+    padding: 8px 12px;
+    background-color: #555; /* Darker grey or specific footer style */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-left: 10px; /* Example spacing */
+}
+
+.logout-button-footer:hover {
+    background-color: #333;
+}
+
+.logout-button-footer:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
 } 

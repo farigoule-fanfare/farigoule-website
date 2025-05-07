@@ -1,11 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import './Footer.css'
 
 // president: {nom: String, phone: String}
-// isAdmin: boolean (new prop to decide if admin link is shown)
-function Footer({ president, isConnected, isAdmin }) {
+function Footer({ president }) {
+    const { isAuthenticated, currentUser, logout, isLoading } = useAuth()
+    const navigate = useNavigate()
+
+    const handleLogout = async () => {
+        await logout()
+        navigate('/')
+    }
+
+    // Determine if the current user is an admin
+    const isAdmin = currentUser && currentUser.roles && currentUser.roles.split(',').map(role => role.trim()).includes('admin')
+
     return (
         <footer>
             <h1>Et sinon ?</h1>
@@ -19,18 +30,31 @@ function Footer({ president, isConnected, isAdmin }) {
                     <tr>
                         <td>La Farigoule<br />École Centrale Marseille<br />38 rue Frédéric Joliot-Curie<br />13013 Marseille</td>
                         <td>
-                            {/* TODO ajouter président */}
                             {president.nom} <br />
                             Tél : {president.phone}
                         </td>
-                        <td><Link to="/chat">Accès fanfarons</Link>
-                            {!!isConnected &&
+                        <td>
+                            {isAuthenticated ? (
                                 <>
-                                    <br />(Connecté)</>}
-                            {isAdmin && // Conditionally show admin link
+                                    Connecté en tant que : {currentUser?.surnom} <br />
+                                    <button onClick={handleLogout} disabled={isLoading} className="logout-button-footer">
+                                        Déconnexion
+                                    </button>
+                                    <br />
+                                    <Link to="/chat">Accès au Chat</Link>
+                                    {isAdmin && (
+                                        <>
+                                            <br /><Link to="/admin">Panneau d'administration</Link>
+                                        </>
+                                    )}
+                                </>
+                            ) : (
                                 <>
-                                    <br /><Link to="/admin">Accès admin</Link>
-                                </>}
+                                    <Link to="/login">Connexion</Link>
+                                    <br />
+                                    <span style={{color: 'grey'}}>(Accès au Chat réservé)</span>
+                                </> 
+                            )}
                         </td>
                     </tr>
                 </tbody>
@@ -47,8 +71,6 @@ function Footer({ president, isConnected, isAdmin }) {
 
 Footer.propTypes = {
     president: PropTypes.object.isRequired,
-    isConnected: PropTypes.bool.isRequired,
-    isAdmin: PropTypes.bool.isRequired
 }
 
 export default Footer

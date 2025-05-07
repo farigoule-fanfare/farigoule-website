@@ -28,24 +28,27 @@ function PageWrapper(props) {
                 });
 
                 if (response && response.success && response.data && response.data.length > 0) {
-                    const allCitations = response.data; // Assuming response.data is the array
+                    const allCitations = response.data;
                     setCitationsArray(allCitations);
-                    const randomIndex = Math.floor(Math.random() * allCitations.length);
-                    setCitationObject(allCitations[randomIndex]);
+                    // Set initial random citation only if not already set by header's default or previous state
+                    if (citationObject.citation === undefined) {
+                        const randomIndex = Math.floor(Math.random() * allCitations.length);
+                        setCitationObject(allCitations[randomIndex]);
+                    }
                 } else {
                     console.warn("No citations fetched or API call was not successful. Response:", response);
-                    setCitationsArray([]);
+                    setCitationsArray([]); // Ensure it's an empty array if fetch fails or no data
                 }
             }
-            catch (e) { // This catch might not be strictly necessary if axiosWrapper already catches and formats errors
+            catch (e) {
                 console.error("Error in fetchAllCitations calling axiosWrapper:", e);
-                setCitationsArray([]);
+                setCitationsArray([]); // Ensure it's an empty array on error
             }
         };
 
         fetchAllCitations();
-        getPresident(); // Assuming this is another async fetch
-    }, []);
+        getPresident();
+    }, [citationObject.citation]); // Depend on citationObject.citation to re-run if it was initially undefined
 
     // Effect to cycle through citationsArray every 10 seconds
     useEffect(() => {
@@ -55,7 +58,7 @@ function PageWrapper(props) {
             if (citationsArray.length > 0) {
                 let randomIndex = Math.floor(Math.random() * citationsArray.length);
                 // Simple way to try to avoid immediate repeat if more than one citation
-                if (citationsArray.length > 1 && citationsArray[randomIndex].citation === citationObject.citation) {
+                if (citationsArray.length > 1 && citationObject.citation && citationsArray[randomIndex].citation === citationObject.citation) {
                     randomIndex = (randomIndex + 1) % citationsArray.length;
                 }
                 setCitationObject(citationsArray[randomIndex]);
@@ -63,6 +66,7 @@ function PageWrapper(props) {
         }, 10000); // Cycle every 10 seconds
 
         return () => clearInterval(interval); // Cleanup interval on component unmount
+    // Ensure citationObject.citation is part of dependency array if it influences selection logic
     }, [citationsArray, citationObject.citation]);
 
     // TODO load infos président depuis la liste des fanfarons avec le numéro de téléphone
@@ -75,36 +79,40 @@ function PageWrapper(props) {
         }
     }
 
+    const pageContent = (
+        <div id="pageWrapperContainer" className="wrapper">
+            <Header
+                citation={citationObject.citation}
+                auteurCitation={citationObject.auteurCitation}
+            />
+            <main className={"wrapper-content"}>
+                {props.children}
+            </main>
+            <Footer
+                president={president}
+                // isConnected and isAdmin will be updated in the next step using useAuth()
+                // isConnected={false} 
+                // isAdmin={false} 
+            />
+        </div>
+    );
+
     return (
         <Suspense fallback={<Loading />}>
-            <RequireAuth
-                key={location.key}
-                privatePage={props.privatePage}
-                requiredRole={props.requiredRole}
-            >
-                {/* Main content */}
-                <div id="pageWrapperContainer" className="wrapper">
-                    <Header
-                        citation={citationObject.citation}
-                        auteurCitation={citationObject.auteurCitation}
-                    />
-                    <main className={"wrapper-content"}>
-                        {props.children}
-                    </main>
-                    <Footer
-                        president={president}
-                        isConnected={false} // TODO: This needs to be dynamic
-                        isAdmin={false} // TODO: This needs to be dynamic (e.g., from user context)
-                    />
-                </div>
-            </RequireAuth>
+            {props.privatePage ? (
+                <RequireAuth requiredRole={props.requiredRole}>
+                    {pageContent}
+                </RequireAuth>
+            ) : (
+                pageContent
+            )}
         </Suspense>
     );
 }
 
 PageWrapper.propTypes = {
     privatePage: PropTypes.bool,
-    requiredRole: PropTypes.array //oneOf["fanfaron", "admin"]
+    requiredRole: PropTypes.string //oneOf["fanfaron", "admin"] - comment indicates previous thought, actual is string
 };
 
 export default PageWrapper;

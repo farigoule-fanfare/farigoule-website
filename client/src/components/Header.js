@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext'; // Import useAuth
 import './Header.css';
 
 // Import images from the src directory
@@ -28,6 +29,14 @@ function Header(props) {
     const [isPortraitsHovered, setIsPortraitsHovered] = useState(false);
     const [isContactHovered, setIsContactHovered] = useState(false);
 
+    const { isAuthenticated, currentUser, logout, isLoading } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        await logout();
+        navigate('/'); // Redirect to homepage after logout
+    };
+
     return (
         <header>
             <p className="blocLogo">
@@ -38,6 +47,21 @@ function Header(props) {
                     <p className="citation">{props.citation}</p>
                     <p className="auteurCitation">{props.auteurCitation}</p>
                 </blockquote>
+
+                {/* Auth Status Display */}
+                <div className="auth-status-header">
+                    {isAuthenticated ? (
+                        <>
+                            <span>Bienvenue, {currentUser?.surnom}!</span>
+                            <button onClick={handleLogout} disabled={isLoading} className="logout-button-header">
+                                Déconnexion
+                            </button>
+                        </>
+                    ) : (
+                        <Link to="/login" className="login-link-header">Connexion</Link>
+                    )}
+                </div>
+
                 <table className="tableauMenu">
                     <thead>
                         <tr>
