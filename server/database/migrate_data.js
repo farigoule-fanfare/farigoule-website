@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const db = require('./index.js'); // Assumes db connection is exported from index.js
+const Buffer = require('buffer').Buffer; // Import Buffer
 
 // Define paths for the individual export files
 const fanfaronsFilePath = path.resolve(__dirname, '../../db_migration_project/fanfarons_export.json');
@@ -8,11 +9,67 @@ const citationsFilePath = path.resolve(__dirname, '../../db_migration_project/ci
 const diaposFilePath = path.resolve(__dirname, '../../db_migration_project/diapos_export.json');
 const contratsFilePath = path.resolve(__dirname, '../../db_migration_project/contrats_export.json');
 
-// Helper function to clean HTML entities (add more replacements if needed)
-function cleanHtmlEntities(text) {
-    if (typeof text !== 'string') return text;
-    return text.replace(/&nbsp;/g, ' ').trim(); // Replace non-breaking space and trim whitespace
+// --- Updated Cleaning Function ---
+function cleanAndFixEncoding(text) {
+    if (typeof text !== 'string') {
+        return text;
+    }
+
+    let cleanedText = text;
+
+    // 1. Clean common HTML entities first
+    cleanedText = cleanedText.replace(/&nbsp;/g, ' ').trim();
+    // Add more entity replacements if needed (e.g., &amp;, &lt;, &gt;)
+    cleanedText = cleanedText.replace(/&amp;/g, '&');
+    cleanedText = cleanedText.replace(/&lt;/g, '<');
+    cleanedText = cleanedText.replace(/&gt;/g, '>');
+    cleanedText = cleanedText.replace(/&quot;/g, '"');
+    cleanedText = cleanedText.replace(/&apos;/g, "'");
+
+    // Convert <br> tags to newlines first
+    cleanedText = cleanedText.replace(/<br\s*\/?>/gi, '\n');
+
+    // 2. Attempt to fix double-encoded UTF-8 (Mojibake from Latin1/Windows-1252 -> UTF8)
+    try {
+        // Heuristic check for common double-encoding patterns
+        if (/[ÂÃ][-¿]/.test(cleanedText)) {
+            const buffer = Buffer.from(cleanedText, 'latin1');
+            const corrected = buffer.toString('utf8');
+            // Only use the corrected string if it actually changed something
+            if (corrected !== cleanedText) {
+                 cleanedText = corrected;
+            }
+        }
+    } catch (e) {
+        console.warn(`Encoding fix (Latin1->UTF8) failed for: ${text.substring(0, 50)}...`);
+        // Continue with the potentially still mangled string
+    }
+
+    // Fix for Ã‰ (Ã followed by U+2030 Per Mille sign) which should be É (E acute U+00C9)
+    // This occurs in strings like "\u00c3\u2030cole" from the JSON.
+    cleanedText = cleanedText.replace(/Ã‰/g, "É");
+
+    // Fix for Åœ -> œ and Å’ -> Œ (e.g., FÅ“tus -> Fœtus)
+    cleanedText = cleanedText.replace(/Åœ/g, "œ");
+    cleanedText = cleanedText.replace(/Å’/g, "Œ");
+
+    // 3. Fix specific remaining Mojibake patterns (often after the above step)
+    // Example: Fix mangled apostrophes/smart quotes resulting from Windows-1252 issues
+    cleanedText = cleanedText.replace(/â€™/g, "'"); // Common mangled apostrophe/right single quote (U+E2 U+20AC U+2122)
+    cleanedText = cleanedText.replace(/â€˜/g, "'"); // Mangled left single quote (U+E2 U+20AC U+2DC)
+    cleanedText = cleanedText.replace(/â€‹/g, "'"); // Mangled apostrophe (U+E2 U+20AC U+2039)
+    cleanedText = cleanedText.replace(/â€œ/g, '"'); // Mangled left double quote (") (U+E2 U+20AC U+0153)
+    cleanedText = cleanedText.replace(/â€\u009D/g, '"'); // Mangled right double quote (") (U+E2 U+20AC U+009D)
+    cleanedText = cleanedText.replace(/â€¦/g, '...'); // Mangled ellipsis (U+E2 U+20AC U+00A6)
+    cleanedText = cleanedText.replace(/â‚¬/g, '€'); // Mangled Euro sign (U+E2 U+201A U+00AC)
+     // Add more replacements here if you notice other specific patterns
+
+    // Normalize multiple newlines to a single newline
+    cleanedText = cleanedText.replace(/\n+/g, '\n');
+
+    return cleanedText.trim(); // Trim again at the end
 }
+// --- END Updated Cleaning Function ---
 
 // Helper function to format date string to YYYY-MM-DD
 function formatDateToSql(dateString) {
@@ -32,7 +89,7 @@ function formatDateToSql(dateString) {
 }
 
 async function migrateData() {
-    console.log('Starting data migration from separate files...');
+    console.log('Starting data migration from separate files (with updated encoding fix)...');
 
     let fanfaronInsertStmt, citationInsertStmt, diapoInsertStmt, contratInsertStmt; // Statements
 
@@ -84,17 +141,25 @@ async function migrateData() {
                  console.warn(`Duplicate email in source JSON: ${fanfaron.mail}. Using placeholder: ${emailToInsert}`);
             }
             usedEmails.add(emailToInsert);
-            const cleanDescription = cleanHtmlEntities(fanfaron.description);
+            
+            // ** APPLY CLEAN/FIX HERE **
+            const fixedSurnom = cleanAndFixEncoding(fanfaron.surnom);
+            const fixedInstrument = cleanAndFixEncoding(fanfaron.instrument);
+            const fixedBureau = cleanAndFixEncoding(fanfaron.bureau);
+            const fixedDescription = cleanAndFixEncoding(fanfaron.description);
+
             try {
                 await new Promise((resolve, reject) => {
-                    fanfaronInsertStmt.run(fanfaron.surnom, fanfaron.instrument, promoInt, fanfaron.bureau, fanfaron.tel, emailToInsert, fanfaron.photo, cleanDescription,
+                    fanfaronInsertStmt.run(
+                        fixedSurnom, fixedInstrument, promoInt, fixedBureau, 
+                        fanfaron.tel, emailToInsert, fanfaron.photo, fixedDescription,
                         function(err) {
                             if (err) {
-                                if (err.code === 'SQLITE_CONSTRAINT' && err.message.includes('.email')) {
-                                    console.warn(`UNIQUE constraint failed for email ${emailToInsert} (Fanfaron ${oldIdFanfaron} - ${fanfaron.surnom}). Skipping.`);
+                                if (err.code === 'SQLITE_CONSTRAINT' && (err.message.includes('.email') || err.message.includes('.surnom'))) {
+                                    console.warn(`UNIQUE constraint failed for ${err.message.includes('.email') ? 'email' : 'surnom'} ${err.message.includes('.email') ? emailToInsert : fixedSurnom} (Fanfaron ${oldIdFanfaron}). Skipping.`);
                                     resolve(); 
                                 } else {
-                                    console.error(`Error inserting fanfaron (old ID ${oldIdFanfaron}): ${fanfaron.surnom}`, err.message);
+                                    console.error(`Error inserting fanfaron (old ID ${oldIdFanfaron}): ${fixedSurnom}`, err.message);
                                     reject(err);
                                 }
                             } else {
@@ -115,13 +180,15 @@ async function migrateData() {
         for (const citation of citationsData) {
             const oldAuteurId = citation.idFanfaron;
             const newAuteurId = fanfaronIdMap.get(oldAuteurId?.toString());
-            const cleanCitationText = cleanHtmlEntities(citation.citation);
-            if (newAuteurId && cleanCitationText) {
+            
+            // ** APPLY CLEAN/FIX HERE **
+            const fixedCitationText = cleanAndFixEncoding(citation.citation);
+            if (newAuteurId && fixedCitationText) {
                  try {
                     await new Promise((resolve, reject) => {
-                        citationInsertStmt.run(cleanCitationText, newAuteurId, (err) => {
+                        citationInsertStmt.run(fixedCitationText, newAuteurId, (err) => {
                             if (err) {
-                                console.error(`Error inserting citation for old auteur_id ${oldAuteurId}: \"${cleanCitationText.substring(0, 30)}...\"`, err.message);
+                                console.error(`Error inserting citation for old auteur_id ${oldAuteurId}: \"${fixedCitationText.substring(0, 30)}...\"`, err.message);
                                 reject(err);
                             } else {
                                 citationsInsertedCount++;
@@ -131,7 +198,7 @@ async function migrateData() {
                     });
                 } catch (insertError) { throw insertError; }
             } else if (!newAuteurId) {
-                 console.warn(`Could not find new fanfaron ID for old auteur_id: ${oldAuteurId} (Citation: \"${cleanCitationText?.substring(0, 30)}...\"). Skipping.`);
+                 console.warn(`Could not find new fanfaron ID for old auteur_id: ${oldAuteurId} (Citation: \"${fixedCitationText?.substring(0, 30)}...\"). Skipping.`);
             } else {
                  console.warn(`Skipping citation with empty text after cleaning for old auteur_id: ${oldAuteurId}.`);
             }
@@ -143,11 +210,12 @@ async function migrateData() {
         diapoInsertStmt = db.prepare(`INSERT INTO diapos (fichier, description) VALUES (?, ?)`);
         let diaposInsertedCount = 0;
         for (const diapo of diaposData) {
-            const cleanDescription = cleanHtmlEntities(diapo.description);
+            // ** APPLY CLEAN/FIX HERE **
+            const fixedDescription = cleanAndFixEncoding(diapo.description);
             if (diapo.fichier) {
                  try {
                     await new Promise((resolve, reject) => {
-                        diapoInsertStmt.run(diapo.fichier, cleanDescription, (err) => {
+                        diapoInsertStmt.run(diapo.fichier, fixedDescription, (err) => {
                             if (err) {
                                 console.error(`Error inserting diapo ${diapo.fichier}:`, err.message);
                                 reject(err);
@@ -170,14 +238,16 @@ async function migrateData() {
         let contratsInsertedCount = 0;
         for (const contrat of contratsData) {
             const sqlDate = formatDateToSql(contrat.date); // Format date
-            const cleanLieu = cleanHtmlEntities(contrat.lieu);
-            const cleanDescription = cleanHtmlEntities(contrat.description);
+            
+            // ** APPLY CLEAN/FIX HERE **
+            const fixedLieu = cleanAndFixEncoding(contrat.lieu);
+            const fixedDescription = cleanAndFixEncoding(contrat.description);
             if (sqlDate) { // Only insert if date is valid
                 try {
                     await new Promise((resolve, reject) => {
-                        contratInsertStmt.run(sqlDate, cleanLieu, cleanDescription, (err) => {
+                        contratInsertStmt.run(sqlDate, fixedLieu, fixedDescription, (err) => {
                             if (err) {
-                                console.error(`Error inserting contrat on ${sqlDate} at ${cleanLieu}:`, err.message);
+                                console.error(`Error inserting contrat on ${sqlDate} at ${fixedLieu}:`, err.message);
                                 reject(err);
                             } else {
                                 contratsInsertedCount++;
