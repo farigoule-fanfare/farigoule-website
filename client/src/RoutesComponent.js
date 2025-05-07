@@ -8,6 +8,7 @@ import LandingPage from "@components/LandingPage";
 import Chat from "@components/Chat";
 import LoginPage from "./components/auth/LoginPage";
 import NousPage from "./components/pages/NousPage";
+import ContactPage from "./components/pages/ContactPage";
 
 export function RoutesComponent(props) {
     const location = useLocation()
@@ -44,6 +45,13 @@ export function RoutesComponent(props) {
                     <Route path="nous" element={
                         <PageWrapper privatePage={false}>
                             <NousPage />
+                        </PageWrapper>
+                    } />
+
+                    {/* Contact Page Route */}
+                    <Route path="contact" element={
+                        <PageWrapper privatePage={false}>
+                            <ContactPage />
                         </PageWrapper>
                     } />
 
