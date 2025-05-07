@@ -18,13 +18,16 @@ export const axiosWrapper = async ({ url, method, data }) => {
                         'Content-Type': 'application/json'
                     },
                     params: data,
-                })
-
-                return ({ success: true, data: resGet.data.data, response: resGet })
+                });
+                // For GET, backend now sends { success: true, ...otherData } or { success: false, message: ... }
+                // We return the whole data part for the AuthContext to check success and other fields.
+                return resGet.data; // Return the whole data object from the response
             }
             catch (e) {
-                const errorReason = e?.response?.data?.errorReason ?? "unknownReason"
-                return ({ success: false, error: e, errorReason: errorReason })
+                const errorDetail = e?.response?.data;
+                const reason = errorDetail?.errorReason || errorDetail?.message || "unknownReason";
+                // Ensure a consistent error object structure for the caller
+                return ({ success: false, error: e, errorReason: reason, message: errorDetail?.message || reason });
             }
 
         case "post":
@@ -36,22 +39,26 @@ export const axiosWrapper = async ({ url, method, data }) => {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
-                    data: JSON.stringify(data),
-                    body: JSON.stringify(data)
-                })
+                    data: data, // No need to JSON.stringify here, axios handles it for objects
+                    // body: JSON.stringify(data) // 'body' is not a standard axios config for client requests
+                });
 
-                if (!resPost.data || !resPost.data.success) {
-                    throw new Error("Request failed");
+                // Backend now includes success field in its main response data for POST too.
+                // So, resPost.data should be { success: true/false, message: ..., user: ... (for login) }
+                if (!resPost.data || typeof resPost.data.success === 'undefined') {
+                     // This case indicates an unexpected response format from backend
+                    console.error('axiosWrapper POST: Response data or success field is missing', resPost.data);
+                    throw new Error("Request failed due to unexpected response format");
                 }
-
-                return (resPost.data)
+                return resPost.data; // Return the whole data object
             }
             catch (e) {
-                const errorReason = e?.response?.data?.errorReason ?? "unknownReason"
-                return ({ success: false, error: e, errorReason: errorReason })
+                const errorDetail = e?.response?.data;
+                const reason = errorDetail?.errorReason || errorDetail?.message || "unknownReason";
+                // Ensure a consistent error object structure for the caller
+                return ({ success: false, error: e, errorReason: reason, message: errorDetail?.message || reason });
             }
         default:
-            return ({ success: false, error: "Wrong method type provided", errorReason: "invalidParameters" })
-
+            return ({ success: false, message: "Wrong method type provided", errorReason: "invalidParameters" });
     }
 }

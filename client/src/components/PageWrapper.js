@@ -30,11 +30,9 @@ function PageWrapper(props) {
                 if (response && response.success && response.data && response.data.length > 0) {
                     const allCitations = response.data;
                     setCitationsArray(allCitations);
-                    // Set initial random citation only if not already set by header's default or previous state
-                    if (citationObject.citation === undefined) {
-                        const randomIndex = Math.floor(Math.random() * allCitations.length);
-                        setCitationObject(allCitations[randomIndex]);
-                    }
+                    // Immediately set a random citation from the fetched array
+                    const randomIndex = Math.floor(Math.random() * allCitations.length);
+                    setCitationObject(allCitations[randomIndex]); 
                 } else {
                     console.warn("No citations fetched or API call was not successful. Response:", response);
                     setCitationsArray([]); // Ensure it's an empty array if fetch fails or no data
@@ -47,27 +45,25 @@ function PageWrapper(props) {
         };
 
         fetchAllCitations();
-        getPresident();
-    }, [citationObject.citation]); // Depend on citationObject.citation to re-run if it was initially undefined
+        getPresident(); // Assuming this is intended to run on mount too
+    }, []); // Empty dependency array: runs only once on mount
 
     // Effect to cycle through citationsArray every 10 seconds
     useEffect(() => {
         if (citationsArray.length === 0) return; // Don't run interval if no citations
 
         const interval = setInterval(() => {
-            if (citationsArray.length > 0) {
-                let randomIndex = Math.floor(Math.random() * citationsArray.length);
-                // Simple way to try to avoid immediate repeat if more than one citation
-                if (citationsArray.length > 1 && citationObject.citation && citationsArray[randomIndex].citation === citationObject.citation) {
-                    randomIndex = (randomIndex + 1) % citationsArray.length;
-                }
-                setCitationObject(citationsArray[randomIndex]);
+            let randomIndex = Math.floor(Math.random() * citationsArray.length);
+            // Simple way to try to avoid immediate repeat if more than one citation
+            // Ensure citationObject.citation is not undefined before comparing
+            if (citationObject.citation !== undefined && citationsArray[randomIndex].citation === citationObject.citation) {
+                randomIndex = (randomIndex + 1) % citationsArray.length;
             }
+            setCitationObject(citationsArray[randomIndex]);
         }, 10000); // Cycle every 10 seconds
 
         return () => clearInterval(interval); // Cleanup interval on component unmount
-    // Ensure citationObject.citation is part of dependency array if it influences selection logic
-    }, [citationsArray, citationObject.citation]);
+    }, [citationsArray, citationObject.citation]); // Dependencies for re-evaluating cycle logic
 
     // TODO load infos président depuis la liste des fanfarons avec le numéro de téléphone
     const getPresident = async () => {
