@@ -12,11 +12,11 @@ async function setFanfaronPassword(identifier, plainPassword) {
         process.exit(1);
     }
 
-    console.log(`Attempting to set password for identifier: ${identifier}`);
+    console.info(`Attempting to set password for identifier: ${identifier}`);
 
     try {
         const hashedPassword = await bcrypt.hash(plainPassword, SALT_ROUNDS);
-        console.log(`Password hashed successfully.`);
+        console.info(`Password hashed successfully.`);
 
         // Try to find by surnom first, then by email
         const findSql = "SELECT id, surnom, email FROM fanfarons WHERE surnom = ? OR email = ?";
@@ -33,7 +33,7 @@ async function setFanfaronPassword(identifier, plainPassword) {
                 process.exit(1);
             }
 
-            console.log(`Found fanfaron: ID=${row.id}, Surnom=${row.surnom}, Email=${row.email}`);
+            console.info(`Found fanfaron: ID=${row.id}, Surnom=${row.surnom}, Email=${row.email}`);
 
             const updateSql = `UPDATE fanfarons SET password_hash = ? WHERE id = ?`;
             db.run(updateSql, [hashedPassword, row.id], function(updateErr) {
@@ -41,7 +41,7 @@ async function setFanfaronPassword(identifier, plainPassword) {
                     console.error('Error updating password:', updateErr.message);
                 } else {
                     if (this.changes > 0) {
-                        console.log(`Password updated successfully for fanfaron ID ${row.id} ('${identifier}').`);
+                        console.info(`Password updated successfully for fanfaron ID ${row.id} ('${identifier}').`);
                     } else {
                         console.error(`Failed to update password for fanfaron ID ${row.id}. No rows affected. This shouldn't happen if user was found.`);
                     }
@@ -51,7 +51,7 @@ async function setFanfaronPassword(identifier, plainPassword) {
                     if (closeErr) {
                         console.error('Error closing database:', closeErr.message);
                     } else {
-                        console.log('Database connection closed.');
+                        console.info('Database connection closed.');
                     }
                 });
             });
