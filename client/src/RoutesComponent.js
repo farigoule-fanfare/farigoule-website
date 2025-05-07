@@ -7,6 +7,7 @@ import NotFound from "@components/NotFound";
 import LandingPage from "@components/LandingPage";
 import Chat from "@components/Chat";
 import LoginPage from "./components/auth/LoginPage";
+import NousPage from "./components/pages/NousPage";
 
 export function RoutesComponent(props) {
     const location = useLocation()
@@ -39,6 +40,14 @@ export function RoutesComponent(props) {
                     {/* Login Page Route */}
                     <Route path="login" element={<LoginPage />} />
 
+                    {/* Nous Page Route */}
+                    <Route path="nous" element={
+                        <PageWrapper privatePage={false}>
+                            <NousPage />
+                        </PageWrapper>
+                    } />
+
+                    {/* Catch-all for this level */}
                     <Route path="*" element={
                         <PageWrapper privatePage={false}>
                             <NotFound />
@@ -54,7 +63,7 @@ export function RoutesComponent(props) {
                 } />
 
                 {/* 404 error component */}
-                <Route index={true} element={
+                <Route path="*" element={
                     <PageWrapper privatePage={false}>
                         <NotFound />
                     </PageWrapper>}
