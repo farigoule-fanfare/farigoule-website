@@ -1,13 +1,48 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import {axiosWrapper} from '@api/axiosUtils';
 import './Footer.css'
 
-// president: {nom: String, phone: String}
-function Footer({ president }) {
+function Footer() {
     const { isAuthenticated, currentUser, logout, isLoading } = useAuth()
     const navigate = useNavigate()
+
+    const [presidentInfo, setPresidentInfo] = useState(null)
+    const [loadingPresident, setLoadingPresident] = useState(true)
+    const [errorPresident, setErrorPresident] = useState(null)
+
+    console.log("President info:", presidentInfo)
+    console.log("errorPresident:", errorPresident)
+
+    useEffect(() => {
+        const fetchPresident = async () => {
+            setLoadingPresident(true)
+            setErrorPresident(null)
+            try {
+                const response = await axiosWrapper({
+                    url: 'users/current-president',
+                    method: 'get'
+                });
+
+                console.log("RESPONSE", response)
+
+                if (response.data) {
+                    setPresidentInfo(response.data)
+                } else {
+                    throw new Error(response?.error ?? "unknwon error")
+                }
+            } catch (err) {
+                console.error("Erreur lors de la récupération du président:", err)
+                setErrorPresident(err.message || 'Erreur de chargement du président.')
+                setPresidentInfo(null)
+            }
+            setLoadingPresident(false)
+        }
+
+        fetchPresident()
+    }, [])
 
     const handleLogout = async () => {
         await logout()
@@ -30,8 +65,25 @@ function Footer({ president }) {
                     <tr>
                         <td>La Farigoule<br />École Centrale Marseille<br />38 rue Frédéric Joliot-Curie<br />13013 Marseille</td>
                         <td>
-                            {president.nom} <br />
-                            Tél : {president.phone}
+                            {loadingPresident ? (
+                                <p>Chargement président...</p>
+                            ) : errorPresident ? (
+                                <p style={{ color: 'red' }}>Erreur: {errorPresident}</p>
+                            ) : presidentInfo ? (
+                                <>
+                                    {presidentInfo.prenom && presidentInfo.nom 
+                                        ? `${presidentInfo.prenom} ${presidentInfo.nom}` 
+                                        : presidentInfo.surnom}
+                                    {presidentInfo.tel && (
+                                        <>
+                                            <br />
+                                            Tél : {presidentInfo.tel}
+                                        </>
+                                    )}
+                                </>
+                            ) : (
+                                <p>Président actuel non disponible.</p>
+                            )}
                         </td>
                         <td>
                             {isAuthenticated ? (
@@ -63,14 +115,8 @@ function Footer({ president }) {
     )
 }
 
-// Footer.defaultProps = {
-//     president: { nom: "Prénom Nom", phone: "00 00 00 00 00" },
-//     isConnected: false,
-//     isAdmin: false // Default isAdmin to false
-// }
-
 Footer.propTypes = {
-    president: PropTypes.object.isRequired,
+    // No specific props are required for this component
 }
 
 export default Footer

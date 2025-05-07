@@ -138,10 +138,37 @@ async function createFanfaron(fanfaronData) {
     });
 }
 
+/**
+ * Finds the current president.
+ * Assumes the president has "president" in their 'bureau' field.
+ * Returns the one with the highest ID if multiple are found.
+ * @returns {Promise<object|null>} President's details (surnom, prenom, nom, email) or null.
+ */
+function getCurrentPresident() {
+    return new Promise((resolve, reject) => {
+        const sql = `
+            SELECT id, surnom, prenom, nom, email, bureau, promo, tel
+            FROM fanfarons 
+            WHERE lower(bureau) LIKE '%president%'
+            ORDER BY id DESC 
+            LIMIT 1
+        `;
+        db.get(sql, [], (err, row) => {
+            if (err) {
+                console.error("Error finding current president:", err.message);
+                reject(err);
+            } else {
+                resolve(row); // Returns the row object or undefined if not found
+            }
+        });
+    });
+}
+
 module.exports = {
     findFanfaronByEmail,
     findFanfaronBySurnom,
     findFanfaronById,
     comparePassword,
-    createFanfaron
+    createFanfaron,
+    getCurrentPresident
 }; 
