@@ -13,9 +13,6 @@ function Footer() {
     const [loadingPresident, setLoadingPresident] = useState(true)
     const [errorPresident, setErrorPresident] = useState(null)
 
-    console.log("President info:", presidentInfo)
-    console.log("errorPresident:", errorPresident)
-
     useEffect(() => {
         const fetchPresident = async () => {
             setLoadingPresident(true)
@@ -25,8 +22,6 @@ function Footer() {
                     url: 'users/current-president',
                     method: 'get'
                 });
-
-                console.log("RESPONSE", response)
 
                 if (response.data) {
                     setPresidentInfo(response.data)
