@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { useLocation } from "react-router-dom";
 
 import Loading from "@components/utils/Loading";
-import { axiosWrapper } from "../api/axiosUtils"; // Import axiosWrapper
+import {axiosWrapper} from '@api/axiosUtils';
 
 const Header = lazy(() => import("@components/Header"));
 const Footer = lazy(() => import("@components/Footer"));

@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser'); // Added cookie-parser
 const path = require('path'); // Import path module
 const routes = require('./routes/routes');
 const authRoutes = require('./routes/authRoutes'); // Import auth routes
+const userRoutes = require('./routes/userRoutes'); // Import user routes
 const db = require('./database'); // Ensure DB is initialized when server starts
 
 const app = express();
@@ -40,6 +41,7 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 // All API routes are prefixed with /route as per this setup
 app.use("/route", routes);
 app.use("/route/auth", authRoutes); // Mount auth routes
+app.use("/route/users", userRoutes); // Mount user routes at /api/users
 
 // --- Catch-all for server status (optional) ---
 // This should be after your specific API routes
