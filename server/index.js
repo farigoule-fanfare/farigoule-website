@@ -1,7 +1,9 @@
 const express = require('express');
 const compression = require('compression');
 const cors = require('cors'); // Import CORS middleware
+const cookieParser = require('cookie-parser'); // Added cookie-parser
 const routes = require('./routes/routes');
+const authRoutes = require('./routes/authRoutes'); // Import auth routes
 const db = require('./database'); // Ensure DB is initialized when server starts
 
 const app = express();
@@ -17,6 +19,9 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+// Parse cookies
+app.use(cookieParser()); // Added cookie-parser middleware
+
 // Compress responses
 app.use(compression());
 
@@ -29,6 +34,7 @@ app.use(express.urlencoded({
 // --- Routes --- 
 // All API routes are prefixed with /route as per this setup
 app.use("/route", routes);
+app.use("/route/auth", authRoutes); // Mount auth routes
 
 // --- Catch-all for server status (optional) ---
 // This should be after your specific API routes
