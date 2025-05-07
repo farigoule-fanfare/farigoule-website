@@ -10,7 +10,7 @@ const authController = {
         const { identifier, password } = req.body;
 
         if (!identifier || !password) {
-            return res.status(400).json({ message: 'Email/Surnom and password are required.' });
+            return res.status(400).json({ success: false, message: 'Email/Surnom and password are required.' });
         }
 
         try {
@@ -21,14 +21,14 @@ const authController = {
             }
 
             if (!fanfaron) {
-                return res.status(401).json({ message: 'Invalid credentials.' });
+                return res.status(401).json({ success: false, message: 'Invalid credentials.' });
             }
 
             // Compare password
             const isMatch = await userService.comparePassword(password, fanfaron.password_hash);
 
             if (!isMatch) {
-                return res.status(401).json({ message: 'Invalid credentials.' });
+                return res.status(401).json({ success: false, message: 'Invalid credentials.' });
             }
 
             // Generate JWT
@@ -45,11 +45,11 @@ const authController = {
 
             // Send back user info (excluding password hash)
             const { password_hash, ...fanfaronInfo } = fanfaron; 
-            res.status(200).json({ message: 'Login successful', user: fanfaronInfo });
+            res.status(200).json({ success: true, message: 'Login successful', user: fanfaronInfo });
 
         } catch (error) {
             console.error("Login Error:", error);
-            res.status(500).json({ message: 'Internal server error during login.' });
+            res.status(500).json({ success: false, message: 'Internal server error during login.' });
         }
     },
 
@@ -64,7 +64,7 @@ const authController = {
             sameSite: 'strict',
             expires: new Date(0) // Set expiry date to the past
         });
-        res.status(200).json({ message: 'Logout successful.' });
+        res.status(200).json({ success: true, message: 'Logout successful.' });
     },
 
     /**
@@ -74,10 +74,10 @@ const authController = {
     handleCheckAuthStatus: (req, res) => {
         // The 'protect' middleware (to be added later) should populate req.user
         if (req.user) {
-            res.status(200).json({ isAuthenticated: true, user: req.user });
+            res.status(200).json({ success: true, isAuthenticated: true, user: req.user });
         } else {
             // This case might not be reached if 'protect' middleware strictly enforces login
-            res.status(401).json({ isAuthenticated: false, user: null });
+            res.status(401).json({ success: false, isAuthenticated: false, user: null });
         }
     }
 };
