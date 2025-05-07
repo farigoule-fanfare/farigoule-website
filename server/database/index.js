@@ -55,6 +55,31 @@ function initializeDb() {
             }
         });
 
+        // Create diapos table for carousel images
+        db.run(`CREATE TABLE IF NOT EXISTS diapos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            fichier TEXT NOT NULL,         -- Filename of the image
+            description TEXT,              -- Caption for the image
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP -- To sort by latest if needed
+        )`, (err) => {
+            if (err) {
+                console.error("Error creating diapos table:", err.message);
+            }
+        });
+
+        // Create contrats table for dates/events
+        db.run(`CREATE TABLE IF NOT EXISTS contrats (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            date DATE NOT NULL,                -- Store as YYYY-MM-DD
+            lieu TEXT,                     -- Location of the event
+            description TEXT,              -- Optional details about the event
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )`, (err) => {
+            if (err) {
+                console.error("Error creating contrats table:", err.message);
+            }
+        });
+
         // TODO: Add other tables as needed (e.g., for chat messages, page content, etc.)
 
         console.log("Database tables checked/initialized.");
