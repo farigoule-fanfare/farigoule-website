@@ -1,0 +1,31 @@
+/* Styles for Footer component */
+
+/* Copied from old global.css - Footer section */
+.tableauFooter {
+    width: 1000px; /* This might need to be responsive, e.g., width: 100% */
+    text-align: center;
+    margin-left: auto; /* To center if parent is wider */
+    margin-right: auto; /* To center if parent is wider */
+}
+
+/* Copied from old global.css - General table header style */
+.tableauFooter th {
+    font-weight: bold;
+}
+
+/* General link styling from old global.css - can be global or component-specific */
+/* If this is identical to Header.css 'a' styling, consider moving to a global CSS file */
+a {
+    text-decoration: none;
+    color: rgb(0,0,255); /* Consider using a theme color */
+}
+
+a:hover {
+    text-decoration: underline; /* Example hover effect */
+}
+
+/* Styling for the h1 in the footer */
+footer h1 {
+    font-family: 'Lobster', cursive; /* Requires font import */
+    text-align: center;
+} 
