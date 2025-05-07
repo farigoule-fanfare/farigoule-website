@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './LoginPage.css'; // We will create this file next
 
@@ -76,6 +76,9 @@ function LoginPage() {
                     </button>
                 </div>
             </form>
+            <div className="homepage-link-container">
+                <Link to="/" className="homepage-link-button">Retour à l'accueil</Link>
+            </div>
         </div>
     );
 }
