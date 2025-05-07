@@ -5,6 +5,12 @@ const db = require('./index.js'); // Assumes db connection is exported from inde
 const fanfaronsFilePath = path.resolve(__dirname, '../../db_migration_project/fanfarons_export.json');
 const citationsFilePath = path.resolve(__dirname, '../../db_migration_project/citations_export.json');
 
+// Helper function to clean HTML entities (add more replacements if needed)
+function cleanHtmlEntities(text) {
+    if (typeof text !== 'string') return text;
+    return text.replace(/&nbsp;/g, ' ').trim(); // Replace non-breaking space and trim whitespace
+}
+
 async function migrateData() {
     console.log('Starting data migration...');
 
@@ -12,13 +18,13 @@ async function migrateData() {
     let citationInsertStmt;
 
     try {
-        // Read and parse fanfarons data
-        const fanfaronsJsonRaw = fs.readFileSync(fanfaronsFilePath, 'utf-8');
+        // Read and parse fanfarons data - explicitly use utf8
+        const fanfaronsJsonRaw = fs.readFileSync(fanfaronsFilePath, 'utf8');
         const fanfaronsData = JSON.parse(fanfaronsJsonRaw);
         console.log(`Read ${fanfaronsData.length} fanfaron records from JSON.`);
 
-        // Read and parse citations data
-        const citationsJsonRaw = fs.readFileSync(citationsFilePath, 'utf-8');
+        // Read and parse citations data - explicitly use utf8
+        const citationsJsonRaw = fs.readFileSync(citationsFilePath, 'utf8');
         const citationsData = JSON.parse(citationsJsonRaw);
         console.log(`Read ${citationsData.length} citation records from JSON.`);
 
@@ -50,6 +56,9 @@ async function migrateData() {
 
             usedEmails.add(emailToInsert); // Add email to the set for subsequent checks
 
+            // Clean description text
+            const cleanDescription = cleanHtmlEntities(fanfaron.description);
+
             try {
                 await new Promise((resolve, reject) => {
                     fanfaronInsertStmt.run(
@@ -58,14 +67,14 @@ async function migrateData() {
                         promoInt,
                         fanfaron.bureau,
                         fanfaron.tel,
-                        emailToInsert, // Use potentially modified email
+                        emailToInsert,
                         fanfaron.photo,
-                        fanfaron.description,
+                        cleanDescription, // Use cleaned description
                         function(err) {
                             if (err) {
                                 // Check if it's a UNIQUE constraint violation specifically on email
                                 if (err.code === 'SQLITE_CONSTRAINT' && err.message.includes('.email')) {
-                                    console.warn(`UNIQUE constraint failed for email ${emailToInsert} (Fanfaron ${oldIdFanfaron} - ${fanfaron.surnom}). This might indicate pre-existing data or issues not caught by initial check. Skipping fanfaron.`);
+                                    console.warn(`UNIQUE constraint failed for email ${emailToInsert} (Fanfaron ${oldIdFanfaron} - ${fanfaron.surnom}). Skipping fanfaron.`);
                                     resolve(); // Resolve promise to continue loop, skipping this user
                                 } else {
                                     console.error(`Error inserting fanfaron (old ID ${oldIdFanfaron}): ${fanfaron.surnom}`, err.message);
@@ -97,13 +106,14 @@ async function migrateData() {
         for (const citation of citationsData) {
             const oldAuteurId = citation.idFanfaron;
             const newAuteurId = fanfaronIdMap.get(oldAuteurId?.toString());
+            const cleanCitationText = cleanHtmlEntities(citation.citation); // Clean citation text
 
-            if (newAuteurId) {
+            if (newAuteurId && cleanCitationText) { // Also check if citation text exists after cleaning
                 try {
                     await new Promise((resolve, reject) => {
-                        citationInsertStmt.run(citation.citation, newAuteurId, (err) => {
+                        citationInsertStmt.run(cleanCitationText, newAuteurId, (err) => {
                             if (err) {
-                                console.error(`Error inserting citation for old auteur_id ${oldAuteurId}: "${citation.citation?.substring(0, 30)}..."`, err.message);
+                                console.error(`Error inserting citation for old auteur_id ${oldAuteurId}: "${cleanCitationText.substring(0, 30)}..."`, err.message);
                                 reject(err);
                             } else {
                                 citationsInsertedCount++;
@@ -114,8 +124,10 @@ async function migrateData() {
                 } catch (insertError) {
                     throw insertError; // Stop migration on citation insert error
                 }
+            } else if (!newAuteurId) {
+                console.warn(`Could not find new fanfaron ID for old auteur_id: ${oldAuteurId} (Citation: "${cleanCitationText?.substring(0, 30)}..."). Skipping.`);
             } else {
-                console.warn(`Could not find new fanfaron ID for old auteur_id: ${oldAuteurId} (Citation: "${citation.citation?.substring(0, 30)}..."). Skipping.`);
+                console.warn(`Skipping citation with empty text after cleaning for old auteur_id: ${oldAuteurId}.`);
             }
         }
         // Finalize citation statement only after the loop completes successfully
@@ -130,21 +142,17 @@ async function migrateData() {
 
     } catch (error) {
         console.error('Error during data migration:', error);
-        // Attempt to finalize statements before rollback
         try {
             if (fanfaronInsertStmt) await new Promise((resolve) => fanfaronInsertStmt.finalize(() => resolve()));
             if (citationInsertStmt) await new Promise((resolve) => citationInsertStmt.finalize(() => resolve()));
         } catch (finalizeError) {
             console.error('Error finalizing statements during error handling:', finalizeError);
         }
-        // Rollback transaction
         await new Promise((resolve) => db.run('ROLLBACK', () => resolve()));
         console.log('Rolled back database transaction due to error.');
     } finally {
-        // Close the database connection
         db.close((err) => {
             if (err) {
-                // Ignore SQLITE_BUSY error here as we attempted cleanup
                 if (err.code !== 'SQLITE_BUSY') {
                     console.error('Error closing database connection:', err.message);
                 }
@@ -155,4 +163,4 @@ async function migrateData() {
     }
 }
 
-migrateData(); 
+migrateData();
