@@ -104,7 +104,7 @@
 .portrait-container {
   display: grid;
   grid-template-rows: auto 1fr;
-  gap: 1rem;
+  gap: 3rem;
   justify-content: center; /* centre la grille dans la page */
 }
 
@@ -131,7 +131,7 @@
   grid-row: 2;
   grid-column: 1;
   display: grid;
-  gap: 1rem;
+  gap: 1.5rem;
   justify-content: center;
   width: 100%;
 }
