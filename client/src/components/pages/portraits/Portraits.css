@@ -90,70 +90,6 @@
 
 
 
-/* Titre principal */
-.titre-annuaire {
-  font-size: 1.5em;
-  font-weight: bold;
-  text-align: center;
-  margin: 1rem 0 0.5rem;
-}
-
-/* Parent grid qui gère header, annuaire et description */
-.portrait-container {
-  display: grid;
-  justify-content: center; /* centre les colonnes horizontalement */
-  gap: 1rem;               /* espace entre colonnes / lignes */
-  grid-template-rows: auto 1fr; /* header + contenu */
-}
-
-/* Panneau de description dans la 2e colonne, 2e ligne */
-.portraitDesc {
-  position: sticky;
-  /*width: 300px;*/
-  top: 1rem;
-  align-self: flex-start;
-  max-height: calc(100vh - 2rem);
-  /*overflow-y: auto;*/
-  padding: 0.5rem;
-  background: transparent;
-}
-
-/*  => transforme #annuaire en grid-layout */
-.portrait-container #annuaire {
-  display: grid;
-  gap: 1rem;               /* espace régulier entre les cartes */
-  justify-content: center; /* centre la grille dans sa colonne */
-  grid-row: 2;             /* seconde ligne du parent grid */
-  grid-column: 1;          /* première colonne du parent grid */
-}
-
-
-/* 4 colonnes quand aucune description n’est ouverte */
-.portrait-container.noDesc #annuaire {
-  grid-template-columns: repeat(4, 200px);
-}
-
-/* 2 colonnes quand une description est ouverte */
-.portrait-container.withDesc #annuaire {
-  grid-template-columns: repeat(2, 200px);
-    
-}
-/* Description à droite, sur les lignes 1 & 2, colonne 2 */
-.portrait-container.withDesc .portraitDesc {
-  grid-row: 1 / span 2;
-  grid-column: 2;
-  min-width: 0;      /* autorise le grid-item à rétrécir */
-  max-width: 100%;   /* le limite à la taille de sa colonne */
-}
-.portrait-header {
-  grid-row: 1;
-  grid-column: 1;
-  text-align: center;
-}
-.portrait-container.withDesc {
-  grid-template-columns: 1fr 1fr;
-}
-
 /* ==========================================================================
    Portraits.css – styles pour la page Portraits
    ========================================================================== */
@@ -200,6 +136,7 @@
   width: 100%;
 }
 
+
 /* > 4 colonnes fluides quand pas de description */
 .portrait-container.noDesc #annuaire {
   grid-template-columns: repeat(4, 1fr);
@@ -210,6 +147,25 @@
   grid-template-columns: repeat(2, 1fr);
 }
 
+/* Panneau de description d'un fanfaron dans la 2e colonne, 2e ligne */
+.portraitDesc {
+  position: sticky;
+  top: 1rem;
+  align-self: flex-start;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  padding: 0.5rem;
+  background: transparent;
+}
+
+/* Portrain d'un fanfaron à droite, sur les lignes 1 & 2, colonne 2 */
+.portrait-container.withDesc .portraitDesc {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  min-width: 0;      /* autorise le grid-item à rétrécir */
+  max-width: 100%;   /* le limite à la taille de sa colonne */
+}
+
 /* --- 7. Alerte “trop de fanfarons” --- */
 .alertTooMany {
   display: inline-block;
@@ -217,6 +173,3 @@
   text-decoration: underline;
   margin-top: 0.5rem;
 }
-
-/* --- 8.*/
-
