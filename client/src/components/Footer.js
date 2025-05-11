@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
@@ -12,6 +12,7 @@ function Footer() {
     const [presidentInfo, setPresidentInfo] = useState(null)
     const [loadingPresident, setLoadingPresident] = useState(true)
     const [errorPresident, setErrorPresident] = useState(null)
+    const tableRef = useRef(null);
 
     useEffect(() => {
         const fetchPresident = async () => {
@@ -35,9 +36,39 @@ function Footer() {
             }
             setLoadingPresident(false)
         }
-
         fetchPresident()
-    }, [])
+    
+        // Fonction de centrage sur la deuxième colonne
+        const centerOnSecondCol = () => {
+            const table = tableRef.current;
+            if (!table) return;
+
+            const th2 = table.querySelector('th:nth-child(2)');
+            if (!th2) return;
+
+            const thRect = th2.getBoundingClientRect();
+            const headerCenter = thRect.left + thRect.width / 2;
+            const windowCenter = window.innerWidth / 2;
+            const shift = windowCenter - headerCenter;
+
+            table.style.transform = `translateX(${shift}px)`;
+        };
+
+        window.addEventListener('load', centerOnSecondCol);
+        window.addEventListener('resize', centerOnSecondCol);
+        centerOnSecondCol();
+
+        return () => {
+        window.removeEventListener('load', centerOnSecondCol);
+        window.removeEventListener('resize', centerOnSecondCol);
+        }; 
+    
+    
+    }, []);
+
+
+
+    
 
     const handleLogout = async () => {
         await logout()
@@ -50,7 +81,7 @@ function Footer() {
     return (
         <footer>
             <h1>Et sinon ?</h1>
-            <table className="tableauFooter">
+            <table ref={tableRef} className="tableauFooter">
                 <tbody>
                     <tr>
                         <th>Notre adresse</th>
