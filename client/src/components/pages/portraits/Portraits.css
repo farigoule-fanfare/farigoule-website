@@ -1,10 +1,6 @@
 /* portraits.css : styles pour la page portraits.php */
 
 /* Liens d'utilisation de l'annuaire */
-.filtrerResultats
-{
-  text-align: center;
-}
 
 /* --- 5. Cartes “blocFanfaron” --- */
 .blocFanfaron
@@ -16,7 +12,7 @@
   width: 100%;
   height: 100%;
   padding: 0.5rem 0.5rem 0 0.5rem;
-  border: 3px solid black;
+  border: 0.15rem solid black;
   border-radius: 0.5rem;
   background-color: rgba(255,255,255,0.6);
   box-sizing: border-box;
@@ -65,22 +61,12 @@
   border-radius: 0.5rem;
 }
 
-
 .noBureau
 {
   visibility: hidden;
 }
 
 
-
-
-.filtrerResultats {
-  margin: 1rem 0;
-  text-align: center;
-}
-.filtrerResultats label {
-  margin: 0 0.5rem;
-}
 .backToTop {
   display: inline-block;
   margin-left: 1rem;
@@ -95,9 +81,57 @@
    ========================================================================== */
 
 /* --- 1. Filtres (en bas de page) --- */
+/* Boîte de filtres : fond blanc semi-transparent, bord arrondi */
 .filtrerResultats {
+  /* passe d’inline-block à table pour shrink-wrap */
+  display: table;
+  /* auto sur gauche/droite pour centrer */
+  margin: 1.5rem auto;
+  
+  /* reste ton style de boîte blanche */
+  background-color: rgba(255,255,255,0.85);
+  border: 0.15rem solid black;
+  border-radius: 0.5rem;
+  padding: 1rem 2rem;
+  width: 40%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   text-align: center;
-  margin: 1rem 0;
+}
+
+
+/* Titre dans la boîte */
+.filtrerResultats h3 {
+  margin:       0 0 1rem;
+  font-size:    1.25rem;
+  font-weight:  bold;
+}
+
+/* Empile chaque label + select */
+.filtrerResultats label {
+  display:       block;
+  margin:        0.5rem 0;
+  font-weight:   500;
+}
+
+/* Petit espacement entre le texte du label et le select */
+.filtrerResultats label select {
+  margin-left:   0.5rem;
+}
+
+/* Bouton “Retour en haut” */
+.filtrerResultats .backToTop, .portrait-header .alertTooMany{
+  display:       inline-block;
+  margin-top:    0.1rem;
+  padding:       0.25rem 0.75rem;
+  text-decoration: none;
+  border:        0.1rem solid #999;
+  border-radius: 0.5rem;
+  background:    #fff;
+  color:         #333;
+  transition:    background-color 0.2s;
+}
+.filtrerResultats .backToTop:hover, .portrait-header .alertTooMany:hover {
+  background-color: #f0f0f0;
 }
 
 /* --- 2. Grille parent : header + annuaire [+ description] --- */
@@ -164,12 +198,4 @@
   grid-column: 2;
   min-width: 0;      /* autorise le grid-item à rétrécir */
   max-width: 100%;   /* le limite à la taille de sa colonne */
-}
-
-/* --- 7. Alerte “trop de fanfarons” --- */
-.alertTooMany {
-  display: inline-block;
-  color: blue;
-  text-decoration: underline;
-  margin-top: 0.5rem;
 }
