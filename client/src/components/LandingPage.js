@@ -117,7 +117,7 @@ function LandingPage() {
                                 {diapos.map(item => (
                                     <div key={item.id} className="carousel-slide">
                                         {/* Use item.imageUrl which includes the full path */}
-                                        <img src={item.imageUrl} alt={item.description} style={{ width: "100%", maxHeight: "500px", objectFit: "contain" }}/>
+                                        <img src={item.imageUrl} alt={item.description} className='carousel-picture'/>
                                         {item.description && <p className="carousel-caption">{item.description}</p>}
                                     </div>
                                 ))}
