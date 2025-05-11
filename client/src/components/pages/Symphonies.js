@@ -55,18 +55,19 @@ const Symphonies = () => {
         Notre superbe Compact-Disc, avec ses six pistes déjantées, mettra l&apos;ambiance dans toutes vos soirées.
       </p>
 
-      <ol>
+        <ol>
         {tracks.map((track) => (
-          <li key={track.id}>
-            <a href="#" onClick={(e) => {
-              e.preventDefault();
-              setAudioSrc(audioMap[track.key]);
-            }}>
-              {track.name}
-            </a>
-          </li>
+            <li key={track.id}>
+            <button
+                onClick={() => setAudioSrc(audioMap[track.key])}
+                className="trackButton"
+            >
+                {track.name}
+            </button>
+            </li>
         ))}
-      </ol>
+        </ol>
+
 
       <audio controls id="lecteurCD" src={audioSrc} autoPlay />
     </div>

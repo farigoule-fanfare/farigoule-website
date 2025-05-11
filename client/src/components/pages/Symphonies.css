@@ -6,3 +6,12 @@
   width: 900px;
   margin: auto;
 }
+.trackButton {
+  background: none;
+  border: none;
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
