@@ -1,0 +1,63 @@
+/* Container */
+.blocDescriptionFanfaron {
+  display: block;
+  margin-left: 1rem;
+  max-width: 1000px;
+  position: relative;
+}
+
+/* Close button overlay */
+.blocDescriptionFanfaron .closeButton {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #000;
+  z-index: 20;
+}
+
+/* Fixed header and photo */
+.fixedContent {
+  text-align: center;
+  padding: 0 1rem 0.5rem;
+}
+.fixedContent .pSurnomFanfaron {
+  margin: 0;
+}
+.fixedContent .pDetailsFanfaron {
+  margin: 0.25rem 0;
+}
+.photoFanfaron {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 8px;
+  margin: 0 auto;
+}
+
+/* Scrollable description */
+.descriptionScroll {
+  overflow-y: auto;
+  max-height: calc(100vh - 200px);
+  padding: 0.5rem 1rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.descriptionScroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Description text styling */
+.pDescriptionFanfaron {
+  font-family: 'Marck Script', cursive;
+  font-size: 1.5em;
+  margin: 0;
+}
+
+/* Hide legacy close link if present */
+.fermerDescription {
+  display: none !important;
+}
