@@ -104,18 +104,7 @@ const Portraits = () => {
 
         {/* Sticky, scrollable description panel with top close cross */}
         {selectedFanfaron && (
-          <div
-            style={{
-              position: 'sticky',
-              top: '1rem',
-              alignSelf: 'flex-start',
-              maxHeight: 'calc(100vh - 2rem)',
-              overflowY: 'auto',
-              padding: '0.5rem',
-              background: 'transparent',
-              //boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-            }}
-          >
+          <div className="portraitDesc">
             
             <FanfaronDescription
               fanfaron={selectedFanfaron}
