@@ -11,7 +11,7 @@ const Portraits = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [filterInstrument, setFilterInstrument] = useState("");
   const [filterPromo, setFilterPromo] = useState("");
-  const [filterBureau, setFilterBureau] = useState("");
+  const [filterBureau, setFilterBureau] = useState("all");
 
 
   useEffect(() => {
@@ -34,15 +34,46 @@ const Portraits = () => {
   // Derive unique filter options
   const instruments = Array.from(new Set(fanfarons.map(f => f.instrument))).sort();
   const promos = Array.from(new Set(fanfarons.map(f => f.promo))).sort((a,b) => a - b);
-  const bureaux = Array.from(new Set(fanfarons.map(f => f.bureau))).sort();
+ 
+  // 1) Définissez en haut du composant ce mapping “raw → affichage”
+  const bureauMapping = {
+    "":        "Blairos",       // pour les vides
+    "president":  "Président",
+    "chefmu":     "Chef Mu'",
+    "trez":       "Trésorier",
+    "com":        "Respo Com'",
+    "biere":      "Respo Bière",
+};
+
+  // 2) Construit la liste d’options à partir de ce mapping
+  const bureauOptions = [
+    { value: "all", label: "Toutes" },
+    ...Object.entries(bureauMapping).map(([raw, label]) => ({
+      value: raw,
+      label: label,
+    })),
+  ];
 
 
   // Apply filters
-  const filtered = fanfarons.filter(f =>
-  (filterInstrument ? f.instrument === filterInstrument : true) &&
-  (filterPromo      ? f.promo      === parseInt(filterPromo ) : true) &&
-  (filterBureau     ? f.bureau     === filterBureau         : true)
-);
+  const filtered = fanfarons.filter(fanfaron => {
+    const byInstrument = filterInstrument
+      ? fanfaron.instrument === filterInstrument
+      : true;
+
+    const byPromo = filterPromo
+      ? fanfaron.promo === Number(filterPromo)
+      : true;
+
+    // Si filterBureau vaut "all", on ne filtre pas ; 
+    // sinon on compare directement, même pour "" (Blairos)
+    const byBureau = filterBureau === "all"
+      ? true
+      : fanfaron.bureau === filterBureau;
+
+    return byInstrument && byPromo && byBureau;
+  });
+
 
 
 
@@ -66,9 +97,7 @@ const Portraits = () => {
         <h2 className="titre-annuaire">L’annuaire des fanfarons</h2>
         {fanfarons.length > 20 && (
           <p>
-            <a href="#filtrerResultats" className="alertTooMany">
-              Hey, y’a trop de fanfarons !
-            </a>
+            <a href="#filtrerResultats" className="alertTooMany"> Hey, y’a trop de fanfarons ! </a>
           </p>
         )}
       </div>
@@ -142,14 +171,18 @@ const Portraits = () => {
           </select>
         </label>
         <label>
-        Bureau :
-        <select value={filterBureau} onChange={e => setFilterBureau(e.target.value)}>
-          <option value="">Tous</option>
-          {Array.from(new Set(fanfarons.map(f => f.bureau))).map(b => (
-            <option key={b} value={b}>{b || "—"}</option>
-          ))}
-        </select>
-      </label>
+          Bureau :
+          <select
+            value={filterBureau}
+            onChange={e => setFilterBureau(e.target.value)}
+          >
+            {bureauOptions.map(opt => (
+              <option key={opt.value || "__empty"} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        </label>
         <a href="#annuaire" className="backToTop">Retour en haut</a>
       </div>
     </ContentPageLayout>
