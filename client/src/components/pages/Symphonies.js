@@ -1,5 +1,6 @@
 // src/components/pages/Symphonies.js
 import React, { useState } from "react";
+import ContentPageLayout from "../layout/ContentPageLayout";
 import "./Symphonies.css";
 
 // Import audio files
@@ -33,45 +34,31 @@ const Symphonies = () => {
   const [audioSrc, setAudioSrc] = useState("");
 
   return (
-    <div className="container">
-      <h1 className="premierTitre">Symphonies</h1>
+  <ContentPageLayout title="Symphonies">
+    <p>
+      Entre variété française et reggae bolchévique, l&apos;album de la Farigoule - les Culs, Vettes et Tanches -
+      propose des compositions florales variées ainsi qu&apos;une jaquette en plastique recyclable.
+      <br />
+      Notre superbe Compact-Disc, avec ses six pistes déjantées, mettra l&apos;ambiance dans toutes vos soirées.
+    </p>
 
-      <p className="blocSocial">
-        <a href="https://www.facebook.com/FanfareLaFarigoule" target="_blank" rel="noopener noreferrer">
-          <img src="/img/boutons/bouton-facebook.png" alt="Facebook" className="boutonFacebook" />
-        </a>
-        <a href="https://twitter.com/lafarigoule" target="_blank" rel="noopener noreferrer">
-          <img src="/img/boutons/bouton-twitter.png" alt="Twitter" className="boutonTwitter" />
-        </a>
-        <a href="https://www.youtube.com/user/FanfareLaFarigoule" target="_blank" rel="noopener noreferrer">
-          <img src="/img/boutons/bouton-youtube.png" alt="YouTube" className="boutonYoutube" />
-        </a>
-      </p>
+    <ol>
+      {tracks.map((track) => (
+        <li key={track.id}>
+          <button
+            onClick={() => setAudioSrc(audioMap[track.key])}
+            className="trackButton"
+          >
+            {track.name}
+          </button>
+        </li>
+      ))}
+    </ol>
 
-      <p>
-        Entre variété française et reggae bolchévique, l&apos;album de la Farigoule - les Culs, Vettes et Tanches -
-        propose des compositions florales variées ainsi qu&apos;une jaquette en plastique recyclable.
-        <br />
-        Notre superbe Compact-Disc, avec ses six pistes déjantées, mettra l&apos;ambiance dans toutes vos soirées.
-      </p>
+    <audio controls id="lecteurCD" src={audioSrc} autoPlay />
+  </ContentPageLayout>
+);
 
-        <ol>
-        {tracks.map((track) => (
-            <li key={track.id}>
-            <button
-                onClick={() => setAudioSrc(audioMap[track.key])}
-                className="trackButton"
-            >
-                {track.name}
-            </button>
-            </li>
-        ))}
-        </ol>
-
-
-      <audio controls id="lecteurCD" src={audioSrc} autoPlay />
-    </div>
-  );
 };
 
 export default Symphonies;
