@@ -1,19 +1,19 @@
+/* Bloc Social (anciennement .blocSocial) */
 .social-links-container {
-    display: inline-flex; /* Align items in a row, can be changed by parent */
-    gap: 10px; /* Space between icons */
-    align-items: center;
-}
-
-.social-link {
-    display: inline-block; /* Ensures the link itself doesn't break line */
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
 }
 
 .social-icon-img {
-    width: 32px; /* Adjust size as needed, original site might have specific sizes */
-    height: 32px; /* Adjust size as needed */
-    vertical-align: middle; /* Helps align if text is ever next to them */
-    transition: opacity 0.2s ease-in-out;
+  width: 40px;
+  height: 40px;
+  vertical-align: middle;
+  transition: opacity 0.2s ease-in-out;
 }
+
 
 .social-icon-img:hover {
     opacity: 0.8; /* Slight hover effect */
