@@ -1,9 +1,10 @@
 /* Container */
 .blocDescriptionFanfaron {
   display: block;
-  margin-left: 1rem;
+  /*margin-left: 5rem;*/
   max-width: 1000px;
   position: relative;
+  text-align: justify;
 }
 
 /* Close button overlay */

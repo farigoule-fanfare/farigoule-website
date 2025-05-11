@@ -55,27 +55,34 @@ const Portraits = () => {
   const selectedFanfaron = sorted.find(f => f.id === selectedId);
 
   return (
-    <ContentPageLayout title="Portraits">
-      {loading && <p>Chargement des portraits…</p>}
-      {error && <p className="error">Erreur : {error}</p>}
-      {/* Titre de l’annuaire */}
-      <p className="premierTitre">L’annuaire des fanfarons</p>
+  <ContentPageLayout title="Portraits">
+    {loading && <p>Chargement des portraits…</p>}
+    {error   && <p className="error">Erreur : {error}</p>}
 
-      {/* Alerte si trop de fanfarons */}
-      {fanfarons.length > 20 && (  // ou le seuil de ton choix
-        <p className="alertTooMany">Hey, y’a trop de fanfarons !</p>
-      )}
+    {/* → Nouveau grid parent */}
+    <div className={`portrait-container ${selectedFanfaron ? "withDesc" : "noDesc"}`}>
+      {/* 1) Header centré */}
+      <div className="portrait-header">
+        <h2 className="titre-annuaire">L’annuaire des fanfarons</h2>
+        {fanfarons.length > 20 && (
+          <p>
+            <a href="#filtrerResultats" className="alertTooMany">
+              Hey, y’a trop de fanfarons !
+            </a>
+          </p>
+        )}
+      </div>
 
-      <div className="portrait-layout">
-        <div
-          id="annuaire"
-          className={`blocAnnuaire container ${selectedId ? "twoColumns" : ""}`}
-        >
-          {sorted.map(f => (
-            <div
-              key={f.id}
-              id={f.id}
-              className="blocFanfaron"
+      {/* 2) Grille 4 ou 2 colonnes */}
+      <div
+        id="annuaire"
+        className={`blocAnnuaire container ${selectedFanfaron ? "twoColumns" : ""}`}
+      >
+        {sorted.map(f => (
+          <div
+            key={f.id}
+            id={f.id}
+            className="blocFanfaron"
               onClick={() => setSelectedId(selectedId === f.id ? null : f.id)}
             >
               <p className="pNomFanfaron">
@@ -102,17 +109,17 @@ const Portraits = () => {
           ))}
         </div>
 
-        {/* Sticky, scrollable description panel with top close cross */}
-        {selectedFanfaron && (
-          <div className="portraitDesc">
-            
-            <FanfaronDescription
-              fanfaron={selectedFanfaron}
-              onClose={() => setSelectedId(null)}
-            />
-          </div>
-        )}
-      </div>
+        {/* 3) Description sticky */}
+      {selectedFanfaron && (
+        <div className="portraitDesc">
+          <FanfaronDescription
+            fanfaron={selectedFanfaron}
+            onClose={() => setSelectedId(null)}
+          />
+        </div>
+      )}
+    </div>
+
       {/* Filter controls */}
       <div id="filtrerResultats" className="filtrerResultats">
         <h3>Filtrer les résultats</h3>
