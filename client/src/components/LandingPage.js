@@ -16,12 +16,13 @@ const formatDate = (dateString) => {
     try {
         // Assuming dateString is YYYY-MM-DD
         const date = new Date(`${dateString}T00:00:00`); // Avoid timezone issues by setting time
-        return date.toLocaleDateString('fr-FR', { 
+        const formatted = date.toLocaleDateString('fr-FR', { 
             weekday: 'long', 
             year: 'numeric', 
             month: 'long', 
             day: 'numeric' 
         });
+        return formatted.charAt(0).toUpperCase() + formatted.slice(1);
     } catch (e) {
         console.error("Error formatting date:", e);
         return dateString; // Return original string if formatting fails
@@ -145,7 +146,7 @@ function LandingPage() {
                         )
                     )}
                     
-                    <h3>Et avant ?</h3>
+                    <h2>Et avant ?</h2>
                     {!loading.contrats && !error.contrats && (
                          pastContrats.length > 0 ? (
                             pastContrats.map(contrat => (
