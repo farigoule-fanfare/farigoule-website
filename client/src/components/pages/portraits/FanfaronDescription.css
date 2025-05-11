@@ -56,8 +56,3 @@
   font-size: 1.5em;
   margin: 0;
 }
-
-/* Hide legacy close link if present */
-.fermerDescription {
-  display: none !important;
-}
