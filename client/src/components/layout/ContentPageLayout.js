@@ -8,7 +8,9 @@ function ContentPageLayout({ title, children }) {
         <div className="content-page-layout">
             <div className="content-page-header">
                 {title && <h1 className="content-page-title">{title}</h1>}
-                <SocialLinks />
+                <div className="content-page-social">
+                  <SocialLinks />
+               </div>
             </div>
             <div className="content-page-main">
                 {children}

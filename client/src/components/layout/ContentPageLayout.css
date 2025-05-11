@@ -3,12 +3,23 @@
 }
 
 /* Titre et réseaux sociaux sur une seule ligne, comme dans l'ancien .premierTitre + .blocSocial */
-.content-page-header {
+/*.content-page-header {
   display: flex;
   align-items: center;
   justify-content: space-around; /* <--- titre à gauche, icônes à droite */
-  max-width: 1000px;
+ /* max-width: 1000px;
   margin: 0px auto 10px auto; /* centre le bloc sur la page */
+ /* padding: 0 20px;
+  flex-wrap: wrap;
+}*/
+
+.content-page-header {
+  position: relative;          /* nécessaire pour le positionnement absolu des icônes */
+  display: flex;
+  align-items: center;
+  justify-content: center;     /* centre le titre horizontalement */
+  max-width: 1000px;
+  margin: 0 auto 10px auto;    /* centre le bloc header sur la page */
   padding: 0 20px;
   flex-wrap: wrap;
 }
@@ -19,7 +30,7 @@
   font-size: 2em;
   text-align: center;
   margin: 0 auto;
-  flex-grow: 1;             /* prend l’espace dispo */
+  /*flex-grow: 1;*/             /* prend l’espace dispo */
 }
 
 /* Zone de contenu principal, centrée */
@@ -40,5 +51,28 @@
     width: auto;
     text-align: center;
     margin-bottom: 10px;
+  }
+}
+
+.content-page-social {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* === RWD === */
+@media (max-width: 768px) {
+  .content-page-header {
+    display: block;
+    text-align: center;
+  }
+  .content-page-social {
+    position: static;
+    transform: none;
+    margin-top: 10px;
+    justify-content: center;
   }
 }
