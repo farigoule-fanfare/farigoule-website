@@ -11,6 +11,8 @@ const Portraits = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [filterInstrument, setFilterInstrument] = useState("");
   const [filterPromo, setFilterPromo] = useState("");
+  const [filterBureau, setFilterBureau] = useState("");
+
 
   useEffect(() => {
     const fetchFanfarons = async () => {
@@ -32,12 +34,17 @@ const Portraits = () => {
   // Derive unique filter options
   const instruments = Array.from(new Set(fanfarons.map(f => f.instrument))).sort();
   const promos = Array.from(new Set(fanfarons.map(f => f.promo))).sort((a,b) => a - b);
+  const bureaux = Array.from(new Set(fanfarons.map(f => f.bureau))).sort();
+
 
   // Apply filters
   const filtered = fanfarons.filter(f =>
-    (filterInstrument ? f.instrument === filterInstrument : true) &&
-    (filterPromo ? f.promo === parseInt(filterPromo) : true)
-  );
+  (filterInstrument ? f.instrument === filterInstrument : true) &&
+  (filterPromo      ? f.promo      === parseInt(filterPromo ) : true) &&
+  (filterBureau     ? f.bureau     === filterBureau         : true)
+);
+
+
 
   // Sort by promo descending then surname ascending
   const sorted = [...filtered].sort((a, b) => {
@@ -51,30 +58,13 @@ const Portraits = () => {
     <ContentPageLayout title="Portraits">
       {loading && <p>Chargement des portraits…</p>}
       {error && <p className="error">Erreur : {error}</p>}
+      {/* Titre de l’annuaire */}
+      <p className="premierTitre">L’annuaire des fanfarons</p>
 
-      {/* Filter controls */}
-      <div id="filtrerResultats" className="filtrerResultats">
-        <h3>Filtrer les résultats</h3>
-        <label>
-          Instrument:
-          <select value={filterInstrument} onChange={e => setFilterInstrument(e.target.value)}>
-            <option value="">Tous</option>
-            {instruments.map(inst => (
-              <option key={inst} value={inst}>{inst.charAt(0).toUpperCase() + inst.slice(1)}</option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Promo:
-          <select value={filterPromo} onChange={e => setFilterPromo(e.target.value)}>
-            <option value="">Toutes</option>
-            {promos.map(p => (
-              <option key={p} value={p}>{p}</option>
-            ))}
-          </select>
-        </label>
-        <a href="#annuaire" className="backToTop">Retour en haut</a>
-      </div>
+      {/* Alerte si trop de fanfarons */}
+      {fanfarons.length > 20 && (  // ou le seuil de ton choix
+        <p className="alertTooMany">Hey, y’a trop de fanfarons !</p>
+      )}
 
       <div className="portrait-layout">
         <div
@@ -123,32 +113,48 @@ const Portraits = () => {
               overflowY: 'auto',
               padding: '0.5rem',
               background: 'transparent',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+              //boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
             }}
           >
-            <button
-              className="fermerDescription top"
-              onClick={() => setSelectedId(null)}
-              style={{
-                display: 'block',
-                marginBottom: '0.5rem',
-                background: 'transparent',
-                border: 'none',
-                color: '#000',
-                fontSize: '1.25rem',
-                cursor: 'pointer',
-                textAlign: 'right',
-                width: '100%'
-              }}
-            >
-              ×
-            </button>
+            
             <FanfaronDescription
               fanfaron={selectedFanfaron}
               onClose={() => setSelectedId(null)}
             />
           </div>
         )}
+      </div>
+      {/* Filter controls */}
+      <div id="filtrerResultats" className="filtrerResultats">
+        <h3>Filtrer les résultats</h3>
+        <label>
+          Instrument:
+          <select value={filterInstrument} onChange={e => setFilterInstrument(e.target.value)}>
+            <option value="">Tous</option>
+            {instruments.map(inst => (
+              <option key={inst} value={inst}>{inst.charAt(0).toUpperCase() + inst.slice(1)}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Promo:
+          <select value={filterPromo} onChange={e => setFilterPromo(e.target.value)}>
+            <option value="">Toutes</option>
+            {promos.map(p => (
+              <option key={p} value={p}>{p}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+        Bureau :
+        <select value={filterBureau} onChange={e => setFilterBureau(e.target.value)}>
+          <option value="">Tous</option>
+          {Array.from(new Set(fanfarons.map(f => f.bureau))).map(b => (
+            <option key={b} value={b}>{b || "—"}</option>
+          ))}
+        </select>
+      </label>
+        <a href="#annuaire" className="backToTop">Retour en haut</a>
       </div>
     </ContentPageLayout>
   );
