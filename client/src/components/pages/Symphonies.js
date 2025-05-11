@@ -35,6 +35,7 @@ const Symphonies = () => {
 
   return (
   <ContentPageLayout title="Symphonies">
+    <div className="container-symphonies-page">
     <p>
       Entre variété française et reggae bolchévique, l&apos;album de la Farigoule - les Culs, Vettes et Tanches -
       propose des compositions florales variées ainsi qu&apos;une jaquette en plastique recyclable.
@@ -56,6 +57,7 @@ const Symphonies = () => {
     </ol>
 
     <audio controls id="lecteurCD" src={audioSrc} autoPlay />
+    </div>
   </ContentPageLayout>
 );
 

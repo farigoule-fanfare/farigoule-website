@@ -1,42 +1,44 @@
 .content-page-layout {
-    padding: 20px; /* Or match your global content padding */
+  padding-top: 20px;
 }
 
+/* Titre et réseaux sociaux sur une seule ligne, comme dans l'ancien .premierTitre + .blocSocial */
 .content-page-header {
-    display: flex; /* Allows title and social links to be on the same line */
-    align-items: center; /* Vertically align title and social icons if they have different heights */
-    justify-content: space-between; /* Puts title to left, social to right. Adjust as needed */
-    margin-bottom: 20px; /* Space between header and main content */
-    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+  display: flex;
+  align-items: center;
+  justify-content: space-around; /* <--- titre à gauche, icônes à droite */
+  max-width: 1000px;
+  margin: 30px auto 20px auto; /* centre le bloc sur la page */
+  padding: 0 20px;
+  flex-wrap: wrap;
 }
 
+/* Le titre reste centré dans son bloc */
 .content-page-title {
-    /* Mimicking .premierTitre from nous.php (check actual styles from global.css or nous.css if needed) */
-    font-family: 'Lobster', cursive; /* Example, match your site's title font */
-    font-size: 2.5em; /* Example size */
-    color: #333;
-    margin: 0; /* Remove default h1 margin if flex is handling spacing */
-    /* flex-grow: 1; Optional: allow title to take more space */
+  font-family: 'Lobster', cursive;
+  font-size: 2em;
+  text-align: center;
+  margin: 0 auto;
+  flex-grow: 1;             /* prend l’espace dispo */
 }
 
-/* The .social-links-container is already styled in SocialLinks.css 
-   but we can add context-specific adjustments here if necessary. 
-   For instance, if .blocSocial had specific margins or positioning properties 
-   not covered by .social-links-container general styles. 
-*/
-
+/* Zone de contenu principal, centrée */
 .content-page-main {
-    /* Styles for the main content area below the title/social links */
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+  text-align: center;
 }
 
-/* Responsive adjustments if needed */
+/* Responsive fallback */
 @media (max-width: 768px) {
-    .content-page-header {
-        flex-direction: column; /* Stack title and social links on smaller screens */
-        align-items: flex-start; /* Align items to the start when stacked */
-    }
+  .content-page-header {
+    display: block;
+  }
 
-    .content-page-title {
-        margin-bottom: 10px; /* Add space below title when stacked */
-    }
-} 
+  .content-page-title {
+    width: auto;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+}
