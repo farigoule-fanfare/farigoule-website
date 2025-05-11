@@ -10,6 +10,7 @@ import LoginPage from "./components/auth/LoginPage";
 import NousPage from "./components/pages/NousPage";
 import ContactPage from "./components/pages/ContactPage";
 import Symphonies from "./components/pages/Symphonies";
+import Portraits from "./components/pages/portraits/Portraits";
 
 
 export function RoutesComponent(props) {
@@ -61,6 +62,13 @@ export function RoutesComponent(props) {
                     <Route path="symphonies" element={
                         <PageWrapper privatePage={false}>
                             <Symphonies />
+                        </PageWrapper>
+                    } />
+
+                    {/* Portraits Page Route */}
+                    <Route path="portraits" element={
+                        <PageWrapper privatePage={false}>
+                            <Portraits />
                         </PageWrapper>
                     } />
 
