@@ -9,6 +9,8 @@ import Chat from "@components/Chat";
 import LoginPage from "./components/auth/LoginPage";
 import NousPage from "./components/pages/NousPage";
 import ContactPage from "./components/pages/ContactPage";
+import Symphonies from "./components/pages/Symphonies";
+
 
 export function RoutesComponent(props) {
     const location = useLocation()
@@ -52,6 +54,13 @@ export function RoutesComponent(props) {
                     <Route path="contact" element={
                         <PageWrapper privatePage={false}>
                             <ContactPage />
+                        </PageWrapper>
+                    } />
+                    
+                    {/* Symphonies Page Route */}
+                    <Route path="symphonies" element={
+                        <PageWrapper privatePage={false}>
+                            <Symphonies />
                         </PageWrapper>
                     } />
 
