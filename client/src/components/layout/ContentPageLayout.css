@@ -1,5 +1,5 @@
 .content-page-layout {
-  padding-top: 20px;
+  padding-top: 0px;
 }
 
 /* Titre et réseaux sociaux sur une seule ligne, comme dans l'ancien .premierTitre + .blocSocial */
@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: space-around; /* <--- titre à gauche, icônes à droite */
   max-width: 1000px;
-  margin: 30px auto 20px auto; /* centre le bloc sur la page */
+  margin: 0px auto 10px auto; /* centre le bloc sur la page */
   padding: 0 20px;
   flex-wrap: wrap;
 }
