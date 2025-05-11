@@ -1,29 +1,42 @@
 /* Styles for Header component */
 
 /* Copied from old global.css - Header section */
-.blocLogo, .blocHeader {
-    display: inline-block;
-    vertical-align: top;
+header {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 1000px;
+  margin: 0 auto 0px auto;
+  padding: 0 10px;
+  gap: 10px;
+  flex-wrap: nowrap; /* 🔒 empêche le passage à la ligne */
 }
 
 .blocLogo {
-    margin: 0px;
+  width: 300px;       /* 🔒 largeur fixe comme dans global.css */
+  flex-shrink: 0;
 }
 
 .logoFarigoule {
-    width: 300px;
-    height: 300px;
+  width: 100%;
+  height: auto;
 }
 
 .blocHeader {
-    width: 680px;
-    margin-left: 10px;
+  width: 680px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0; 
 }
+
+
+
 
 .blocCitation {
     overflow: hidden;
     height: 160px;
-    margin: 10px;
+    margin: 15px 10px 0px 10px;
     /* Updated image paths to be relative to src/img */
     background-image: url("../img/background-citation-tete.png"), url("../img/background-citation.png");
     background-position: 20px 3px, left;
@@ -57,12 +70,13 @@
     font-size: 0.8em;
     font-weight: bold;
     display: block; /* Ensure it takes space for layout if needed before visible */
-    margin-bottom: 2px; /* Add a little space between text and button image */
+    margin-bottom: 0.1em; /* Add a little space between text and button image */
 }
 
 .tableauMenu td:hover > span {
     visibility: visible;
 }
+
 
 .boutonAccueil,
 .boutonNous,

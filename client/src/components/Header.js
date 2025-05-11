@@ -67,7 +67,7 @@ function Header(props) {
                                 onMouseEnter={() => setIsAccueilHovered(true)}
                                 onMouseLeave={() => setIsAccueilHovered(false)}
                             >
-                                <span className="texteAccueil">Accueil</span><br />
+                                <span className="texteAccueil">Accueil</span>
                                 <Link to="/">
                                     <img src={isAccueilHovered ? boutonAccueilHoverSrc : boutonAccueilSrc} alt="Bouton Accueil" className="boutonAccueil" />
                                 </Link>
@@ -76,7 +76,7 @@ function Header(props) {
                                 onMouseEnter={() => setIsNousHovered(true)}
                                 onMouseLeave={() => setIsNousHovered(false)}
                             >
-                                <span className="texteNous">Nous</span><br />
+                                <span className="texteNous">Nous</span>
                                 <Link to="/nous">
                                     <img src={isNousHovered ? boutonNousHoverSrc : boutonNousSrc} alt="Bouton Nous" className="boutonNous" />
                                 </Link>
@@ -85,7 +85,7 @@ function Header(props) {
                                 onMouseEnter={() => setIsSymphoniesHovered(true)}
                                 onMouseLeave={() => setIsSymphoniesHovered(false)}
                             >
-                                <span className="texteSymphonies">Symphonies</span><br />
+                                <span className="texteSymphonies">Symphonies</span>
                                 <Link to="/symphonies">
                                     <img src={isSymphoniesHovered ? boutonSymphoniesHoverSrc : boutonSymphoniesSrc} alt="Bouton Symphonies" className="boutonSymphonies" />
                                 </Link>
@@ -94,7 +94,7 @@ function Header(props) {
                                 onMouseEnter={() => setIsPortraitsHovered(true)}
                                 onMouseLeave={() => setIsPortraitsHovered(false)}
                             >
-                                <span className="textePortraits">Portraits</span><br />
+                                <span className="textePortraits">Portraits</span>
                                 <Link to="/portraits">
                                     <img src={isPortraitsHovered ? boutonPortraitsHoverSrc : boutonPortraitsSrc} alt="Bouton Portraits" className="boutonPortraits" />
                                 </Link>
@@ -103,7 +103,7 @@ function Header(props) {
                                 onMouseEnter={() => setIsContactHovered(true)}
                                 onMouseLeave={() => setIsContactHovered(false)}
                             >
-                                <span className="texteContact">Contact</span><br />
+                                <span className="texteContact">Contact</span>
                                 <Link to="/contact">
                                     <img src={isContactHovered ? boutonContactHoverSrc : boutonContactSrc} alt="Bouton Contact" className="boutonContact" />
                                 </Link>
