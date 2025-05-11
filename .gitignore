@@ -1,5 +1,5 @@
 .vercel
 .env
-
+farigoule-site
 /node_modules
 package-lock.json
