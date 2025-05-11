@@ -5,8 +5,8 @@ import "./Symphonies.css";
 // Import audio files
 import epic from "../../mp3/epic.mp3";
 import disco from "../../mp3/disco.mp3";
-import mestizaje from "../../mp3/mestizaje.mp3";
-import oneTit from "../../mp3/one-tit.mp3";
+import mestizaje from "../../mp3/mesti.mp3";
+import oneTit from "../../mp3/onetit.mp3";
 import kro from "../../mp3/kro.mp3";
 import boys from "../../mp3/boys.mp3";
 
