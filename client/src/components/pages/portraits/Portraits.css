@@ -98,3 +98,44 @@
   font-family: 'Marck Script', cursive;
   font-size: 1.5em;
 }
+
+/* Wrapper qui place annuaire et description sur une ligne */
+.portrait-layout {
+  display: flex;
+  align-items: flex-start; /* alignement en haut */
+  gap: 1rem;               /* espace entre les deux colonnes */
+}
+
+/* Grid 4 colonnes par défaut */
+#annuaire {
+  display: grid;
+  grid-template-columns: repeat(4, 200px);
+  gap: 10px;               /* espace entre les cartes */
+}
+
+/* Passe à 2 colonnes quand description ouverte */
+#annuaire.twoColumns {
+  grid-template-columns: repeat(2, 200px);
+}
+
+.filtrerResultats {
+  margin: 1rem 0;
+  text-align: center;
+}
+.filtrerResultats label {
+  margin: 0 0.5rem;
+}
+.backToTop {
+  display: inline-block;
+  margin-left: 1rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.descriptionScroll::-webkit-scrollbar {
+  display: none;
+}
+.descriptionScroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}

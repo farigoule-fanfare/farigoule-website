@@ -14,6 +14,8 @@ router.get('/api/diapos/latest', controllers.getLatestDiaposApi);       // Route
 router.get('/api/diapos/random', controllers.getRandomDiapoApi); // Route for random diapo
 router.get('/api/contrats/upcoming', controllers.getUpcomingContratsApi); // Route for upcoming contrats
 router.get('/api/contrats/past', controllers.getPastContratsApi);       // Route for past contrats
+router.get('/api/fanfarons', controllers.getAllFanfaronsApi); // Route for all fanfarons
+
 
 // Example protected route structure (add actual protected routes later)
 // const { protect, authorize } = require('../middleware/authMiddleware');

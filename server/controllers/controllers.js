@@ -124,7 +124,20 @@ const controller = {
             console.error("Failed to get past contrats:", error);
             res.status(500).json({ success: false, message: 'Failed to retrieve past contrats' });
         }
-    }
+    },
+    getAllFanfaronsApi: async (req, res) => {
+        try {
+            const fanfarons = await require('../services/fanfaronService').getAllFanfarons();
+            const dataWithUrls = fanfarons.map(f => ({
+            ...f,
+            photoUrl: `${req.protocol}://${req.get('host')}/public/uploads/fanfarons/${f.photo}`
+            }));
+            res.json({ success: true, data: dataWithUrls });
+        } catch (e) {
+            res.status(500).json({ success: false, message: e.message });
+        }
+        }
+
 };
 
 module.exports = {
