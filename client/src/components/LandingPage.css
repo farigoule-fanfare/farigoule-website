@@ -25,9 +25,10 @@
 .blocDates {
     /* Styles for the dates section */
     /* Example: Add some padding or border if desired */
-     padding: 20px;
-     border-top: 1px solid #eee; 
-     border-bottom: 1px solid #eee;
+    display: block;
+    width: 470px;
+    margin: 0.5rem auto;
+    text-align: center;
 }
 
 .blocDates h2, .blocDates h3 {
