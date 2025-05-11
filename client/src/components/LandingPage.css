@@ -7,6 +7,13 @@
 .carousel-slide {
     text-align: center;
     position: relative; /* Needed for absolute positioning of caption if used */
+    
+}
+
+.carousel-picture {
+    width: 100%;
+    /*max-height: 500px;*/
+    object-fit: contain
 }
 .carousel-caption {
     /* Example: Overlay caption */
@@ -14,10 +21,11 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(128,128,128,0.3);
     color: white;
-    padding: 10px 15px;
-    font-size: 0.9em;
+    padding: 0.1em 0 0.1em;
+    font-size: 1.5em;
+    font-weight: bold;
     text-align: center;
     z-index: 1;
 }
