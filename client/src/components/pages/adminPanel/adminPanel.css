@@ -9,7 +9,7 @@
   margin: 2rem 0;
 }
 
-.menuItem {
+.menuAdminContainer .menuItem {
   padding: 1rem 1.5rem;
   background: rgba(255, 255, 255, 0.85);
   border-radius: 8px;
@@ -21,17 +21,17 @@
   cursor: pointer;
 }
 
-.menuItem:hover {
+.menuAdminContainer .menuItem:hover {
   transform: translateY(-3px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.logoutItem {
+.menuAdminContainer .logoutItem {
   background: #e74c3c;
   color: #fff;
 }
 
-.logoutItem:hover {
+.menuAdminContainer .logoutItem:hover {
   background: #c0392b;
 }
 
@@ -41,21 +41,21 @@
 
 /*------------------- Pour les différentes pages-------------*/
 /* Taille des vignettes d'aperçu pour l'interface d'édition du diaporama */
-.apercuDiapo
+.menuAdminContainer .apercuDiapo
 {
   width: 90px;
   height: 50px;
 }
 
 /* Taille des vignettes d'aperçu pour l'interface d'édition des fanfarons */
-.apercuFanfaron
+.menuAdminContainer .apercuFanfaronaP
 {
   width: 50px;
   height: 50px;
 }
 
 /* Style de tous les tableaux d'édition de l'interface */
-.tableauDiapos, .tableauDates, .tableauFanfarons, .tableauCitations, .tableauVisites, .tableauGraphiques
+.menuAdminContainer .tableauDiapos, .tableauDates, .tableauFanfarons, .tableauCitations, .tableauVisites, .tableauGraphiques
 {
   width: 800px;
   margin: auto;
@@ -67,43 +67,43 @@
   background-color: rgba(255,255,255,0.6);
 }
 
-.tableauFanfarons
+.menuAdminContainer .tableauFanfarons
 {
   width: 950px;
   font-size: 0.8em;
 }
 
 /* Interface de gestion de la page d'accueil */
-.lienAncreFormulaireDate
+.menuAdminContainer .lienAncreFormulaireDate
 {
   text-align: center;
 }
 
 /* Interface d'édition des citations */
-.lienAncreFormulaireCitation
+.menuAdminContainer .lienAncreFormulaireCitation
 {
   text-align: center;
 }
 
-#contenuCitation
+.menuAdminContainer #contenuCitation
 {
   width: 300px;
 }
 
 /* Interface d'édition des fanfarons */
-.lienAncreFormulaireFanfaron
+.menuAdminContainer .lienAncreFormulaireFanfaron
 {
   text-align: center;
 }
 
-#descriptionFanfaron
+.menuAdminContainer #descriptionFanfaron
 {
   width: 400px;
   height: 100px;
 }
 
 /* Interface des statistiques de visites */
-#graphiqueVisites
+.menuAdminContainer #graphiqueVisites
 {
   display: block;
   margin: auto;
@@ -113,6 +113,6 @@
 }
 
 
-.social-links-container{
+.menuAdminContainer .social-links-container{
   visibility: hidden;
 }

@@ -129,6 +129,7 @@ function Footer() {
                             ) : (
                                 <>
                                     <Link to="/login">Connexion</Link>
+                                    <Link to="/adminPanel">Admin Panel Temp</Link>
                                     <br />
                                     <span style={{color: 'grey'}}>(Accès au Chat réservé)</span>
                                 </> 
