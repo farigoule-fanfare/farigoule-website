@@ -11,6 +11,9 @@ import NousPage from "./components/pages/NousPage";
 import ContactPage from "./components/pages/ContactPage";
 import Symphonies from "./components/pages/Symphonies";
 import Portraits from "./components/pages/portraits/Portraits";
+import AdminPanel from "./components/pages/adminPanel/mainPanel";
+import GestionFanfarons from "./components/pages/adminPanel/gestionFanfarons";
+
 
 
 export function RoutesComponent(props) {
@@ -43,6 +46,20 @@ export function RoutesComponent(props) {
                     
                     {/* Login Page Route */}
                     <Route path="login" element={<LoginPage />} />
+
+                    {/* Admin Panel Route */}
+                    <Route path="adminPanel" element={
+                        <PageWrapper privatePage ={false}>
+                            <AdminPanel /> 
+                            </PageWrapper>
+                    }   />
+
+                    {/* Admin Panel Route */}
+                    <Route path="gestionFanfarons" element={
+                        <PageWrapper privatePage ={false}>
+                            <GestionFanfarons /> 
+                            </PageWrapper>
+                    }   />
 
                     {/* Nous Page Route */}
                     <Route path="nous" element={

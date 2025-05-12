@@ -21,13 +21,21 @@ export default function GestionFanfarons() {
     fetchList();
   }, []);
 
-    const fetchList = async () => {
-  const fullUrl = `${process.env.REACT_APP_RESTAPI_SERVER_URI}/${'admin'}`;
-  console.log('➡️ URL appelée :', fullUrl);
-  const res = await axiosWrapper({ method: 'get', url: 'admin' });
-  console.log('❗ fetchList res =', res);
-  // …
-};
+  const fetchList = async () => {
+    // → construira http://localhost:5000/route/admin/get
+      const res = await axiosWrapper({ method: 'get', url: 'admin/get' });
+      if (res.success) {
+        // selon votre wrapper, res.data est l’objet { success:true, data: […] }
+        // le vrai tableau peut être dans res.data.data ou directement dans res.data
+        const arr = Array.isArray(res.data)
+          ? res.data
+          : Array.isArray(res.data.data)
+            ? res.data.data
+            : [];
+        setFanfarons(arr);
+      }
+    };
+
 
 
   // ✏️ Soumission du formulaire (création ou mise à jour)
