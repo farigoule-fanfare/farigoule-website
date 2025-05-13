@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { axiosWrapper } from '../../api/axiosUtils';
+import ContentPageLayout from '../layout/ContentPageLayout';
+import './UserProfile.css';
 
 export default function UserProfile() {
   const { currentUser, isAuthenticated, isLoading, checkAuthStatus } = useAuth();
@@ -23,28 +25,32 @@ export default function UserProfile() {
     }
   }, [currentUser]);
 
-  if (isLoading) return <div>Chargement...</div>;
-  if (!isAuthenticated) return <div>Vous devez être connecté pour accéder à cette page.</div>;
+  if (isLoading) {
+    return (
+      <ContentPageLayout title="Mon Profil">
+        <div>Chargement...</div>
+      </ContentPageLayout>
+    );
+  }
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm(f => ({ ...f, [name]: value }));
+  const { name, value } = e.target;
+    setForm((f) => ({ ...f, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus(null);
     try {
-      // Log the form submission
       console.log('Submitting user profile update:', form);
       const res = await axiosWrapper({
         method: 'put',
         url: 'users/profile',
-        data: form
+        data: form,
       });
       if (res.success) {
         setStatus('Modifications enregistrées.');
-        await checkAuthStatus(); // Refresh user info
+        await checkAuthStatus();
       } else {
         setStatus('Erreur lors de la mise à jour.');
         console.error('Update error:', res.error || res.message);
@@ -56,28 +62,57 @@ export default function UserProfile() {
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h2>Mon Profil</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Nom:</label>
-          <input name="nom" value={form.nom} onChange={handleChange} required />
-        </div>
-        <div>
-          <label>Prénom:</label>
-          <input name="prenom" value={form.prenom} onChange={handleChange} required />
-        </div>
-        <div>
-          <label>Email:</label>
-          <input name="email" type="email" value={form.email} onChange={handleChange} required />
-        </div>
-        <div>
-          <label>Téléphone:</label>
-          <input name="telephone" value={form.telephone} onChange={handleChange} />
-        </div>
-        <button type="submit">Enregistrer</button>
-      </form>
-      {status && <div style={{ marginTop: '1rem' }}>{status}</div>}
-    </div>
+    <ContentPageLayout title="Mon Profil">
+      <div className="userProfile-container">
+        <form onSubmit={handleSubmit} className="userProfile-form">
+          <div className="userProfile-form-group">
+            <label htmlFor="nom" className="userProfile-label">Nom:</label>
+            <input
+              id="nom"
+              name="nom"
+              className="userProfile-input"
+              value={form.nom}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="userProfile-form-group">
+            <label htmlFor="prenom" className="userProfile-label">Prénom:</label>
+            <input
+              id="prenom"
+              name="prenom"
+              className="userProfile-input"
+              value={form.prenom}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="userProfile-form-group">
+            <label htmlFor="email" className="userProfile-label">Email:</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              className="userProfile-input"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="userProfile-form-group">
+            <label htmlFor="telephone" className="userProfile-label">Téléphone:</label>
+            <input
+              id="telephone"
+              name="telephone"
+              className="userProfile-input"
+              value={form.telephone}
+              onChange={handleChange}
+            />
+          </div>
+          <button type="submit" className="userProfile-button">Enregistrer</button>
+        </form>
+        {status && <div className="userProfile-status">{status}</div>}
+      </div>
+    </ContentPageLayout>
   );
-} 
+}
