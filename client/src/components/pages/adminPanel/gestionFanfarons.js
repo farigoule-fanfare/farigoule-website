@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import ContentPageLayout from "../../layout/ContentPageLayout";
+import AdminPageLayout from "../../layout/AdminPageLayout";
 import { axiosWrapper } from '@api/axiosUtils';
 import './adminPanel.css';
 
@@ -81,7 +81,7 @@ const handleSubmit = async e => {
   };
 
   return (
-    <ContentPageLayout title="Gestion des fanfarons" hideSocialLinks>
+    <AdminPageLayout title="Gestion des fanfarons">
       
         
 
@@ -191,6 +191,6 @@ const handleSubmit = async e => {
           </tbody>
         </table>
       </div>
-    </ContentPageLayout>
+    </AdminPageLayout>
   );
 }
