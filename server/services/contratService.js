@@ -10,6 +10,32 @@ function getTodayDateString() {
 }
 
 const contratService = {
+
+    /**
+   * Fetches all contrats (events), ordered by date descending.
+   */
+
+    getAllContrats: async () => {
+    try {
+      const sql = `
+        SELECT id, date, lieu, description
+        FROM contrats
+        ORDER BY date DESC
+      `;
+      const rows = await new Promise((resolve, reject) => {
+        db.all(sql, [], (err, result) => {
+          if (err) reject(err);
+          else resolve(result);
+        });
+      });
+      return rows;
+    } catch (error) {
+      console.error('Error fetching all contrats:', error.message);
+      throw error;
+    }
+  },
+
+
   /**
    * Fetches upcoming contrats (events) from today onwards, ordered by date ascending.
    */
@@ -35,53 +61,28 @@ const contratService = {
 
   /**
    * Fetches past contrats (events) before today, ordered by date descending.
+   * @param {number} [limit=3] - Maximum number of past contrats to return.
    */
-  getPastContrats: async () => {
-  try {
-    const today = getTodayDateString();
-    const sql = `
-      SELECT id, date, lieu, description
-      FROM contrats
-      WHERE date < ?
-      ORDER BY date DESC
-    `;
-    const rows = await new Promise((resolve, reject) => {
-      db.all(sql, [today], (err, result) => {
-        if (err) reject(err);
-        else resolve(result);
+  getPastContrats: async (limit = 3) => {
+    try {
+      const today = getTodayDateString();
+      const sql = `SELECT id, date, lieu, description
+                   FROM contrats
+                   WHERE date < ?
+                   ORDER BY date DESC
+                   LIMIT ?`;
+      const rows = await new Promise((resolve, reject) => {
+        db.all(sql, [today, limit], (err, result) => {
+          if (err) reject(err);
+          else resolve(result);
+        });
       });
-    });
-    return rows;
-  } catch (error) {
-    console.error('Error fetching past contrats:', error.message);
-    throw error;
+      return rows;
+    } catch (error) {
+      console.error('Error fetching past contrats:', error.message);
+      throw error;
     }
   },
-
-  /**
-   * Fetches all contrats (events), ordered by date descending.
-   */
-
-  getAllContrats: async () => {
-  try {
-    const sql = `
-      SELECT id, date, lieu, description
-      FROM contrats
-      ORDER BY date DESC
-    `;
-    const rows = await new Promise((resolve, reject) => {
-      db.all(sql, [], (err, result) => {
-        if (err) reject(err);
-        else resolve(result);
-      });
-    });
-    return rows;
-  } catch (error) {
-    console.error('Error fetching all contrats:', error.message);
-    throw error;
-  }
-},
-
 
   /**
    * Adds a new contrat.
