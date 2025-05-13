@@ -15,7 +15,7 @@ export default function FanfaronDescription({ fanfaron, onClose }) {
       <div className="fixedContent">
         <h2 className="pSurnomFanfaron">{fanfaron.surnom}</h2>
         <p className="pDetailsFanfaron">
-          {capitalize(fanfaron.instrument)} — Promo {fanfaron.promo}
+          {`${capitalize(fanfaron.instrument)}${fanfaron.promo ? ` — Promo ${fanfaron.promo}` : ""}`}
         </p>
         <img
           src={fanfaron.photoUrl}
