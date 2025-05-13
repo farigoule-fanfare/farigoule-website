@@ -51,61 +51,63 @@ export default function GestionFanfarons() {
       <div className="gestionFanfarons-container">
         <h1 className="gestionFanfarons-title">Gestion des fanfarons</h1>
 
-        <form onSubmit={handleSubmit} className="gestionFanfarons-form">
-          {['surnom','instrument','promo','bureau','mail','tel'].map(field => (
-            <div key={field} className="gestionFanfarons-form-group">
-              <label htmlFor={field} className="gestionFanfarons-label">
-                {field === 'mail' ? 'Mail :' : field.charAt(0).toUpperCase() + field.slice(1) + ' :'}
-              </label>
-              <input
-                id={field}
-                name={field}
-                type={field === 'promo' ? 'number' : field === 'mail' ? 'email' : 'text'}
-                value={form[field]}
+        <div className="gestionFanfarons-form-wrapper">
+          <form onSubmit={handleSubmit} className="gestionFanfarons-form">
+            {['surnom','instrument','promo','bureau','mail','tel'].map(field => (
+              <div key={field} className="gestionFanfarons-form-group">
+                <label htmlFor={field} className="gestionFanfarons-label">
+                  {field === 'mail' ? 'Mail :' : field.charAt(0).toUpperCase() + field.slice(1) + ' :'}
+                </label>
+                <input
+                  id={field}
+                  name={field}
+                  type={field === 'promo' ? 'number' : field === 'mail' ? 'email' : 'text'}
+                  value={form[field]}
+                  onChange={handleChange}
+                  required={['surnom','instrument','promo'].includes(field)}
+                  className="gestionFanfarons-input"
+                />
+              </div>
+            ))}
+
+            <div className="gestionFanfarons-form-group">
+              <label htmlFor="description" className="gestionFanfarons-label">Description :</label>
+              <textarea
+                id="description"
+                name="description"
+                value={form.description}
                 onChange={handleChange}
-                required={['surnom','instrument','promo'].includes(field)}
+                className="gestionFanfarons-textarea"
+              />
+            </div>
+
+            <div className="gestionFanfarons-form-group">
+              <label htmlFor="photoFanfaron" className="gestionFanfarons-label">Photo (JPEG/PNG) :</label>
+              <input
+                id="photoFanfaron"
+                type="file"
+                accept="image/*"
+                onChange={e => setPhotoFile(e.target.files[0])}
                 className="gestionFanfarons-input"
               />
             </div>
-          ))}
 
-          <div className="gestionFanfarons-form-group">
-            <label htmlFor="description" className="gestionFanfarons-label">Description :</label>
-            <textarea
-              id="description"
-              name="description"
-              value={form.description}
-              onChange={handleChange}
-              className="gestionFanfarons-textarea"
-            />
-          </div>
-
-          <div className="gestionFanfarons-form-group">
-            <label htmlFor="photoFanfaron" className="gestionFanfarons-label">Photo (JPEG/PNG) :</label>
-            <input
-              id="photoFanfaron"
-              type="file"
-              accept="image/*"
-              onChange={e => setPhotoFile(e.target.files[0])}
-              className="gestionFanfarons-input"
-            />
-          </div>
-
-          <div className="gestionFanfarons-buttons">
-            <button type="submit" className="gestionFanfarons-button gestionFanfarons-button--submit">
-              {editingId ? 'Mettre à jour' : 'Créer'}
-            </button>
-            {editingId && (
-              <button
-                type="button"
-                onClick={() => { setEditingId(null); setForm({ surnom: '', instrument: '', promo: '', bureau: '', mail: '', tel: '', description: '' }); setPhotoFile(null); }}
-                className="gestionFanfarons-button gestionFanfarons-button--cancel"
-              >
-                Annuler
+            <div className="gestionFanfarons-buttons">
+              <button type="submit" className="gestionFanfarons-button gestionFanfarons-button--submit">
+                {editingId ? 'Mettre à jour' : 'Créer'}
               </button>
-            )}
-          </div>
-        </form>
+              {editingId && (
+                <button
+                  type="button"
+                  onClick={() => { setEditingId(null); setForm({ surnom: '', instrument: '', promo: '', bureau: '', mail: '', tel: '', description: '' }); setPhotoFile(null); }}
+                  className="gestionFanfarons-button gestionFanfarons-button--cancel"
+                >
+                  Annuler
+                </button>
+              )}
+            </div>
+          </form>
+        </div>
 
         <table className="gestionFanfarons-table">
           <thead>
@@ -140,7 +142,7 @@ export default function GestionFanfarons() {
                     <span className="gestionFanfarons-noPhoto">Aucune photo</span>
                   )}
                 </td>
-                <td className="gestionFanfarons-td">
+                <td className="gestionFanfarons-td gestionFanfarons-td--actions">
                   <button
                     onClick={() => {
                       setEditingId(f.id);
