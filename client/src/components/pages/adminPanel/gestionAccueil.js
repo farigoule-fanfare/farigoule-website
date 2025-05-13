@@ -1,6 +1,6 @@
 // src/pages/GestionAccueil.jsx
 import React, { useState, useEffect, useRef } from 'react';
-import ContentPageLayout from '../../layout/ContentPageLayout';
+import AdminPageLayout from '../../layout/AdminPageLayout';
 import { axiosWrapper } from '@api/axiosUtils';
 import './adminPanel.css';
 
@@ -113,7 +113,7 @@ export default function GestionAccueil() {
   };
 
   return (
-    <ContentPageLayout hideSocialLinks>
+    <AdminPageLayout>
       {/* ==== SECTION DIAPORAMA ==== */}
       <section className="gestionAccueil-section">
         <h2>Diaporama</h2>
@@ -255,6 +255,6 @@ export default function GestionAccueil() {
           </form>
         </div>
       </section>
-    </ContentPageLayout>
+    </AdminPageLayout>
   );
 }
