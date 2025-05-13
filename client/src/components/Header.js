@@ -53,6 +53,9 @@ function Header(props) {
                     {isAuthenticated && (
                         <>
                             <span>Bienvenue, {currentUser?.surnom}!</span>
+                            <Link to="/profile" className="profile-link-header" style={{ marginLeft: '1rem', marginRight: '1rem' }}>
+                                Mon Profil
+                            </Link>
                             <button onClick={handleLogout} disabled={isLoading} className="logout-button-header">
                                 Déconnexion
                             </button>
