@@ -16,7 +16,7 @@ export default function AdminLayout({ title, children }) {
 
   const menuItems = [
     { to: '/gestionAccueil', label: "Gestion page d'accueil" },
-    { to: '/citations',        label: 'Gestion des citations' },
+    { to: '/gestionCitations', label: 'Gestion des citations' },
     { to: '/gestionFanfarons', label: 'Gestion des fanfarons' },
     { to: '/stats-visites',    label: 'Statistiques du site' },
     { action: handleLogout,    label: 'Déconnexion' }

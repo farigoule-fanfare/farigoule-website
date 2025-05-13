@@ -15,6 +15,7 @@ import Portraits from "./components/pages/portraits/Portraits";
 import AdminPanel from "./components/pages/adminPanel/mainPanel";
 import GestionFanfarons from "./components/pages/adminPanel/gestionFanfarons";
 import GestionAccueil from "./components/pages/adminPanel/gestionAccueil";
+import GestionCitations from "./components/pages/adminPanel/gestionCitations";
 import UserProfile from "./components/pages/UserProfile";
 import RequireAuth from "./components/utils/RequireAuth";
 
@@ -75,18 +76,6 @@ export function RoutesComponent(props) {
                         }
                     />
                     <Route
-                        path="gestionFanfarons"
-                        element={
-                            <RequireAuth>
-                              <AdminRoute>
-                                <PageWrapper privatePage={true}>
-                                  <GestionFanfarons />
-                                </PageWrapper>
-                              </AdminRoute>
-                            </RequireAuth>
-                        }
-                    />
-                    <Route
                         path="gestionAccueil"
                         element={
                             <RequireAuth>
@@ -98,6 +87,31 @@ export function RoutesComponent(props) {
                             </RequireAuth>
                         }
                     />
+                    <Route
+                        path="gestionCitations"
+                        element={
+                            <RequireAuth>
+                              <AdminRoute>
+                                <PageWrapper privatePage={true}>
+                                  <GestionCitations />
+                                </PageWrapper>
+                              </AdminRoute>
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="gestionFanfarons"
+                        element={
+                            <RequireAuth>
+                              <AdminRoute>
+                                <PageWrapper privatePage={true}>
+                                  <GestionFanfarons />
+                                </PageWrapper>
+                              </AdminRoute>
+                            </RequireAuth>
+                        }
+                    />
+                    
 
                     {/* Other public pages */}
                     <Route
