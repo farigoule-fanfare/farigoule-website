@@ -63,11 +63,11 @@ export default function GestionFanfarons() {
   };
 
   return (
-    <ContentPageLayout>
-      <div className="gestionFanfarons-container">
-        <h1 className="gestionFanfarons-title">Gestion des fanfarons</h1>
+    <ContentPageLayout title="Gestion des fanfarons" hideSocialLinks>
+      
+        
 
-        <div className="gestionFanfarons-form-wrapper" ref={formRef}>
+        <div className="gestionFanfarons-form-wrapper" >
           <form onSubmit={handleSubmit} className="gestionFanfarons-form">
             {['surnom','instrument','promo','bureau','mail','tel'].map(field => (
               <div key={field} className="gestionFanfarons-form-group">
@@ -124,7 +124,7 @@ export default function GestionFanfarons() {
             </div>
           </form>
         </div>
-
+      <div className="gestionFanfarons-container" ref={formRef}>
         <table className="gestionFanfarons-table">
           <thead>
             <tr>
