@@ -6,7 +6,11 @@ const path = require('path'); // Import path module
 const routes = require('./routes/routes');
 const authRoutes = require('./routes/authRoutes'); // Import auth routes
 const userRoutes = require('./routes/userRoutes'); // Import user routes
-const adminRoutes = require('./routes/adminRoutes'); // Import admin routes
+const fanfaronsRoutes = require('./routes/admin/fanfarons');
+const contratsRoutes = require('./routes/admin/contrats');
+const diaposRoutes = require('./routes/admin/diapos');
+const citationsRoutes = require('./routes/admin/citations');
+
 
 const db = require('./database'); // Ensure DB is initialized when server starts
 
@@ -56,8 +60,10 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use("/route/", routes);
 app.use("/route/auth", authRoutes); // Mount auth routes
 app.use("/route/users", userRoutes); // Mount user routes at /api/users
-app.use("/route/admin", adminRoutes);  // ← nouvelle route pour la gestion des fanfarons
-
+app.use('/route/admin/fanfarons', fanfaronsRoutes);
+app.use('/route/admin/contrats', contratsRoutes);
+app.use('/route/admin/diapos', diaposRoutes);
+app.use('/route/admin/citations', citationsRoutes);
 
 // --- Catch-all for server status (optional) ---
 // This should be after your specific API routes
