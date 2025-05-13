@@ -1,12 +1,25 @@
 import axios from 'axios';
 
-export const axiosWrapper = async ({
-  url,
-  method,
-  data = {},
-  params = {},
-  isMultipart = false
-}) => {
+export const axiosInstance = axios.create({
+  withCredentials: true,
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  }
+});
+
+/**
+ * Wrapper évolué pour toutes les requêtes HTTP
+ * @param {Object} options
+ * @param {string} options.url    - Segment ou URL absolue (préfixée dynamiquement) de l'endpoint
+ * @param {string} options.method - 'get'|'post'|'put'|'delete'|'patch'
+ * @param {Object} [options.data]   - Payload pour POST/PUT/PATCH
+ * @param {Boolean} [options.isMultipart]
+ * @returns {Promise<Object>}       - { success: boolean, ...payload }
+ */
+export const axiosWrapper = async ({ url, method, data = {}, isMultipart=false}) => {
+  const params = data
+  
   const base = process.env.REACT_APP_RESTAPI_SERVER_URI || '';
   const fullUrl = url.startsWith('http')
     ? url
