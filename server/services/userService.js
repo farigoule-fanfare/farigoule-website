@@ -164,11 +164,53 @@ function getCurrentPresident() {
     });
 }
 
+/**
+ * Updates the profile of a user (nom, prenom, email, telephone only)
+ * @param {number} userId
+ * @param {object} updates - { nom, prenom, email, telephone }
+ * @returns {Promise<object>} Updated user (excluding password_hash)
+ */
+async function updateProfile(userId, updates) {
+    if (!userId) throw new Error('User ID is required for profile update');
+    // Only allow nom, prenom, email, and tel (map telephone to tel)
+    const dbUpdates = {};
+    if (updates.nom !== undefined) dbUpdates.nom = updates.nom;
+    if (updates.prenom !== undefined) dbUpdates.prenom = updates.prenom;
+    if (updates.email !== undefined) dbUpdates.email = updates.email;
+    if (updates.telephone !== undefined) dbUpdates.tel = updates.telephone;
+    
+    if (Object.keys(dbUpdates).length === 0) {
+        throw new Error('No valid fields to update');
+    }
+    // Build SQL
+    const setClause = Object.keys(dbUpdates).map(f => `${f} = ?`).join(', ');
+    const params = [...Object.values(dbUpdates), userId];
+    const sql = `UPDATE fanfarons SET ${setClause} WHERE id = ?`;
+    return new Promise((resolve, reject) => {
+        db.run(sql, params, function(err) {
+            if (err) {
+                console.error('Error updating user profile:', err.message);
+                if (err.code === 'SQLITE_CONSTRAINT' && err.message.includes('.email')) {
+                    return reject(new Error('Cet email est déjà utilisé.'));
+                }
+                return reject(err);
+            }
+            // Log the update
+            console.log(`User ${userId} profile updated:`, dbUpdates);
+            // Return the updated user (excluding password_hash)
+            findFanfaronById(userId)
+                .then(user => resolve(user))
+                .catch(fetchErr => reject(fetchErr));
+        });
+    });
+}
+
 module.exports = {
     findFanfaronByEmail,
     findFanfaronBySurnom,
     findFanfaronById,
     comparePassword,
     createFanfaron,
-    getCurrentPresident
+    getCurrentPresident,
+    updateProfile
 }; 

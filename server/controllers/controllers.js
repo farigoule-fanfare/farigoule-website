@@ -28,7 +28,6 @@ const test = async (req, res) => {
 
 const controller = {
     getApi: (req, res) => {
-        console.log("req", req.user);
         res.json({
             message: "Hello from server!",
             user: req.user

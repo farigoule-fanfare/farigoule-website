@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
-import ContentPageLayout from "../../layout/ContentPageLayout";
+
 import { axiosWrapper } from "@api/axiosUtils";
+
+import ContentPageLayout from "../../layout/ContentPageLayout";
 import FanfaronDescription from "./FanfaronDescription";
+
 import "./Portraits.css";
 
 const Portraits = () => {
@@ -35,9 +38,8 @@ const Portraits = () => {
   const instruments = Array.from(new Set(fanfarons.map(f => f.instrument))).sort();
   const promos = Array.from(new Set(fanfarons.map(f => f.promo))).sort((a,b) => a - b);
  
-  // 1) Définissez en haut du composant ce mapping “raw → affichage”
   const bureauMapping = {
-    "":        "Blairos",       // pour les vides
+    "":        "Blairos",       // Défaut si vide
     "president":  "Président",
     "chefmu":     "Chef Mu'",
     "trez":       "Trésorier",
@@ -56,7 +58,7 @@ const Portraits = () => {
 
 
   // Apply filters
-  const filtered = fanfarons.filter(fanfaron => {
+  const fanfaronsFiltered = fanfarons.filter(fanfaron => {
     const byInstrument = filterInstrument
       ? fanfaron.instrument === filterInstrument
       : true;
@@ -78,12 +80,12 @@ const Portraits = () => {
 
 
   // Sort by promo descending then surname ascending
-  const sorted = [...filtered].sort((a, b) => {
+  const fanfaronsSorted = [...fanfaronsFiltered].sort((a, b) => {
     if (b.promo !== a.promo) return b.promo - a.promo;
     return a.surnom.localeCompare(b.surnom, 'fr');
   });
 
-  const selectedFanfaron = sorted.find(f => f.id === selectedId);
+  const selectedFanfaron = fanfaronsSorted.find(f => f.id === selectedId);
 
   return (
   <ContentPageLayout title="Portraits">
@@ -107,8 +109,9 @@ const Portraits = () => {
         id="annuaire"
         className={`blocAnnuaire container ${selectedFanfaron ? "twoColumns" : ""}`}
       >
-        {sorted.map(f => (
-          <div
+        {fanfaronsSorted.map(f => {
+          return(
+            <div
             key={f.id}
             id={f.id}
             className="blocFanfaron"
@@ -116,9 +119,11 @@ const Portraits = () => {
             >
               <p className="pNomFanfaron">
                 <strong>{f.surnom}</strong><br />
-                {f.instrument.charAt(0).toUpperCase() + f.instrument.slice(1)} ({f.promo})
+                {/* Instru (promo) */}
+                {`${f.instrument.charAt(0).toUpperCase() + f.instrument.slice(1)}${f.promo ? ` (${f.promo})` :""}`}
               </p>
-              {f.bureau && (
+              {/* Ajoute l'icone "bureau" correspondant au poste si nécessaire */}
+              {(f.bureau && ["president","chefmu","trez","com","biere"].includes(f.bureau)) && (
                 <p className="pImageBureau">
                   <img
                     src={require(`../../../img/boutons/bouton-${f.bureau}.png`)}
@@ -130,12 +135,14 @@ const Portraits = () => {
               <p className="pApercuFanfaron">
                 <img
                   src={f.photoUrl}
-                  alt="Photo du fanfaron"
+                  alt="Fanfaron"
                   className="apercuFanfaron"
                 />
               </p>
             </div>
-          ))}
+          )}
+          
+          )}
         </div>
 
         {/* 3) Description sticky */}

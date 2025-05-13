@@ -11,4 +11,7 @@ const { protect, authorize } = require('../middleware/authMiddleware');
 // New public route for current president
 router.get('/current-president', userController.getCurrentPresidentApi);
 
+// AUTH ONLY: Route pour qu'un fanfaron puisse modifier son profil (nom, prénom, téléphone, email)
+router.put('/profile', protect, userController.updateProfileApi);
+
 module.exports = router; 

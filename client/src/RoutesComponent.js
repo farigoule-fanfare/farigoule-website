@@ -13,6 +13,8 @@ import Symphonies from "./components/pages/Symphonies";
 import Portraits from "./components/pages/portraits/Portraits";
 import AdminPanel from "./components/pages/adminPanel/mainPanel";
 import GestionFanfarons from "./components/pages/adminPanel/gestionFanfarons";
+import UserProfile from "./components/pages/UserProfile";
+import RequireAuth from "./components/utils/RequireAuth";
 
 
 
@@ -47,19 +49,23 @@ export function RoutesComponent(props) {
                     {/* Login Page Route */}
                     <Route path="login" element={<LoginPage />} />
 
-                    {/* Admin Panel Route */}
+                    {/* Admin Panel Route (protected) */}
                     <Route path="adminPanel" element={
-                        <PageWrapper privatePage ={false}>
-                            <AdminPanel /> 
+                        <RequireAuth>
+                            <PageWrapper privatePage={true}>
+                                <AdminPanel />
                             </PageWrapper>
-                    }   />
+                        </RequireAuth>
+                    } />
 
-                    {/* Admin Panel Route */}
+                    {/* Gestion Fanfarons Route (protected) */}
                     <Route path="gestionFanfarons" element={
-                        <PageWrapper privatePage ={false}>
-                            <GestionFanfarons /> 
+                        <RequireAuth>
+                            <PageWrapper privatePage={true}>
+                                <GestionFanfarons />
                             </PageWrapper>
-                    }   />
+                        </RequireAuth>
+                    } />
 
                     {/* Nous Page Route */}
                     <Route path="nous" element={
@@ -87,6 +93,15 @@ export function RoutesComponent(props) {
                         <PageWrapper privatePage={false}>
                             <Portraits />
                         </PageWrapper>
+                    } />
+
+                    {/* User Profile Route (protected) */}
+                    <Route path="profile" element={
+                        <RequireAuth>
+                            <PageWrapper privatePage={true}>
+                                <UserProfile />
+                            </PageWrapper>
+                        </RequireAuth>
                     } />
 
                     {/* Catch-all for this level */}
