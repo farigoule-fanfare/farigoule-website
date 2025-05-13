@@ -23,7 +23,7 @@ export default function MenuAdminPage() {
   ];
 
   return (
-    <ContentPageLayout title="Menu Administration">
+    <ContentPageLayout title="Menu Administration" hideSocialLinks>
       <nav className="menuAdminContainer">
         {menuItems.map((item, idx) => (
           item.to ? (
