@@ -57,8 +57,7 @@ export default function GestionFanfarons() {
     const method = editingId ? 'put' : 'post';
     const url = editingId ? `admin/${editingId}` : 'admin';
     try{
-    const fullUrl = `${process.env.REACT_APP_RESTAPI_SERVER_URI || ''}/route/${editingId ? `admin/${editingId}` : 'admin'}`.replace(/([^:]\/)\/+/g, "$1");
-
+    
     const res = await axiosWrapper({
       method,
       url,
@@ -196,7 +195,7 @@ export default function GestionFanfarons() {
                   {f.photoUrl ? (
                     <img
                       src={f.photoUrl}
-                      alt={`Photo de ${f.surnom}`}
+                      alt={`${f.surnom}`}
                       className="apercuFanfaron"
                     />
                   ) : (
