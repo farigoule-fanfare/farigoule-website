@@ -27,8 +27,6 @@ export default function GestionFanfarons() {
     };
 
 
-
-<<<<<<< Updated upstream
   // // Soumission du formulaire (création ou mise à jour)
   // const handleSubmit = async e => {
   //   e.preventDefault();
@@ -52,11 +50,7 @@ export default function GestionFanfarons() {
 
   
 
-const handleSubmit = async e => {
-=======
-  // Soumission du formulaire (création ou mise à jour)
   const handleSubmit = async e => {
->>>>>>> Stashed changes
     e.preventDefault();
     const fd = new FormData();
     Object.entries(form).forEach(([key, value]) => fd.append(key, value));
