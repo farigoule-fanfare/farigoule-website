@@ -8,8 +8,6 @@ export const axiosInstance = axios.create({
 });
 
 export const axiosWrapper = async ({ url, method, data, isMultipart=false }) => {
-
-  console.log("axiosWrapper", url, method, data, isMultipart)
   try{
     let response;
     let headers = { 'Accept': 'application/json' };
@@ -79,8 +77,6 @@ export const axiosWrapper = async ({ url, method, data, isMultipart=false }) => 
       default:
         return ({ success: false, message: "Wrong method type provided", errorReason: "invalidParameters" });
     }
-
-    console.log("response", response)
 
     if (!response?.success){
       throw new Error(response?.error ?? "Operation failed")
