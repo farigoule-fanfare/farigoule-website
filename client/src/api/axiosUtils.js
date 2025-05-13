@@ -3,79 +3,93 @@ import axios from 'axios';
 export const axiosInstance = axios.create({
   withCredentials: true,
   headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
+    'Accept': 'application/json'
   }
 });
 
-/**
- * Wrapper évolué pour toutes les requêtes HTTP
- * @param {Object} options
- * @param {string} options.url    - Segment ou URL absolue (préfixée dynamiquement) de l'endpoint
- * @param {string} options.method - 'get'|'post'|'put'|'delete'|'patch'
- * @param {Object} [options.data]   - Payload pour POST/PUT/PATCH
- * @param {Boolean} [options.isMultipart]
- * @returns {Promise<Object>}       - { success: boolean, ...payload }
- */
-export const axiosWrapper = async ({ url, method, data = {}, isMultipart=false}) => {
-  const params = data
-  
-  const base = process.env.REACT_APP_RESTAPI_SERVER_URI || '';
-  const fullUrl = url.startsWith('http')
-    ? url
-    : `${base.replace(/\/+$/, '')}/${url.replace(/^\/+/, '')}`;
+export const axiosWrapper = async ({ url, method, data, isMultipart=false }) => {
 
-  // Configuration commune
-  const config = {
-    withCredentials: true,
-    params,
-    headers: {}
-  };
-
-  if (isMultipart) {
-    // Laisse le navigateur fixer le bon Content-Type (avec boundary)
-    // On ne met **pas** application/json
-  } else {
-    config.headers['Content-Type'] = 'application/json';
-  }
-
-  try {
+  console.log("axiosWrapper", url, method, data, isMultipart)
+  try{
     let response;
-    switch (method.toLowerCase()) {
-      case 'get':
-        response = await axios.get(fullUrl, config);
-        break;
-      case 'delete':
-        response = await axios.delete(fullUrl, config);
-        break;
-      case 'post':
-        response = await axios.post(fullUrl, data, config);
-        break;
-      case 'put':
-        response = await axios.put(fullUrl, data, config);
-        break;
-      case 'patch':
-        response = await axios.patch(fullUrl, data, config);
-        break;
+    let headers = { 'Accept': 'application/json' };
+    if (!isMultipart) {
+      headers['Content-Type'] = 'application/json';
+    } else {
+      // For multipart, do not set Content-Type, let Axios handle it
+      console.log('[axiosWrapper] Detected multipart upload, omitting Content-Type header.');
+    }
+
+    switch (method) {
+      case "get":
+      case "delete":
+        try {
+          let resGet = await axiosInstance({
+            method,
+            url: `${process.env.REACT_APP_RESTAPI_SERVER_URI}/${url}`,
+            headers,
+            params: data,
+          });
+
+          if (!resGet?.data){
+            throw new Error("operation failed")
+          }
+
+          response = resGet?.data
+        }
+        catch (e) {
+          const errorDetail = e?.response?.data;
+          const reason = errorDetail?.errorReason || errorDetail?.message || "unknownReason";
+          // Ensure a consistent error object structure for the caller
+          return ({ success: false, error: e, errorReason: reason, message: errorDetail?.message || reason });
+        }
+        break
+
+        
+      case "post":
+      case "patch":
+      case "put":
+        try {
+          let axiosConfig = {
+            method,
+            url: `${process.env.REACT_APP_RESTAPI_SERVER_URI}/${url}`,
+            headers,
+            data
+          };
+          if (isMultipart) {
+            // Remove Content-Type header for multipart
+            delete axiosConfig.headers['Content-Type'];
+            console.log('[axiosWrapper] Sending FormData payload:', data);
+          }
+          let resPost = await axiosInstance(axiosConfig);
+
+          if (!resPost?.data){
+            throw new Error("operation failed")
+          }
+
+          response = resPost?.data
+        }
+        catch (e) {
+          const errorDetail = e?.response?.data;
+          const reason = errorDetail?.errorReason || errorDetail?.message || "unknownReason";
+          // Ensure a consistent error object structure for the caller
+          return ({ success: false, error: e, errorReason: reason, message: errorDetail?.message || reason });
+        }
+        break
       default:
-        return { success: false, message: 'Wrong method type provided' };
+        return ({ success: false, message: "Wrong method type provided", errorReason: "invalidParameters" });
     }
 
-    const payload = response.data;
-    if (typeof payload.success === 'undefined') {
-      console.warn('axiosWrapper: response lacks success flag', payload);
-      return { success: false, message: 'Unexpected response format', payload };
-    }
-    return payload;
+    console.log("response", response)
 
-  } catch (e) {
-    const errorDetail = e.response?.data || {};
-    const reason = errorDetail.errorReason || errorDetail.message || e.message;
-    return {
-      success: false,
-      message: reason,
-      status: e.response?.status || null,
-      error: e
-    };
+    if (!response?.success){
+      throw new Error(response?.error ?? "Operation failed")
+    }
+
+    return response
   }
-};
+  catch(e){
+    console.log("axiosWrapper error:", e)
+    return ({success: false, error: e})
+  }
+}
