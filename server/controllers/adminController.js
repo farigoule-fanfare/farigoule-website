@@ -22,8 +22,14 @@ module.exports = {
   // Autres actions d'administration (create, update, delete)
   async create(req, res) {
     try {
-      const fanfaron = await fanfaronService.createFanfarons(req.body);
+      const payload = {
+        ...req.body,
+        photo: req.file?.filename || null
+      };
+      const fanfaron = await fanfaronService.createFanfarons(payload);
       res.json({ success: true, data: fanfaron });
+      console.log('Fichier reçu :', req.file);
+
     } catch (error) {
       console.error('adminController.create error:', error);
       res.status(500).json({ success: false, message: 'Erreur création', error: error.message });
@@ -32,13 +38,18 @@ module.exports = {
 
   async update(req, res) {
     try {
-      const fanfaron = await fanfaronService.updateFanfarons(req.params.id, req.body);
+      const payload = {
+        ...req.body,
+        photo: req.file?.filename || null
+      };
+      const fanfaron = await fanfaronService.updateFanfarons(req.params.id, payload);
       res.json({ success: true, data: fanfaron });
     } catch (error) {
       console.error('adminController.update error:', error);
       res.status(500).json({ success: false, message: 'Erreur mise à jour', error: error.message });
     }
   },
+
 
   async remove(req, res) {
     try {
