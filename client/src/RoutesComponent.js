@@ -13,6 +13,7 @@ import Symphonies from "./components/pages/Symphonies";
 import Portraits from "./components/pages/portraits/Portraits";
 import AdminPanel from "./components/pages/adminPanel/mainPanel";
 import GestionFanfarons from "./components/pages/adminPanel/gestionFanfarons";
+import GestionAccueil from "./components/pages/adminPanel/gestionAccueil";
 
 
 
@@ -54,10 +55,17 @@ export function RoutesComponent(props) {
                             </PageWrapper>
                     }   />
 
-                    {/* Admin Panel Route */}
+                    {/* Gestion Fanfarons Route */}
                     <Route path="gestionFanfarons" element={
                         <PageWrapper privatePage ={false}>
                             <GestionFanfarons /> 
+                            </PageWrapper>
+                    }   />
+
+                    {/* Gestion Acceuil Route */}
+                    <Route path="gestionAccueil" element={
+                        <PageWrapper privatePage ={false}>
+                            <GestionAccueil /> 
                             </PageWrapper>
                     }   />
 
