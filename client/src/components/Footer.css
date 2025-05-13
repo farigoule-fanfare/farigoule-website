@@ -3,6 +3,7 @@
 /* On centre le contenu textuel du footer */
 footer {
   text-align: center;
+  margin-bottom: 1rem;
 }
 
 /* Transition pour un déplacement fluide de la table */
