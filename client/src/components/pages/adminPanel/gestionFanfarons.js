@@ -15,7 +15,6 @@ export default function GestionFanfarons() {
   const fetchList = async () => {
       const res = await axiosWrapper({ method: 'get', url: 'admin/get' });
       if (res.success) {
-        // selon votre wrapper, res.data est l’objet { success:true, data: […] }
         // le vrai tableau peut être dans res.data.data ou directement dans res.data
         const arr = Array.isArray(res.data)
           ? res.data
