@@ -13,12 +13,41 @@ export default function GestionFanfarons() {
   useEffect(() => { fetchList(); }, []);
 
   const fetchList = async () => {
-    const res = await axiosWrapper({ method: 'get', url: 'admin/get'});
-    if (res.success) {
-      const arr = Array.isArray(res.data) ? res.data : Array.isArray(res.data.data) ? res.data.data : [];
-      setFanfarons(arr);
-    }
-  };
+      const res = await axiosWrapper({ method: 'get', url: 'admin/get' });
+      if (res.success) {
+        // selon votre wrapper, res.data est l’objet { success:true, data: […] }
+        // le vrai tableau peut être dans res.data.data ou directement dans res.data
+        const arr = Array.isArray(res.data)
+          ? res.data
+          : Array.isArray(res.data.data)
+            ? res.data.data
+            : [];
+        setFanfarons(arr);
+      }
+    };
+
+
+
+  // // Soumission du formulaire (création ou mise à jour)
+  // const handleSubmit = async e => {
+  //   e.preventDefault();
+  //   const fd = new FormData();
+  //   Object.entries(form).forEach(([key, value]) => {
+  //     fd.append(key, value);
+  //   });
+  //   if (photoFile) {
+  //     fd.append('photoFanfaron', photoFile);
+  //   }
+
+  //   const method = editingId ? 'put' : 'post';
+  //   const url    = editingId ? `admin/${editingId}` : 'admin';
+
+  //   const res = await axiosWrapper({ method, url, data: fd });
+  //   if (res.success) {
+  //     const arr = Array.isArray(res.data) ? res.data : Array.isArray(res.data.data) ? res.data.data : [];
+  //     setFanfarons(arr);
+  //   }
+  // };
 
   
 
