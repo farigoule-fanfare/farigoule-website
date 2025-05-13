@@ -1,0 +1,154 @@
+
+
+/* MenuAdminPage.css */
+.menuAdminContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.menuAdminContainer .menuItem {
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  color: #2c3e50;
+  font-weight: 500;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.menuAdminContainer .menuItem:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.menuAdminContainer .logoutItem {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.menuAdminContainer .logoutItem:hover {
+  background: #c0392b;
+}
+
+
+
+
+.menuAdminContainer .social-links-container, .gestionFanfarons-container .social-links-container{
+  visibility: hidden;
+}
+
+/* page gestions fanfarons*/
+
+.gestionFanfarons-container {
+  padding: 2rem;
+  /*background-color: #fff;*/
+}
+
+.gestionFanfarons-form-group {
+  margin-bottom: 1rem;
+  display: contents; /* permet au grid de fonctionner */
+}
+
+.gestionFanfarons-label {
+  display: block;
+  margin: 0.25rem 0 0.25rem;
+  font-weight: 600;
+  align-self: center;
+}
+
+.gestionFanfarons-input,
+.gestionFanfarons-textarea {
+  width: 90%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  background: none;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+  text-align: center ;
+}
+.gestionFanfarons-textarea{
+  text-align: justify;
+}
+.gestionFanfarons-buttons {
+  display: flex;
+  justify-content: center;   /* centre horizontalement */
+  align-items: center;       /* centre verticalement */
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+
+
+
+.gestionFanfarons-button--submit {
+  background-color: #007bff;
+  color: white;
+  align-self: center;
+}
+
+.gestionFanfarons-button--cancel {
+  background-color: #6c757d;
+  color: white;
+}
+
+.gestionFanfarons-td--actions {
+  text-align: center;         /* centre horizontalement le contenu */
+}
+
+.gestionFanfarons-button {
+  display: block;             /* chaque bouton prend toute la largeur disponible */
+  margin: 0.25rem auto;
+   padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  text-align: center;       /* centre chaque bouton horizontalement */
+}
+
+.gestionFanfarons-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff8d;
+  margin-top: 2rem;
+  border-radius: 0.5rem;
+}
+
+.gestionFanfarons-th,
+.gestionFanfarons-td {
+  padding: 0.75rem;
+  border: 1px solid #e0e0e0;
+}
+
+.gestionFanfarons-th--id,
+.gestionFanfarons-td--id {
+  width: 4rem;
+}
+
+.gestionFanfarons-th--surnom,
+.gestionFanfarons-td--surnom {
+  padding-left: 1rem;
+}
+
+.gestionFanfarons-photo {
+  max-width: 4rem;
+  max-height: 4rem;
+  object-fit: cover;
+  border-radius: 0.25rem;
+}
+
+.gestionFanfarons-form-wrapper {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.gestionFanfarons-form {
+  
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem 2rem;
+}
+

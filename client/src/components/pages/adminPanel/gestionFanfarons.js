@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import ContentPageLayout from "../../layout/ContentPageLayout";
+import AdminPageLayout from "../../layout/AdminPageLayout";
 import { axiosWrapper } from '@api/axiosUtils';
 import './adminPanel.css';
 
@@ -108,7 +108,7 @@ export default function GestionFanfarons() {
   };
 
   return (
-    <ContentPageLayout title="Gestion des fanfarons" hideSocialLinks>
+    <AdminPageLayout title="Gestion des fanfarons">
       
         
 
@@ -218,6 +218,6 @@ export default function GestionFanfarons() {
           </tbody>
         </table>
       </div>
-    </ContentPageLayout>
+    </AdminPageLayout>
   );
 }
