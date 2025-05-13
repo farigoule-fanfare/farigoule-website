@@ -11,12 +11,6 @@ export const axiosWrapper = async ({ url, method, data, isMultipart=false }) => 
   try{
     let response;
     let headers = { 'Accept': 'application/json' };
-    if (!isMultipart) {
-      headers['Content-Type'] = 'application/json';
-    } else {
-      // For multipart, do not set Content-Type, let Axios handle it
-      console.log('[axiosWrapper] Detected multipart upload, omitting Content-Type header.');
-    }
 
     switch (method) {
       case "get":

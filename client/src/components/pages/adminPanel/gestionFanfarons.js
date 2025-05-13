@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import AdminPageLayout from "../../layout/AdminPageLayout";
 import { axiosWrapper } from '@api/axiosUtils';
-import './adminPanel.css';
+import './gestionFanfaron.css';
 
 export default function GestionFanfarons() {
   const [fanfarons, setFanfarons] = useState([]);
@@ -13,7 +13,7 @@ export default function GestionFanfarons() {
   useEffect(() => { fetchList(); }, []);
 
   const fetchList = async () => {
-      const res = await axiosWrapper({ method: 'get', url: 'admin/get' });
+      const res = await axiosWrapper({ method: 'get', url: 'admin/fanfarons/' });
       if (res.success) {
         // le vrai tableau peut être dans res.data.data ou directement dans res.data
         const arr = Array.isArray(res.data)
@@ -55,7 +55,7 @@ export default function GestionFanfarons() {
     Object.entries(form).forEach(([key, value]) => fd.append(key, value));
     if (photoFile) fd.append('photoFanfaron', photoFile);
     const method = editingId ? 'put' : 'post';
-    const url = editingId ? `admin/${editingId}` : 'admin';
+    const url = editingId ? `admin/fanfarons/${editingId}` : 'admin';
     try{
     
     const res = await axiosWrapper({
@@ -82,7 +82,7 @@ export default function GestionFanfarons() {
 
   const handleDelete = async id => {
     if (!window.confirm('Supprimer ce fanfaron ?')) return;
-    const res = await axiosWrapper({ method: 'delete', url: `admin/${id}` });
+    const res = await axiosWrapper({ method: 'delete', url: `admin/fanfarons/${id}` });
     if (res.success) fetchList();
   };
 
