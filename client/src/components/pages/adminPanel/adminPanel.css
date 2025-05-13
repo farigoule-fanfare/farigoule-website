@@ -51,43 +51,61 @@
 
 .gestionFanfarons-form-group {
   margin-bottom: 1rem;
+  display: contents; /* permet au grid de fonctionner */
 }
 
 .gestionFanfarons-label {
   display: block;
-  margin-bottom: 0.25rem;
+  margin: 0.25rem 0 0.25rem;
   font-weight: 600;
+  align-self: center;
 }
 
 .gestionFanfarons-input,
 .gestionFanfarons-textarea {
-  width: 100%;
+  width: 90%;
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 0.25rem;
+  box-sizing: border-box;
 }
 
 .gestionFanfarons-buttons {
-  margin-top: 1.5rem;
   display: flex;
+  justify-content: center;   /* centre horizontalement */
+  align-items: center;       /* centre verticalement */
   gap: 1rem;
+  margin: 1.5rem 0;
 }
 
-.gestionFanfarons-button {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 0.25rem;
-  cursor: pointer;
-}
+
+
 
 .gestionFanfarons-button--submit {
   background-color: #007bff;
   color: white;
+  align-self: center;
 }
 
 .gestionFanfarons-button--cancel {
   background-color: #6c757d;
   color: white;
+}
+
+.gestionFanfarons-td--actions {
+  text-align: center;         /* centre horizontalement le contenu */
+}
+
+.gestionFanfarons-button {
+  display: block;             /* chaque bouton prend toute la largeur disponible */
+  margin: 0.25rem auto;       /* centre chaque bouton horizontalement */
+}
+.gestionFanfarons-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  text-align: center;
 }
 
 .gestionFanfarons-table {
@@ -118,3 +136,15 @@
   object-fit: cover;
   border-radius: 0.25rem;
 }
+
+.gestionFanfarons-form-wrapper {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.gestionFanfarons-form {
+  
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem 2rem;
+}
+
