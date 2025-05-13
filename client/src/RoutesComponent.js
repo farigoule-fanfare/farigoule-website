@@ -13,9 +13,9 @@ import Symphonies from "./components/pages/Symphonies";
 import Portraits from "./components/pages/portraits/Portraits";
 import AdminPanel from "./components/pages/adminPanel/mainPanel";
 import GestionFanfarons from "./components/pages/adminPanel/gestionFanfarons";
+import GestionAccueil from "./components/pages/adminPanel/gestionAccueil";
 import UserProfile from "./components/pages/UserProfile";
 import RequireAuth from "./components/utils/RequireAuth";
-
 
 
 export function RoutesComponent(props) {
@@ -58,7 +58,7 @@ export function RoutesComponent(props) {
                         </RequireAuth>
                     } />
 
-                    {/* Gestion Fanfarons Route (protected) */}
+                    {/* Admin Panel Route (protected) */}
                     <Route path="gestionFanfarons" element={
                         <RequireAuth>
                             <PageWrapper privatePage={true}>
