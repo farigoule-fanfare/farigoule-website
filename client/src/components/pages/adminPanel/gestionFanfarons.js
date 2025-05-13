@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ContentPageLayout from "../../layout/ContentPageLayout";
 import { axiosWrapper } from '@api/axiosUtils';
 import './adminPanel.css';
@@ -8,6 +8,7 @@ export default function GestionFanfarons() {
   const [form, setForm] = useState({ surnom: '', instrument: '', promo: '', bureau: '', mail: '', tel: '', description: '' });
   const [photoFile, setPhotoFile] = useState(null);
   const [editingId, setEditingId] = useState(null);
+  const formRef = useRef(null);
 
   useEffect(() => { fetchList(); }, []);
 
@@ -46,12 +47,27 @@ export default function GestionFanfarons() {
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleEditClick = f => {
+    setEditingId(f.id);
+    setForm({
+      surnom: f.surnom,
+      instrument: f.instrument,
+      promo: f.promo,
+      bureau: f.bureau,
+      mail: f.mail,
+      tel: f.tel,
+      description: f.description
+    });
+    setPhotoFile(null);
+    formRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <ContentPageLayout>
       <div className="gestionFanfarons-container">
         <h1 className="gestionFanfarons-title">Gestion des fanfarons</h1>
 
-        <div className="gestionFanfarons-form-wrapper">
+        <div className="gestionFanfarons-form-wrapper" ref={formRef}>
           <form onSubmit={handleSubmit} className="gestionFanfarons-form">
             {['surnom','instrument','promo','bureau','mail','tel'].map(field => (
               <div key={field} className="gestionFanfarons-form-group">
@@ -119,7 +135,7 @@ export default function GestionFanfarons() {
               <th className="gestionFanfarons-th">Bureau</th>
               <th className="gestionFanfarons-th">Téléphone</th>
               <th className="gestionFanfarons-th gestionFanfarons-th--photo">Aperçu photo</th>
-              <th className="gestionFanfarons-th">Actions</th>
+              <th className="gestionFanfarons-th gestionFanfarons-th--actions-header">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -144,17 +160,13 @@ export default function GestionFanfarons() {
                 </td>
                 <td className="gestionFanfarons-td gestionFanfarons-td--actions">
                   <button
-                    onClick={() => {
-                      setEditingId(f.id);
-                      setForm({ surnom: f.surnom, instrument: f.instrument, promo: f.promo, bureau: f.bureau, mail: f.mail, tel: f.tel, description: f.description });
-                    }}
+                    onClick={() => handleEditClick(f)}
                     className="gestionFanfarons-button gestionFanfarons-button--edit"
-                  >
-                    ✎
-                  </button>
-                  <button onClick={() => handleDelete(f.id)} className="gestionFanfarons-button gestionFanfarons-button--delete">
-                    🗑
-                  </button>
+                  >✎</button>
+                  <button
+                    onClick={() => handleDelete(f.id)}
+                    className="gestionFanfarons-button gestionFanfarons-button--delete"
+                  >🗑</button>
                 </td>
               </tr>
             ))}
