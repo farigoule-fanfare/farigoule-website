@@ -13,7 +13,7 @@ export default function GestionCitations() {
 
   // Form/edit state
   const [editCitationId, setEditCitationId] = useState(null);
-  const [citationForm, setCitationForm] = useState({ idFanfaron: '', citation: '' });
+  const [citationForm, setCitationForm] = useState({ auteur_id: '', citation: '' });
   const citationFormRef = useRef(null);
 
   // Pagination state
@@ -66,7 +66,7 @@ export default function GestionCitations() {
     e.preventDefault();
     try {
       const payload = {
-        idFanfaron: citationForm.idFanfaron,
+        auteur_id: citationForm.auteur_id,
         citation: citationForm.citation
       };
       const url = editCitationId
@@ -76,7 +76,7 @@ export default function GestionCitations() {
       const res = await axiosWrapper({ method, url, data: payload });
       if (res.success) {
         setEditCitationId(null);
-        setCitationForm({ idFanfaron: '', citation: '' });
+        setCitationForm({ auteur_id: '', citation: '' });
         fetchCitations();
       }
     } catch (error) {
@@ -86,9 +86,9 @@ export default function GestionCitations() {
 
   // Prepare edit (keep fanfaron selection)
   const handleCitationEdit = citation => {
-    setEditCitationId(citation.idCitation);
+    setEditCitationId(citation.id);
     setCitationForm({
-      idFanfaron: String(citation.idFanfaron),
+      auteur_id: citation.auteur_id,
       citation: citation.citation
     });
     citationFormRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -125,14 +125,14 @@ export default function GestionCitations() {
           </thead>
           <tbody>
             {currentCitations.map(c => (
-              <tr key={c.idCitation}>
+              <tr key={c.id}>
                 <td>{c.auteurCitation}</td>
                 <td>{c.citation}</td>
                 <td>
                   <button onClick={() => handleCitationEdit(c)}>✎</button>
                 </td>
                 <td>
-                  <button onClick={() => handleCitationDelete(c.idCitation)}>🗑</button>
+                  <button onClick={() => handleCitationDelete(c.id)}>🗑</button>
                 </td>
               </tr>
             ))}
@@ -154,17 +154,17 @@ export default function GestionCitations() {
           <form onSubmit={handleCitationSubmit}>
             <h3>{editCitationId ? 'Éditer une citation' : 'Ajouter une citation'}</h3>
             <p>
-              <label htmlFor="idFanfaron">Fanfaron :</label>
+              <label htmlFor="auteur_id">Fanfaron :</label>
               <select
-                name="idFanfaron"
-                id="idFanfaron"
-                value={citationForm.idFanfaron}
+                name="auteur_id"
+                id="auteur_id"
+                value={citationForm.auteur_id}
                 onChange={handleCitationChange}
                 required
               >
                 <option value="">Sélectionner</option>
                 {fanfarons.map(f => (
-                  <option key={f.idFanfaron} value={String(f.idFanfaron)}>
+                  <option key={f.id} value={f.id}>
                     {f.surnom}
                   </option>
                 ))}
