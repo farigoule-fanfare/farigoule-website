@@ -16,12 +16,24 @@ const PORT = process.env.PORT || 5000; // Use environment variable for port or d
 // --- Middleware --- 
 
 // Configure CORS to allow specific origin and credentials
-const corsOptions = {
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000', // Your React app's origin
-    credentials: true, // Allow cookies and authorization headers
-    optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
-};
-app.use(cors(corsOptions));
+// const corsOptions = {
+//     origin: process.env.FRONTEND_URL || 'http://localhost:3000', // Your React app's origin
+//     credentials: true, // Allow cookies and authorization headers
+//     optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+// };
+// app.use(cors(corsOptions));
+
+// TODO configure to work on CORS package
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", process.env.FRONTEND_URL || 'http://localhost:3000');
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    if (req.method === "OPTIONS") {
+      return res.sendStatus(200);
+    }
+    next();
+  });
 
 // Parse cookies
 app.use(cookieParser()); // Added cookie-parser middleware
