@@ -1,234 +1,164 @@
 import React, { useState, useEffect } from 'react';
+import ContentPageLayout from "../../layout/ContentPageLayout";
 import { axiosWrapper } from '@api/axiosUtils';
+import './adminPanel.css';
+
 export default function GestionFanfarons() {
-  
-    // 🍺 États
   const [fanfarons, setFanfarons] = useState([]);
-  const [form, setForm] = useState({
-    surnom: '',
-    instrument: '',
-    promo: '',
-    bureau: '',
-    mail: '',
-    tel: '',
-    description: ''
-  });
+  const [form, setForm] = useState({ surnom: '', instrument: '', promo: '', bureau: '', mail: '', tel: '', description: '' });
   const [photoFile, setPhotoFile] = useState(null);
   const [editingId, setEditingId] = useState(null);
 
-  // ⚙️ Récupère la liste au montage et après chaque écriture
-  useEffect(() => {
-    fetchList();
-  }, []);
+  useEffect(() => { fetchList(); }, []);
 
   const fetchList = async () => {
-    // → construira http://localhost:5000/route/admin/get
-      const res = await axiosWrapper({ method: 'get', url: 'admin/get' });
-      if (res.success) {
-        // selon votre wrapper, res.data est l’objet { success:true, data: […] }
-        // le vrai tableau peut être dans res.data.data ou directement dans res.data
-        const arr = Array.isArray(res.data)
-          ? res.data
-          : Array.isArray(res.data.data)
-            ? res.data.data
-            : [];
-        setFanfarons(arr);
-      }
-    };
+    const res = await axiosWrapper({ method: 'get', url: 'admin/get' });
+    if (res.success) {
+      const arr = Array.isArray(res.data) ? res.data : Array.isArray(res.data.data) ? res.data.data : [];
+      setFanfarons(arr);
+    }
+  };
 
-
-
-  // ✏️ Soumission du formulaire (création ou mise à jour)
   const handleSubmit = async e => {
     e.preventDefault();
     const fd = new FormData();
-    Object.entries(form).forEach(([key, value]) => {
-      fd.append(key, value);
-    });
-    if (photoFile) {
-      fd.append('photoFanfaron', photoFile);
-    }
-
+    Object.entries(form).forEach(([key, value]) => fd.append(key, value));
+    if (photoFile) fd.append('photoFanfaron', photoFile);
     const method = editingId ? 'put' : 'post';
-    const url    = editingId ? `admin/${editingId}` : 'admin';
-
+    const url = editingId ? `admin/${editingId}` : 'admin';
     const res = await axiosWrapper({ method, url, data: fd });
     if (res.success) {
       await fetchList();
-      setForm({
-        surnom: '',
-        instrument: '',
-        promo: '',
-        bureau: '',
-        mail: '',
-        tel: '',
-        description: ''
-      });
+      setForm({ surnom: '', instrument: '', promo: '', bureau: '', mail: '', tel: '', description: '' });
       setPhotoFile(null);
       setEditingId(null);
     }
   };
 
-  // 🗑 Suppression d’un fanfaron
   const handleDelete = async id => {
     if (!window.confirm('Supprimer ce fanfaron ?')) return;
     const res = await axiosWrapper({ method: 'delete', url: `admin/${id}` });
     if (res.success) fetchList();
   };
 
-  // 🔄 Mise à jour de l’état du formulaire
   const handleChange = e => {
     const { name, value } = e.target;
-    setForm(f => ({ ...f, [name]: value }));
+    setForm(prev => ({ ...prev, [name]: value }));
   };
 
   return (
-    <div style={{ padding: '1rem' }}>
-      <h1>Gestion des fanfarons</h1>
+    <ContentPageLayout>
+      <div className="gestionFanfarons-container">
+        <h1 className="gestionFanfarons-title">Gestion des fanfarons</h1>
 
-      <form onSubmit={handleSubmit} style={{ marginBottom: '2rem' }}>
-        <div>
-          <label>Surnom:</label>
-          <input
-            name="surnom"
-            value={form.surnom}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Instrument:</label>
-          <input
-            name="instrument"
-            value={form.instrument}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Promo:</label>
-          <input
-            name="promo"
-            type="number"
-            value={form.promo}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Bureau:</label>
-          <input
-            name="bureau"
-            value={form.bureau}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Mail:</label>
-          <input
-            name="mail"
-            type="email"
-            value={form.mail}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Téléphone:</label>
-          <input
-            name="tel"
-            value={form.tel}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Description:</label>
-          <textarea
-            name="description"
-            value={form.description}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Photo (JPEG/PNG):</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={e => setPhotoFile(e.target.files[0])}
-          />
-        </div>
-        <button type="submit">
-          {editingId ? 'Mettre à jour' : 'Créer'}
-        </button>
-        {editingId && (
-          <button
-            type="button"
-            onClick={() => {
-              setEditingId(null);
-              setForm({
-                surnom: '',
-                instrument: '',
-                promo: '',
-                bureau: '',
-                mail: '',
-                tel: '',
-                description: ''
-              });
-              setPhotoFile(null);
-            }}
-            style={{ marginLeft: '1rem' }}
-          >
-            Annuler
-          </button>
-        )}
-      </form>
-
-      <table border="1" cellPadding="4" cellSpacing="0">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Surnom</th>
-            <th>Instrument</th>
-            <th>Promo</th>
-            <th>Bureau</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {fanfarons.map(f => (
-            <tr key={f.id}>
-              <td>{f.id}</td>
-              <td>{f.surnom}</td>
-              <td>{f.instrument}</td>
-              <td>{f.promo}</td>
-              <td>{f.bureau}</td>
-              <td>
-                <button
-                  onClick={() => {
-                    setEditingId(f.id);
-                    setForm({
-                      surnom: f.surnom,
-                      instrument: f.instrument,
-                      promo: f.promo,
-                      bureau: f.bureau,
-                      mail: f.mail,
-                      tel: f.tel,
-                      description: f.description
-                    });
-                  }}
-                >
-                  ✎
-                </button>
-                <button
-                  onClick={() => handleDelete(f.id)}
-                  style={{ marginLeft: '0.5rem' }}
-                >
-                  🗑
-                </button>
-              </td>
-            </tr>
+        <form onSubmit={handleSubmit} className="gestionFanfarons-form">
+          {['surnom','instrument','promo','bureau','mail','tel'].map(field => (
+            <div key={field} className="gestionFanfarons-form-group">
+              <label htmlFor={field} className="gestionFanfarons-label">
+                {field === 'mail' ? 'Mail :' : field.charAt(0).toUpperCase() + field.slice(1) + ' :'}
+              </label>
+              <input
+                id={field}
+                name={field}
+                type={field === 'promo' ? 'number' : field === 'mail' ? 'email' : 'text'}
+                value={form[field]}
+                onChange={handleChange}
+                required={['surnom','instrument','promo'].includes(field)}
+                className="gestionFanfarons-input"
+              />
+            </div>
           ))}
-        </tbody>
-      </table>
-    </div>
+
+          <div className="gestionFanfarons-form-group">
+            <label htmlFor="description" className="gestionFanfarons-label">Description :</label>
+            <textarea
+              id="description"
+              name="description"
+              value={form.description}
+              onChange={handleChange}
+              className="gestionFanfarons-textarea"
+            />
+          </div>
+
+          <div className="gestionFanfarons-form-group">
+            <label htmlFor="photoFanfaron" className="gestionFanfarons-label">Photo (JPEG/PNG) :</label>
+            <input
+              id="photoFanfaron"
+              type="file"
+              accept="image/*"
+              onChange={e => setPhotoFile(e.target.files[0])}
+              className="gestionFanfarons-input"
+            />
+          </div>
+
+          <div className="gestionFanfarons-buttons">
+            <button type="submit" className="gestionFanfarons-button gestionFanfarons-button--submit">
+              {editingId ? 'Mettre à jour' : 'Créer'}
+            </button>
+            {editingId && (
+              <button
+                type="button"
+                onClick={() => { setEditingId(null); setForm({ surnom: '', instrument: '', promo: '', bureau: '', mail: '', tel: '', description: '' }); setPhotoFile(null); }}
+                className="gestionFanfarons-button gestionFanfarons-button--cancel"
+              >
+                Annuler
+              </button>
+            )}
+          </div>
+        </form>
+
+        <table className="gestionFanfarons-table">
+          <thead>
+            <tr>
+              <th className="gestionFanfarons-th gestionFanfarons-th--id">ID</th>
+              <th className="gestionFanfarons-th gestionFanfarons-th--surnom">Surnom</th>
+              <th className="gestionFanfarons-th">Instrument</th>
+              <th className="gestionFanfarons-th">Promo</th>
+              <th className="gestionFanfarons-th">Bureau</th>
+              <th className="gestionFanfarons-th">Téléphone</th>
+              <th className="gestionFanfarons-th gestionFanfarons-th--photo">Aperçu photo</th>
+              <th className="gestionFanfarons-th">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {fanfarons.map(f => (
+              <tr key={f.id} className="gestionFanfarons-row">
+                <td className="gestionFanfarons-td gestionFanfarons-td--id">{f.id}</td>
+                <td className="gestionFanfarons-td gestionFanfarons-td--surnom">{f.surnom}</td>
+                <td className="gestionFanfarons-td">{f.instrument}</td>
+                <td className="gestionFanfarons-td">{f.promo}</td>
+                <td className="gestionFanfarons-td">{f.bureau}</td>
+                <td className="gestionFanfarons-td">{f.tel}</td>
+                <td className="gestionFanfarons-td gestionFanfarons-td--photo">
+                  {f.photoUrl ? (
+                    <img
+                      src={f.photoUrl}
+                      alt={`Photo de ${f.surnom}`}
+                      className="apercuFanfaron"
+                    />
+                  ) : (
+                    <span className="gestionFanfarons-noPhoto">Aucune photo</span>
+                  )}
+                </td>
+                <td className="gestionFanfarons-td">
+                  <button
+                    onClick={() => {
+                      setEditingId(f.id);
+                      setForm({ surnom: f.surnom, instrument: f.instrument, promo: f.promo, bureau: f.bureau, mail: f.mail, tel: f.tel, description: f.description });
+                    }}
+                    className="gestionFanfarons-button gestionFanfarons-button--edit"
+                  >
+                    ✎
+                  </button>
+                  <button onClick={() => handleDelete(f.id)} className="gestionFanfarons-button gestionFanfarons-button--delete">
+                    🗑
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </ContentPageLayout>
   );
 }
