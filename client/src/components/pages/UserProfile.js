@@ -5,7 +5,7 @@ import ContentPageLayout from '../layout/ContentPageLayout';
 import './UserProfile.css';
 
 export default function UserProfile() {
-  const { currentUser, isAuthenticated, isLoading, checkAuthStatus } = useAuth();
+  const { currentUser, isLoading, checkAuthStatus } = useAuth();
   const [form, setForm] = useState({
     nom: '',
     prenom: '',
