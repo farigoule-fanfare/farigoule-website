@@ -113,7 +113,7 @@ export default function GestionAccueil() {
   };
 
   return (
-    <AdminPageLayout>
+    <AdminPageLayout title="Gestion de la page d'accueil">
       {/* ==== SECTION DIAPORAMA ==== */}
       <section className="gestionAccueil-section">
         <h2>Diaporama</h2>
