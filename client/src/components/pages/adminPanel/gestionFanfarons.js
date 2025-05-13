@@ -13,28 +13,46 @@ export default function GestionFanfarons() {
   useEffect(() => { fetchList(); }, []);
 
   const fetchList = async () => {
-    const res = await axiosWrapper({ method: 'get', url: 'admin/get' });
+    const res = await axiosWrapper({ method: 'get', url: 'admin/get'});
     if (res.success) {
       const arr = Array.isArray(res.data) ? res.data : Array.isArray(res.data.data) ? res.data.data : [];
       setFanfarons(arr);
     }
   };
 
-  const handleSubmit = async e => {
+  
+
+const handleSubmit = async e => {
     e.preventDefault();
     const fd = new FormData();
     Object.entries(form).forEach(([key, value]) => fd.append(key, value));
     if (photoFile) fd.append('photoFanfaron', photoFile);
     const method = editingId ? 'put' : 'post';
     const url = editingId ? `admin/${editingId}` : 'admin';
-    const res = await axiosWrapper({ method, url, data: fd });
-    if (res.success) {
+    try{
+    const fullUrl = `${process.env.REACT_APP_RESTAPI_SERVER_URI || ''}/route/${editingId ? `admin/${editingId}` : 'admin'}`.replace(/([^:]\/)\/+/g, "$1");
+
+    const res = await axiosWrapper({
+      method,
+      url,
+      data: fd,
+      isMultipart: true
+    });
+
+      console.log('[SUBMIT RESULT]', res);
+      if (res.success) {
       await fetchList();
       setForm({ surnom: '', instrument: '', promo: '', bureau: '', mail: '', tel: '', description: '' });
       setPhotoFile(null);
       setEditingId(null);
+      }
+    } catch (err) {
+      console.error('[SUBMIT ERROR]', err);
     }
+
   };
+
+
 
   const handleDelete = async id => {
     if (!window.confirm('Supprimer ce fanfaron ?')) return;
