@@ -127,7 +127,7 @@ const Portraits = () => {
                 <p className="pImageBureau">
                   <img
                     src={require(`../../../img/boutons/bouton-${f.bureau}.png`)}
-                    alt="Logo bureau"
+                    alt="Bureau"
                     className="imageBureau"
                   />
                 </p>
