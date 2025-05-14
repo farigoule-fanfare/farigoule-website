@@ -1,5 +1,5 @@
 // src/pages/GestionAccueil.jsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef,useCallback } from 'react';
 import AdminPageLayout from '../../layout/AdminPageLayout';
 import { axiosWrapper } from '@api/axiosUtils';
 import './gestionAccueil.css';
@@ -23,14 +23,8 @@ export default function GestionAccueil() {
   const [diapoPage, setDiapoPage] = useState(1);
   const [datePage, setDatePage] = useState(1);
 
-  // Fetch data on mount
-  useEffect(() => {
-    fetchDiapos();
-    fetchDates();
-  }, []);
-
-  // Fetch diapos using same endpoint as admin
-  const fetchDiapos = async () => {
+  // Memoized fetch functions
+  const fetchDiapos = useCallback(async () => {
     try {
       const res = await axiosWrapper({ method: 'get', url: 'admin/diapos' });
       if (res.success && Array.isArray(res.data)) {
@@ -44,10 +38,9 @@ export default function GestionAccueil() {
     } catch (error) {
       console.error('Erreur réseau fetch diapos:', error);
     }
-  };
+  }, [diapoPage]);
 
-  // Fetch upcoming contracts (dates)
-  const fetchDates = async () => {
+  const fetchDates = useCallback(async () => {
     try {
       const res = await axiosWrapper({ method: 'get', url: 'admin/contrats/' });
       if (res.success && Array.isArray(res.data)) {
@@ -61,7 +54,13 @@ export default function GestionAccueil() {
     } catch (error) {
       console.error('Erreur réseau fetch dates:', error);
     }
-  };
+  }, [datePage]);
+
+   // Fetch data on mount
+  useEffect(() => {
+    fetchDiapos();
+    fetchDates();
+  }, [fetchDiapos,fetchDates]);
 
   // --- Diapo handlers ---
   const handleDiapoChange = e => setDiapoForm({ description: e.target.value });
