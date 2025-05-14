@@ -29,24 +29,6 @@
   resize: vertical;
 }
 
-button[type="submit"] {
-  background-color: #007bff; /* Example primary color */
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-button[type="submit"]:hover {
-  background-color: #0056b3;
-}
-
-button[type="submit"]:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
 
 .success-message {
   color: green;

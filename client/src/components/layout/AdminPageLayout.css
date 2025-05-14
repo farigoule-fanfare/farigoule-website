@@ -1,6 +1,17 @@
-
-
 /* MenuAdminPage.css */
+/* Variables globales */
+:root {
+  --bg-light: #ffffff8d;
+  --border-radius: 0.5rem;
+  --gap: 1rem;
+  --primary: #007bff;
+  --success: #28a745;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --text-dark: #333;
+}
+
+
 .menuAdminContainer {
   display: flex;
   flex-wrap: wrap;
@@ -35,9 +46,159 @@
   background: #c0392b;
 }
 
+/* ----------- Pages ------------*/
+.adminPanel-form-wrapper {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.adminPanel-form {
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem 2rem;
+}
+
+.adminPanel-form-group {
+  margin-bottom: 1rem;
+  display: contents; /* permet au grid de fonctionner */
+}
+
+.adminPanel-label {
+  display: block;
+  margin: 0.25rem 0 0.25rem;
+  font-weight: 600;
+  align-self: center;
+}
+
+.adminPanel-input,
+.adminPanel-textarea {
+  width: 90%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  background: none;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+  text-align: center ;
+}
+.adminPanel-textarea{
+  text-align: justify;
+}
 
 
 
-.menuAdminContainer .social-links-container, .gestionFanfarons-container .social-links-container{
-  visibility: hidden;
+/* Boutons du formulaire */
+
+.adminPanel-buttons {
+  display: flex;
+  justify-content: center;   /* centre horizontalement */
+  align-items: center;       /* centre verticalement */
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.adminPanel-button {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: filter 0.2s;
+  align-self: center;
+}
+
+.adminPanel-button[type="submit"] {
+  background-color: var(--success);
+  color: #fff;
+}
+
+.adminPanel-button[type="submit"]:hover {
+  filter: brightness(0.9);
+}
+
+.adminPanel-button[type="cancel"] {
+  background-color: var(--warning);
+  color: #000;
+}
+
+.adminPanel-button[type="cancel"]:hover {
+  filter: brightness(0.9);
+}
+
+/* Boutons d’action (éditer / supprimer) */
+.adminPanel-button[type="edit"],
+.adminPanel-button[type="delete"]{
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+.adminPanel-button[type="edit"] {
+  background-color: var(--warning);
+  color: #000;
+}
+
+.adminPanel-button[type="edit"]:hover {
+  filter: brightness(0.9);
+}
+
+.adminPanel-button[type="delete"] {
+  background-color: var(--danger);
+  color: #fff;
+}
+
+.adminPanel-button[type="delete"]:hover {
+  filter: brightness(0.9);
+}
+
+
+/* Tableaux */
+
+.adminPanel-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--gap);
+}
+
+.adminPanel-table th,
+.adminPanel-table td {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+
+.adminPanel-table thead th {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: var(--gap);
+}
+
+.pagination button {
+  width: 2.5rem;
+  padding: 0.5rem;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--primary);
+  color: #fff;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+.pagination button[disabled] {
+  background-color: #6c757d;
+  cursor: default;
+}
+
+.pagination button:not([disabled]):hover {
+  filter: brightness(0.9);
 }
