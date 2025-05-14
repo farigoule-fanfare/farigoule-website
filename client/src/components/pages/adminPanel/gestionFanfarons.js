@@ -1,5 +1,5 @@
 // src/pages/GestionFanfarons.jsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import AdminPageLayout from '../../layout/AdminPageLayout';
 import { axiosWrapper } from '@api/axiosUtils';
 import './gestionFanfaron.css';
@@ -13,11 +13,9 @@ export default function GestionFanfarons() {
   const formRef = useRef(null);
   const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    fetchList();
-  }, []);
 
-  const fetchList = async () => {
+
+  const fetchList = useCallback(async () => {
     try {
       const res = await axiosWrapper({ method: 'get', url: 'admin/fanfarons/' });
       if (res.success) {
@@ -29,7 +27,11 @@ export default function GestionFanfarons() {
     } catch (err) {
       console.error('[FETCH ERROR]', err);
     }
-  };
+  },[page]);
+
+    useEffect(() => {
+    fetchList();
+  }, [fetchList]);
 
   const sorted = [...fanfarons].sort((a, b) => {
     const pa = Number(a.promo), pb = Number(b.promo);
