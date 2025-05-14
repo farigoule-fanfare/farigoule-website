@@ -1,5 +1,5 @@
 // src/pages/GestionCitations.jsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef,useCallback} from 'react';
 import AdminPageLayout from '../../layout/AdminPageLayout';
 import { axiosWrapper } from '@api/axiosUtils';
 //import './adminPanel.css';
@@ -19,11 +19,7 @@ export default function GestionCitations() {
   // Pagination state
   const [citationPage, setCitationPage] = useState(1);
 
-  // Fetch data on mount
-  useEffect(() => {
-    fetchFanfarons();
-    fetchCitations();
-  }, []);
+  
 
   // Load fanfarons for select options
   const fetchFanfarons = async () => {
@@ -41,7 +37,7 @@ export default function GestionCitations() {
   };
 
   // Load all citations
-  const fetchCitations = async () => {
+  const fetchCitations = useCallback(async () => {
     try {
       const res = await axiosWrapper({ method: 'get', url: 'admin/citations' });
       console.log('fetchCitations response:', res);  // Debug raw response
@@ -53,7 +49,13 @@ export default function GestionCitations() {
     } catch (error) {
       console.error('Erreur réseau fetch citations:', error);
     }
-  };
+  },[citationPage]);
+
+  // Fetch data on mount
+  useEffect(() => {
+    fetchFanfarons();
+    fetchCitations();
+  }, [fetchCitations]);
 
   // Handle form changes
   const handleCitationChange = e => {

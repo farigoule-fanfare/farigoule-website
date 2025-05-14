@@ -1,7 +1,6 @@
 // Copyright © FINANCE SECURITY GmbH - All rights reserved.
 import React, { useEffect, useState, lazy, Suspense } from "react";
 import PropTypes from "prop-types";
-import { useLocation } from "react-router-dom";
 
 import Loading from "@components/utils/Loading";
 import {axiosWrapper} from '@api/axiosUtils';
@@ -15,8 +14,7 @@ const RequireAuth = lazy(() => import("@components/utils/RequireAuth"));
 function PageWrapper(props) {
     const [citationsArray, setCitationsArray] = useState([]);
     const [citationObject, setCitationObject] = useState({ citation: "", auteurCitation: "" });
-    const [president, setPresident] = useState({ nom: "", phone: "" });
-    const location = useLocation();
+    const [president] = useState({ nom: "", phone: "" });
 
     // Fetch all citations on initial component mount
     useEffect(() => {
