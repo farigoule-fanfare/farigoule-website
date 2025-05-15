@@ -2,20 +2,18 @@ import React, { useState, useEffect, useMemo } from 'react';
 import AdminPageLayout from '../../layout/AdminPageLayout';
 import { axiosWrapper } from '@api/axiosUtils';
 import { useAuth } from '../../../context/AuthContext';
-//import './gestionFanfaron.css';
-
+import './gestionFanfaron.css';
 
 export default function GestionUtilisateurs() {
   const ITEMS_PER_PAGE = 10;
-  const auth = useAuth();
-  const userId = auth?.user?.id;
+  const { currentUser } = useAuth();
+  const selfId = currentUser?.id ? String(currentUser.id) : null;
+
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(1);
-  const [modal, setModal] = useState({ show: false, password: '' });
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  /* ------------ FETCH USERS ------------- */
+  useEffect(() => { fetchUsers(); }, []);
 
   const fetchUsers = async () => {
     try {
@@ -27,16 +25,17 @@ export default function GestionUtilisateurs() {
         if (page > totalPages) setPage(1);
       }
     } catch (err) {
-      console.error('[FETCH USERS ERROR]', err);
+      console.error('FETCH USERS ERROR', err);
     }
   };
 
+  /* ------------ HELPERS ------------- */
+  const isMe = (u) => selfId && String(u.id) === selfId;
+
   const sorted = useMemo(() => {
     return [...users].sort((a, b) => {
-      const pa = Number(a.promo);
-      const pb = Number(b.promo);
-      if (pb !== pa) return pb - pa;
-      return a.surnom.localeCompare(b.surnom, 'fr');
+      const pa = Number(a.promo), pb = Number(b.promo);
+      return pb - pa || a.surnom.localeCompare(b.surnom, 'fr');
     });
   }, [users]);
 
@@ -53,82 +52,80 @@ export default function GestionUtilisateurs() {
 
   const generateRandomPassword = () => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let pass = '';
-    for (let i = 0; i < 10; i++) {
-      pass += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return pass;
+    return Array.from({ length: 10 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
   };
 
+  const showPasswordPopup = (pass) => {
+    const w = window.open('', '', 'width=420,height=220');
+    if (!w) return; // popup blocked
+    w.document.write(`<!DOCTYPE html><html><head><title>Nouveau mot de passe</title></head><body style="font-family:Arial;text-align:center;padding:2rem;">
+        <h3>Mot de passe généré</h3>
+        <pre style="font-size:1.3rem;margin:1rem 0;">${pass}</pre>
+        <button id="copyBtn" style="padding:0.5rem 1rem;border:1px solid #444;border-radius:4px;cursor:pointer;">Copier</button>
+        <script>
+          document.getElementById('copyBtn').addEventListener('click', () => {
+            navigator.clipboard.writeText('${pass}').then(()=>alert('Mot de passe copié !')); 
+          });
+        </script>
+      </body></html>`);
+    w.document.close();
+  };
+
+  /* ------------ ACTIONS ------------- */
   const handleResetPassword = async (u) => {
+    if (isMe(u)) return;
     if (!window.confirm(`Réinitialiser le mot de passe de ${u.surnom} ?`)) return;
     const newPass = generateRandomPassword();
     try {
-      await axiosWrapper({
-        method: 'post',
-        url: `admin/admin/${u.id}/setPassword`,
-        data: { password: newPass }
-      });
-      setModal({ show: true, password: newPass });
+      await axiosWrapper({ method: 'post', url: `admin/admin/${u.id}/setPassword`, data: { password: newPass } });
+      showPasswordPopup(newPass);
     } catch (err) {
-      console.error('[RESET PASSWORD ERROR]', err);
+      console.error('RESET PASSWORD ERROR', err);
     }
   };
 
   const handleToggleAdmin = async (u) => {
-    const isAdmin = getHighestRole(u.roles) === 'admin';
-    if (isAdmin && userId === u.id) return;
-    const action = isAdmin ? 'removeAdminRole' : 'addAdminRole';
+    if (isMe(u)) return;
+    const currentRole = getHighestRole(u.roles);
+    const confirmMsg = currentRole === 'admin' ? `Retirer le rôle admin de ${u.surnom} ?` : `Ajouter le rôle admin à ${u.surnom} ?`;
+    if (!window.confirm(confirmMsg)) return;
+    const action = currentRole === 'admin' ? 'removeAdminRole' : 'addAdminRole';
     try {
-      await axiosWrapper({
-        method: 'post',
-        url: `admin/admin/${u.id}/${action}`
-      });
+      await axiosWrapper({ method: 'post', url: `admin/admin/${u.id}/${action}` });
       fetchUsers();
     } catch (err) {
-      console.error('[TOGGLE ADMIN ERROR]', err);
+      console.error('TOGGLE ADMIN ERROR', err);
     }
   };
 
-  const closeModal = () => setModal({ show: false, password: '' });
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(modal.password);
-  };
-
+  /* ------------ RENDER ------------- */
   return (
     <AdminPageLayout title="Gestion des utilisateurs">
       <div className="adminPanel-section">
         <table className="adminPanel-table">
           <thead>
-            <tr>
-              <th>ID</th>
-              <th>Surnom</th>
-              <th>Promo</th>
-              <th>Rôle</th>
-              <th>Actions</th>
-            </tr>
+            <tr><th>ID</th><th>Surnom</th><th>Promo</th><th>Rôle</th><th>Actions</th></tr>
           </thead>
           <tbody>
-            {paginated.map((u, idx) => u && (
-              <tr key={u.id || idx}>
+            {paginated.map((u, idx) => (
+              <tr key={u.id ?? idx}>
                 <td>{u.id}</td>
                 <td>{u.surnom}</td>
                 <td>{u.promo}</td>
                 <td>{getHighestRole(u.roles)}</td>
                 <td>
-                  <button
-                    className="adminPanel-button"
-                    onClick={() => handleResetPassword(u)}
-                  >
-                    Reset mot de passe
-                  </button>
-                  <button
-                    className="adminPanel-button"
-                    onClick={() => handleToggleAdmin(u)}
-                    disabled={userId === u.id && getHighestRole(u.roles) === 'admin'}
-                  >
-                    {getHighestRole(u.roles) === 'admin' ? 'Retirer admin' : 'Ajouter admin'}
-                  </button>
+                  {isMe(u) ? (
+                    <span>Moi</span>
+                  ) : (
+                    <div className='adminPanel-buttons'>
+                      <button className="adminPanel-button" type="update" onClick={() => handleResetPassword(u)}>
+                        Reset mot de passe
+                      </button>
+                      <button className="adminPanel-button" type="cancel" onClick={() => handleToggleAdmin(u)}>
+                        {getHighestRole(u.roles) === 'admin' ? 'Retirer admin' : 'Ajouter admin'}
+                      </button>
+                    </div>
+                  )}
                 </td>
               </tr>
             ))}
@@ -136,41 +133,12 @@ export default function GestionUtilisateurs() {
         </table>
         <div className="pagination">
           {Array.from({ length: Math.ceil(sorted.length / ITEMS_PER_PAGE) }, (_, i) => (
-            <button
-              key={i + 1}
-              disabled={page === i + 1}
-              onClick={() => setPage(i + 1)}
-              className="adminPanel-button"
-            >
+            <button key={i + 1} disabled={page === i + 1} onClick={() => setPage(i + 1)} className="adminPanel-button">
               {i + 1}
             </button>
           ))}
         </div>
       </div>
-
-      {modal.show && (
-        <div className="adminPanel-modalOverlay">
-          <div className="adminPanel-modal">
-            <p>
-              Nouveau mot de passe généré : <code>{modal.password}</code>
-            </p>
-            <div className="adminPanel-buttons">
-              <button
-                className="adminPanel-button"
-                onClick={copyToClipboard}
-              >
-                Copier
-              </button>
-              <button
-                className="adminPanel-button"
-                onClick={closeModal}
-              >
-                Fermer
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </AdminPageLayout>
   );
 }
