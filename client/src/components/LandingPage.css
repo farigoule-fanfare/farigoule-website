@@ -30,31 +30,56 @@
     z-index: 1;
 }
 
-.blocDates {
-    /* Styles for the dates section */
-    /* Example: Add some padding or border if desired */
-    display: block;
-    width: 470px;
-    margin: 0.5rem auto;
+.blocDatesInsta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.dates-container {
+    flex: 0 0 45%;
+    text-align: center;
+    max-width: 500px;
+}
+
+.instagram-container {
+  flex: 0 0 40%;
+  text-align: center;
+  max-width: 400px;
+}
+
+.instagram-embed {
+  display: flex;
+  justify-content: center;   /* centre horizontalement */
+  align-items: center;       /* centre verticalement si hauteur définie */
+  overflow: hidden;
+  
+}
+
+/* Optionnel : ajuster la responsivité */
+@media (max-width: 768px) {
+  .dates-container,
+  .instagram-container {
+    flex: 1 1 100%;
+  }
+}
+
+.blocDatesInsta h2{
     text-align: center;
 }
 
-.blocDates h2, .blocDates h3 {
-    /* Style titles */
-    font-family: 'Lobster', cursive; /* Example */
-    color: #333;
+.blocDatesInsta p {
+    margin-bottom: 1.5rem; /* Space between date entries */
 }
 
-.blocDates p {
-    margin-bottom: 15px; /* Space between date entries */
-}
-
-.blocDates .date {
+.blocDatesInsta .date {
+    margin-top: auto;
     font-weight: bold;
     color: black; /* Example color */
 }
 
-.blocDates .description {
+.blocDatesInsta .description {
     font-style: italic;
     color: #555;
     font-size: 0.9em;
