@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import AdminPageLayout from '../../layout/AdminPageLayout';
 import { axiosWrapper } from '@api/axiosUtils';
 import { useAuth } from '../../../context/AuthContext';
-import './gestionFanfaron.css';
 
 export default function GestionUtilisateurs() {
   const ITEMS_PER_PAGE = 10;
@@ -118,10 +117,10 @@ export default function GestionUtilisateurs() {
                     <span>Moi</span>
                   ) : (
                     <div className='adminPanel-buttons'>
-                      <button className="adminPanel-button" type="update" onClick={() => handleResetPassword(u)}>
+                      <button className="adminPanel-button" type="edit" onClick={() => handleResetPassword(u)}>
                         Reset mot de passe
                       </button>
-                      <button className="adminPanel-button" type="cancel" onClick={() => handleToggleAdmin(u)}>
+                      <button className="adminPanel-button" type="delete" onClick={() => handleToggleAdmin(u)}>
                         {getHighestRole(u.roles) === 'admin' ? 'Retirer admin' : 'Ajouter admin'}
                       </button>
                     </div>
