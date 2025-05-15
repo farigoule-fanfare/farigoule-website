@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import AdminPageLayout from '../../layout/AdminPageLayout';
 import { axiosWrapper } from '@api/axiosUtils';
 import { useAuth } from '../../../context/AuthContext';
@@ -12,9 +12,7 @@ export default function GestionUtilisateurs() {
   const [page, setPage] = useState(1);
 
   /* ------------ FETCH USERS ------------- */
-  useEffect(() => { fetchUsers(); }, []);
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback ( async () => {
     try {
       const res = await axiosWrapper({ method: 'get', url: 'admin/manageUsers/' });
       if (res.success) {
@@ -26,7 +24,9 @@ export default function GestionUtilisateurs() {
     } catch (err) {
       console.error('FETCH USERS ERROR', err);
     }
-  };
+  },[ITEMS_PER_PAGE, page]);
+
+  useEffect(() => { fetchUsers(); }, [fetchUsers]);
 
   /* ------------ HELPERS ------------- */
   const isMe = (u) => selfId && String(u.id) === selfId;
