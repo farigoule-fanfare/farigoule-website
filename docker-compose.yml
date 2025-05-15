@@ -1,0 +1,28 @@
+services:
+  server:
+    container_name: farigoule-server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+      - PORT=${SERVER_PORT}
+      - FRONTEND_URL=${FRONTEND_URL}
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    restart: always
+  client:
+    container_name: farigoule-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+      - PORT=${CLIENT_PORT}
+      - REACT_APP_RESTAPI_SERVER_URI=${REACT_APP_RESTAPI_SERVER_URI}
+    ports:
+      # - "${CLIENT_PORT}:${CLIENT_PORT}"
+      - "${CLIENT_PORT}:80"
+    restart: always
+    depends_on:
+      - server
