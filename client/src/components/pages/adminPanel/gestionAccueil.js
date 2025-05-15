@@ -173,7 +173,7 @@ export default function GestionAccueil() {
               <input id="description" name="description" type="text" value={diapoForm.description} onChange={handleDiapoChange} required className="contentPage-input" />
             </div>
             <div className="adminPanel-buttons">
-              <button type="submit" className="adminPanel-button">{editDiapoId ? 'Mettre à jour' : 'Envoyer'}</button>
+              <button type={editDiapoId ? "update" : "submit"} className="adminPanel-button">{editDiapoId ? 'Mettre à jour' : 'Envoyer'}</button>
               {editDiapoId && <button type="cancel" onClick={handleDiapoCancel} className="adminPanel-button">Annuler</button>}
             </div>
           </form>
@@ -222,7 +222,7 @@ export default function GestionAccueil() {
               <input id="descriptionDate" name="description" type="text" value={dateForm.description} onChange={handleDateChange} required className="contentPage-input" />
             </div>
             <div className="adminPanel-buttons">
-              <button type="submit" className="adminPanel-button">{editDateId ? 'Mettre à jour' : 'Envoyer'}</button>
+              <button type={editDateId ? "update" : "submit"} className="adminPanel-button">{editDateId ? 'Mettre à jour' : 'Envoyer'}</button>
               {editDateId && <button type="cancel" onClick={handleDateCancel} className="adminPanel-button">Annuler</button>}
             </div>
           </form>
