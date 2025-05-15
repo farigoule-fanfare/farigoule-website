@@ -66,12 +66,12 @@
   align-self: center;
 }
 
-.adminPanel-button[type="submit"] {
+.adminPanel-button[type="update"] {
   background-color: var(--success);
   color: #fff;
 }
 
-.adminPanel-button[type="submit"]:hover {
+.adminPanel-button[type="update"]:hover {
   filter: brightness(0.9);
 }
 
@@ -120,6 +120,7 @@
   width: 100%;
   border-collapse: collapse;
   margin-bottom: var(--gap);
+  background-color: #ffffff71;
 }
 
 .adminPanel-table th,

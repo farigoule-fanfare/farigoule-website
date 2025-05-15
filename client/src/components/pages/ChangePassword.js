@@ -50,7 +50,8 @@ export default function ChangePassword() {
 
   return (
     <ContentPageLayout title="Changer de mot de passe">
-      <form className="contentPage-form-" onSubmit={handleSubmit}>
+      <form className="contentPage-form" onSubmit={handleSubmit}>
+        <h3>Souviens-toi en</h3>
         <div className="contentPage-form-group">
           <label className='contentPage-label'>Mot de passe actuel</label>
           <input
