@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { axiosWrapper } from '../../api/axiosUtils';
 import ContentPageLayout from '../layout/ContentPageLayout';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './UserProfile.css';
 
 export default function UserProfile() {
@@ -14,6 +14,8 @@ export default function UserProfile() {
     telephone: ''
   });
   const [status, setStatus] = useState(null);
+  const navigate = useNavigate();
+  const handleChangePassword = () => navigate('/change-password');
 
   useEffect(() => {
     if (currentUser) {
@@ -111,12 +113,16 @@ export default function UserProfile() {
               onChange={handleChange}
             />
           </div>
-          <button type="submit">Enregistrer</button>
+          <button className='userProfile-button' type="submit">Enregistrer</button>
 
             <div className="contentPage-actions">
-              <button className='adminPanel-button' type='cancel'>
-              <Link to="/change-password">Modifier mon mot de passe</Link>
-              </button>
+              <button
+                  onClick={handleChangePassword}
+                  className="adminPanel-button"
+                  type = "submit"
+              >
+                  Modifier mon mot de passe
+                </button>
         </div>
         </form>
         {status && <div className="adminPanel-status">{status}</div>}
