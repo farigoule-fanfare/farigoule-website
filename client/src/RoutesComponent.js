@@ -18,6 +18,7 @@ import GestionAccueil from "./components/pages/adminPanel/gestionAccueil";
 import GestionCitations from "./components/pages/adminPanel/gestionCitations";
 import UserProfile from "./components/pages/UserProfile";
 import RequireAuth from "./components/utils/RequireAuth";
+import ChangePassword from './components/pages/ChangePassword';
 
 // Wrapper to restrict access to admin-only routes
 function AdminRoute({ children }) {
@@ -154,6 +155,18 @@ export function RoutesComponent(props) {
                             <RequireAuth>
                                 <PageWrapper privatePage={true}>
                                     <UserProfile />
+                                </PageWrapper>
+                            </RequireAuth>
+                        }
+                    />
+
+                    {/* Change password page (authenticated users) */}
+                    <Route
+                        path="change-password"
+                        element={
+                            <RequireAuth>
+                                <PageWrapper privatePage={true}>
+                                    <ChangePassword />
                                 </PageWrapper>
                             </RequireAuth>
                         }
