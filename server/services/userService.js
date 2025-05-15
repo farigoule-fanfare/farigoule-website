@@ -222,6 +222,39 @@ async function updatePasswordById(userId, newHash) {
   });
 }
 
+/**
+ * Fetch every fanfaron (id, surnom, promo, roles array)
+ */
+async function listAllUsers() {
+  const sql = `SELECT id, surnom, promo, roles
+               FROM fanfarons`;
+  return new Promise((resolve, reject) => {
+    db.all(sql, [], (err, rows) => {
+      if (err) return reject(err);
+      // parse the JSON‐string roles field into an array
+      const users = rows.map(r => ({ 
+        ...r, 
+        roles: parseRoles(r.roles) 
+      }));
+      resolve(users);
+    });
+  });
+}
+
+/**
+ * Overwrite the roles field of one user
+ * @param {number} userId 
+ * @param {string[]} rolesArray 
+ */
+async function updateRolesById(userId, rolesArray) {
+  const sql = 'UPDATE fanfarons SET roles = ? WHERE id = ?';
+  return new Promise((resolve, reject) => {
+    db.run(sql, [JSON.stringify(rolesArray), userId], function(err) {
+      if (err) return reject(err);
+      resolve();
+    });
+  });
+}
 
 module.exports = {
   findFanfaronByEmail,
@@ -231,5 +264,7 @@ module.exports = {
   createFanfaron,
   getCurrentPresident,
   updateProfile,
-  updatePasswordById
+  updatePasswordById,
+  listAllUsers,
+  updateRolesById
 };
