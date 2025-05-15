@@ -16,6 +16,7 @@ import AdminPanel from "./components/pages/adminPanel/mainPanel";
 import GestionFanfarons from "./components/pages/adminPanel/gestionFanfarons";
 import GestionAccueil from "./components/pages/adminPanel/gestionAccueil";
 import GestionCitations from "./components/pages/adminPanel/gestionCitations";
+import GestionUsers from "./components/pages/adminPanel/gestionUsers";
 import UserProfile from "./components/pages/UserProfile";
 import RequireAuth from "./components/utils/RequireAuth";
 import ChangePassword from './components/pages/ChangePassword';
@@ -107,6 +108,19 @@ export function RoutesComponent(props) {
                               <AdminRoute>
                                 <PageWrapper privatePage={true}>
                                   <GestionFanfarons />
+                                </PageWrapper>
+                              </AdminRoute>
+                            </RequireAuth>
+                        }
+                    />
+
+                    <Route
+                        path="gestionUsers"
+                        element={
+                            <RequireAuth>
+                              <AdminRoute>
+                                <PageWrapper privatePage={true}>
+                                  <GestionUsers />
                                 </PageWrapper>
                               </AdminRoute>
                             </RequireAuth>
