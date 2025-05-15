@@ -5,6 +5,6 @@ WORKDIR /usr/app/
 COPY . .
 RUN npm install --production --loglevel=warn
 
-#USER node
+USER node
 
 ENTRYPOINT [ "node", "index.js" ]
