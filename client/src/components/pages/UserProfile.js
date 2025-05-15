@@ -66,6 +66,7 @@ export default function UserProfile() {
     <ContentPageLayout title="Mon Profil">
       <div className="adminPanel-container">
         <form onSubmit={handleSubmit} className="contentPage-form">
+          <h3>Mes informations</h3>
           <div className="contentPage-form-group">
             <label htmlFor="nom" className="contentPage-label">Nom:</label>
             <input
