@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { axiosWrapper } from '../../api/axiosUtils';
 import ContentPageLayout from '../layout/ContentPageLayout';
+import { Link } from 'react-router-dom';
 import './UserProfile.css';
 
 export default function UserProfile() {
@@ -63,56 +64,64 @@ export default function UserProfile() {
 
   return (
     <ContentPageLayout title="Mon Profil">
-      <div className="userProfile-container">
-        <form onSubmit={handleSubmit} className="userProfile-form">
-          <div className="userProfile-form-group">
-            <label htmlFor="nom" className="userProfile-label">Nom:</label>
+      <div className="adminPanel-container">
+        <form onSubmit={handleSubmit} className="contentPage-form">
+          <div className="contentPage-form-group">
+            <label htmlFor="nom" className="contentPage-label">Nom:</label>
             <input
               id="nom"
               name="nom"
-              className="userProfile-input"
+              className="contentPage-input"
               value={form.nom}
               onChange={handleChange}
               required
             />
           </div>
-          <div className="userProfile-form-group">
-            <label htmlFor="prenom" className="userProfile-label">Prénom:</label>
+          <div className="contentPage-form-group">
+            <label htmlFor="prenom" className="contentPage-label">Prénom:</label>
             <input
               id="prenom"
               name="prenom"
-              className="userProfile-input"
+              className="contentPage-input"
               value={form.prenom}
               onChange={handleChange}
               required
             />
           </div>
-          <div className="userProfile-form-group">
-            <label htmlFor="email" className="userProfile-label">Email:</label>
+          <div className="contentPage-form-group">
+            <label htmlFor="email" className="contentPage-label">Email:</label>
             <input
               id="email"
               name="email"
               type="email"
-              className="userProfile-input"
+              className="contentPage-input"
               value={form.email}
               onChange={handleChange}
               required
             />
           </div>
-          <div className="userProfile-form-group">
-            <label htmlFor="telephone" className="userProfile-label">Téléphone:</label>
+          <div className="contentPage-form-group">
+            <label htmlFor="telephone" className="contentPage-label">Téléphone:</label>
             <input
               id="telephone"
               name="telephone"
-              className="userProfile-input"
+              className="contentPage-input"
               value={form.telephone}
               onChange={handleChange}
             />
           </div>
-          <button type="submit" className="userProfile-button">Enregistrer</button>
+          <button type="submit">Enregistrer</button>
+
+            <div className="contentPage-actions">
+              <button className='adminPanel-button' type='cancel'>
+              <Link to="/change-password">Modifier mon mot de passe</Link>
+              </button>
+        </div>
         </form>
-        {status && <div className="userProfile-status">{status}</div>}
+        {status && <div className="adminPanel-status">{status}</div>}
+      
       </div>
+      
     </ContentPageLayout>
   );
 }

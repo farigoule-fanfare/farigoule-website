@@ -161,16 +161,16 @@ export default function GestionAccueil() {
         </div>
 
         {/* Diapo Form */}
-        <div className="adminPanel-form-wrapper" ref={diapoFormRef}>
-          <form onSubmit={handleDiapoSubmit} encType="multipart/form-data" className="adminPanel-form">
+        <div className="contentPage-form-wrapper" ref={diapoFormRef}>
+          <form onSubmit={handleDiapoSubmit} encType="multipart/form-data" className="contentPage-form">
             <h3>{editDiapoId ? 'Éditer une diapo' : 'Ajouter une diapo'}</h3>
-            <div className="adminPanel-form-group">
-              <label htmlFor="file" className="adminPanel-label">Image :</label>
-              <input id="file" name="file" type="file" accept="image/*" onChange={handleDiapoFileChange} required={!editDiapoId} className="adminPanel-input" />
+            <div className="contentPage-form-group">
+              <label htmlFor="file" className="contentPage-label">Image :</label>
+              <input id="file" name="file" type="file" accept="image/*" onChange={handleDiapoFileChange} required={!editDiapoId} className="contentPage-input" />
             </div>
-            <div className="adminPanel-form-group">
-              <label htmlFor="description" className="adminPanel-label">Texte :</label>
-              <input id="description" name="description" type="text" value={diapoForm.description} onChange={handleDiapoChange} required className="adminPanel-input" />
+            <div className="contentPage-form-group">
+              <label htmlFor="description" className="contentPage-label">Texte :</label>
+              <input id="description" name="description" type="text" value={diapoForm.description} onChange={handleDiapoChange} required className="contentPage-input" />
             </div>
             <div className="adminPanel-buttons">
               <button type="submit" className="adminPanel-button">{editDiapoId ? 'Mettre à jour' : 'Envoyer'}</button>
@@ -206,20 +206,20 @@ export default function GestionAccueil() {
         </div>
 
         {/* Dates Form */}
-        <div className="adminPanel-form-wrapper" ref={dateFormRef}>
-          <form onSubmit={handleDateSubmit} className="adminPanel-form">
+        <div className="contentPage-form-wrapper" ref={dateFormRef}>
+          <form onSubmit={handleDateSubmit} className="contentPage-form">
             <h3>{editDateId ? 'Éditer une date' : 'Ajouter une date'}</h3>
-            <div className="adminPanel-form-group">
-              <label htmlFor="date" className="adminPanel-label">Date :</label>
-              <input id="date" name="date" type="date" value={dateForm.date} onChange={handleDateChange} required className="adminPanel-input" />
+            <div className="contentPage-form-group">
+              <label htmlFor="date" className="contentPage-label">Date :</label>
+              <input id="date" name="date" type="date" value={dateForm.date} onChange={handleDateChange} required className="contentPage-input" />
             </div>
-            <div className="adminPanel-form-group">
-              <label htmlFor="lieu" className="adminPanel-label">Lieu :</label>
-              <input id="lieu" name="lieu" type="text" value={dateForm.lieu} onChange={handleDateChange} required className="adminPanel-input" />
+            <div className="contentPage-form-group">
+              <label htmlFor="lieu" className="contentPage-label">Lieu :</label>
+              <input id="lieu" name="lieu" type="text" value={dateForm.lieu} onChange={handleDateChange} required className="contentPage-input" />
             </div>
-            <div className="adminPanel-form-group">
-              <label htmlFor="descriptionDate" className="adminPanel-label">Description :</label>
-              <input id="descriptionDate" name="description" type="text" value={dateForm.description} onChange={handleDateChange} required className="adminPanel-input" />
+            <div className="contentPage-form-group">
+              <label htmlFor="descriptionDate" className="contentPage-label">Description :</label>
+              <input id="descriptionDate" name="description" type="text" value={dateForm.description} onChange={handleDateChange} required className="contentPage-input" />
             </div>
             <div className="adminPanel-buttons">
               <button type="submit" className="adminPanel-button">{editDateId ? 'Mettre à jour' : 'Envoyer'}</button>

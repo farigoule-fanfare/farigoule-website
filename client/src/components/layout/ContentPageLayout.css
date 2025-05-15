@@ -87,8 +87,10 @@ button[type="submit"] {
   border-radius: 0.4rem;
   cursor: pointer;
   font-size: 1rem;
-  display: block;
-  text-align: center; 
+  /*display: block;*/
+  text-align: center;
+  justify-content: center;
+  margin: 0.5rem 0 0.5rem;
 }
 
 button[type="submit"]:hover {
@@ -100,3 +102,43 @@ button[type="submit"]:disabled {
   cursor: not-allowed;
 }
 
+/* ----------- Content ------------*/
+.contentPage-form-wrapper {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.contentPage-form {
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem 2rem;
+}
+
+.contentPage-form-group {
+  margin-bottom: 1rem;
+  display: contents; /* permet au grid de fonctionner */
+}
+
+.contentPage-label {
+  display: block;
+  margin: 0.25rem 0 0.25rem;
+  font-weight: 600;
+  align-self: center;
+}
+
+.contentPage-input,
+.adminPanel-textarea {
+  width: 90%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  background: none;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+  text-align: center ;
+}
+.adminPanel-textarea{
+  text-align: justify;
+}
+
+.contentPage-actions{
+  margin: 0.5rem 0 0.5rem;
+}
