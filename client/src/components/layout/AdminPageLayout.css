@@ -46,45 +46,6 @@
   background: #c0392b;
 }
 
-/* ----------- Pages ------------*/
-.adminPanel-form-wrapper {
-  width: 100%;
-  margin-bottom: 2rem;
-}
-
-.adminPanel-form {
-  grid-template-columns: 1fr 2fr;
-  gap: 1rem 2rem;
-}
-
-.adminPanel-form-group {
-  margin-bottom: 1rem;
-  display: contents; /* permet au grid de fonctionner */
-}
-
-.adminPanel-label {
-  display: block;
-  margin: 0.25rem 0 0.25rem;
-  font-weight: 600;
-  align-self: center;
-}
-
-.adminPanel-input,
-.adminPanel-textarea {
-  width: 90%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  background: none;
-  border-radius: 0.25rem;
-  box-sizing: border-box;
-  text-align: center ;
-}
-.adminPanel-textarea{
-  text-align: justify;
-}
-
-
-
 /* Boutons du formulaire */
 
 .adminPanel-buttons {
