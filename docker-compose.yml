@@ -11,7 +11,7 @@ services:
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
     volumes:
-      - ./server/database/farigouel.sqlite:/usr/app/database/farigouel.sqlite
+      - ./server/database/farigoule.sqlite:/usr/app/database/farigoule.sqlite
       - ./server/public/uploads:/usr/app/public/uploads
     restart: unless-stopped
   client:
