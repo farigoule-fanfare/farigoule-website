@@ -4,9 +4,11 @@ import { axiosWrapper } from '@api/axiosUtils';
 import { useAuth } from '../../../context/AuthContext';
 //import './gestionFanfaron.css';
 
+
 export default function GestionUtilisateurs() {
   const ITEMS_PER_PAGE = 10;
-  const { user } = useAuth();
+  const auth = useAuth();
+  const userId = auth?.user?.id;
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(1);
   const [modal, setModal] = useState({ show: false, password: '' });
@@ -17,10 +19,11 @@ export default function GestionUtilisateurs() {
 
   const fetchUsers = async () => {
     try {
-      const res = await axiosWrapper({ method: 'get', url: 'route/admin/admin/fanfarons' });
+      const res = await axiosWrapper({ method: 'get', url: 'admin/admin/' });
       if (res.success) {
-        setUsers(Array.isArray(res.data) ? res.data : []);
-        const totalPages = Math.ceil((Array.isArray(res.data) ? res.data.length : 0) / ITEMS_PER_PAGE);
+        const list = Array.isArray(res.data) ? res.data : [];
+        setUsers(list);
+        const totalPages = Math.ceil(list.length / ITEMS_PER_PAGE);
         if (page > totalPages) setPage(1);
       }
     } catch (err) {
@@ -63,7 +66,7 @@ export default function GestionUtilisateurs() {
     try {
       await axiosWrapper({
         method: 'post',
-        url: `route/admin/admin/fanfarons/${u.id}/setPassword`,
+        url: `admin/admin/${u.id}/setPassword`,
         data: { password: newPass }
       });
       setModal({ show: true, password: newPass });
@@ -74,12 +77,12 @@ export default function GestionUtilisateurs() {
 
   const handleToggleAdmin = async (u) => {
     const isAdmin = getHighestRole(u.roles) === 'admin';
-    if (isAdmin && u.id === user.id) return;
+    if (isAdmin && userId === u.id) return;
     const action = isAdmin ? 'removeAdminRole' : 'addAdminRole';
     try {
       await axiosWrapper({
         method: 'post',
-        url: `route/admin/admin/fanfarons/${u.id}/${action}`
+        url: `admin/admin/${u.id}/${action}`
       });
       fetchUsers();
     } catch (err) {
@@ -106,8 +109,8 @@ export default function GestionUtilisateurs() {
             </tr>
           </thead>
           <tbody>
-            {paginated.map(u => (
-              <tr key={u.id}>
+            {paginated.map((u, idx) => u && (
+              <tr key={u.id || idx}>
                 <td>{u.id}</td>
                 <td>{u.surnom}</td>
                 <td>{u.promo}</td>
@@ -122,7 +125,7 @@ export default function GestionUtilisateurs() {
                   <button
                     className="adminPanel-button"
                     onClick={() => handleToggleAdmin(u)}
-                    disabled={u.id === user.id && getHighestRole(u.roles) === 'admin'}
+                    disabled={userId === u.id && getHighestRole(u.roles) === 'admin'}
                   >
                     {getHighestRole(u.roles) === 'admin' ? 'Retirer admin' : 'Ajouter admin'}
                   </button>
