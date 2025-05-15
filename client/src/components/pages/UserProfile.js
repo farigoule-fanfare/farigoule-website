@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { axiosWrapper } from '../../api/axiosUtils';
 import ContentPageLayout from '../layout/ContentPageLayout';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './UserProfile.css';
 
 export default function UserProfile() {
