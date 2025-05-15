@@ -92,6 +92,19 @@ function LandingPage() {
             }
         };
         fetchContrats();
+    },
+     []);
+
+    // Charger le script officiel d’Instagram pour traiter les <blockquote>
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.src = 'https://www.instagram.com/embed.js';
+        script.async = true;
+        script.defer = true;
+        document.body.appendChild(script);
+        return () => {
+            document.body.removeChild(script);
+        };
     }, []);
 
     const sliderSettings = {
@@ -128,7 +141,8 @@ function LandingPage() {
                     )}
                 </section>
 
-                <section className="blocDates">
+                <section className="blocDatesInsta">
+                    <div className="dates-container">
                     <h2>Nos prochaines dates</h2>
                     {loading.contrats && <p>Chargement des dates...</p>}
                     {error.contrats && <p className="error-message">Erreur dates: {error.contrats}</p>}
@@ -160,6 +174,18 @@ function LandingPage() {
                             <p>Aucune date passée récente.</p>
                         )
                     )}
+                </div>
+                <div className="instagram-container">
+                    <h2>Notre instagram</h2>
+                    {/* Embed du profil Instagram */}
+                    <div className='instagram-embed'>
+                    <blockquote
+                    className="instagram-media"
+                    data-instgrm-permalink="https://www.instagram.com/la_farigoule_fanfare/?utm_source=ig_embed"
+                    data-instgrm-version="379"
+                    ></blockquote>
+                    </div>
+                </div>
                 </section>
             </div>
         </ContentPageLayout>
