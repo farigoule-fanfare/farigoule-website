@@ -10,7 +10,10 @@ services:
       - FRONTEND_URL=${FRONTEND_URL}
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
-    restart: always
+    volumes:
+      - ./server/database/farigouel.sqlite:/usr/app/database/farigouel.sqlite
+      - ./server/public/uploads:/usr/app/public/uploads
+    restart: unless-stopped
   client:
     container_name: farigoule-client
     build:
@@ -21,8 +24,7 @@ services:
       - PORT=${CLIENT_PORT}
       - REACT_APP_RESTAPI_SERVER_URI=${REACT_APP_RESTAPI_SERVER_URI}
     ports:
-      # - "${CLIENT_PORT}:${CLIENT_PORT}"
       - "${CLIENT_PORT}:80"
-    restart: always
+    restart: unless-stopped
     depends_on:
       - server

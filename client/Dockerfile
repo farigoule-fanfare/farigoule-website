@@ -1,4 +1,4 @@
-FROM node:24-alpine as build
+FROM node@sha256:37712740dc486f179b9540be1c6703cef3f805ea932573a007db748b71189afe as build
 
 RUN apk update
 WORKDIR /usr/app
@@ -6,18 +6,8 @@ COPY . .
 RUN npm install
 RUN npm run build
 
-FROM nginx:alpine as production
+FROM nginx@sha256:5e36bd7a8adfe291560a6849d3125438fbe244f29a567522099caceef32bce54 as production
 
 COPY --from=build /usr/app/build /usr/share/nginx/html
 
 CMD [ "nginx", "-g", "daemon off;" ]
-
-# FROM node:24-alpine as production
-# RUN apk update
-# WORKDIR /usr/app
-# COPY --from=build /usr/app .
-# RUN ls -lah
-# RUN rm -rf node_modules
-# RUN npm install --omit=dev --loglevel=warn
-# RUN npm install -g serve
-# CMD serve -p $PORT build
