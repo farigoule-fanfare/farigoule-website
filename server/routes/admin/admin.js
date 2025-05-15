@@ -2,7 +2,11 @@
 const express = require('express');
 const router = express.Router();
 const adminCtrl = require('../../controllers/admin/adminController');
+const { protect, authorize } = require('../../middleware/authMiddleware');
 // (Optionally) add an `isAdmin` middleware here
+
+// ⚠️-protège toutes les routes ci-dessous
+router.use(protect, authorize(['admin']));
 
 router.get('/',       adminCtrl.listUsers);
 router.post('/:id/setPassword',  adminCtrl.setPassword);
