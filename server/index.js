@@ -65,7 +65,7 @@ app.use('/route/admin/fanfarons', fanfaronsRoutes);
 app.use('/route/admin/contrats', contratsRoutes);
 app.use('/route/admin/diapos', diaposRoutes);
 app.use('/route/admin/citations', citationsRoutes);
-app.use('/route/admin/manageUsers', /* isAdminMiddleware, */ adminRoutes);
+app.use('/route/admin/manageUsers', adminRoutes);
 
 // --- Catch-all for server status (optional) ---
 // This should be after your specific API routes
