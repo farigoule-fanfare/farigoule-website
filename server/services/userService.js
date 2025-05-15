@@ -200,6 +200,29 @@ async function updateProfile(userId, updates) {
   });
 }
 
+/**
+ * Met à jour le mot de passe d’un fanfaron identifié par son ID.
+ * @param {number} userId - ID du fanfaron.
+ * @param {string} newHash - Nouveau hash Bcrypt du mot de passe.
+ * @returns {Promise<void>}
+ */
+async function updatePasswordById(userId, newHash) {
+  if (!userId || !newHash) {
+    throw new Error('userId et newHash sont requis pour updatePasswordById');
+  }
+  const sql = 'UPDATE fanfarons SET password_hash = ? WHERE id = ?';
+  return new Promise((resolve, reject) => {
+    db.run(sql, [newHash, userId], function(err) {
+      if (err) {
+        console.error(`Erreur lors de la mise à jour du mot de passe pour l’utilisateur ${userId} :`, err.message);
+        return reject(err);
+      }
+      resolve();
+    });
+  });
+}
+
+
 module.exports = {
   findFanfaronByEmail,
   findFanfaronBySurnom,
@@ -207,5 +230,6 @@ module.exports = {
   comparePassword,
   createFanfaron,
   getCurrentPresident,
-  updateProfile
+  updateProfile,
+  updatePasswordById
 };
