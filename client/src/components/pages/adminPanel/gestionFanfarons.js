@@ -134,7 +134,7 @@ export default function GestionFanfarons() {
             />
           </div>
           <div className="adminPanel-buttons">
-            <button type="submit" className="adminPanel-button">
+            <button type = {editingId ? "update" : "submit"} className="adminPanel-button">
               {editingId ? 'Mettre à jour' : 'Créer'}
             </button>
             {editingId && (

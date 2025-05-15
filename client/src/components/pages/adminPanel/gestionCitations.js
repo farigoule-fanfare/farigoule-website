@@ -178,7 +178,7 @@ export default function GestionCitations() {
             </div>
             <div className="adminPanel-buttons">
               <button
-                type="submit"
+                type={editCitationId ? "update" : "submit"}
                 className="adminPanel-button"
               >
                 {editCitationId ? 'Mettre à jour' : 'Envoyer'}
