@@ -18,7 +18,7 @@ export default function AdminLayout({ title, children }) {
     { to: '/gestionAccueil', label: "Gestion page d'accueil" },
     { to: '/gestionCitations', label: 'Gestion des citations' },
     { to: '/gestionFanfarons', label: 'Gestion des fanfarons' },
-    { to: '/stats-visites',    label: 'Statistiques du site' },
+    { to: '/gestionUsers',    label: 'Gestion des utilisateurs' },
     { action: handleLogout,    label: 'Déconnexion' }
   ];
 

@@ -14,4 +14,7 @@ router.get('/current-president', userController.getCurrentPresidentApi);
 // AUTH ONLY: Route pour qu'un fanfaron puisse modifier son profil (nom, prénom, téléphone, email)
 router.put('/profile', protect, userController.updateProfileApi);
 
++ // AUTH ONLY: Route pour que l’utilisateur change son propre mot de passe
++ router.put('/change-password', protect, userController.changePasswordApi);
+
 module.exports = router; 
