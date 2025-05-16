@@ -48,7 +48,7 @@ function authorize(requiredRoles) {
         }
 
         // Assuming roles are stored as a comma-separated string in the user object (e.g., "fanfaron,admin")
-        const userRoles = req.user.roles ? req.user.roles.split(',').map(role => role.trim()) : [];
+        const userRoles = Array.isArray(req.user.roles) ? req.user.roles : String(req.user.roles).split(',');
 
         const hasRequiredRole = requiredRoles.some(role => userRoles.includes(role));
 
