@@ -11,8 +11,8 @@ services:
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
     volumes:
-      - ./server/database/farigoule.sqlite:/usr/app/database/farigoule.sqlite
-      - ./server/public/uploads:/usr/app/public/uploads
+      - farigoule-db-storage:/usr/app/database/
+      - farigoule-uploads-storage:/usr/app/public/uploads
     restart: unless-stopped
   client:
     container_name: farigoule-client
@@ -28,3 +28,11 @@ services:
     restart: unless-stopped
     depends_on:
       - server
+
+volumes:
+  farigoule-db-storage:
+    driver: local
+    name: farigoule-db-storage
+  farigoule-uploads-storage:
+    driver: local
+    name: farigoule-uploads-storage
