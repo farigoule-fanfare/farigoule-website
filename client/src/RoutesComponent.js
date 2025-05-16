@@ -6,8 +6,8 @@ import { useAuth } from "./context/AuthContext";
 import PageWrapper from "./components/PageWrapper";
 import NotFound from "@components/NotFound";
 import LandingPage from "@components/LandingPage";
+import Chat from "@components/Chat";
 import LoginPage from "./components/auth/LoginPage";
-import Chat from "@components/pages/Chat";
 import NousPage from "./components/pages/NousPage";
 import ContactPage from "./components/pages/ContactPage";
 import Symphonies from "./components/pages/Symphonies";
@@ -16,10 +16,8 @@ import AdminPanel from "./components/pages/adminPanel/mainPanel";
 import GestionFanfarons from "./components/pages/adminPanel/gestionFanfarons";
 import GestionAccueil from "./components/pages/adminPanel/gestionAccueil";
 import GestionCitations from "./components/pages/adminPanel/gestionCitations";
-import GestionUsers from "./components/pages/adminPanel/gestionUsers";
 import UserProfile from "./components/pages/UserProfile";
 import RequireAuth from "./components/utils/RequireAuth";
-import ChangePassword from './components/pages/ChangePassword';
 
 // Wrapper to restrict access to admin-only routes
 function AdminRoute({ children }) {
@@ -113,19 +111,6 @@ export function RoutesComponent(props) {
                             </RequireAuth>
                         }
                     />
-
-                    <Route
-                        path="gestionUsers"
-                        element={
-                            <RequireAuth>
-                              <AdminRoute>
-                                <PageWrapper privatePage={true}>
-                                  <GestionUsers />
-                                </PageWrapper>
-                              </AdminRoute>
-                            </RequireAuth>
-                        }
-                    />
                     
 
                     {/* Other public pages */}
@@ -169,18 +154,6 @@ export function RoutesComponent(props) {
                             <RequireAuth>
                                 <PageWrapper privatePage={true}>
                                     <UserProfile />
-                                </PageWrapper>
-                            </RequireAuth>
-                        }
-                    />
-
-                    {/* Change password page (authenticated users) */}
-                    <Route
-                        path="change-password"
-                        element={
-                            <RequireAuth>
-                                <PageWrapper privatePage={true}>
-                                    <ChangePassword />
                                 </PageWrapper>
                             </RequireAuth>
                         }

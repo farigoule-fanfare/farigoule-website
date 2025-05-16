@@ -36,7 +36,6 @@ function Header(props) {
         await logout();
         navigate('/'); // Redirect to homepage after logout
     };
-    const handleGoProfile = () => navigate('/profile');
 
     return (
         <header>
@@ -53,28 +52,16 @@ function Header(props) {
                 <div className="auth-status-header">
                     {isAuthenticated && (
                         <>
-                        <span className="auth-user">Bienvenue, {currentUser?.surnom} !</span>
-
-                        {/* ─── nouveau bouton « Profil » ─── */}
-                        <button
-                            onClick={handleGoProfile}
-                            className="adminPanel-button"
-                            type = "edit"
-                        >
-                            Mon profil
-                        </button>
-                        <button
-                            onClick={handleLogout}
-                            disabled={isLoading}
-                            className="adminPanel-button"
-                            type="delete"
-                        >
-                            Déconnexion
-                        </button>
+                            <span>Bienvenue, {currentUser?.surnom}!</span>
+                            <Link to="/profile" className="profile-link-header" style={{ marginLeft: '1rem', marginRight: '1rem' }}>
+                                Mon Profil
+                            </Link>
+                            <button onClick={handleLogout} disabled={isLoading} className="logout-button-header">
+                                Déconnexion
+                            </button>
                         </>
                     )}
                 </div>
-
 
                 <table className="tableauMenu">
                     <thead>

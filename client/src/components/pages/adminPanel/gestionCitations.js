@@ -145,18 +145,18 @@ export default function GestionCitations() {
           ))}
         </div>
 
-        <div className="contentPage-form-wrapper" ref={citationFormRef}>
-          <form onSubmit={handleCitationSubmit} className="contentPage-form">
+        <div className="adminPanel-form-wrapper" ref={citationFormRef}>
+          <form onSubmit={handleCitationSubmit} className="adminPanel-form">
             <h3>{editCitationId ? 'Éditer une citation' : 'Ajouter une citation'}</h3>
-            <div className="contentPage-form-group">
-              <label htmlFor="auteur_id" className="contentPage-label">Fanfaron :</label>
+            <div className="adminPanel-form-group">
+              <label htmlFor="auteur_id" className="adminPanel-label">Fanfaron :</label>
               <select
                 id="auteur_id"
                 name="auteur_id"
                 value={citationForm.auteur_id}
                 onChange={handleCitationChange}
                 required
-                className="contentPage-input"
+                className="adminPanel-input"
               >
                 <option value="">Sélectionner</option>
                 {fanfarons.map(f => (
@@ -164,8 +164,8 @@ export default function GestionCitations() {
                 ))}
               </select>
             </div>
-            <div className="contentPage-form-group">
-              <label htmlFor="citation" className="contentPage-label">Citation :</label>
+            <div className="adminPanel-form-group">
+              <label htmlFor="citation" className="adminPanel-label">Citation :</label>
               <input
                 id="citation"
                 name="citation"
@@ -173,12 +173,12 @@ export default function GestionCitations() {
                 value={citationForm.citation}
                 onChange={handleCitationChange}
                 required
-                className="contentPage-input"
+                className="adminPanel-input"
               />
             </div>
             <div className="adminPanel-buttons">
               <button
-                type={editCitationId ? "update" : "submit"}
+                type="submit"
                 className="adminPanel-button"
               >
                 {editCitationId ? 'Mettre à jour' : 'Envoyer'}

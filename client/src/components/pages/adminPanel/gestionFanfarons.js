@@ -94,12 +94,12 @@ export default function GestionFanfarons() {
   return (
     <AdminPageLayout title="Gestion des fanfarons">
       {/* Formulaire */}
-      <div className="contentPage-form-wrapper" ref={formRef}>
-        <form onSubmit={handleSubmit} className="contentPage-form">
+      <div className="adminPanel-form-wrapper" ref={formRef}>
+        <form onSubmit={handleSubmit} className="adminPanel-form">
           <h3>{editingId ? 'Éditer un fanfaron' : 'Ajouter un fanfaron'}</h3>
           {['surnom','instrument','promo','bureau','mail','tel'].map(field => (
-            <div key={field} className="contentPage-form-group">
-              <label htmlFor={field} className="contentPage-label">
+            <div key={field} className="adminPanel-form-group">
+              <label htmlFor={field} className="adminPanel-label">
                 {field === 'mail' ? 'Mail :' : field.charAt(0).toUpperCase() + field.slice(1) + ' :'}
               </label>
               <input
@@ -109,12 +109,12 @@ export default function GestionFanfarons() {
                 value={form[field]}
                 onChange={handleChange}
                 required={['surnom','instrument','promo'].includes(field)}
-                className="contentPage-input"
+                className="adminPanel-input"
               />
             </div>
           ))}
-          <div className="contentPage-form-group">
-            <label htmlFor="description" className="contentPage-label">Description :</label>
+          <div className="adminPanel-form-group">
+            <label htmlFor="description" className="adminPanel-label">Description :</label>
             <textarea
               id="description"
               name="description"
@@ -123,18 +123,18 @@ export default function GestionFanfarons() {
               className="adminPanel-textarea"
             />
           </div>
-          <div className="contentPage-form-group">
-            <label htmlFor="photoFanfaron" className="contentPage-label">Photo :</label>
+          <div className="adminPanel-form-group">
+            <label htmlFor="photoFanfaron" className="adminPanel-label">Photo :</label>
             <input
               id="photoFanfaron"
               type="file"
               accept="image/*"
               onChange={handleFileChange}
-              className="contentPage-input"
+              className="adminPanel-input"
             />
           </div>
           <div className="adminPanel-buttons">
-            <button type = {editingId ? "update" : "submit"} className="adminPanel-button">
+            <button type="submit" className="adminPanel-button">
               {editingId ? 'Mettre à jour' : 'Créer'}
             </button>
             {editingId && (
