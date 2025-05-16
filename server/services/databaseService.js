@@ -3,7 +3,7 @@ const path = require('path');
 
 // Define the path for the database file
 // It will be created in the 'server/database/' directory
-const DB_PATH = path.resolve(__dirname, 'farigoule.sqlite');
+const DB_PATH = path.resolve(__dirname, '..', 'database', 'farigoule.sqlite');
 
 // Create or open the database
 // The OPEN_READWRITE flag means the database is opened for reading and writing.
