@@ -1,5 +1,4 @@
 const userService = require('../services/userService');
-const bcrypt = require('bcryptjs');
 
 const getAllUsersApi = async (req, res, next) => {
     try {
@@ -54,53 +53,10 @@ const updateProfileApi = async (req, res, next) => {
     }
 };
 
- /**
- * Permet à l’utilisateur authentifié de changer son propre mot de passe.
- * Exige dans le body : { currentPassword, newPassword }
- */
-const changePasswordApi = async (req, res) => {
-try {
-    const surnom = req.user && req.user.surnom;
-    if (!surnom) {
-    return res.status(401).json({ success: false, message: 'Non authentifié.' });
-    }
-
-    const { currentPassword, newPassword } = req.body;
-    if (!currentPassword || !newPassword) {
-    return res.status(400).json({ success: false, message: 'Both currentPassword and newPassword are required.' });
-    }
-
-    // 1) Récupérer l’utilisateur depuis le service
-    const user = await userService.findFanfaronBySurnom(surnom);
-    if (!user) {
-    return res.status(404).json({ success: false, message: 'Utilisateur non trouvé.' });
-    }
-
-    // 2) Vérifier le mot de passe actuel
-    const isMatch = await bcrypt.compare(currentPassword, user.password_hash);
-    if (!isMatch) {
-    return res.status(401).json({ success: false, message: 'Mot de passe actuel incorrect.' });
-    }
-
-    // 3) Hasher et enregistrer le nouveau mot de passe
-    const salt = await bcrypt.genSalt(10);
-    const newHash = await bcrypt.hash(newPassword, salt);
-    // Vous pouvez soit appeler un service userService.updatePassword(user.id, newHash)
-    // soit, si vous n’avez pas encore ce service, l’écrire ici via SQL direct :
-    await userService.updatePasswordById(user.id, newHash);
-
-    return res.status(200).json({ success: true, message: 'Mot de passe mis à jour.' });
-} catch (error) {
-    console.error('changePasswordApi error:', error);
-    return res.status(500).json({ success: false, message: "Erreur serveur lors du changement de mot de passe." });
-}
-};
-
 module.exports = {
     // registerFanfaronApi,
     // updateFanfaronPasswordApi,
     getAllUsersApi,
     getCurrentPresidentApi,
-    updateProfileApi,
-    changePasswordApi
+    updateProfileApi
 };
