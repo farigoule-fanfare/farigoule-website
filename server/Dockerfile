@@ -3,8 +3,6 @@ FROM node@sha256:37712740dc486f179b9540be1c6703cef3f805ea932573a007db748b71189af
 RUN apk update
 WORKDIR /usr/app/
 COPY . .
-RUN npm install --production --loglevel=warn
+RUN npm install --omit=dev --loglevel=warn
 
-USER node
-
-ENTRYPOINT [ "node", "index.js" ]
+CMD [ "node", "index.js" ]
