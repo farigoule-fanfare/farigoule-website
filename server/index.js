@@ -10,7 +10,6 @@ const fanfaronsRoutes = require('./routes/admin/fanfarons');
 const contratsRoutes = require('./routes/admin/contrats');
 const diaposRoutes = require('./routes/admin/diapos');
 const citationsRoutes = require('./routes/admin/citations');
-const adminRoutes = require('./routes/admin/manageUsers');
 
 
 const db = require('./database'); // Ensure DB is initialized when server starts
@@ -65,7 +64,6 @@ app.use('/route/admin/fanfarons', fanfaronsRoutes);
 app.use('/route/admin/contrats', contratsRoutes);
 app.use('/route/admin/diapos', diaposRoutes);
 app.use('/route/admin/citations', citationsRoutes);
-app.use('/route/admin/manageUsers', adminRoutes);
 
 // --- Catch-all for server status (optional) ---
 // This should be after your specific API routes

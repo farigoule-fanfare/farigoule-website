@@ -97,22 +97,14 @@ function LandingPage() {
 
     // Charger le script officiel d’Instagram pour traiter les <blockquote>
     useEffect(() => {
-        const INSTABASE = 'https://www.instagram.com/embed.js';
-        // Si pas déjà injecté, on ajoute le script officiel
-        if (!document.querySelector(`script[src="${INSTABASE}"]`)) {
         const script = document.createElement('script');
-        script.src = INSTABASE;
+        script.src = 'https://www.instagram.com/embed.js';
         script.async = true;
         script.defer = true;
-        script.onload = () => {
-            // Dès que le script est chargé, on demande à Instagram de traiter les blockquotes
-            window.instgrm && window.instgrm.Embeds.process();
-        };
         document.body.appendChild(script);
-        } else {
-        // Si déjà présent (rafraîchissement de composant), on relance le rendu
-        window.instgrm && window.instgrm.Embeds.process();
-        }
+        return () => {
+            document.body.removeChild(script);
+        };
     }, []);
 
     const sliderSettings = {
@@ -187,10 +179,10 @@ function LandingPage() {
                     <h2>Notre instagram</h2>
                     {/* Embed du profil Instagram */}
                     <div className='instagram-embed'>
-                     <blockquote
+                    <blockquote
                     className="instagram-media"
                     data-instgrm-permalink="https://www.instagram.com/la_farigoule_fanfare/?utm_source=ig_embed"
-                    data-instgrm-version="12"
+                    data-instgrm-version="379"
                     ></blockquote>
                     </div>
                 </div>
