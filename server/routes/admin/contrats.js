@@ -1,5 +1,9 @@
 const router = require('express').Router();
 const ctrl   = require('../../controllers/admin/contratsController');
+const { protect, authorize } = require('../../middleware/authMiddleware');
+
+// ⚠️-protège toutes les routes ci-dessous
+router.use(protect, authorize(['admin']));
 
 // GET all contrats
 router.get('/',     ctrl.getAllContrats);
