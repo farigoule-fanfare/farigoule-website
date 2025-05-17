@@ -34,17 +34,17 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 2rem;
+  gap: 3rem;
 }
 
 .dates-container {
-    flex: 0 0 40%;
+    flex: 0 0 35%;
     text-align: center;
     max-width: 500px;
 }
 
 .deezer-container {
-    flex: 0 0 35%;
+    flex: 0 0 30%;
     text-align: center;
     max-width: 500px;
 }
