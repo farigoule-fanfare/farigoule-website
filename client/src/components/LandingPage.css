@@ -30,7 +30,7 @@
     z-index: 1;
 }
 
-.blocDatesInsta {
+.blocDatesDeezer {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -38,48 +38,42 @@
 }
 
 .dates-container {
-    flex: 0 0 45%;
+    flex: 0 0 40%;
     text-align: center;
     max-width: 500px;
 }
 
-.instagram-container {
-  flex: 0 0 40%;
-  text-align: center;
-  max-width: 400px;
+.deezer-container {
+    flex: 0 0 35%;
+    text-align: center;
+    max-width: 500px;
 }
 
-.instagram-embed {
-  display: flex;
-  justify-content: center;   /* centre horizontalement */
-  align-items: center;       /* centre verticalement si hauteur définie */
-  overflow: hidden;
-  
-}
+
 
 /* Optionnel : ajuster la responsivité */
 @media (max-width: 768px) {
   .dates-container,
-  .instagram-container {
+  .deezer-container {
     flex: 1 1 100%;
   }
 }
 
-.blocDatesInsta h2{
+.blocDatesDeezer h2{
     text-align: center;
 }
 
-.blocDatesInsta p {
+.blocDatesDeezer p {
     margin-bottom: 1.5rem; /* Space between date entries */
 }
 
-.blocDatesInsta .date {
+.blocDatesDeezer .date {
     margin-top: auto;
     font-weight: bold;
     color: black; /* Example color */
 }
 
-.blocDatesInsta .description {
+.blocDatesDeezer .description {
     font-style: italic;
     color: #555;
     font-size: 0.9em;
