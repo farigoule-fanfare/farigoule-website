@@ -46,7 +46,7 @@ function Footer () {
       <div className="bloc adresse">
         <strong className='footer-subtitle'>Notre adresse</strong><br />
         La Farigoule<br />
-        École Centrale Marseille<br />
+        École Centrale Méditerranée<br />
         38 rue Frédéric Joliot-Curie<br />
         13013 Marseille
       </div>
