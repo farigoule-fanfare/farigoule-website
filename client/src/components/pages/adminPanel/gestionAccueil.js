@@ -54,7 +54,7 @@ export default function GestionAccueil() {
     e.preventDefault();
     const fd = new FormData();
     fd.append('description', diapoForm.description);
-    if (diapoForm.file) fd.append('fichier', diapoForm.file);
+    if (diapoForm.file) fd.append('file', diapoForm.file);
     const method = editDiapoId ? 'put' : 'post';
     const url = editDiapoId ? `admin/diapos/${editDiapoId}` : 'admin/diapos';
     try {
