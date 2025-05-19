@@ -129,7 +129,7 @@ async function migrateData() {
 
 
         // --- Insert Fanfarons --- (Logic remains similar)
-        fanfaronInsertStmt = db.prepare(`INSERT INTO fanfarons (surnom, instrument, promo, bureau, tel, email, photo, description, password_hash, roles, prenom, nom) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NULL, 'fanfaron', NULL, NULL)`);
+        fanfaronInsertStmt = db.prepare(`INSERT INTO fanfarons (surnom, instrument, promo, bureau, tel, email, photo, description, password_hash, roles, prenom, nom) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NULL,'["fanfaron"]', NULL, NULL)`);
         for (const fanfaron of fanfaronsData) {
             const oldIdFanfaron = fanfaron.idFanfaron;
             const promoInt = fanfaron.promo ? parseInt(fanfaron.promo, 10) : null;
