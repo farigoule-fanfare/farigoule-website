@@ -1,6 +1,6 @@
 import React from 'react';
 import ContentPageLayout from '../layout/ContentPageLayout';
-import './contactPage.css';
+import './ContactPage.css';
 
 const ContactPage = () => {
   return (
