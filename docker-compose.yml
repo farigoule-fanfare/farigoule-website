@@ -6,8 +6,6 @@ services:
       dockerfile: Dockerfile
     environment:
       - NODE_ENV=production
-      - VIRTUAL_HOST=fanfare-farigoule.com
-      - LETSENCRYPT_HOST=fanfare-farigoule.com
       - PORT=${SERVER_PORT}
       - FRONTEND_URL=${FRONTEND_URL}
     ports:
@@ -23,6 +21,8 @@ services:
       dockerfile: Dockerfile
     environment:
       - NODE_ENV=production
+      - VIRTUAL_HOST=fanfare-farigoule.com
+      - LETSENCRYPT_HOST=fanfare-farigoule.com
       - PORT=${CLIENT_PORT}
       - REACT_APP_RESTAPI_SERVER_URI=${REACT_APP_RESTAPI_SERVER_URI}
     ports:
