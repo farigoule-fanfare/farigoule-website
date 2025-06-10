@@ -6,6 +6,8 @@ services:
       dockerfile: Dockerfile
     environment:
       - NODE_ENV=production
+      - VIRTUAL_HOST=fanfare-farigoule.com
+      - LETSENCRYPT_HOST=fanfare-farigoule.com
       - PORT=${SERVER_PORT}
       - FRONTEND_URL=${FRONTEND_URL}
     ports:
