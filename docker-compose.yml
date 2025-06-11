@@ -1,0 +1,40 @@
+services:
+  server:
+    container_name: farigoule-server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+      - PORT=${SERVER_PORT}
+      - FRONTEND_URL=${FRONTEND_URL}
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    volumes:
+      - farigoule-db-storage:/usr/app/database/
+      - farigoule-uploads-storage:/usr/app/public/uploads
+    restart: unless-stopped
+  client:
+    container_name: farigoule-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+      - VIRTUAL_HOST=fanfare-farigoule.com
+      - LETSENCRYPT_HOST=fanfare-farigoule.com
+      - PORT=${CLIENT_PORT}
+      - REACT_APP_RESTAPI_SERVER_URI=${REACT_APP_RESTAPI_SERVER_URI}
+    ports:
+      - "${CLIENT_PORT}:80"
+    restart: unless-stopped
+    depends_on:
+      - server
+
+volumes:
+  farigoule-db-storage:
+    driver: local
+    name: farigoule-db-storage
+  farigoule-uploads-storage:
+    driver: local
+    name: farigoule-uploads-storage
