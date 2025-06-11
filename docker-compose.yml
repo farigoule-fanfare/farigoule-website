@@ -1,6 +1,28 @@
 services:
+  client:
+    container_name: farigoule-client
+    env_file:
+      - "client/.env"
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_RESTAPI_SERVER_URI: ${REACT_APP_RESTAPI_SERVER_URI}
+    environment:
+      - NODE_ENV=production
+      - VIRTUAL_HOST=fanfare-farigoule.com
+      - LETSENCRYPT_HOST=fanfare-farigoule.com
+    ports:
+      - "${CLIENT_PORT}:80"
+    restart: unless-stopped
+    networks:
+      - farigoule-network
+    depends_on:
+      - server
   server:
     container_name: farigoule-server
+    env_file:
+      - "server/.env"
     build:
       context: ./server
       dockerfile: Dockerfile
@@ -8,28 +30,13 @@ services:
       - NODE_ENV=production
       - PORT=${SERVER_PORT}
       - FRONTEND_URL=${FRONTEND_URL}
-    ports:
-      - "${SERVER_PORT}:${SERVER_PORT}"
+      - REACT_APP_RESTAPI_SERVER_URI=${REACT_APP_RESTAPI_SERVER_URI}
     volumes:
       - farigoule-db-storage:/usr/app/database/
       - farigoule-uploads-storage:/usr/app/public/uploads
     restart: unless-stopped
-  client:
-    container_name: farigoule-client
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    environment:
-      - NODE_ENV=production
-      - VIRTUAL_HOST=fanfare-farigoule.com
-      - LETSENCRYPT_HOST=fanfare-farigoule.com
-      - PORT=${CLIENT_PORT}
-      - REACT_APP_RESTAPI_SERVER_URI=${REACT_APP_RESTAPI_SERVER_URI}
-    ports:
-      - "${CLIENT_PORT}:80"
-    restart: unless-stopped
-    depends_on:
-      - server
+    networks:
+      - farigoule-network
 
 volumes:
   farigoule-db-storage:
@@ -38,3 +45,8 @@ volumes:
   farigoule-uploads-storage:
     driver: local
     name: farigoule-uploads-storage
+
+networks:
+  farigoule-network:
+    driver: bridge
+    name: farigoule-network
