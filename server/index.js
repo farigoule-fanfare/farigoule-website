@@ -13,7 +13,7 @@ const citationsRoutes = require('./routes/admin/citations');
 const adminRoutes = require('./routes/admin/manageUsers');
 
 
-const db = require('./database'); // Ensure DB is initialized when server starts
+const db = require('./services/databaseService'); // Ensure DB is initialized when server starts
 
 const app = express();
 const PORT = process.env.PORT || 5000; // Use environment variable for port or default to 5000

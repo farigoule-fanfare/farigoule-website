@@ -1,4 +1,4 @@
-const db = require('../database');
+const db = require('./databaseService');
 const bcrypt = require('bcryptjs');
 
 const SALT_ROUNDS = 10; // Cost factor for bcrypt hashing
