@@ -1,4 +1,4 @@
-const db = require('../database');
+const db = require('./databaseService');
 
 /**
  * Service for managing citations and related data.
