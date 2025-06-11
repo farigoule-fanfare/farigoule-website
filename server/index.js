@@ -18,17 +18,12 @@ const db = require('./services/databaseService'); // Ensure DB is initialized wh
 const app = express();
 const PORT = process.env.PORT || 5000; // Use environment variable for port or default to 5000
 
-// --- Middleware --- 
-
-// Configure CORS to allow specific origin and credentials
-// const corsOptions = {
-//     origin: process.env.FRONTEND_URL || 'http://localhost:3000', // Your React app's origin
-//     credentials: true, // Allow cookies and authorization headers
-//     optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
-// };
-// app.use(cors(corsOptions));
-
+app.use(require('morgan')('combined'));
 // TODO configure to work on CORS package
+app.use(cors({
+    origin: "*", // Allow requests from the frontend URL
+    credentials: true, // Allow credentials (cookies, authorization headers, etc.)}
+}))
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", process.env.FRONTEND_URL || 'http://localhost:3000');
     res.header("Access-Control-Allow-Credentials", "true");
@@ -58,18 +53,18 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // --- Routes --- 
 // All API routes are prefixed with /route as per this setup
-app.use("/route/", routes);
-app.use("/route/auth", authRoutes); // Mount auth routes
-app.use("/route/users", userRoutes); // Mount user routes at /api/users
-app.use('/route/admin/fanfarons', fanfaronsRoutes);
-app.use('/route/admin/contrats', contratsRoutes);
-app.use('/route/admin/diapos', diaposRoutes);
-app.use('/route/admin/citations', citationsRoutes);
-app.use('/route/admin/manageUsers', adminRoutes);
+app.use("/api", routes);
+app.use("/auth", authRoutes); // Mount auth routes
+app.use("/users", userRoutes); // Mount user routes at /api/users
+app.use('/admin/fanfarons', fanfaronsRoutes);
+app.use('/admin/contrats', contratsRoutes);
+app.use('/admin/diapos', diaposRoutes);
+app.use('/admin/citations', citationsRoutes);
+app.use('/admin/manageUsers', adminRoutes);
 
 // --- Catch-all for server status (optional) ---
 // This should be after your specific API routes
-app.use("/", (req, res) => {
+app.use("/", (_req, res) => {
     res.send("Farigoule Vercel Server is running");
 });
 
