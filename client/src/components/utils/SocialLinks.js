@@ -35,7 +35,7 @@ const socialLinksData = [
     // },
     {
         key: SOCIAL_KEYS.YOUTUBE,
-        href: "https://www.youtube.com/user/FanfareLaFarigoule",
+        href: "http://www.youtube.com/@la_farigoule_fanfare",
         alt: "YouTube La Farigoule",
         iconSrc: youtubeIcon,
         iconHoverSrc: youtubeIconHover,

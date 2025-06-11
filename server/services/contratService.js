@@ -1,4 +1,4 @@
-const db = require('../database');
+const db = require('./databaseService');
 
 // Helper function to get today's date in YYYY-MM-DD format
 function getTodayDateString() {

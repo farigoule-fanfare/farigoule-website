@@ -4,6 +4,7 @@ import { axiosWrapper } from "@api/axiosUtils";
 
 import ContentPageLayout from "../../layout/ContentPageLayout";
 import FanfaronDescription from "./FanfaronDescription";
+import { BureauMapping } from "./BureauMapping"
 
 import "./Portraits.css";
 
@@ -37,20 +38,11 @@ const Portraits = () => {
   // Derive unique filter options
   const instruments = Array.from(new Set(fanfarons.map(f => f.instrument))).sort();
   const promos = Array.from(new Set(fanfarons.map(f => f.promo))).sort((a,b) => a - b);
- 
-  const bureauMapping = {
-    "":        "Blairos",       // Défaut si vide
-    "president":  "Président",
-    "chefmu":     "Chef Mu'",
-    "trez":       "Trésorier",
-    "com":        "Respo Com'",
-    "biere":      "Respo Bière",
-};
 
   // 2) Construit la liste d’options à partir de ce mapping
   const bureauOptions = [
     { value: "all", label: "Toutes" },
-    ...Object.entries(bureauMapping).map(([raw, label]) => ({
+    ...Object.entries(BureauMapping).map(([raw, label]) => ({
       value: raw,
       label: label,
     })),
