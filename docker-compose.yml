@@ -37,6 +37,7 @@ services:
     restart: unless-stopped
     networks:
       - farigoule-network
+    entrypoint: sleep infinity
 
 volumes:
   farigoule-db-storage:
