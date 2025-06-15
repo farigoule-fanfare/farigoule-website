@@ -1,6 +1,5 @@
 /* Styles for Header component */
 
-/* Copied from old global.css - Header section */
 header {
   display: flex;
   justify-content: center;
@@ -9,11 +8,11 @@ header {
   margin: 0 auto 1rem auto;
   padding: 0 10px;
   gap: 10px;
-  flex-wrap: nowrap; /* 🔒 empêche le passage à la ligne */
+  flex-wrap: nowrap;
 }
 
 .blocLogo {
-  width: 300px;       /* 🔒 largeur fixe comme dans global.css */
+  width: 300px;
   flex-shrink: 0;
 }
 
@@ -27,88 +26,141 @@ header {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 0; 
+  gap: 0;
 }
 
-
 .blocCitation {
-    overflow: hidden;
-    height: 160px;
-    margin: 15px 10px 0px 10px;
-    /* Updated image paths to be relative to src/img */
-    background-image: url("../img/background-citation-tete.png"), url("../img/background-citation.png");
-    background-position: 20px 3px, left;
-    background-repeat: no-repeat;
-    border-left: 3px solid black;
-    padding-left: 20px;
+  overflow: hidden;
+  height: 160px;
+  margin: 15px 10px 0px 10px;
+  background-image: url("../img/background-citation.png");
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  padding: 1.2rem 1.2rem 0.5rem 0.5rem;
 }
 
 .citation {
-    font-family: 'Marck Script', cursive; /* Requires font import */
-    font-size: 1.5em;
-    text-align: justify;
-    margin-bottom: 5px;
-    text-indent: 75px;
+  font-family: 'Marck Script', cursive;
+  font-size: 1.5em;
+  text-align: justify;
+  text-indent: 5rem;
 }
 
 .auteurCitation {
-    font-weight: bold;
-    font-style: italic;
-    text-align: right;
-    margin-top: 0px;
+  font-weight: bold;
+  font-style: italic;
+  text-align: right;
+  margin-top: 0px;
 }
 
 .tableauMenu {
-    width: 680px;
-    text-align: center;
+  width: 680px;
+  text-align: center;
 }
 
-.tableauMenu td > span { /* Target spans directly under td for menu text */
-    visibility: hidden;
-    font-size: 0.8em;
-    font-weight: bold;
-    display: block; /* Ensure it takes space for layout if needed before visible */
-    margin-bottom: 0.1em; /* Add a little space between text and button image */
+.tableauMenu td > span {
+  visibility: hidden;
+  font-size: 0.8em;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.1em;
 }
 
 .tableauMenu td:hover > span {
-    visibility: visible;
+  visibility: visible;
 }
-
 
 .boutonAccueil,
 .boutonNous,
 .boutonSymphonies,
 .boutonPortraits,
 .boutonContact {
-    width: 85px;
-    height: 85px;
+  width: 85px;
+  height: 85px;
 }
 
-
-
-
-/* ---------- AUTH STATUS HEADER ---------- */
-.auth-status-header{
-  /* remplira toute la largeur dispo - se cale à droite grâce au flex parent */
-  display:flex;
+.auth-status-header {
+  display: flex;
   justify-content: center;
-  align-items:center;
-  gap:1rem;
-  margin:.25rem 0;
-  padding:.35rem .75rem;
-  font-size:1rem;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.25rem 0;
+  padding: 0.35rem 0.75rem;
+  font-size: 1rem;
 }
 
-.auth-user{           /* “Bienvenue, …” */
-  font-weight:600;
+.auth-user {
+  font-weight: 600;
 }
 
-/* --- Responsive : empiler le bloc si trop étroit --- */
-@media(max-width:600px){
-  .auth-status-header{
-    flex-direction:column;
-    align-items:flex-start;
-    gap:.3rem;
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap !important;
+    padding: 0 1rem;
+  }
+
+  .blocLogo {
+    display: none;
+  }
+
+  .blocHeader {
+    width: 100%;
+    align-items: center;
+  }
+
+  .blocCitation {
+    width: 100%;
+    height: 130px;
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: top left;
+    padding: 1rem 1rem 0.5rem 0.5rem;
+    border-left: none;
+  }
+
+  .citation {
+    text-indent: 4rem;
+    font-size: 1.2em;
+    text-align: justify;
+  }
+
+  .auteurCitation {
+    text-align: right;
+  }
+
+  .tableauMenu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .tableauMenu div {
+    width: 60px;
+  }
+
+  .tableauMenu img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .tableauMenu span {
+    display: block;
+    font-size: 0.7em;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+    visibility: visible !important;
+  }
+
+  .auth-status-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
   }
 }

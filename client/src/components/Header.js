@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // Import useAuth
+import { useAuth } from '../context/AuthContext';
 import './Header.css';
 
-// Import images from the src directory
-import logoFarigouleSrc from '../img/logo-farigoule.png'; // Adjusted path if logo is directly in src/img
+import logoFarigouleSrc from '../img/logo-farigoule.png';
 import boutonAccueilSrc from '../img/boutons/bouton-accueil.png';
 import boutonAccueilHoverSrc from '../img/boutons/bouton-accueil-hover.png';
 import boutonNousSrc from '../img/boutons/bouton-nous.png';
@@ -16,11 +15,6 @@ import boutonPortraitsSrc from '../img/boutons/bouton-portraits.png';
 import boutonPortraitsHoverSrc from '../img/boutons/bouton-portraits-hover.png';
 import boutonContactSrc from '../img/boutons/bouton-contact.png';
 import boutonContactHoverSrc from '../img/boutons/bouton-contact-hover.png';
-
-// TODO
-// Import CSS
-// - CSS for hover effects on menu items (replaces boutonsHover.js functionality)
-// - Ensure citation data is eventually fetched and passed as props if dynamic
 
 function Header(props) {
     const [isAccueilHovered, setIsAccueilHovered] = useState(false);
@@ -34,7 +28,7 @@ function Header(props) {
 
     const handleLogout = async () => {
         await logout();
-        navigate('/'); // Redirect to homepage after logout
+        navigate('/');
     };
     const handleGoProfile = () => navigate('/profile');
 
@@ -49,92 +43,48 @@ function Header(props) {
                     <p className="auteurCitation">{props.auteurCitation}</p>
                 </blockquote>
 
-                {/* Auth Status Display - Connexion link removed */}
                 <div className="auth-status-header">
                     {isAuthenticated && (
                         <>
-                        <span className="auth-user">Bienvenue, {currentUser?.surnom} !</span>
-
-                        {/* ─── nouveau bouton « Profil » ─── */}
-                        <button
-                            onClick={handleGoProfile}
-                            className="adminPanel-button"
-                            type = "edit"
-                        >
-                            Mon profil
-                        </button>
-                        <button
-                            onClick={handleLogout}
-                            disabled={isLoading}
-                            className="adminPanel-button"
-                            type="delete"
-                        >
-                            Déconnexion
-                        </button>
+                            <span className="auth-user">Bienvenue, {currentUser?.surnom} !</span>
+                            <button onClick={handleGoProfile} className="adminPanel-button" type="edit">
+                                Mon profil
+                            </button>
+                            <button onClick={handleLogout} disabled={isLoading} className="adminPanel-button" type="delete">
+                                Déconnexion
+                            </button>
                         </>
                     )}
                 </div>
 
-
-                <table className="tableauMenu">
-                    <thead>
-                        <tr>
-                            <td 
-                                onMouseEnter={() => setIsAccueilHovered(true)}
-                                onMouseLeave={() => setIsAccueilHovered(false)}
-                            >
-                                <span className="texteAccueil">Accueil</span>
-                                <Link to="/">
-                                    <img src={isAccueilHovered ? boutonAccueilHoverSrc : boutonAccueilSrc} alt="Bouton Accueil" className="boutonAccueil" />
-                                </Link>
-                            </td>
-                            <td
-                                onMouseEnter={() => setIsNousHovered(true)}
-                                onMouseLeave={() => setIsNousHovered(false)}
-                            >
-                                <span className="texteNous">Nous</span>
-                                <Link to="/nous">
-                                    <img src={isNousHovered ? boutonNousHoverSrc : boutonNousSrc} alt="Bouton Nous" className="boutonNous" />
-                                </Link>
-                            </td>
-                            <td
-                                onMouseEnter={() => setIsSymphoniesHovered(true)}
-                                onMouseLeave={() => setIsSymphoniesHovered(false)}
-                            >
-                                <span className="texteSymphonies">Symphonies</span>
-                                <Link to="/symphonies">
-                                    <img src={isSymphoniesHovered ? boutonSymphoniesHoverSrc : boutonSymphoniesSrc} alt="Bouton Symphonies" className="boutonSymphonies" />
-                                </Link>
-                            </td>
-                            <td
-                                onMouseEnter={() => setIsPortraitsHovered(true)}
-                                onMouseLeave={() => setIsPortraitsHovered(false)}
-                            >
-                                <span className="textePortraits">Portraits</span>
-                                <Link to="/portraits">
-                                    <img src={isPortraitsHovered ? boutonPortraitsHoverSrc : boutonPortraitsSrc} alt="Bouton Portraits" className="boutonPortraits" />
-                                </Link>
-                            </td>
-                            <td
-                                onMouseEnter={() => setIsContactHovered(true)}
-                                onMouseLeave={() => setIsContactHovered(false)}
-                            >
-                                <span className="texteContact">Contact</span>
-                                <Link to="/contact">
-                                    <img src={isContactHovered ? boutonContactHoverSrc : boutonContactSrc} alt="Bouton Contact" className="boutonContact" />
-                                </Link>
-                            </td>
-                        </tr>
-                    </thead>
-                </table>
+                <div className="flex flex-wrap justify-center gap-2 mt-4 md:flex-nowrap md:justify-between tableauMenu">
+                    {[{
+                        title: 'Accueil', link: '/', img: boutonAccueilSrc, hover: boutonAccueilHoverSrc, isHovered: isAccueilHovered, setHovered: setIsAccueilHovered, className: 'boutonAccueil'
+                    }, {
+                        title: 'Nous', link: '/nous', img: boutonNousSrc, hover: boutonNousHoverSrc, isHovered: isNousHovered, setHovered: setIsNousHovered, className: 'boutonNous'
+                    }, {
+                        title: 'Symphonies', link: '/symphonies', img: boutonSymphoniesSrc, hover: boutonSymphoniesHoverSrc, isHovered: isSymphoniesHovered, setHovered: setIsSymphoniesHovered, className: 'boutonSymphonies'
+                    }, {
+                        title: 'Portraits', link: '/portraits', img: boutonPortraitsSrc, hover: boutonPortraitsHoverSrc, isHovered: isPortraitsHovered, setHovered: setIsPortraitsHovered, className: 'boutonPortraits'
+                    }, {
+                        title: 'Contact', link: '/contact', img: boutonContactSrc, hover: boutonContactHoverSrc, isHovered: isContactHovered, setHovered: setIsContactHovered, className: 'boutonContact'
+                    }].map(({ title, link, img, hover, isHovered, setHovered, className }) => (
+                        <div key={title} className="flex flex-col items-center" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+                            <span className="text-sm font-semibold">{title}</span>
+                            <Link to={link}>
+                                <img src={isHovered ? hover : img} alt={`Bouton ${title}`} className={className} />
+                            </Link>
+                        </div>
+                    ))}
+                </div>
             </div>
         </header>
-    )
+    );
 }
 
 Header.propTypes = {
     citation: PropTypes.string.isRequired,
     auteurCitation: PropTypes.string.isRequired,
-}
+};
 
-export default Header
+export default Header;
