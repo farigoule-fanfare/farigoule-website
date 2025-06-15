@@ -115,18 +115,18 @@ export default function GestionCitations() {
                 <td>{c.auteurCitation}</td>
                 <td>{c.citation}</td>
                 <td>
+                  <div className="adminPanel-buttons">
                   <button
                     type='edit'
                     onClick={() => handleCitationEdit(c)}
                     className="adminPanel-button"
                   >✎</button>
-                </td>
-                <td>
                   <button
                     type='delete'
                     onClick={() => handleCitationDelete(c.id)}
                     className="adminPanel-button"
                   >🗑</button>
+                  </div>
                 </td>
               </tr>
             ))}
