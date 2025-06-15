@@ -105,6 +105,7 @@ button[type="submit"]:disabled {
 .contentPage-form {
   grid-template-columns: 1fr 2fr;
   gap: 1rem 2rem;
+  width : 80%;
 }
 
 .contentPage-form-group {
@@ -135,4 +136,11 @@ button[type="submit"]:disabled {
 
 .contentPage-actions{
   margin: 0.5rem 0 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .contentPage-form {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
 }
