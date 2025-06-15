@@ -141,15 +141,19 @@ export default function GestionAccueil() {
         <h2>Diaporama</h2>
         <table className="adminPanel-table">
           <thead>
-            <tr><th>Aperçu</th><th>Texte</th><th colSpan="2">Actions</th></tr>
+            <tr><th>Aperçu</th><th>Texte</th><th>Actions</th></tr>
           </thead>
           <tbody>
             {currentDiapos.map(d => (
               <tr key={d.id}>
                 <td><img src={d.imageUrl} alt={d.description} className="apercuDiapo" /></td>
                 <td>{d.description}</td>
-                <td><button onClick={() => handleDiapoEdit(d)} className="adminPanel-button" type="edit">✎</button></td>
-                <td><button onClick={() => handleDiapoDelete(d.id)} className="adminPanel-button" type="delete">🗑</button></td>
+                <td>
+                  <div className="adminPanel-buttons">
+                    <button onClick={() => handleDiapoEdit(d)} className="adminPanel-button" type="edit">✎</button>
+                    <button onClick={() => handleDiapoDelete(d.id)} className="adminPanel-button" type="delete">🗑</button>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -196,8 +200,12 @@ export default function GestionAccueil() {
                 </td>
                 <td>{d.lieu}</td>
                 <td>{d.description}</td>
-                <td><button onClick={()=>handleDateEdit(d)} className="adminPanel-button" type="edit">✎</button></td>
-                <td><button onClick={()=>handleDateDelete(d.id)} className="adminPanel-button" type="delete">🗑</button></td>
+                <td>
+                  <div className="adminPanel-buttons">
+                    <button onClick={()=>handleDateEdit(d)} className="adminPanel-button" type="edit">✎</button>
+                    <button onClick={()=>handleDateDelete(d.id)} className="adminPanel-button" type="delete">🗑</button>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>

@@ -181,10 +181,10 @@ export default function GestionFanfarons() {
                   }
                 </td>
                 <td>
+                  <div className="adminPanel-buttons">
                   <button onClick={() => handleEditClick(f)} className="adminPanel-button" type="edit">✎</button>
-                </td>
-                <td>
                   <button onClick={() => handleDelete(f.id)} className="adminPanel-button" type="delete">🗑</button>
+                  </div>
                 </td>
               </tr>
             ))}
