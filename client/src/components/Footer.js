@@ -84,7 +84,7 @@ function Footer () {
             >
               Déconnexion
             </button><br />
-            {isAdmin && <><br /><Link to="/adminPanel">Panneau d'administration</Link></>}
+            {isAdmin && <><Link to="/adminPanel">Panneau d'administration</Link></>}
           </>
         ) : (
           <Link to="/login">Connexion</Link>
