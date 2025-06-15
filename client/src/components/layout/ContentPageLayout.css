@@ -3,15 +3,6 @@
 }
 
 /* Titre et réseaux sociaux sur une seule ligne, comme dans l'ancien .premierTitre + .blocSocial */
-/*.content-page-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-around; /* <--- titre à gauche, icônes à droite */
- /* max-width: 1000px;
-  margin: 0px auto 10px auto; /* centre le bloc sur la page */
- /* padding: 0 20px;
-  flex-wrap: wrap;
-}*/
 
 .content-page-header {
   position: relative;          /* nécessaire pour le positionnement absolu des icônes */

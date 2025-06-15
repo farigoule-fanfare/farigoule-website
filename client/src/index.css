@@ -57,7 +57,8 @@ form {
 /* Classe .container : enfant de la balise body, contient TOUT le contenu de chaque page */
 /* This can be applied to a top-level div in App.js or similar */
 .container {
-  width: 1000px; /* Consider responsive units e.g. 90% or max-width */
+  max-width: 1000px; /* Consider responsive units e.g. 90% or max-width */
+  width : 90%;
   margin: auto;
 }
 
