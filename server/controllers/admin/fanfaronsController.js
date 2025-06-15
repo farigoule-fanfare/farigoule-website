@@ -9,7 +9,7 @@ module.exports = {
       // Construire les URLs des photos
       const dataWithUrls = fanfarons.map(f => ({
         ...f,
-        photoUrl: `${req.protocol}://${req.get('host')}/public/uploads/fanfarons/${f.photo}`
+        photoUrl: `${process.env.REACT_APP_RESTAPI_SERVER_URI}/public/uploads/fanfarons/${f.photo}`
       }));
       // Renvoi du tableau prêt à l'affichage
       res.json({ success: true, data: dataWithUrls });
