@@ -59,17 +59,13 @@ header {
   text-align: center;
 }
 
-.tableauMenu td > span {
+.tableauMenu > div > span {
   visibility: hidden;
-  font-size: 0.8em;
-  font-weight: bold;
-  display: block;
-  margin-bottom: 0.1em;
 }
-
-.tableauMenu td:hover > span {
+.tableauMenu > div:hover > span {
   visibility: visible;
 }
+
 
 .boutonAccueil,
 .boutonNous,
