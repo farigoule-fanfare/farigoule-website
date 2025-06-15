@@ -54,14 +54,6 @@ form {
   border-radius: 10px;
 }
 
-/* Classe .container : enfant de la balise body, contient TOUT le contenu de chaque page */
-/* This can be applied to a top-level div in App.js or similar */
-.container {
-  max-width: 1000px; /* Consider responsive units e.g. 90% or max-width */
-  width : 90%;
-  margin: auto;
-}
-
 /* Social media buttons styling from old global.css */
 /* These might be part of a specific component or general layout */
 .premierTitre, .blocSocial {
