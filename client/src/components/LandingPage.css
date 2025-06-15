@@ -1,5 +1,13 @@
  /* In client/src/components/LandingPage.css */
-    
+   
+ .landing-page-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+
  .blocCarousel {
     margin-bottom: 40px; /* Space below carousel */
 }
