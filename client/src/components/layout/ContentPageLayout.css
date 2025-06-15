@@ -1,5 +1,10 @@
 .content-page-layout {
-  padding-top: 0px;
+  padding-top: 5px;
+  width: 100%;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
 }
 
 /* Titre et réseaux sociaux sur une seule ligne, comme dans l'ancien .premierTitre + .blocSocial */
