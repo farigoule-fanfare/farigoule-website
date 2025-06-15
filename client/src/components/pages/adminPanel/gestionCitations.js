@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import AdminPageLayout from '../../layout/AdminPageLayout';
 import { axiosWrapper } from '@api/axiosUtils';
+import Pagination from '../../utils/Pagination';
 //import './gestionCitations.css';
 
 export default function GestionCitations() {
@@ -106,7 +107,7 @@ export default function GestionCitations() {
             <tr>
               <th>Fanfaron</th>
               <th>Citation</th>
-              <th colSpan="2">Actions</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -132,18 +133,11 @@ export default function GestionCitations() {
             ))}
           </tbody>
         </table>
-        <div className="pagination">
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i + 1}
-              disabled={citationPage === i + 1}
-              onClick={() => setCitationPage(i + 1)}
-              className="adminPanel-button"
-            >
-              {i + 1}
-            </button>
-          ))}
-        </div>
+        <Pagination
+          currentPage={citationPage}
+          totalPages={totalPages}
+          onPageChange={setCitationPage}
+        />
 
         <div className="contentPage-form-wrapper" ref={citationFormRef}>
           <form onSubmit={handleCitationSubmit} className="contentPage-form">
