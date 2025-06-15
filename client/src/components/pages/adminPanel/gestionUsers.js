@@ -101,7 +101,7 @@ export default function GestionUtilisateurs() {
   /* ------------ RENDER ------------- */
   return (
     <AdminPageLayout title="Gestion des utilisateurs">
-      <div className="adminPanel-section">
+      <section className="adminPanel-section">
         <table className="adminPanel-table">
           <thead>
             <tr><th>ID</th><th>Surnom</th><th>Promo</th><th>Rôle</th><th>Actions</th></tr>
@@ -136,7 +136,7 @@ export default function GestionUtilisateurs() {
         totalPages={ Math.ceil(sorted.length / ITEMS_PER_PAGE)}
         onPageChange={setPage}
       />
-      </div>
+      </section>
       
     </AdminPageLayout>
   );

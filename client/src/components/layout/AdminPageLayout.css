@@ -135,6 +135,7 @@
   padding: 0.75rem;
   border: 1px solid #ccc;
   text-align: center;
+  white-space: normal;
 }
 
 
@@ -142,7 +143,27 @@
   background-color: rgba(0, 0, 0, 0.05);
 }
 
+.adminPanel-section {
+  max-width: 1000px;
+  margin: 0 auto 2rem auto;
+}
 
+/* For responsive column wrapping */
+.adminPanel-table td {
+  word-break: break-word;
+  white-space: normal;
+  max-width: 100%;
+  vertical-align: top;
+}
+
+/* Responsive table wrapper */
+@media (max-width: 768px) {
+  .adminPanel-table {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+  }
+}
 
 /* Pagination */
 .pagination {
@@ -182,15 +203,6 @@
 }
 
 
-
-/* For responsive column wrapping */
-.adminPanel-table td {
-  word-break: break-word;
-  white-space: normal;
-  max-width: 140px;
-  vertical-align: top;
-}
-
 /* Format date sur deux lignes */
 .date-cell {
   white-space: nowrap;
@@ -201,12 +213,3 @@
   display: block;
 }
 
-
-/* Responsive table wrapper */
-@media (max-width: 768px) {
-  .adminPanel-table {
-    display: block;
-    overflow-x: auto;
-    width: 100%;
-  }
-}
