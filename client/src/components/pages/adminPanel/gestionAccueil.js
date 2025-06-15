@@ -190,7 +190,10 @@ export default function GestionAccueil() {
           <tbody>
             {currentDates.map(d => (
               <tr key={d.id}>
-                <td>{new Date(d.date).toLocaleDateString('fr-FR')}</td>
+                <td className="date-cell">
+                  <span>{new Date(d.date).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })}</span>
+                  <span>{new Date(d.date).getFullYear()}</span>
+                </td>
                 <td>{d.lieu}</td>
                 <td>{d.description}</td>
                 <td><button onClick={()=>handleDateEdit(d)} className="adminPanel-button" type="edit">✎</button></td>

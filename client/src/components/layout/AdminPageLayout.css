@@ -164,3 +164,32 @@
 .pagination button:not([disabled]):hover {
   filter: brightness(0.9);
 }
+
+
+/* For responsive column wrapping */
+.adminPanel-table td {
+  word-break: break-word;
+  white-space: normal;
+  max-width: 140px;
+  vertical-align: top;
+}
+
+/* Format date sur deux lignes */
+.date-cell {
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.date-cell span {
+  display: block;
+}
+
+
+/* Responsive table wrapper */
+@media (max-width: 768px) {
+  .adminPanel-table {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+  }
+}
