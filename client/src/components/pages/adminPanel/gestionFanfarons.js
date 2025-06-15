@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import AdminPageLayout from '../../layout/AdminPageLayout';
 import { axiosWrapper } from '@api/axiosUtils';
+import Pagination from '../../utils/Pagination';
 import './gestionFanfaron.css';
 
 export default function GestionFanfarons() {
@@ -162,7 +163,7 @@ export default function GestionFanfarons() {
               <th>Bureau</th>
               <th>Téléphone</th>
               <th>Photo</th>
-              <th colSpan={2}>Actions</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -190,12 +191,12 @@ export default function GestionFanfarons() {
             ))}
           </tbody>
         </table>
-        <div className="pagination">
-          {Array.from({ length: Math.ceil(sorted.length / ITEMS_PER_PAGE) }, (_, i) => (
-            <button key={i+1} disabled={page===i+1} onClick={()=>setPage(i+1)} className="adminPanel-button">{i+1}</button>
-          ))}
+        <Pagination
+          currentPage={page}
+          totalPages={ Math.ceil(sorted.length / ITEMS_PER_PAGE)}
+          onPageChange={setPage}
+        />
         </div>
-      </div>
     </AdminPageLayout>
   );
 }

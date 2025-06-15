@@ -172,6 +172,16 @@
   filter: brightness(0.9);
 }
 
+.pagination button.active {
+  background-color: var(--success);
+  font-weight: bold;
+}
+.pagination span {
+  align-self: center;
+  padding: 0.3rem 0.6rem;
+}
+
+
 
 /* For responsive column wrapping */
 .adminPanel-table td {

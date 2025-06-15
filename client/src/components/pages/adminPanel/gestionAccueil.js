@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import AdminPageLayout from '../../layout/AdminPageLayout';
 import { axiosWrapper } from '@api/axiosUtils';
+import Pagination from '../../utils/Pagination';
 import './gestionAccueil.css';
 
 export default function GestionAccueil() {
@@ -158,11 +159,11 @@ export default function GestionAccueil() {
             ))}
           </tbody>
         </table>
-        <div className="pagination">
-          {Array.from({ length: totalDiapoPages }, (_, i) => (
-            <button key={i+1} disabled={diapoPage===i+1} onClick={()=>setDiapoPage(i+1)} className="adminPanel-button">{i+1}</button>
-          ))}
-        </div>
+        <Pagination
+          currentPage={diapoPage}
+          totalPages={totalDiapoPages}
+          onPageChange={setDiapoPage}
+        />
 
         {/* Diapo Form */}
         <div className="contentPage-form-wrapper" ref={diapoFormRef}>
@@ -189,7 +190,7 @@ export default function GestionAccueil() {
         <h2>Les prochaines dates</h2>
         <table className="adminPanel-table">
           <thead>
-            <tr><th>Date</th><th>Lieu</th><th>Description</th><th colSpan="2">Actions</th></tr>
+            <tr><th>Date</th><th>Lieu</th><th>Description</th><th>Actions</th></tr>
           </thead>
           <tbody>
             {currentDates.map(d => (
@@ -210,11 +211,11 @@ export default function GestionAccueil() {
             ))}
           </tbody>
         </table>
-        <div className="pagination">
-          {Array.from({ length: totalDatePages }, (_, i) => (
-            <button key={i+1} disabled={datePage===i+1} onClick={()=>setDatePage(i+1)} className="adminPanel-button">{i+1}</button>
-          ))}
-        </div>
+        <Pagination
+          currentPage={datePage}
+          totalPages={totalDatePages}
+          onPageChange={setDatePage}
+        />
 
         {/* Dates Form */}
         <div className="contentPage-form-wrapper" ref={dateFormRef}>
