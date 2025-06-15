@@ -27,7 +27,6 @@
 /* Le titre reste centré dans son bloc */
 .content-page-title {
   font-family: 'Lobster', cursive;
-  font-size: 2em;
   text-align: center;
   margin: 0 auto;
   /*flex-grow: 1;*/             /* prend l’espace dispo */
@@ -38,7 +37,7 @@
   max-width: 1000px;
   margin: 0 auto;
   padding: 0 20px;
-  text-align: left;
+  text-align: justify;
 }
 
 /* Responsive fallback */

@@ -25,6 +25,17 @@ code {
 h1, h2, h3 {
   font-family: 'Lobster', cursive; /* Requires font import */
   text-align: center;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 2em;
+}
+h2 {
+  font-size: 1.5em;
+}
+h3 {
+  font-size: 1.2em;
 }
 
 /* th styling was moved to Footer.css as .tableauFooter th */
