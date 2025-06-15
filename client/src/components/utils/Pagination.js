@@ -3,8 +3,8 @@ import React from 'react';
 export default function Pagination({ currentPage, totalPages, onPageChange }) {
   const getPageRange = () => {
     const range = [];
-    const start = Math.max(1, currentPage - 2);
-    const end = Math.min(totalPages, currentPage + 2);
+    const start = Math.max(1, currentPage - 1);
+    const end = Math.min(totalPages, currentPage + 1);
     for (let i = start; i <= end; i++) range.push(i);
     return range;
   };
