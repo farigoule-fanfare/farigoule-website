@@ -11,7 +11,6 @@
 services:
   client:
     # This is the crucial change: defining the image name for the registry.
-    image: ${REGISTRY:-ghcr.io}/${IMAGE_OWNER:-your-github-username}/farigoule-client:${TAG:-latest}
     container_name: farigoule-client
     env_file:
       - "client/.env"
@@ -34,7 +33,6 @@ services:
 
   server:
     # And the same change for the server.
-    image: ${REGISTRY:-ghcr.io}/${IMAGE_OWNER:-your-github-username}/farigoule-server:${TAG:-latest}
     container_name: farigoule-server
     env_file:
       - "server/.env"
@@ -46,6 +44,8 @@ services:
       - PORT=${SERVER_PORT}
       - FRONTEND_URL=${FRONTEND_URL}
       - REACT_APP_RESTAPI_SERVER_URI=${REACT_APP_RESTAPI_SERVER_URI}
+      - BREVO_SMTP_USER=${BREVO_SMTP_USER}
+      - BREVO_SMTP_PASS=${BREVO_SMTP_PASS}
     volumes:
       - farigoule-db-storage:/usr/app/database/
       - farigoule-uploads-storage:/usr/app/public/uploads
