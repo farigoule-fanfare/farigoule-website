@@ -11,7 +11,7 @@
 services:
   client:
     # This is the crucial change: defining the image name for the registry.
-    image: ${REGISTRY:-ghcr.io}/${IMAGE_OWNER:-your-github-username}/farigoule-client:${TAG:-latest}
+    image: ${{DOCKER_CLIENT_IMAGE}}
     container_name: farigoule-client
     env_file:
       - "client/.env"
@@ -34,7 +34,7 @@ services:
 
   server:
     # And the same change for the server.
-    image: ${REGISTRY:-ghcr.io}/${IMAGE_OWNER:-your-github-username}/farigoule-server:${TAG:-latest}
+    image: ${{DOCKER_SERVER_IMAGE}}
     container_name: farigoule-server
     env_file:
       - "server/.env"
