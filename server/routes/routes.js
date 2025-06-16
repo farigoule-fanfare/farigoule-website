@@ -3,18 +3,16 @@ const controllers = require("../controllers/controllers");
 
 const router = express.Router();
 
-router.get("/test", controllers.test);
-
 // New route for citations
-router.get("/api/citations", controllers.getCitationsApi);
+router.get("/citations", controllers.getCitationsApi);
 
 // Public routes
-router.get('/api/diapos', controllers.getAllDiaposApi);           // Route for all diapos
-router.get('/api/diapos/latest', controllers.getLatestDiaposApi);       // Route for latest diapos
-router.get('/api/diapos/random', controllers.getRandomDiapoApi); // Route for random diapo
-router.get('/api/contrats/upcoming', controllers.getUpcomingContratsApi); // Route for upcoming contrats
-router.get('/api/contrats/past', controllers.getPastContratsApi);       // Route for past contrats
-router.get('/api/fanfarons', controllers.getAllFanfaronsApi); // Route for all fanfarons
+router.get('/diapos', controllers.getAllDiaposApi);           // Route for all diapos
+router.get('/diapos/latest', controllers.getLatestDiaposApi);       // Route for latest diapos
+router.get('/diapos/random', controllers.getRandomDiapoApi); // Route for random diapo
+router.get('/contrats/upcoming', controllers.getUpcomingContratsApi); // Route for upcoming contrats
+router.get('/contrats/past', controllers.getPastContratsApi);       // Route for past contrats
+router.get('/fanfarons', controllers.getAllFanfaronsApi); // Route for all fanfarons
 
 
 // Example protected route structure (add actual protected routes later)

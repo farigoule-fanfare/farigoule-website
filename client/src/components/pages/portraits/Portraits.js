@@ -88,11 +88,18 @@ const Portraits = () => {
     <div className={`portrait-container ${selectedFanfaron ? "withDesc" : "noDesc"}`}>
       {/* 1) Header centré */}
       <div className="portrait-header">
-        <h2 className="titre-annuaire">L’annuaire des fanfarons</h2>
+        <h2 className="titre-annuaire" id="annuaire-title">L’annuaire des fanfarons</h2>
         {fanfarons.length > 20 && (
-          <p>
-            <a href="#filtrerResultats" className="alertTooMany"> Hey, y’a trop de fanfarons ! </a>
-          </p>
+          <button
+            className="alertTooMany"
+            onClick={() => {
+              setSelectedId(null);
+              const el = document.getElementById("filtrerResultats");
+              if (el) el.scrollIntoView({ behavior: "smooth" });
+            }}
+          >
+            Hey, y’a trop de fanfarons !
+          </button>
         )}
       </div>
 
@@ -182,7 +189,17 @@ const Portraits = () => {
             ))}
           </select>
         </label>
-        <a href="#annuaire" className="backToTop">Retour en haut</a>
+        <button
+          type="button"
+          className="backToTop"
+          onClick={() => {
+            const el = document.getElementById("annuaire-title");
+            if (el) el.scrollIntoView({ behavior: "smooth" });
+          }}
+        >
+          Retour en haut
+        </button>
+
       </div>
     </ContentPageLayout>
   );
