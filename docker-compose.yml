@@ -1,5 +1,17 @@
+# docker-compose.yml
+
+# We define the environment variables here so docker-compose knows about them.
+# The GitHub Actions workflow will populate these values during the run.
+# For local development, you might need a .env file to set these.
+# Example .env file content:
+# REGISTRY=ghcr.io
+# IMAGE_OWNER=your-github-username
+# TAG=latest
+
 services:
   client:
+    # This is the crucial change: defining the image name for the registry.
+    image: ${REGISTRY:-ghcr.io}/${IMAGE_OWNER:-your-github-username}/farigoule-client:${TAG:-latest}
     container_name: farigoule-client
     env_file:
       - "client/.env"
@@ -19,7 +31,10 @@ services:
       - farigoule-network
     depends_on:
       - server
+
   server:
+    # And the same change for the server.
+    image: ${REGISTRY:-ghcr.io}/${IMAGE_OWNER:-your-github-username}/farigoule-server:${TAG:-latest}
     container_name: farigoule-server
     env_file:
       - "server/.env"
@@ -41,6 +56,7 @@ services:
 volumes:
   farigoule-db-storage:
     driver: local
+    # 'name' is redundant here when the key is the same. Can be removed.
     name: farigoule-db-storage
   farigoule-uploads-storage:
     driver: local
@@ -49,4 +65,6 @@ volumes:
 networks:
   farigoule-network:
     driver: bridge
+    # 'name' is redundant here as well.
     name: farigoule-network
+
