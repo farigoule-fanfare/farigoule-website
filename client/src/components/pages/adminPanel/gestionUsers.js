@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import AdminPageLayout from '../../layout/AdminPageLayout';
 import { axiosWrapper } from '@api/axiosUtils';
 import { useAuth } from '../../../context/AuthContext';
+import Pagination from '../../utils/Pagination';
 
 export default function GestionUtilisateurs() {
   const ITEMS_PER_PAGE = 10;
@@ -100,7 +101,7 @@ export default function GestionUtilisateurs() {
   /* ------------ RENDER ------------- */
   return (
     <AdminPageLayout title="Gestion des utilisateurs">
-      <div className="adminPanel-section">
+      <section className="adminPanel-section">
         <table className="adminPanel-table">
           <thead>
             <tr><th>ID</th><th>Surnom</th><th>Promo</th><th>Rôle</th><th>Actions</th></tr>
@@ -130,14 +131,13 @@ export default function GestionUtilisateurs() {
             ))}
           </tbody>
         </table>
-        <div className="pagination">
-          {Array.from({ length: Math.ceil(sorted.length / ITEMS_PER_PAGE) }, (_, i) => (
-            <button key={i + 1} disabled={page === i + 1} onClick={() => setPage(i + 1)} className="adminPanel-button">
-              {i + 1}
-            </button>
-          ))}
-        </div>
-      </div>
+        <Pagination
+        currentPage={page}
+        totalPages={ Math.ceil(sorted.length / ITEMS_PER_PAGE)}
+        onPageChange={setPage}
+      />
+      </section>
+      
     </AdminPageLayout>
   );
 }

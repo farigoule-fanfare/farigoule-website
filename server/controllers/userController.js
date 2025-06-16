@@ -15,8 +15,9 @@ const getCurrentPresidentApi = async (req, res, next) => {
     try {
         const president = await userService.getCurrentPresident();
         if (!president) {
-            // It's not necessarily an error if no president is found, 
+            // It's not necessarily an error if no president is found,
             // the frontend can handle this. Or return 404 if it should be an error.
+            // TODO: c'est une 404
             return res.status(200).json({ success: true, data: null, message: "Current president not found." });
         }
         res.status(200).json({ success: true, data: president });
