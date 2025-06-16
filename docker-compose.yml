@@ -11,7 +11,7 @@
 services:
   client:
     # This is the crucial change: defining the image name for the registry.
-    image: ${{DOCKER_CLIENT_IMAGE}}
+    image: ${DOCKER_CLIENT_IMAGE}
     container_name: farigoule-client
     env_file:
       - "client/.env"
@@ -34,7 +34,7 @@ services:
 
   server:
     # And the same change for the server.
-    image: ${{DOCKER_SERVER_IMAGE}}
+    image: ${DOCKER_SERVER_IMAGE}
     container_name: farigoule-server
     env_file:
       - "server/.env"
