@@ -33,6 +33,7 @@ import ContextProvider from './ContextProvider';
 // import RenderOnAuthenticated from 'components/utils/RenderOnAuthenticated';
 
 export function App(props) {
+  console.log("SERVER_URI", process.env.REACT_APP_RESTAPI_SERVER_URI, "\n", process.env.RESTAPI_SERVER_URI);
   return (
     <BrowserRouter>
       <ContextProvider>

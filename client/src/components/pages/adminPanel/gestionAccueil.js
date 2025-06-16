@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import AdminPageLayout from '../../layout/AdminPageLayout';
 import { axiosWrapper } from '@api/axiosUtils';
+import Pagination from '../../utils/Pagination';
 import './gestionAccueil.css';
 
 export default function GestionAccueil() {
@@ -141,24 +142,28 @@ export default function GestionAccueil() {
         <h2>Diaporama</h2>
         <table className="adminPanel-table">
           <thead>
-            <tr><th>Aperçu</th><th>Texte</th><th colSpan="2">Actions</th></tr>
+            <tr><th>Aperçu</th><th>Texte</th><th>Actions</th></tr>
           </thead>
           <tbody>
             {currentDiapos.map(d => (
               <tr key={d.id}>
                 <td><img src={d.imageUrl} alt={d.description} className="apercuDiapo" /></td>
                 <td>{d.description}</td>
-                <td><button onClick={() => handleDiapoEdit(d)} className="adminPanel-button" type="edit">✎</button></td>
-                <td><button onClick={() => handleDiapoDelete(d.id)} className="adminPanel-button" type="delete">🗑</button></td>
+                <td>
+                  <div className="adminPanel-buttons">
+                    <button onClick={() => handleDiapoEdit(d)} className="adminPanel-button" type="edit">✎</button>
+                    <button onClick={() => handleDiapoDelete(d.id)} className="adminPanel-button" type="delete">🗑</button>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div className="pagination">
-          {Array.from({ length: totalDiapoPages }, (_, i) => (
-            <button key={i+1} disabled={diapoPage===i+1} onClick={()=>setDiapoPage(i+1)} className="adminPanel-button">{i+1}</button>
-          ))}
-        </div>
+        <Pagination
+          currentPage={diapoPage}
+          totalPages={totalDiapoPages}
+          onPageChange={setDiapoPage}
+        />
 
         {/* Diapo Form */}
         <div className="contentPage-form-wrapper" ref={diapoFormRef}>
@@ -185,25 +190,32 @@ export default function GestionAccueil() {
         <h2>Les prochaines dates</h2>
         <table className="adminPanel-table">
           <thead>
-            <tr><th>Date</th><th>Lieu</th><th>Description</th><th colSpan="2">Actions</th></tr>
+            <tr><th>Date</th><th>Lieu</th><th>Description</th><th>Actions</th></tr>
           </thead>
           <tbody>
             {currentDates.map(d => (
               <tr key={d.id}>
-                <td>{new Date(d.date).toLocaleDateString('fr-FR')}</td>
+                <td className="date-cell">
+                  <span>{new Date(d.date).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })}</span>
+                  <span>{new Date(d.date).getFullYear()}</span>
+                </td>
                 <td>{d.lieu}</td>
                 <td>{d.description}</td>
-                <td><button onClick={()=>handleDateEdit(d)} className="adminPanel-button" type="edit">✎</button></td>
-                <td><button onClick={()=>handleDateDelete(d.id)} className="adminPanel-button" type="delete">🗑</button></td>
+                <td>
+                  <div className="adminPanel-buttons">
+                    <button onClick={()=>handleDateEdit(d)} className="adminPanel-button" type="edit">✎</button>
+                    <button onClick={()=>handleDateDelete(d.id)} className="adminPanel-button" type="delete">🗑</button>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div className="pagination">
-          {Array.from({ length: totalDatePages }, (_, i) => (
-            <button key={i+1} disabled={datePage===i+1} onClick={()=>setDatePage(i+1)} className="adminPanel-button">{i+1}</button>
-          ))}
-        </div>
+        <Pagination
+          currentPage={datePage}
+          totalPages={totalDatePages}
+          onPageChange={setDatePage}
+        />
 
         {/* Dates Form */}
         <div className="contentPage-form-wrapper" ref={dateFormRef}>

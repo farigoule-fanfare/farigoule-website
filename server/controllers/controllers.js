@@ -58,7 +58,7 @@ const controller = {
             const diapos = await diapoService.getLatestDiapos(limit);
             const diaposWithUrls = diapos.map(d => ({
                 ...d,
-                imageUrl: `${req.protocol}://${req.get('host')}/public/uploads/carousel/${d.fichier}`
+                imageUrl: `${process.env.REACT_APP_RESTAPI_SERVER_URI}/public/uploads/carousel/${d.fichier}`
             }));
             res.status(200).json({ success: true, data: diaposWithUrls });
         } catch (error) {
@@ -77,7 +77,7 @@ const controller = {
             // Prepend the base URL for static files to the fichier name
             const diapoWithUrl = {
                 ...diapo,
-                imageUrl: `${req.protocol}://${req.get('host')}/public/uploads/carousel/${diapo.fichier}`
+                imageUrl: `${process.env.REACT_APP_RESTAPI_SERVER_URI}/public/uploads/carousel/${diapo.fichier}`
             };
             res.status(200).json({ success: true, data: diapoWithUrl });
         } catch (error) {
@@ -93,7 +93,7 @@ const controller = {
             // Prepend the base URL for static files to the fichier names
             const diaposWithUrls = diapos.map(d => ({
                 ...d,
-                imageUrl: `${req.protocol}://${req.get('host')}/public/uploads/carousel/${d.fichier}`
+                imageUrl: `${process.env.REACT_APP_RESTAPI_SERVER_URI}/public/uploads/carousel/${d.fichier}`
             }));
             res.status(200).json({ success: true, data: diaposWithUrls });
         } catch (error) {
@@ -129,7 +129,7 @@ const controller = {
             const fanfarons = await require('../services/fanfaronService').getAllFanfarons();
             const dataWithUrls = fanfarons.map(f => ({
             ...f,
-            photoUrl: `${req.protocol}://${req.get('host')}/public/uploads/fanfarons/${f.photo}`
+            photoUrl: `${process.env.REACT_APP_RESTAPI_SERVER_URI}/public/uploads/fanfarons/${f.photo}`
             }));
             res.json({ success: true, data: dataWithUrls });
         } catch (e) {

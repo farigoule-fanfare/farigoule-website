@@ -11,7 +11,7 @@ export const axiosWrapper = async ({ url, method, data, isMultipart=false }) => 
   try{
     let response;
     let headers = { 'Accept': 'application/json' };
-
+    console.log("[axiosWrapper] url:", url, "method:", method, "data:", data, "isMultipart:", isMultipart);
     switch (method) {
       case "get":
       case "delete":
@@ -22,7 +22,7 @@ export const axiosWrapper = async ({ url, method, data, isMultipart=false }) => 
             headers,
             params: data,
           });
-
+          console.log(resGet)
           if (!resGet?.data){
             throw new Error("operation failed")
           }

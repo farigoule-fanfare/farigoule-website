@@ -1,17 +1,13 @@
 .content-page-layout {
-  padding-top: 0px;
+  padding-top: 5px;
+  width: 100%;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
 }
 
 /* Titre et réseaux sociaux sur une seule ligne, comme dans l'ancien .premierTitre + .blocSocial */
-/*.content-page-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-around; /* <--- titre à gauche, icônes à droite */
- /* max-width: 1000px;
-  margin: 0px auto 10px auto; /* centre le bloc sur la page */
- /* padding: 0 20px;
-  flex-wrap: wrap;
-}*/
 
 .content-page-header {
   position: relative;          /* nécessaire pour le positionnement absolu des icônes */
@@ -27,7 +23,6 @@
 /* Le titre reste centré dans son bloc */
 .content-page-title {
   font-family: 'Lobster', cursive;
-  font-size: 2em;
   text-align: center;
   margin: 0 auto;
   /*flex-grow: 1;*/             /* prend l’espace dispo */
@@ -38,7 +33,7 @@
   max-width: 1000px;
   margin: 0 auto;
   padding: 0 20px;
-  text-align: left;
+  text-align: justify;
 }
 
 /* Responsive fallback */
@@ -110,6 +105,7 @@ button[type="submit"]:disabled {
 .contentPage-form {
   grid-template-columns: 1fr 2fr;
   gap: 1rem 2rem;
+  width : 80%;
 }
 
 .contentPage-form-group {
@@ -140,4 +136,11 @@ button[type="submit"]:disabled {
 
 .contentPage-actions{
   margin: 0.5rem 0 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .contentPage-form {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
 }

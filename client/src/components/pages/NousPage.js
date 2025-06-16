@@ -9,7 +9,7 @@ const NousPage = () => {
       <div class="presentation-fanfare">
         <h2>🎺 La Farigoule</h2>
         <p>
-          <strong>La Farigoule</strong> — fanfare déjantée, festive et haute en couleurs — fait vibrer Marseille et tout le sud-est de la France ! Composée d’élèves ingénieurs de l’École Centrale Méditerranée, notre troupe burlesque mêle passion musicale et joie communicative.
+          <strong>La Farigoule</strong>, fanfare déjantée, festive et haute en couleurs, fait vibrer Marseille et tout le sud-est de la France ! Composée d’élèves ingénieurs de l’École Centrale Méditerranée, notre troupe burlesque mêle passion musicale et joie communicative.
         </p>
 
         <p>
@@ -19,7 +19,7 @@ const NousPage = () => {
         <h3>🎉 La Farigoule, c’est :</h3>
         <ul>
           <li>Des musiciens au cœur aussi grand que leur groove</li>
-          <li>Des prestations dans les rues de Marseille — Canebière, Vieux-Port, parc Longchamp et au-delà</li>
+          <li>Des prestations dans les rues de Marseille : du Vieux-Port au parc Longchamp, en passant par la Canebière, et au-delà</li>
           <li>Une énergie explosive, une ambiance burlesque, et des costumes débridés</li>
           <li>Et surtout, la fête, partout, pour tout le monde !</li>
         </ul>

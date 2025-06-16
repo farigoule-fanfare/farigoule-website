@@ -1,8 +1,34 @@
-FROM node@sha256:37712740dc486f179b9540be1c6703cef3f805ea932573a007db748b71189afe
+FROM node:alpine AS builder
 
-RUN apk update
+RUN apk update && \
+    apk add --no-cache \
+    python3 \
+    py3-setuptools \
+    py3-pip \
+    make \
+    g++
+
 WORKDIR /usr/app/
-COPY . .
+COPY package*.json ./
 RUN npm install --omit=dev --loglevel=warn
+
+FROM node:alpine AS production
+
+RUN apk update && \
+    apk add --no-cache python3
+
+WORKDIR /usr/app
+
+COPY --from=builder /usr/app/node_modules ./node_modules
+COPY --from=builder /usr/app/package.json .
+COPY --from=builder /usr/app/package-lock.json .
+COPY controllers ./controllers
+COPY routes ./routes
+COPY services ./services
+COPY database ./database
+COPY controllers ./controllers
+COPY public ./public
+COPY middleware ./middleware
+COPY index.js .
 
 CMD [ "node", "index.js" ]

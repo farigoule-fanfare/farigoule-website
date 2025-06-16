@@ -24,7 +24,7 @@ module.exports = {
       // Build full URLs for static carousel images
       const diaposWithUrls = diapos.map(d => ({
         ...d,
-        imageUrl: `${req.protocol}://${req.get('host')}/public/uploads/carousel/${d.fichier}`
+        imageUrl: `${process.env.REACT_APP_RESTAPI_SERVER_URI}/public/uploads/carousel/${d.fichier}`
       }));
       return res.status(200).json({ success: true, data: diaposWithUrls });
     } catch (error) {
