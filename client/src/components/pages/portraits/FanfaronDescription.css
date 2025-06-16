@@ -57,3 +57,17 @@
   font-size: 1.5em;
   margin: 0;
 }
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .blocDescriptionFanfaron {
+    padding-top: 3rem;
+  }
+
+  .blocDescriptionFanfaron .closeButton {
+    top: 1rem;
+    right: 1rem;
+    font-size: 2.5rem;
+    z-index: 100;
+  }
+}
