@@ -11,7 +11,7 @@ const contratsRoutes = require('./routes/admin/contrats');
 const diaposRoutes = require('./routes/admin/diapos');
 const citationsRoutes = require('./routes/admin/citations');
 const adminRoutes = require('./routes/admin/manageUsers');
-
+const contactRoutes = require('./routes/contactRoutes');
 
 const db = require('./services/databaseService'); // Ensure DB is initialized when server starts
 
@@ -61,6 +61,7 @@ app.use('/admin/contrats', contratsRoutes);
 app.use('/admin/diapos', diaposRoutes);
 app.use('/admin/citations', citationsRoutes);
 app.use('/admin/manageUsers', adminRoutes);
+app.use('/mail', contactRoutes);
 
 // --- Catch-all for server status (optional) ---
 // This should be after your specific API routes
