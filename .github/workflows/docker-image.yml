@@ -2,7 +2,7 @@ name: Docker Compose CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "preprod" ]
   pull_request:
     branches: [ "main" ]
 
