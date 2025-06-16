@@ -3,21 +3,25 @@
 name: Docker Compose CI/CD
 
 on:
+  # Trigger the workflow on pushes and pull requests to main and preprod
   push:
     branches: [ "main", "preprod" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "preprod" ]
 
 # Use environment variables for registry details to keep the steps clean
 env:
   REGISTRY: ghcr.io
   # github.repository_owner is the organization or user that owns the repository
   IMAGE_OWNER: ${{ github.repository_owner }}
+  # Define the base image names here for reusability
+  CLIENT_IMAGE_NAME: farigoule-client
+  SERVER_IMAGE_NAME: farigoule-server
 
 jobs:
-  # This job runs on pull requests to validate the Docker build
-  build:
-    name: Build Images for Validation
+  # This job runs on pull requests to validate the Docker build without pushing
+  validate-build:
+    name: Validate Docker Build
     # Run this job only for pull_request events
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
@@ -25,13 +29,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build Docker Compose services
+      - name: Build Docker Compose services for validation
+        # This step only builds the images to ensure they are valid. It does not push.
         run: docker compose build
 
   # This job runs on pushes to 'main' or 'preprod' to build and push images
   build-and-push:
     name: Build and Push Images
-    # Run this job only for push events
+    # Run this job only for push events on the specified branches
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     # Grant permissions for the job to write to GitHub Packages
@@ -50,35 +55,49 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Determine image tag
-        # This step creates an environment variable `IMAGE_TAG`
-        # It will be 'latest' for the main branch, or the branch name (e.g., 'preprod') otherwise.
+      - name: Determine Image Tags
+        id: prep_tags
+        # This step sets two output variables: BRANCH_TAG and SHA_TAG
         run: |
-          branch=${{ github.ref_name }}
-          if [ "$branch" == "main" ]; then
-            echo "IMAGE_TAG=latest" >> $GITHUB_ENV
+          branch_name=${{ github.ref_name }}
+          if [ "$branch_name" == "main" ]; then
+            echo "BRANCH_TAG=production" >> $GITHUB_OUTPUT
           else
-            echo "IMAGE_TAG=$branch" >> $GITHUB_ENV
+            echo "BRANCH_TAG=$branch_name" >> $GITHUB_OUTPUT
           fi
-          # Also create a unique tag based on the commit SHA
-          echo "SHA_TAG=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
+          echo "SHA_TAG=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_OUTPUT
 
       - name: Build and Push with Branch Tag
-        # Docker Compose will use the IMAGE_TAG env var to tag the images
-        # e.g., ghcr.io/your-org/farigoule-client:latest
+        # Docker Compose needs the image names with the tag defined as environment variables.
+        # We set DOCKER_CLIENT_IMAGE and DOCKER_SERVER_IMAGE which should be used
+        # in the 'image:' field of your docker-compose.yml file.
+        # Example docker-compose.yml service:
+        #   client:
+        #     image: ${{DOCKER_CLIENT_IMAGE}}
+        #     build: ./client
         env:
-          TAG: ${{ env.IMAGE_TAG }}
+          DOCKER_CLIENT_IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ env.CLIENT_IMAGE_NAME }}:${{ steps.prep_tags.outputs.BRANCH_TAG }}
+          DOCKER_SERVER_IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ env.SERVER_IMAGE_NAME }}:${{ steps.prep_tags.outputs.BRANCH_TAG }}
         run: |
           docker compose build
           docker compose push
 
       - name: Re-tag and Push with SHA Tag
-        # This step creates an additional, unique tag for the same images
-        # e.g., ghcr.io/your-org/farigoule-client:a1b2c3d
-        # This provides an immutable reference to the exact version of the code.
+        # This step creates an additional, immutable tag for the same images.
+        # This provides a precise reference to the exact version of the code.
         run: |
-          docker tag ghcr.io/${{ env.IMAGE_OWNER }}/farigoule-client:${{ env.IMAGE_TAG }} ghcr.io/${{ env.IMAGE_OWNER }}/farigoule-client:${{ env.SHA_TAG }}
-          docker tag ghcr.io/${{ env.IMAGE_OWNER }}/farigoule-server:${{ env.IMAGE_TAG }} ghcr.io/${{ env.IMAGE_OWNER }}/farigoule-server:${{ env.SHA_TAG }}
+          # Define image names for clarity
+          CLIENT_IMAGE_BRANCH_TAGGED="${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ env.CLIENT_IMAGE_NAME }}:${{ steps.prep_tags.outputs.BRANCH_TAG }}"
+          SERVER_IMAGE_BRANCH_TAGGED="${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ env.SERVER_IMAGE_NAME }}:${{ steps.prep_tags.outputs.BRANCH_TAG }}"
           
-          docker push ghcr.io/${{ env.IMAGE_OWNER }}/farigoule-client:${{ env.SHA_TAG }}
-          docker push ghcr.io/${{ env.IMAGE_OWNER }}/farigoule-server:${{ env.SHA_TAG }}
+          CLIENT_IMAGE_SHA_TAGGED="${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ env.CLIENT_IMAGE_NAME }}:${{ steps.prep_tags.outputs.SHA_TAG }}"
+          SERVER_IMAGE_SHA_TAGGED="${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ env.SERVER_IMAGE_NAME }}:${{ steps.prep_tags.outputs.SHA_TAG }}"
+
+          # Re-tag the images with the short SHA
+          docker tag "$CLIENT_IMAGE_BRANCH_TAGGED" "$CLIENT_IMAGE_SHA_TAGGED"
+          docker tag "$SERVER_IMAGE_BRANCH_TAGGED" "$SERVER_IMAGE_SHA_TAGGED"
+          
+          # Push the new SHA-based tags
+          docker push "$CLIENT_IMAGE_SHA_TAGGED"
+          docker push "$SERVER_IMAGE_SHA_TAGGED"
+
