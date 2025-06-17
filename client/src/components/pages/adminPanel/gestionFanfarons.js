@@ -121,7 +121,7 @@ export default function GestionFanfarons() {
               name="description"
               value={form.description}
               onChange={handleChange}
-              className="adminPanel-textarea"
+              className="contentPage-textarea"
             />
           </div>
           <div className="contentPage-form-group">
