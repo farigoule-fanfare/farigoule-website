@@ -76,6 +76,7 @@
 .adminPanel-button[type="update"] {
   background-color: var(--success);
   color: #fff;
+  margin: 1rem 0 1rem 0;
 }
 
 .adminPanel-button[type="update"]:hover {
@@ -85,6 +86,7 @@
 .adminPanel-button[type="cancel"] {
   background-color: var(--warning);
   color: #000;
+  margin: 1rem 0 1rem 0;
 }
 
 .adminPanel-button[type="cancel"]:hover {
