@@ -31,6 +31,7 @@ function Header(props) {
         navigate('/');
     };
     const handleGoProfile = () => navigate('/profile');
+    const handleGoAnnuaire = () => navigate('/annuaire');
 
     return (
         <header>
@@ -47,6 +48,9 @@ function Header(props) {
                     {isAuthenticated && (
                         <>
                             <span className="auth-user">Bienvenue, {currentUser?.surnom} !</span>
+                            <button onClick={handleGoAnnuaire} className="adminPanel-button" id="annuaire-button" type="update">
+                                Annuaire
+                            </button>
                             <button onClick={handleGoProfile} className="adminPanel-button" type="edit">
                                 Mon profil
                             </button>
