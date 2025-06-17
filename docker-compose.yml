@@ -46,6 +46,7 @@ services:
       - REACT_APP_RESTAPI_SERVER_URI=${REACT_APP_RESTAPI_SERVER_URI}
       - BREVO_SMTP_USER=${BREVO_SMTP_USER}
       - BREVO_SMTP_PASS=${BREVO_SMTP_PASS}
+      - CONTACT_MAIL_FROM=${CONTACT_MAIL_FROM}
     volumes:
       - farigoule-db-storage:/usr/app/database/
       - farigoule-uploads-storage:/usr/app/public/uploads
