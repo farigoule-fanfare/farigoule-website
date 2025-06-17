@@ -161,3 +161,12 @@ header {
     gap: 0.3rem;
   }
 }
+
+#annuaire-button{
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: filter 0.2s;
+}
