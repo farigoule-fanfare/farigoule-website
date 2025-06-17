@@ -60,9 +60,15 @@ const ContactPage = () => {
 
   return (
     <ContentPageLayout title="Envoyer un message">
-       <p className="pTexteContact">
-          Vous pouvez écrire un petit mot au président de la Farigoule en remplissant ce formulaire, par exemple si vous voulez nous inviter à votre événement. Sinon, vous pouvez nous écrire sur Instagram (de préférence ) ou Facebook via les boutons de réseaux sociaux ci-contre !
-      </p>
+      <p className="pTexteContact">
+        Pour nous contacter, ou envoyer une déclaration d'amour au (à la) présidente(e) la Farigoule, vous pouvez:
+      </p><br />
+      <ul>
+        <li>- Nous écrire sur les réseaux sociaux (Instagram, de préférence, ou Facebook), en utilisant les boutons ci-dessus</li>
+        <li>- Remplir le formulaire ci-dessous avec votre mail pour qu'on puisse vous répondre</li>
+        <li>- Contacter le (la) président(e) par téléphone ou SMS, son téléphone est affiché en bas de chaque page du site</li>
+      </ul>
+      
       <div className="contentPage-form-wrapper">
         <form onSubmit={handleSubmit} className="contentPage-form">
           <div className="contentPage-form-group">
@@ -77,7 +83,7 @@ const ContactPage = () => {
 
           <div className="contentPage-form-group">
           <label className="contentPage-label">Votre message :</label>
-          <textarea name="message" className="adminPanel-textarea" value={formData.message} onChange={handleChange} required />
+          <textarea name="message" className="contentPage-textarea" value={formData.message} onChange={handleChange} required />
           </div>
 
           <button type="submit" disabled={status.loading || !presidentInfo?.email}>
