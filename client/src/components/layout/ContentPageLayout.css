@@ -107,6 +107,7 @@ button[type="submit"]:disabled {
   gap: 1rem 2rem;
   width : 80%;
   padding-top: 1rem;
+  margin-top: 1rem;
 }
 
 .contentPage-form-group {
