@@ -78,11 +78,19 @@ function LandingPage() {
                 }
                 
                 if (pastRes.success && pastRes.data) {
-                    setPastContrats(pastRes.data);
+                    
+                     if (upcomingRes.success && upcomingRes.data) {
+                        const needPast = Math.max(0, 4 - upcomingRes.data.length);
+                        setPastContrats(pastRes.data.slice(-needPast));
+                     } else {
+                        setPastContrats(pastRes.data);
+                     }
+
                 } else {
                      console.error("Failed to fetch past contrats:", pastRes.message);
                      setError(prev => ({ ...prev, contrats: (prev.contrats ? prev.contrats + "; " : "") + "Past fetch failed" }));
                 }
+                
 
             } catch (err) {
                 console.error("LandingPage Error fetching contrats:", err);
@@ -144,7 +152,7 @@ function LandingPage() {
                                 </p>
                             ))
                         ) : (
-                            <p>Aucune date à venir pour le moment.</p>
+                            <p><br />Aucune date à venir pour le moment.</p>
                         )
                     )}
                     

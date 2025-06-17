@@ -3,10 +3,8 @@
  .landing-page-content {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 0 20px;
   box-sizing: border-box;
 }
-
 
  .blocCarousel {
     margin-bottom: 40px; /* Space below carousel */
@@ -62,10 +60,15 @@
 
 /* Optionnel : ajuster la responsivité */
 @media (max-width: 768px) {
-  .dates-container,
-  .deezer-container {
+    .dates-container,
+    .deezer-container {
     flex: 1 1 100%;
-  }
+    }
+
+    .carousel-caption,
+    .blocCarousel .slick-arrow {
+        display: none !important; /* Hide arrows on small screens */
+    }
 }
 
 .blocDatesDeezer h2{
@@ -97,10 +100,4 @@
     padding: 10px;
     border-radius: 4px;
     margin: 10px 0;
-}
-
-@media (max-width: 768px) {
-    .carousel-caption {
-        visibility: hidden; /* Hide caption on small screens */
-    }
 }
