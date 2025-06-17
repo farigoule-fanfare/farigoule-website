@@ -60,26 +60,25 @@ const ContactPage = () => {
 
   return (
     <ContentPageLayout title="Envoyer un message">
-      <div className="container-contact-page">
-        <p className="pTexteContact">
+       <p className="pTexteContact">
           Vous pouvez écrire un petit mot au président de la Farigoule en remplissant ce formulaire, par exemple si vous voulez nous inviter à votre événement. Sinon, vous pouvez nous écrire sur Instagram (de préférence ) ou Facebook via les boutons de réseaux sociaux ci-contre !
-        </p>
+      </p>
+      <div className="contentPage-form-wrapper">
+        <form onSubmit={handleSubmit} className="contentPage-form">
+          <div className="contentPage-form-group">
+            <label className="contentPage-label">Votre nom :</label>
+            <input type="text" className="contentPage-input" name="nom" value={formData.nom} onChange={handleChange} required />
+          </div>
 
-        <form onSubmit={handleSubmit} className="contact-form">
-          <label>
-            Votre nom :
-            <input type="text" name="nom" value={formData.nom} onChange={handleChange} required />
-          </label>
+          <div className="contentPage-form-group">
+            <label className="contentPage-label">Votre adresse e-mail :</label>
+            <input type="email" className="contentPage-input" name="email" value={formData.email} onChange={handleChange} required />
+          </div>
 
-          <label>
-            Votre adresse e-mail :
-            <input type="email" name="email" value={formData.email} onChange={handleChange} required />
-          </label>
-
-          <label>
-            Votre message :
-            <textarea name="message" value={formData.message} onChange={handleChange} required />
-          </label>
+          <div className="contentPage-form-group">
+          <label className="contentPage-label">Votre message :</label>
+          <textarea name="message" className="adminPanel-textarea" value={formData.message} onChange={handleChange} required />
+          </div>
 
           <button type="submit" disabled={status.loading || !presidentInfo?.email}>
             {status.loading ? 'Envoi en cours…' : 'Envoyer'}
