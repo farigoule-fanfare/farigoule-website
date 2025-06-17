@@ -123,7 +123,7 @@ button[type="submit"]:disabled {
 }
 
 .contentPage-input,
-.adminPanel-textarea {
+.contentPage-textarea {
   width: 90%;
   padding: 0.5rem;
   border: 1px solid #ccc;
@@ -132,7 +132,7 @@ button[type="submit"]:disabled {
   box-sizing: border-box;
   text-align: center ;
 }
-.adminPanel-textarea{
+.contentPage-textarea{
   text-align: justify;
 }
 
