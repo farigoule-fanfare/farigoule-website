@@ -62,7 +62,7 @@ const ContactPage = () => {
     <ContentPageLayout title="Envoyer un message">
       <div className="container-contact-page">
         <p className="pTexteContact">
-          Vous pouvez écrire un petit mot au président de la Farigoule en remplissant ce formulaire. Sinon, vous pouvez nous écrire sur Instagram ou Facebook via les liens à droite !
+          Vous pouvez écrire un petit mot au président de la Farigoule en remplissant ce formulaire, par exemple si vous voulez nous inviter à votre événement. Sinon, vous pouvez nous écrire sur Instagram (de préférence ) ou Facebook via les boutons de réseaux sociaux ci-contre !
         </p>
 
         <form onSubmit={handleSubmit} className="contact-form">
