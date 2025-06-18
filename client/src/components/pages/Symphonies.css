@@ -1,17 +1,101 @@
-/* symphonies.css : styles pour la page symphonies.php */
-
-#lecteurCD
-{
-  display: block;
-  width: 100%;
-  margin: auto;
+/* ====  barre d’onglets album  ==== */
+.album-tabs {
+  display: flex;
+  justify-self: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 }
-.trackButton {
-  background: none;
-  border: none;
-  color: blue;
-  text-decoration: underline;
+
+.album-tabs > button {
+  padding: 0.4rem 0.8rem;
+  background: transparent;
+  border: 2px solid currentColor;
+  border-radius: 4px;
   cursor: pointer;
   font: inherit;
-  padding: 0;
+  transition: background 0.25s;
+}
+.album-tabs > button.active,
+.album-tabs > button:hover {
+  background: rgb(0 0 0 / 24%);
+  color: #ffffff;
+}
+
+/* ====  grille piste ==== */
+.tracks-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+}
+
+/* arrière-plan pour l’album qui possède une jaquette   */
+.tracks-grid[style] .track-card {
+  background-image: var(--cover-url);
+  background-size: cover;
+}
+/* ====  carte piste  ==== */
+.track-card {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.track-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.208);
+  transition: background 0.25s;
+}
+
+.track-card:hover,
+.track-card:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.track-card:hover::before,
+.track-card.playing::before {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+/* numéro & titre */
+.track-number,
+.track-title {
+  position: absolute;
+  color: #fff;
+  text-shadow: 0 1px 2px #000;
+  font-weight: 600;
+}
+.track-number { top: 0.4rem; left: 0.6rem; }
+.track-title  { bottom: 0.6rem; left: 0.6rem; right: 0.6rem; }
+
+/* icône CSS Play/Pause */
+.track-icon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 24px;
+  height: 24px;
+  background: #fff;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+  transition: transform 0.25s;
+}
+.track-card.playing .track-icon::after {
+  clip-path: none;
+  background-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
+  background-size: 8px 24px, 8px 24px;
+  background-position: 0 0, 16px 0;
+  background-color: transparent;
+}
+.track-card:active .track-icon::after { transform: scale(0.9); }
+
+/* focus clavier bien visible */
+.track-card:focus-visible {
+  box-shadow: 0 0 0 3px #ffd600, 0 0 0 6px #000;
 }
