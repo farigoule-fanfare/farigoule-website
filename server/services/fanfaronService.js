@@ -23,6 +23,8 @@ module.exports = {
     new Promise((resolve, reject) => {
       const {
         surnom,
+        nom,
+        prenom,
         instrument,
         promo,
         bureau,
@@ -33,11 +35,13 @@ module.exports = {
       } = data;
       const stmt = db.prepare(
         `INSERT INTO fanfarons
-         (surnom, instrument, promo, bureau, email, tel, description, photo)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+         (surnom,nom,prenom, instrument, promo, bureau, email, tel, description, photo)
+         VALUES (?, ?,?,?, ?, ?, ?, ?, ?, ?)`
       );
       stmt.run(
         surnom,
+        nom,
+        prenom,
         instrument,
         promo,
         bureau,
@@ -63,6 +67,8 @@ module.exports = {
     new Promise((resolve, reject) => {
       const {
         surnom,
+        nom,
+        prenom,
         instrument,
         promo,
         bureau,
@@ -74,6 +80,8 @@ module.exports = {
       const stmt = db.prepare(
         `UPDATE fanfarons
          SET surnom = ?,
+             nom = ?,
+             prenom = ?,
              instrument = ?,
              promo = ?,
              bureau = ?,
@@ -85,6 +93,8 @@ module.exports = {
       );
       stmt.run(
         surnom,
+        nom,
+        prenom,
         instrument,
         promo,
         bureau,
