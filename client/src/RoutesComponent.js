@@ -11,7 +11,7 @@ import Chat from "@components/pages/Chat";
 import NousPage from "./components/pages/NousPage";
 import ContactPage from "./components/pages/ContactPage";
 import Symphonies from "./components/pages/Symphonies";
-import Portraits from "./components/pages/portraits/Portraits";
+import Portraits from "./components/pages/Portraits";
 import AdminPanel from "./components/pages/adminPanel/mainPanel";
 import GestionFanfarons from "./components/pages/adminPanel/gestionFanfarons";
 import GestionAccueil from "./components/pages/adminPanel/gestionAccueil";
