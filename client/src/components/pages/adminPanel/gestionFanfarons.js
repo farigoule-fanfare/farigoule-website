@@ -8,7 +8,7 @@ import './gestionFanfaron.css';
 export default function GestionFanfarons() {
   const ITEMS_PER_PAGE = 10;
   const [fanfarons, setFanfarons] = useState([]);
-  const [form, setForm] = useState({ surnom: '', instrument: '', promo: '', bureau: '', email: '', tel: '', description: '' });
+  const [form, setForm] = useState({ surnom: '', nom: '', prenom: '', instrument: '', promo: '', bureau: '', email: '', tel: '', description: '' });
   const [photoFile, setPhotoFile] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const formRef = useRef(null);
@@ -58,7 +58,7 @@ export default function GestionFanfarons() {
       const res = await axiosWrapper({ method, url, data: fd, isMultipart: true });
       if (res.success) {
         await fetchList();
-        setForm({ surnom: '', instrument: '', promo: '', bureau: '', email: '', tel: '', description: '' });
+        setForm({ surnom: '', nom: '', prenom: '', instrument: '', promo: '', bureau: '', email: '', tel: '', description: '' });
         setPhotoFile(null);
         setEditingId(null);
       }
@@ -71,6 +71,8 @@ export default function GestionFanfarons() {
     setEditingId(f.id);
     setForm({
       surnom: f.surnom,
+      nom: f.nom,
+      prenom: f.prenom,
       instrument: f.instrument,
       promo: f.promo,
       bureau: f.bureau,
@@ -98,7 +100,7 @@ export default function GestionFanfarons() {
       <div className="contentPage-form-wrapper" ref={formRef}>
         <form onSubmit={handleSubmit} className="contentPage-form">
           <h3>{editingId ? 'Éditer un fanfaron' : 'Ajouter un fanfaron'}</h3>
-          {['surnom','instrument','promo','bureau','email','tel'].map(field => (
+          {['surnom','nom','prenom','instrument','promo','bureau','email','tel'].map(field => (
             <div key={field} className="contentPage-form-group">
               <label htmlFor={field} className="contentPage-label">
                 {field === 'email' ? 'Mail :' : field.charAt(0).toUpperCase() + field.slice(1) + ' :'}
@@ -141,7 +143,7 @@ export default function GestionFanfarons() {
             {editingId && (
               <button
                 type="cancel"
-                onClick={() => { setEditingId(null); setForm({ surnom: '', instrument: '', promo: '', bureau: '', email: '', tel: '', description: '' }); setPhotoFile(null); }}
+                onClick={() => { setEditingId(null); setForm({ surnom: '', nom: '', prenom: '', instrument: '', promo: '', bureau: '', email: '', tel: '', description: '' }); setPhotoFile(null); }}
                 className="adminPanel-button"
               >
                 Annuler
@@ -151,13 +153,13 @@ export default function GestionFanfarons() {
         </form>
       </div>
 
-      {/* Tableau inspiré de adminPanel-table */}
       <div className="adminPanel-section">
         <table className="adminPanel-table">
           <thead>
             <tr>
-              <th>ID</th>
               <th>Surnom</th>
+              <th>Nom</th>
+              <th>Prénom</th>
               <th>Instrument</th>
               <th>Promo</th>
               <th>Bureau</th>
@@ -170,8 +172,9 @@ export default function GestionFanfarons() {
           <tbody>
             {current.map(f => (
               <tr key={f.id}>
-                <td>{f.id}</td>
                 <td>{f.surnom}</td>
+                <td>{f.nom}</td>
+                <td>{f.prenom}</td>
                 <td>{f.instrument}</td>
                 <td>{f.promo}</td>
                 <td>{f.bureau}</td>
