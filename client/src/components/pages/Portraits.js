@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 
 import { axiosWrapper } from "@api/axiosUtils";
 
-import ContentPageLayout from "../../layout/ContentPageLayout";
-import FanfaronDescription from "./FanfaronDescription";
-import { BureauMapping } from "./BureauMapping"
+import ContentPageLayout from "../layout/ContentPageLayout";
+import FanfaronDescription from "./helpers/FanfaronDescription";
+import { BureauMapping } from "./helpers/BureauMapping"
 
 import "./Portraits.css";
 
@@ -125,7 +125,7 @@ const Portraits = () => {
               {(f.bureau && ["president","chefmu","trez","com","biere"].includes(f.bureau)) && (
                 <p className="pImageBureau">
                   <img
-                    src={require(`../../../img/boutons/bouton-${f.bureau}.png`)}
+                    src={require(`../../img/boutons/bouton-${f.bureau}.png`)}
                     alt="Bureau"
                     className="imageBureau"
                   />
