@@ -62,23 +62,29 @@
   width: var(--size-vinyl);
   height: var(--size-vinyl);
   border-radius: 50%;
-  background: url("../../img/symphonies/vinyl-rim_hole.png") center/contain no-repeat,
-    /* bord du disque */ var(--cover) center/38% no-repeat; /* jaquette au centre */
+  position: relative;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
-  margin: 0 auto;
-  transition: filter 0.3s;
+  margin: 0 auto; 
 }
 
-/* Rotation en lecture */
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.vinyl::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  background:
+      url("../../img/symphonies/vinyl-rim_hole.png") center/contain no-repeat,
+      var(--cover) center/38% no-repeat;
+  transition:filter .3s;
 }
-.spinning {
+
+@keyframes spin{
+  from{ transform:rotate(0deg); }
+  to  { transform:rotate(360deg); }
+}
+
+/* Rotation appliquée au pseudo-élément seulement */
+.spinning::after{
   animation: spin 3.5s linear infinite;
 }
 
@@ -92,6 +98,7 @@
   --pivot-y: 10%;   /* …ou en % : 4.5%, 4.2%        */
   transform-origin: var(--pivot-x) var(--pivot-y); /* point de pivot (dépend du visuel) */
   transition: transform 0.6s ease;
+  pointer-events:none;
 }
 
 /* ---------- Bouton Play / Pause ---------- */
