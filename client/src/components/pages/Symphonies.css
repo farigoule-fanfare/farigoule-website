@@ -1,5 +1,5 @@
 :root {
-  --size-vinyl: 320px; /* diamètre du disque */
+  --size-vinyl: clamp(180px, 60vmin, 360px); /* diamètre du disque */
   --accent: #ff0080; /* rose accent */
   --text-color: #fff;
   --bg: #111;
@@ -38,6 +38,7 @@
   width: calc(var(--size-vinyl) + var(--wood-left) + var(--wood-right));
   height: calc(var(--size-vinyl) + 60px);      /* + 60 pour le bouton */
   margin: 3rem auto 0;                           /* centré sur la page */
+  max-width: 100%;
 }
 
 .turntable{
