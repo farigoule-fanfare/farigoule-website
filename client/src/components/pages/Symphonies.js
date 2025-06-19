@@ -4,8 +4,8 @@ import ContentPageLayout from "../layout/ContentPageLayout";
 import "./Symphonies.css";
 
 // --- Jaquette connue uniquement pour CD 2
-import cd2Cover from "../../img/front-cover-cd2.png";
-import cd1Cover from "../../img/front-cover-cd1.jpg";
+import cd2Cover from "../../img/cover-cd2.png";
+import cd1Cover from "../../img/cover-cd1.jpg";
 
 // === PISTES CD 1 (déjà présentes dans ton ancien fichier) ===
 import epic      from "../../mp3/cd1/epic.mp3";
@@ -15,15 +15,15 @@ import oneTit    from "../../mp3/cd1/onetit.mp3";
 import kro       from "../../mp3/cd1/kro.mp3";
 import boys      from "../../mp3/cd1/boys.mp3";
 
-// === PISTES CD 2 (fichiers .wav que tu viens d’ajouter) ===
-import prodigy    from "../../mp3/cd2/2_Prodigy.wav";
-import letsGet    from "../../mp3/cd2/3_Let_s Get.wav";
-import biture     from "../../mp3/cd2/4_Biture.wav";
-import passtime   from "../../mp3/cd2/5_Passtime.wav";
-import jalousie   from "../../mp3/cd2/6_Jalousie.wav";
-import backataone from "../../mp3/cd2/7_Backataone.wav";
-import n99        from "../../mp3/cd2/8_99.wav";
-import fastFuse   from "../../mp3/cd2/1_FastFuse.wav";
+// === PISTES CD 2 (fichiers .m4a que tu viens d’ajouter) ===
+import prodigy    from "../../mp3/cd2/2_Prodigy.m4a";
+import letsGet    from "../../mp3/cd2/3_Let_s Get.m4a";
+import biture     from "../../mp3/cd2/4_Biture.m4a";
+import passtime   from "../../mp3/cd2/5_Passtime.m4a";
+import jalousie   from "../../mp3/cd2/6_Jalousie.m4a";
+import backataone from "../../mp3/cd2/7_Backataone.m4a";
+import n99        from "../../mp3/cd2/8_99.m4a";
+import fastFuse   from "../../mp3/cd2/1_FastFuse.m4a";
 
 // --------------------
 // 1) On décrit les deux albums dans un tableau :
