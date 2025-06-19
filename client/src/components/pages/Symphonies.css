@@ -3,6 +3,8 @@
   --accent: #ff0080; /* rose accent */
   --text-color: #fff;
   --bg: #111;
+  --wood-left: 25px;
+  --wood-right: 50px; 
 }
 
 /* ---------- Sélecteur d’albums ---------- */
@@ -31,23 +33,29 @@
 }
 
 /* ---------- Plateau vinyle ---------- */
-.turntable {
+.turntable-box{
   position: relative;
-  width: var(--size-vinyl);
-  height: calc(var(--size-vinyl) + 60px); /* place pour le bouton */
+  width: calc(var(--size-vinyl) + var(--wood-left) + var(--wood-right));
+  height: calc(var(--size-vinyl) + 60px);      /* + 60 pour le bouton */
+  margin: 3rem auto 0;                           /* centré sur la page */
+}
+
+.turntable{
+  position: absolute;
+  top: 0;
+  left: var(--wood-left);
   border-radius: 10%;
-  margin: 3rem auto 1rem;
 }
 
 .turntable::before{
-  content: "";
-  position: absolute;
-  inset : -25px -50px 25px -25px;                          /* ← déborde de 25 px de chaque côté */
-  background: url("../../img/symphonies/turntable-bg.jpg") center/cover no-repeat;
-  border-radius: 8px;                       /* petits coins arrondis si tu veux */
-  z-index: -1;                              /* reste derrière le reste */
-  pointer-events: none;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+  content:"";
+  position:absolute;
+  inset: calc(-1 * var(--wood-left)) calc(-1 * var(--wood-right)) -25px calc(-1 * var(--wood-left));
+  background:url("../../img/symphonies/turntable-bg.jpg") center/cover no-repeat;
+  border-radius:8px;
+  z-index:-1;
+  pointer-events:none;
+  box-shadow:0 8px 16px rgba(0,0,0,.6);
 }
 
 .vinyl {
@@ -89,7 +97,7 @@
 /* ---------- Bouton Play / Pause ---------- */
 .btn-play{
   position:absolute;
-  bottom:13%;
+  bottom:0%;
   left:100%;
   transform:translateX(-50%);
   width:3rem;
@@ -142,6 +150,7 @@
 }
 
 .track-title {
-  min-width: 180px;
+  min-width: 9rem;
   text-align: center;
+  font-size: large;
 }

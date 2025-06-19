@@ -84,32 +84,34 @@ function AlbumSelector({ albums, albumIdx, setAlbumIdx }) {
 
 function Turntable({ cover, isPlaying, angle, onPlayPause }) {
   return (
-    <div className="turntable">
-      {/* Disque vinyle (cover injectée via CSS custom property) */}
-      <div
-        className={`vinyl ${isPlaying ? "spinning" : ""}`}
-        style={{ "--cover": `url(${cover})` }}
-        aria-hidden="true"
-      />
+    <div className="turntable-box">
+      <div className="turntable">
+        {/* Disque vinyle (cover injectée via CSS custom property) */}
+        <div
+          className={`vinyl ${isPlaying ? "spinning" : ""}`}
+          style={{ "--cover": `url(${cover})` }}
+          aria-hidden="true"
+        />
 
-      {/* Bras pivotant */}
-      <div
-      className="tonearm-wrap"  style={{ transform: `rotate(${angle}deg)` }}>
-      <img
-        src={image_toneArm}
-        className="tonearm"
-        alt=""
-        aria-hidden="true"
-      /></div>
+        {/* Bras pivotant */}
+        <div
+        className="tonearm-wrap"  style={{ transform: `rotate(${angle}deg)` }}>
+        <img
+          src={image_toneArm}
+          className="tonearm"
+          alt=""
+          aria-hidden="true"
+        /></div>
 
-      {/* Bouton Play / Pause */}
-      <button
-        className="btn-play"
-        onClick={onPlayPause}
-        aria-label={isPlaying ? "Mettre en pause" : "Lecture"}
-      >
-        {isPlaying ? "❚❚" : "▶"}
-      </button>
+        {/* Bouton Play / Pause */}
+        <button
+          className="btn-play"
+          onClick={onPlayPause}
+          aria-label={isPlaying ? "Mettre en pause" : "Lecture"}
+        >
+          {isPlaying ? "❚❚" : "▶"}
+        </button>
+      </div>
     </div>
   );
 }
