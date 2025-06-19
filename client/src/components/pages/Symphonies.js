@@ -1,11 +1,13 @@
 // src/components/pages/Symphonies.jsx
 import React, { useState, useRef, useEffect } from "react";
 import ContentPageLayout from "../layout/ContentPageLayout";
+import { armAngleDeg } from "./helpers/armAngle";
 import "./Symphonies.css";
 
 // --- Jaquette connue uniquement pour CD 2
-import cd2Cover from "../../img/cover-cd2.png";
-import cd1Cover from "../../img/cover-cd1.jpg";
+import cd2Cover from "../../img/symphonies/cover-cd2.png";
+import cd1Cover from "../../img/symphonies/cover-cd1.png";
+import image_toneArm from "../../img/symphonies/tonearm.png"
 
 // === PISTES CD 1 (déjà présentes dans ton ancien fichier) ===
 import epic      from "../../mp3/cd1/epic.mp3";
@@ -58,85 +60,161 @@ const albums = [
     ],
   },
 ];
-// --------------------
 
-const Symphonies = () => {
-  const [albumIdx, setAlbumIdx]   = useState(0);        // 0 → CD 1
-  const [current, setCurrent]     = useState(null);     // index piste en cours
+/* ------------------------------------------------------------------ */
+/* 3) Sous-composants ------------------------------------------------ */
+
+function AlbumSelector({ albums, albumIdx, setAlbumIdx }) {
+  return (
+    <nav className="album-tabs" role="tablist">
+      {albums.map((alb, i) => (
+        <button
+          key={alb.id}
+          role="tab"
+          aria-selected={albumIdx === i}
+          className={albumIdx === i ? "active" : ""}
+          onClick={() => setAlbumIdx(i)}
+        >
+          {alb.title}
+        </button>
+      ))}
+    </nav>
+  );
+}
+
+function Turntable({ cover, isPlaying, angle, onPlayPause }) {
+  return (
+    <div className="turntable">
+      {/* Disque vinyle (cover injectée via CSS custom property) */}
+      <div
+        className={`vinyl ${isPlaying ? "spinning" : ""}`}
+        style={{ "--cover": `url(${cover})` }}
+        aria-hidden="true"
+      />
+
+      {/* Bras pivotant */}
+      <div
+      className="tonearm-wrap"  style={{ transform: `rotate(${angle}deg)` }}>
+      <img
+        src={image_toneArm}
+        className="tonearm"
+        alt=""
+        aria-hidden="true"
+      /></div>
+
+      {/* Bouton Play / Pause */}
+      <button
+        className="btn-play"
+        onClick={onPlayPause}
+        aria-label={isPlaying ? "Mettre en pause" : "Lecture"}
+      >
+        {isPlaying ? "❚❚" : "▶"}
+      </button>
+    </div>
+  );
+}
+
+function TrackSelector({ album, trackIdx, prev, next }) {
+  return (
+    <div className="track-selector">
+      <button onClick={prev} aria-label="Piste précédente">
+        ◀
+      </button>
+      <span className="track-title" aria-live="polite">
+        {album.tracks[trackIdx].title}
+      </span>
+      <button onClick={next} aria-label="Piste suivante">
+        ▶
+      </button>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* 3) Composant principal ------------------------------------------- */
+export default function Symphonies() {
+  const [albumIdx, setAlbumIdx] = useState(0);
+  const [trackIdx, setTrackIdx] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
 
   const album = albums[albumIdx];
+  const currentTrack = album.tracks[trackIdx];
 
-  // ↻ change de piste
+  /* -- (re)charge la bonne piste quand album ou track change -------- */
   useEffect(() => {
-    if (current !== null) {
-      audioRef.current.src = album.tracks[current].src;
+    if (!audioRef.current) return;
+    audioRef.current.src = currentTrack.src;
+    if (isPlaying) {
+      const p = audioRef.current.play();
+      if (p) p.catch(console.error);
+    }
+  }, [albumIdx, trackIdx]); //  eslint-disable-line react-hooks/exhaustive-deps
+
+  /* -- Play / Pause ------------------------------------------------- */
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
       audioRef.current.play();
       setIsPlaying(true);
     }
-  }, [current, album]);
-
-  const togglePlay = (idx) => {
-    if (current === idx) {
-      if (isPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        audioRef.current.play();
-        setIsPlaying(true);
-      }
-    } else {
-      setCurrent(idx);
-    }
   };
+
+  /* -- Sélection précédente/suivante -------------------------------- */
+  const prevTrack = () =>
+    setTrackIdx((i) => (i - 1 + album.tracks.length) % album.tracks.length);
+  const nextTrack = () => setTrackIdx((i) => (i + 1) % album.tracks.length);
+
+  /* -- Quand la piste se termine, on enchaîne ----------------------- */
+  const handleEnded = () => {
+    nextTrack();
+    setIsPlaying(true);
+  };
+  /* Bras vinyle */
+  /* -- Angle du bras vinyle ---------------------------------------- */
+  const playingAngle = armAngleDeg(trackIdx, album.tracks.length);
+  const angle = isPlaying ? playingAngle : 0;
 
   return (
     <ContentPageLayout title="Symphonies">
-      {/* --- Sélecteur d’albums --- */}
-      <nav className="album-tabs" role="tablist">
-        {albums.map((alb, i) => (
-          <button
-            key={alb.id}
-            role="tab"
-            aria-selected={albumIdx === i}
-            className={albumIdx === i ? "active" : ""}
-            onClick={() => { setAlbumIdx(i); setCurrent(null); }}
-          >
-            {alb.title}
-          </button>
-        ))}
-      </nav>
+      <p>- Entre variété française et reggae bolchévique, le premier album de la Farigoule - les Culs, Vettes et Tanches - sorti en 2012, propose des compositions florales variées.
+Ses six pistes déjantées, mettra l'ambiance dans toutes vos soirées.</p>
+      <p>- Après trois ans d'une attente interminable et un joli coup de pouce de John Williams, notre second CD est sorti à l'été 2017 !
+Vous pourrez vous le procurer sur le Vieux Port dès que vous nous verrez, ou n'importe où d'ailleurs, n'hésitez pas</p>
+      {/* Sélecteur de CD */}
+      <AlbumSelector
+        albums={albums}
+        albumIdx={albumIdx}
+        setAlbumIdx={(i) => {
+          setAlbumIdx(i);
+          setTrackIdx(0);
+          setIsPlaying(false);
+        }}
+      />
 
-      {/* --- Grille de pistes --- */}
-      <div
-        className={`tracks-grid`}
-        style={album.cover ? { "--cover-url": `url(${album.cover})` } : {}}
-      >
-        {album.tracks.map((track, idx) => (
-          <button
-            key={track.n}
-            className={`track-card ${
-              current === idx && isPlaying ? "playing" : ""
-            }`}
-            onClick={() => togglePlay(idx)}
-            aria-label={
-              current === idx && isPlaying
-                ? `Mettre ${track.title} en pause`
-                : `Écouter ${track.title}`
-            }
-          >
-            <span className="track-number">{track.n}</span>
-            <span className="track-title">{track.title}</span>
-            <span className="track-icon" aria-hidden="true" />
-          </button>
-        ))}
-      </div>
+      {/* Platine */}
+      <Turntable
+        cover={album.cover}
+        isPlaying={isPlaying}
+        angle={angle}
+        onPlayPause={togglePlay}
+      />
 
-      {/* lecteur audio caché */}
-      <audio ref={audioRef} hidden controls />
+      {/* Sélecteur de pistes */}
+      <TrackSelector
+        album={album}
+        trackIdx={trackIdx}
+        prev={prevTrack}
+        next={nextTrack}
+      />
+
+      {/* Élément <audio> masqué (mais ARIA-friendly) */}
+      <audio ref={audioRef} hidden onEnded={handleEnded} preload="auto" />
     </ContentPageLayout>
   );
-};
+}
 
-export default Symphonies;
+

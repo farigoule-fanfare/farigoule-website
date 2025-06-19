@@ -1,101 +1,147 @@
-/* ====  barre d’onglets album  ==== */
-.album-tabs {
-  display: flex;
-  justify-self: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+:root {
+  --size-vinyl: 320px; /* diamètre du disque */
+  --accent: #ff0080; /* rose accent */
+  --text-color: #fff;
+  --bg: #111;
 }
 
-.album-tabs > button {
-  padding: 0.4rem 0.8rem;
+/* ---------- Sélecteur d’albums ---------- */
+.album-tabs {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.album-tabs button {
   background: transparent;
-  border: 2px solid currentColor;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  padding: 0.3rem 0.7rem;
   border-radius: 4px;
   cursor: pointer;
   font: inherit;
-  transition: background 0.25s;
-}
-.album-tabs > button.active,
-.album-tabs > button:hover {
-  background: rgb(0 0 0 / 24%);
-  color: #ffffff;
+  transition: background 0.25s, color 0.25s;
 }
 
-/* ====  grille piste ==== */
-.tracks-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+.album-tabs button.active,
+.album-tabs button:hover {
+  background: var(--accent);
+  color: #000;
 }
 
-/* arrière-plan pour l’album qui possède une jaquette   */
-.tracks-grid[style] .track-card {
-  background-image: var(--cover-url);
-  background-size: cover;
-}
-/* ====  carte piste  ==== */
-.track-card {
+/* ---------- Plateau vinyle ---------- */
+.turntable {
   position: relative;
-  aspect-ratio: 1 / 1;
+  width: var(--size-vinyl);
+  height: calc(var(--size-vinyl) + 60px); /* place pour le bouton */
+  border-radius: 10%;
+  margin: 3rem auto 1rem;
+}
+
+.turntable::before{
+  content: "";
+  position: absolute;
+  inset : -25px -50px 25px -25px;                          /* ← déborde de 25 px de chaque côté */
+  background: url("../../img/symphonies/turntable-bg.jpg") center/cover no-repeat;
+  border-radius: 8px;                       /* petits coins arrondis si tu veux */
+  z-index: -1;                              /* reste derrière le reste */
+  pointer-events: none;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+}
+
+.vinyl {
+  width: var(--size-vinyl);
+  height: var(--size-vinyl);
+  border-radius: 50%;
+  background: url("../../img/symphonies/vinyl-rim_hole.png") center/contain no-repeat,
+    /* bord du disque */ var(--cover) center/38% no-repeat; /* jaquette au centre */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+  margin: 0 auto;
+  transition: filter 0.3s;
+}
+
+/* Rotation en lecture */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spinning {
+  animation: spin 3.5s linear infinite;
+}
+
+/* ---------- Bras de lecture ---------- */
+.tonearm-wrap {
+  position: absolute;
+  width: 55%; /* ajuste à la taille de ton SVG */
+  top: 0%;
+  left: 75%;
+  --pivot-x: 52%;   /* mets ici tes vraies valeurs… */
+  --pivot-y: 10%;   /* …ou en % : 4.5%, 4.2%        */
+  transform-origin: var(--pivot-x) var(--pivot-y); /* point de pivot (dépend du visuel) */
+  transition: transform 0.6s ease;
+}
+
+/* ---------- Bouton Play / Pause ---------- */
+.btn-play{
+  position:absolute;
+  bottom:13%;
+  left:100%;
+  transform:translateX(-50%);
+  width:3rem;
+  height:3rem;
+
+  /* Texte (icône) */
+  font-size:1.8rem;
+  color:#393939;                /* blanc au-dessus de l’image */
+  border:none;
+  cursor:pointer;
+  background:transparent;    /* le fond sera géré par ::before */
+  overflow:hidden;           /* masque l’image si elle déborde */
+} 
+
+/* L’image placée “sous” le symbole */
+.btn-play::before{
+  content:"";
+  position:absolute;
+  inset:0;                   /* couvre 100 % du bouton */
+  background:url("../../img/boutons/bouton-play.png") center/cover no-repeat;
+  transition:filter .25s;
+  z-index:-1;                /* derrière le texte */
+}
+
+/* Petit effet au survol */
+.btn-play:hover::before{
+  filter:brightness(1.15);
+}
+
+/* ---------- Sélecteur de pistes ---------- */
+.track-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  font-weight: bold;
+}
+
+.track-selector button {
+  background: transparent;
   border: none;
+  color: var(--accent);
+  font-size: 1.4rem;
   cursor: pointer;
-  overflow: hidden;
-  outline: none;
-  transition: transform 0.25s, box-shadow 0.25s;
+  transition: transform 0.2s;
 }
 
-.track-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.208);
-  transition: background 0.25s;
+.track-selector button:hover {
+  transform: scale(1.2);
 }
 
-.track-card:hover,
-.track-card:focus-visible {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-}
-
-.track-card:hover::before,
-.track-card.playing::before {
-  background: rgba(0, 0, 0, 0.55);
-}
-
-/* numéro & titre */
-.track-number,
 .track-title {
-  position: absolute;
-  color: #fff;
-  text-shadow: 0 1px 2px #000;
-  font-weight: 600;
-}
-.track-number { top: 0.4rem; left: 0.6rem; }
-.track-title  { bottom: 0.6rem; left: 0.6rem; right: 0.6rem; }
-
-/* icône CSS Play/Pause */
-.track-icon::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  width: 24px;
-  height: 24px;
-  background: #fff;
-  clip-path: polygon(0 0, 100% 50%, 0 100%);
-  transition: transform 0.25s;
-}
-.track-card.playing .track-icon::after {
-  clip-path: none;
-  background-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
-  background-size: 8px 24px, 8px 24px;
-  background-position: 0 0, 16px 0;
-  background-color: transparent;
-}
-.track-card:active .track-icon::after { transform: scale(0.9); }
-
-/* focus clavier bien visible */
-.track-card:focus-visible {
-  box-shadow: 0 0 0 3px #ffd600, 0 0 0 6px #000;
+  min-width: 180px;
+  text-align: center;
 }
