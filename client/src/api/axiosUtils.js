@@ -11,7 +11,7 @@ export const axiosWrapper = async ({ url, method, data, isMultipart=false }) => 
   try{
     let response;
     let headers = { 'Accept': 'application/json' };
-    console.log("[axiosWrapper] url:", url, "method:", method, "data:", data, "isMultipart:", isMultipart);
+    // console.log("[axiosWrapper] url:", url, "method:", method, "data:", data, "isMultipart:", isMultipart);
     switch (method) {
       case "get":
       case "delete":
@@ -22,7 +22,7 @@ export const axiosWrapper = async ({ url, method, data, isMultipart=false }) => 
             headers,
             params: data,
           });
-          console.log(resGet)
+          //console.log(resGet)
           if (!resGet?.data){
             throw new Error("operation failed")
           }
@@ -51,7 +51,7 @@ export const axiosWrapper = async ({ url, method, data, isMultipart=false }) => 
           if (isMultipart) {
             // Remove Content-Type header for multipart
             delete axiosConfig.headers['Content-Type'];
-            console.log('[axiosWrapper] Sending FormData payload:', data);
+            //console.log('[axiosWrapper] Sending FormData payload:', data);
           }
           let resPost = await axiosInstance(axiosConfig);
 
