@@ -67,4 +67,3 @@ networks:
     driver: bridge
     # 'name' is redundant here as well.
     name: farigoule-network
-
