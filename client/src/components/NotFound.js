@@ -1,40 +1,45 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import ContentPageLayout from './layout/ContentPageLayout';
 import LostImg from '../img/not-found.png'; // remplacez 'lost.png' par le nom de votre fichier
 
 function NotFound() {
   const navigate = useNavigate();
 
   return (
-    <div style={{ textAlign: 'center', padding: '2rem' }}>
+    <ContentPageLayout title="Oh non, page introuvable !">
+    <div class="not-found-container" style={{ margin: '0 auto' }}>
       <h1 style={{ fontSize: '4rem', margin: '0.5rem 0' }}>Error 404</h1>
-      <h2 style={{ fontSize: '2rem', margin: '0.5rem 0' }}>Not found</h2>
-      <img
-        src={LostImg}
-        alt="Perdu"
-        style={{ maxWidth: '100%', height: 'auto', margin: '1rem 0' }}
-      />
-      
-       <h3> Oula mais où suis je ??? Je ferais mieux de retourner en terrain connu</h3>
-      
-      <button
+      <p style={{ textAlign: 'center' }}>
+        <button
         onClick={() => navigate('/')}
-        style={{
-          padding: '0.75rem 1.5rem',
-          fontSize: '1rem',
-          backgroundColor: '#007bff',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '0.25rem',
-          cursor: 'pointer',
-          transition: 'background-color 0.2s ease',
-        }}
+        className='adminPanel-button' type="submit"
         onMouseEnter={e => e.currentTarget.style.backgroundColor = '#0056b3'}
         onMouseLeave={e => e.currentTarget.style.backgroundColor = '#007bff'}
-      >
+        >
         Retour en lieu sûr
-      </button>
+        </button>
+
+      
+        <img
+          src={LostImg} alt="Perdu" style={{ maxWidth: '100%', height: 'auto', margin: '1rem auto', display: 'block' }}
+        />
+      
+
+       <h3> Oula mais où suis je ??? Je ferais mieux de retourner en terrain connu</h3>
+      
+        <button
+          onClick={() => navigate('/')}
+          className='adminPanel-button' type="submit"
+          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#0056b3'}
+          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#007bff'}
+        >
+          Retour en lieu sûr
+        </button>
+      </p>
     </div>
+ 
+  </ContentPageLayout> 
   );
 }
 

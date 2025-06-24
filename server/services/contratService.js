@@ -38,16 +38,18 @@ const contratService = {
 
   /**
    * Fetches upcoming contrats (events) from today onwards, ordered by date ascending.
+   * * @param {number} [limit=3] - Maximum number of upcoming contrats to return.
    */
-  getUpcomingContrats: async () => {
+  getUpcomingContrats: async (limit = 3) => {
     try {
       const today = getTodayDateString();
       const sql = `SELECT id, date, lieu, description
                    FROM contrats
                    WHERE date >= ?
-                   ORDER BY date ASC`;
+                   ORDER BY date ASC
+                   LIMIT ?`;
       const rows = await new Promise((resolve, reject) => {
-        db.all(sql, [today], (err, result) => {
+        db.all(sql, [today, limit], (err, result) => {
           if (err) reject(err);
           else resolve(result);
         });
