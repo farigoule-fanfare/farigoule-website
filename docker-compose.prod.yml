@@ -8,7 +8,6 @@
 #     CLIENT_IMAGE_NAME, SERVER_IMAGE_NAME, CLIENT_PORT, SERVER_PORT,
 #     FRONTEND_URL, REACT_APP_RESTAPI_SERVER_URI.
 # -------------------------------------------------------------------
-version: "3.9"
 
 services:
   client:
