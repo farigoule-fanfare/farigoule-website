@@ -31,7 +31,7 @@ jobs:
 
       - name: Build Docker Compose services for validation
         # This step only builds the images to ensure they are valid. It does not push.
-        run: docker compose build
+        run: docker compose -f docker-compose.dev.yml build
 
   # This job runs on pushes to 'main' or 'preprod' to build and push images
   build-and-push:
@@ -100,4 +100,3 @@ jobs:
           # Push the new SHA-based tags
           docker push "$CLIENT_IMAGE_SHA_TAGGED"
           docker push "$SERVER_IMAGE_SHA_TAGGED"
-
