@@ -8,7 +8,7 @@ import './gestionFanfaron.css';
 export default function GestionFanfarons() {
   const ITEMS_PER_PAGE = 10;
   const [fanfarons, setFanfarons] = useState([]);
-  const [form, setForm] = useState({ surnom: '', instrument: '', promo: '', bureau: '', mail: '', tel: '', description: '' });
+  const [form, setForm] = useState({ surnom: '', nom: '', prenom: '', instrument: '', promo: '', bureau: '', email: '', tel: '', description: '' });
   const [photoFile, setPhotoFile] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const formRef = useRef(null);
@@ -58,7 +58,7 @@ export default function GestionFanfarons() {
       const res = await axiosWrapper({ method, url, data: fd, isMultipart: true });
       if (res.success) {
         await fetchList();
-        setForm({ surnom: '', instrument: '', promo: '', bureau: '', mail: '', tel: '', description: '' });
+        setForm({ surnom: '', nom: '', prenom: '', instrument: '', promo: '', bureau: '', email: '', tel: '', description: '' });
         setPhotoFile(null);
         setEditingId(null);
       }
@@ -71,10 +71,12 @@ export default function GestionFanfarons() {
     setEditingId(f.id);
     setForm({
       surnom: f.surnom,
+      nom: f.nom,
+      prenom: f.prenom,
       instrument: f.instrument,
       promo: f.promo,
       bureau: f.bureau,
-      mail: f.mail,
+      email: f.email,
       tel: f.tel,
       description: f.description
     });
@@ -98,15 +100,15 @@ export default function GestionFanfarons() {
       <div className="contentPage-form-wrapper" ref={formRef}>
         <form onSubmit={handleSubmit} className="contentPage-form">
           <h3>{editingId ? 'Éditer un fanfaron' : 'Ajouter un fanfaron'}</h3>
-          {['surnom','instrument','promo','bureau','mail','tel'].map(field => (
+          {['surnom','nom','prenom','instrument','promo','bureau','email','tel'].map(field => (
             <div key={field} className="contentPage-form-group">
               <label htmlFor={field} className="contentPage-label">
-                {field === 'mail' ? 'Mail :' : field.charAt(0).toUpperCase() + field.slice(1) + ' :'}
+                {field === 'email' ? 'Mail :' : field.charAt(0).toUpperCase() + field.slice(1) + ' :'}
               </label>
               <input
                 id={field}
                 name={field}
-                type={field === 'promo' ? 'number' : field === 'mail' ? 'email' : 'text'}
+                type={field === 'promo' ? 'number' : field === 'email' ? 'mail' : 'text'}
                 value={form[field]}
                 onChange={handleChange}
                 required={['surnom','instrument','promo'].includes(field)}
@@ -121,7 +123,7 @@ export default function GestionFanfarons() {
               name="description"
               value={form.description}
               onChange={handleChange}
-              className="adminPanel-textarea"
+              className="contentPage-textarea"
             />
           </div>
           <div className="contentPage-form-group">
@@ -141,7 +143,7 @@ export default function GestionFanfarons() {
             {editingId && (
               <button
                 type="cancel"
-                onClick={() => { setEditingId(null); setForm({ surnom: '', instrument: '', promo: '', bureau: '', mail: '', tel: '', description: '' }); setPhotoFile(null); }}
+                onClick={() => { setEditingId(null); setForm({ surnom: '', nom: '', prenom: '', instrument: '', promo: '', bureau: '', email: '', tel: '', description: '' }); setPhotoFile(null); }}
                 className="adminPanel-button"
               >
                 Annuler
@@ -151,17 +153,18 @@ export default function GestionFanfarons() {
         </form>
       </div>
 
-      {/* Tableau inspiré de adminPanel-table */}
       <div className="adminPanel-section">
         <table className="adminPanel-table">
           <thead>
             <tr>
-              <th>ID</th>
               <th>Surnom</th>
+              <th>Nom</th>
+              <th>Prénom</th>
               <th>Instrument</th>
               <th>Promo</th>
               <th>Bureau</th>
               <th>Téléphone</th>
+              <th>Email</th>
               <th>Photo</th>
               <th>Actions</th>
             </tr>
@@ -169,12 +172,14 @@ export default function GestionFanfarons() {
           <tbody>
             {current.map(f => (
               <tr key={f.id}>
-                <td>{f.id}</td>
                 <td>{f.surnom}</td>
+                <td>{f.nom}</td>
+                <td>{f.prenom}</td>
                 <td>{f.instrument}</td>
                 <td>{f.promo}</td>
                 <td>{f.bureau}</td>
                 <td>{f.tel}</td>
+                <td>{f.email}</td>
                 <td>
                   {f.photoUrl
                     ? <img src={f.photoUrl} alt={f.surnom} className="apercuDiapo" />
