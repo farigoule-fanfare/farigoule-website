@@ -1,3 +1,4 @@
+const { getAllFanfaronsAnnuaire } = require('../controllers/fanfaronsController');
 const db = require('./databaseService');
 
 
@@ -8,12 +9,24 @@ module.exports = {
    */
   getAllFanfarons: () =>
     new Promise((resolve, reject) => {
-      db.all('SELECT * FROM fanfarons', (err, rows) => {
+      db.all('SELECT id, surnom, instrument, promo, bureau, description, photo FROM fanfarons', (err, rows) => {
         if (err) reject(err);
         else resolve(rows);
       });
     }),
 
+  /**
+   * Récupère tous les fanfarons avec toutes leurs infos pour la page admin et annuaire
+   * @returns {Promise<Array>} liste des fanfarons
+   */
+  getAllFanfaronsAnnuaire: () =>
+    new Promise((resolve, reject) => {
+      db.all('SELECT * FROM fanfarons', (err, rows) => {
+        if (err) reject(err);
+        else resolve(rows);
+      });
+    }),
+  
   /**
    * Crée un nouveau fanfaron
    * @param {Object} data - champs du fanfaron
