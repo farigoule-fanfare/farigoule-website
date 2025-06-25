@@ -8,12 +8,6 @@ router.use(protect, authorize(['admin']));
 // GET all contrats
 router.get('/',     ctrl.getAllContrats);
 
-// GET upcoming contrats: /admin/contrats/upcoming
-router.get('/upcoming', ctrl.getUpcomingContrats);
-
-// GET past contrats 
-router.get('/past',     ctrl.getPastContrats);
-
 // POST a new contrat: /admin/contrats
 router.post('/',         ctrl.addContrat);
 
