@@ -1,7 +1,7 @@
 // server/routes/admin/admin.js
 const express = require('express');
 const router = express.Router();
-const adminCtrl = require('../../controllers/admin/adminController');
+const adminCtrl = require('../../controllers/adminController');
 const { protect, authorize } = require('../../middleware/authMiddleware');
 // (Optionally) add an `isAdmin` middleware here
 
