@@ -35,12 +35,6 @@ const { protect, authorize } = require('../../middleware/authMiddleware');
 // ⚠️-protège toutes les routes ci-dessous
 router.use(protect, authorize(['admin']));
 
-// GET latest diapos: /admin/diapos/latest?limit=5
-router.get('/latest', ctrl.getLatestDiapos);
-
-// GET all diapos: /admin/diapos
-router.get('/',        ctrl.getAllDiapos);
-
 // POST a new diapo: /admin/diapos (file upload required)
 router.post('/',       upload.single('file'), ctrl.addDiapo);
 
