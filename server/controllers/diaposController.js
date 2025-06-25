@@ -1,6 +1,62 @@
 const diapoService = require('../services/diapoService');
 
 const diaposController = {
+  /**
+   * GET /api/diapos/
+   */
+  getAllDiaposApi: async (req, res) => {
+      try {
+          const diapos = await diapoService.getAllDiapos();
+          // Prepend the base URL for static files to the fichier names
+          const diaposWithUrls = diapos.map(d => ({
+              ...d,
+              imageUrl: `${process.env.REACT_APP_RESTAPI_SERVER_URI}/public/uploads/carousel/${d.fichier}`
+          }));
+          res.status(200).json({ success: true, data: diaposWithUrls });
+      } catch (error) {
+          console.error("Failed to get all diapos:", error);
+          res.status(500).json({ success: false, message: 'Failed to retrieve all diapos' });
+      }
+  },
+  
+  /**
+   * GET /api/diapos/latest
+   */
+  getLatestDiaposApi: async (req, res) => {
+      try {
+          const limit = parseInt(req.query.limit, 10) || 5;
+          const diapos = await diapoService.getLatestDiapos(limit);
+          const diaposWithUrls = diapos.map(d => ({
+              ...d,
+              imageUrl: `${process.env.REACT_APP_RESTAPI_SERVER_URI}/public/uploads/carousel/${d.fichier}`
+          }));
+          res.status(200).json({ success: true, data: diaposWithUrls });
+      } catch (error) {
+          console.error("Failed to get latest diapos:", error);
+          res.status(500).json({ success: false, message: 'Failed to retrieve diapos' });
+      }
+  },
+
+  /**
+   * GET /api/diapos/random
+   */
+  getRandomDiapoApi: async (req, res) => {
+      try {
+          const diapo = await diapoService.getRandomDiapo();
+          if (!diapo) {
+              return res.status(404).json({ success: false, message: 'No diapos found.' });
+          }
+          // Prepend the base URL for static files to the fichier name
+          const diapoWithUrl = {
+              ...diapo,
+              imageUrl: `${process.env.REACT_APP_RESTAPI_SERVER_URI}/public/uploads/carousel/${diapo.fichier}`
+          };
+          res.status(200).json({ success: true, data: diapoWithUrl });
+      } catch (error) {
+          console.error("Failed to get random diapo:", error);
+          res.status(500).json({ success: false, message: 'Failed to retrieve random diapo' });
+      }
+  },
 
   /**
    * POST /admin/diapos
