@@ -2,7 +2,6 @@ const multer  = require('multer');
 // Store carousel images in the dedicated folder
 //const upload = multer({ dest: 'public/uploads/carousel' });
 const path = require('path');
-const fs = require('fs');
 
 // Stockage dans le dossier carousel
 const storage = multer.diskStorage({
@@ -26,11 +25,9 @@ const fileFilter = (req, file, cb) => {
 };
 
 const upload = multer({ storage, fileFilter });
-
-
 const router = require('express').Router();
-const ctrl   = require('../../controllers/diaposController');
-const { protect, authorize } = require('../../middleware/authMiddleware');
+const ctrl   = require('../controllers/diaposController');
+const { protect, authorize } = require('../middleware/authMiddleware');
 
 // ⚠️-protège toutes les routes ci-dessous
 router.use(protect, authorize(['admin']));
