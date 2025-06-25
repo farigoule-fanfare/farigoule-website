@@ -27,7 +27,7 @@ export default function GestionAccueil() {
   // Fetchers
   const fetchDiapos = useCallback(async () => {
     try {
-      const res = await axiosWrapper({ method: 'get', url: 'admin/diapos' });
+      const res = await axiosWrapper({ method: 'get', url: 'api/diapos' });
       if (res.success && Array.isArray(res.data)) {
         setDiapos(res.data);
         if (diapoPage > Math.ceil(res.data.length / ITEMS_PER_PAGE)) setDiapoPage(1);
