@@ -1,5 +1,6 @@
 const express = require("express");
 const controllers = require("../controllers/controllers");
+const citationControllers = require("../controllers/citationsController");
 
 const router = express.Router();
 
@@ -10,6 +11,7 @@ router.get('/diapos/random', controllers.getRandomDiapoApi); // Route for random
 router.get('/contrats/upcoming', controllers.getUpcomingContratsApi); // Route for upcoming contrats
 router.get('/contrats/past', controllers.getPastContratsApi);       // Route for past contrats
 router.get("/citations", controllers.getCitationsApi); // Route for all citations
+router.get("/citations/ordered", citationControllers.getAllCitationsOrdered); // Route for all citations
 router.get('/fanfarons', controllers.getAllFanfaronsApi); // Route for all fanfarons
 
 module.exports = router;
