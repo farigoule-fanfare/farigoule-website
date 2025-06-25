@@ -2,6 +2,20 @@ const citationService = require('../services/citationService');
 
 const citationsController = {
   /**
+   * GET /api/citations
+   */
+  getCitationsApi: async (req, res) => {
+      try {
+          const citations = await citationService.getAllCitationsWithAuthors();
+
+          return res.status(200).send({ success: true, data: citations })
+      } catch (error) {
+          console.error("API Error fetching citations:", error);
+          res.status(500).json({ error: "Failed to fetch citations" });
+      }
+    },
+
+  /**
    * GET /api/citations/ordered
    */
   getAllCitationsOrdered: async (req, res) => {

@@ -6,16 +6,7 @@ const contratService = require('../services/contratService');
 const controller = {
 
     // New controller function for fetching citations
-    getCitationsApi: async (req, res) => {
-        try {
-            const citations = await getAllCitationsWithAuthors();
-
-            return res.status(200).send({ success: true, data: citations })
-        } catch (error) {
-            console.error("API Error fetching citations:", error);
-            res.status(500).json({ error: "Failed to fetch citations" });
-        }
-    },
+    
 
     // Controller for latest diapos
     getLatestDiaposApi: async (req, res) => {
