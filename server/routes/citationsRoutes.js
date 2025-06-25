@@ -2,16 +2,13 @@ const router = require('express').Router();
 const ctrl   = require('../controllers/citationsController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
-// ⚠️-protège toutes les routes ci-dessous
-router.use(protect, authorize(['admin']));
-
 // POST a new citation: /admin/citations
-router.post('/',       ctrl.addCitation);
+router.post('/', [protect, authorize(['admin'])], ctrl.addCitation);
 
 // PUT update a citation by ID: /admin/citations/:id
-router.put('/:id',     ctrl.updateCitation);
+router.put('/:id', [protect, authorize(['admin'])], ctrl.updateCitation);
 
 // DELETE a citation by ID: /admin/citations/:id
-router.delete('/:id',  ctrl.deleteCitation);
+router.delete('/:id', [protect, authorize(['admin'])], ctrl.deleteCitation);
 
 module.exports = router;
