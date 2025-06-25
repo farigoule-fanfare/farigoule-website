@@ -1,31 +1,6 @@
 const contratService = require('../../services/contratService');
 
 module.exports = {
-  /**
-   * GET /admin/contrats/upcoming
-   */
-  async getUpcomingContrats(req, res) {
-    try {
-      const contrats = await contratService.getUpcomingContrats();
-      return res.status(200).json({ success: true, data : contrats });
-    } catch (error) {
-      console.error('Controller getUpcomingContrats error:', error.message);
-      return res.status(500).json({ success: false, message: error.message });
-    }
-  },
-
-   /**
-   * GET /admin/contrats/past?
-   */
-  async getPastContrats(req, res) {
-    try {
-      const contrats = await contratService.getPastContrats();
-      return res.status(200).json({ success: true, data:contrats });
-    } catch (error) {
-      console.error('Controller getPastContrats error:', error.message);
-      return res.status(500).json({ success: false, message: error.message });
-    }
-  },
 
    /**
    * GET /admin/contrats/
@@ -39,8 +14,6 @@ module.exports = {
       return res.status(500).json({ success: false, message: error.message });
     }
   },
-
-
 
   /**
    * POST /admin/contrats
