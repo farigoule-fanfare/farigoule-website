@@ -1,10 +1,10 @@
 const citationService = require('../services/citationService');
 
-module.exports = {
+const citationsController = {
   /**
    * GET /api/citations/ordered
    */
-  async getAllCitationsOrdered(req, res) {
+  getAllCitationsOrdered: async (req, res) => {
     try {
       const citations = await citationService.getAllCitationsWithAuthorsOrdered();
       return res.status(200).json({ success: true, data: citations });
@@ -17,7 +17,7 @@ module.exports = {
   /**
    * POST /admin/citations
    */
-  async addCitation(req, res) {
+  addCitation: async (req, res) => {
     try {
       const { citation, auteur_id } = req.body;
       const newCitation = await citationService.addCitation({ citation, auteur_id });
@@ -31,7 +31,7 @@ module.exports = {
   /**
    * PUT /admin/citations/:id
    */
-  async updateCitation(req, res) {
+  updateCitation: async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
       const { citation, auteur_id } = req.body;
@@ -46,7 +46,7 @@ module.exports = {
   /**
    * DELETE /admin/citations/:id
    */
-  async deleteCitation(req, res) {
+  deleteCitation: async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
       const result = await citationService.deleteCitation(id);
@@ -57,3 +57,6 @@ module.exports = {
     }
   }
 };
+
+module.exports = citationsController;
+

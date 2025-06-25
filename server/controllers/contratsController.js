@@ -1,11 +1,11 @@
 const contratService = require('../services/contratService');
 
-module.exports = {
+const contratsController = {
 
    /**
    * GET /admin/contrats/
    */
-  async getAllContrats(req, res) {
+  getAllContrats: async (req, res) => {
     try {
       const contrats = await contratService.getAllContrats();
       return res.status(200).json({ success: true, data:contrats });
@@ -18,7 +18,7 @@ module.exports = {
   /**
    * POST /admin/contrats
    */
-  async addContrat(req, res) {
+  addContrat: async (req, res) => {
     try {
       const { date, lieu, description } = req.body;
       const newContrat = await contratService.addContrat({ date, lieu, description });
@@ -32,7 +32,7 @@ module.exports = {
   /**
    * PUT /admin/contrats/:id
    */
-  async updateContrat(req, res) {
+  updateContrat: async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
       const { date, lieu, description } = req.body;
@@ -47,7 +47,7 @@ module.exports = {
   /**
    * DELETE /admin/contrats/:id
    */
-  async deleteContrat(req, res) {
+  deleteContrat: async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
       const result = await contratService.deleteContrat(id);
@@ -59,4 +59,4 @@ module.exports = {
   }
 };
 
-
+module.exports = contratsController;

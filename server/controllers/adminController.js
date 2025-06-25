@@ -3,12 +3,12 @@ const userService = require('../services/userService');
 const bcrypt = require('bcryptjs');
 const SALT_ROUNDS = 10;  // keep in sync with userService
 
-module.exports = {
+const adminController = {
   /**
    * POST /admin/fanfarons/:id/setPassword
    * Body: { password: 'newPlaintext' }
    */
-  async setPassword(req, res) {
+  setPassword: async (req, res) => {
     const { id } = req.params;
     const { password } = req.body;
     if (!password) return res.status(400).json({ success: false, message: 'Password required' });
@@ -25,7 +25,7 @@ module.exports = {
   /**
    * POST /admin/fanfarons/:id/addAdminRole
    */
-  async addAdminRole(req, res) {
+  addAdminRole: async (req, res) => {
     const { id } = req.params;
     try {
       const user = await userService.findFanfaronById(Number(id));
@@ -41,7 +41,7 @@ module.exports = {
   /**
    * POST /admin/fanfarons/:id/removeAdminRole
    */
-  async removeAdminRole(req, res) {
+  removeAdminRole: async (req, res) => {
     const { id } = req.params;
     try {
       const user = await userService.findFanfaronById(Number(id));
@@ -56,3 +56,5 @@ module.exports = {
     }
   },
 };
+
+module.exports = adminController;
