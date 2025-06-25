@@ -1,13 +1,14 @@
 const express = require("express");
 const controllers = require("../controllers/controllers");
 const citationControllers = require("../controllers/citationsController");
+const diaposControllers = require("../controllers/diaposController");
 
 const router = express.Router();
 
 // Public routes
-router.get('/diapos', controllers.getAllDiaposApi);           // Route for all diapos
-router.get('/diapos/latest', controllers.getLatestDiaposApi);       // Route for latest diapos
-router.get('/diapos/random', controllers.getRandomDiapoApi); // Route for random diapo
+router.get('/diapos', diaposControllers.getAllDiaposApi);           // Route for all diapos
+router.get('/diapos/latest', diaposControllers.getLatestDiaposApi);       // Route for latest diapos
+router.get('/diapos/random', diaposControllers.getRandomDiapoApi); // Route for random diapo
 router.get('/contrats/upcoming', controllers.getUpcomingContratsApi); // Route for upcoming contrats
 router.get('/contrats/past', controllers.getPastContratsApi);       // Route for past contrats
 router.get("/citations", citationControllers.getCitationsApi); // Route for all citations
