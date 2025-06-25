@@ -10,7 +10,7 @@ router.get('/diapos/latest', controllers.getLatestDiaposApi);       // Route for
 router.get('/diapos/random', controllers.getRandomDiapoApi); // Route for random diapo
 router.get('/contrats/upcoming', controllers.getUpcomingContratsApi); // Route for upcoming contrats
 router.get('/contrats/past', controllers.getPastContratsApi);       // Route for past contrats
-router.get("/citations", controllers.getCitationsApi); // Route for all citations
+router.get("/citations", citationControllers.getCitationsApi); // Route for all citations
 router.get("/citations/ordered", citationControllers.getAllCitationsOrdered); // Route for all citations
 router.get('/fanfarons', controllers.getAllFanfaronsApi); // Route for all fanfarons
 
