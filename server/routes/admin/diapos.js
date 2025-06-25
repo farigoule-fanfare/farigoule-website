@@ -29,7 +29,7 @@ const upload = multer({ storage, fileFilter });
 
 
 const router = require('express').Router();
-const ctrl   = require('../../controllers/admin/diaposController');
+const ctrl   = require('../../controllers/diaposController');
 const { protect, authorize } = require('../../middleware/authMiddleware');
 
 // ⚠️-protège toutes les routes ci-dessous

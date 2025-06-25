@@ -1,4 +1,4 @@
-const citationService = require('../../services/citationService');
+const citationService = require('../services/citationService');
 
 module.exports = {
   /**
