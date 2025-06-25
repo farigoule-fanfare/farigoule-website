@@ -4,17 +4,6 @@ const diapoService = require('../services/diapoService');
 const contratService = require('../services/contratService');
 
 const controller = {
-    getApi: (req, res) => {
-        res.json({
-            message: "Hello from server!",
-            user: req.user
-        });
-    },
-    postApi: (req, res) => {
-        res.send(
-            `I received your POST request. This is what you sent me: ${req.body.post}`,
-        );
-    },
 
     // New controller function for fetching citations
     getCitationsApi: async (req, res) => {
