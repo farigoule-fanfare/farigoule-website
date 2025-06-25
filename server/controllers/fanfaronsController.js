@@ -1,11 +1,11 @@
 const fanfaronService = require('../services/fanfaronService');
 
-module.exports = {
+const fanfaronsController = {
   
   /**
    * POST /admin/fanfarons
    */
-  async createFanfaron(req, res) {
+  createFanfaron: async (req, res) => {
     try {
       const payload = {
         ...req.body,
@@ -24,7 +24,7 @@ module.exports = {
   /**
    * PUT /admin/fanfarons/:id
    */
-  async updateFanfaron(req, res) {
+  updateFanfaron: async (req, res) => {
     try {
       const payload = {
         ...req.body,
@@ -41,7 +41,7 @@ module.exports = {
   /**
    * DELETE /admin/fanfarons/:id
    */
-  async removeFanfaron(req, res) {
+  removeFanfaron: async (req, res) => {
     try {
       await fanfaronService.deleteFanfarons(req.params.id);
       res.json({ success: true });
@@ -51,3 +51,5 @@ module.exports = {
     }
   }
 };
+
+module.exports = fanfaronsController;

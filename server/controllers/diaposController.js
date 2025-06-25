@@ -1,11 +1,11 @@
 const diapoService = require('../services/diapoService');
 
-module.exports = {
+const diaposController = {
 
   /**
    * POST /admin/diapos
    */
-  async addDiapo(req, res) {
+  addDiapo: async (req, res) => {
     try {
       const fichier = req.file ? req.file.filename : null;
       const { description } = req.body;
@@ -20,7 +20,7 @@ module.exports = {
   /**
    * PUT /admin/diapos/:id
    */
-  async updateDiapo(req, res) {
+  updateDiapo: async (req, res) =>{
     try {
       const id = parseInt(req.params.id, 10);
       const fichier = req.file ? req.file.filename : null;
@@ -36,7 +36,7 @@ module.exports = {
   /**
    * DELETE /admin/diapos/:id
    */
-  async deleteDiapo(req, res) {
+  deleteDiapo: async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
       const result = await diapoService.deleteDiapo(id);
@@ -47,3 +47,5 @@ module.exports = {
     }
   }
 };
+
+module.exports = diaposController;
