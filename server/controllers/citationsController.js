@@ -2,6 +2,19 @@ const citationService = require('../services/citationService');
 
 module.exports = {
   /**
+   * GET /api/citations/ordered
+   */
+  async getAllCitationsOrdered(req, res) {
+    try {
+      const citations = await citationService.getAllCitationsWithAuthorsOrdered();
+      return res.status(200).json({ success: true, data: citations });
+    } catch (error) {
+      console.error('Controller getAllCitations error:', error.message);
+      return res.status(500).json({ success: false, message: error.message });
+    }
+  },
+
+  /**
    * POST /admin/citations
    */
   async addCitation(req, res) {

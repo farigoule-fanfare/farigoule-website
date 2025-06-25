@@ -31,6 +31,32 @@ const citationService = {
   },
 
   /**
+   * Fetches all citations along with their authors' nicknames in citation alphabetic order.
+   * @returns {Promise<Array<{ id: number, citation: string, auteur_id: number, auteurCitation: string }>>}
+   */
+  getAllCitationsWithAuthorsOrdered: () => {
+    return new Promise((resolve, reject) => {
+      const sql = `
+        SELECT 
+          c.id AS id,
+          c.citation AS citation,
+          c.auteur_id AS auteur_id,
+          COALESCE(f.surnom, 'Anonyme') AS auteurCitation
+        FROM citations c
+        LEFT JOIN fanfarons f ON c.auteur_id = f.id
+        ORDER BY citation
+      `;
+      db.all(sql, [], (err, rows) => {
+        if (err) {
+          console.error('Error fetching citations with authors:', err.message);
+          return reject(err);
+        }
+        resolve(rows);
+      });
+    });
+  },
+
+  /**
    * Adds a new citation to the database.
    * @param {{ citation: string, auteur_id: number }} data
    * @returns {Promise<{ id: number, citation: string, auteur_id: number }>}
