@@ -3,6 +3,7 @@ const controllers = require("../controllers/controllers");
 const citationControllers = require("../controllers/citationsController");
 const diaposControllers = require("../controllers/diaposController");
 const contratsControllers = require("../controllers/contratsController");
+const fanfaronsControllers = require("../controllers/fanfaronsController");
 
 const router = express.Router();
 
@@ -14,6 +15,6 @@ router.get('/contrats/upcoming', contratsControllers.getUpcomingContratsApi); //
 router.get('/contrats/past', contratsControllers.getPastContratsApi);       // Route for past contrats
 router.get("/citations", citationControllers.getCitationsApi); // Route for all citations
 router.get("/citations/ordered", citationControllers.getAllCitationsOrdered); // Route for all citations
-router.get('/fanfarons', controllers.getAllFanfaronsApi); // Route for all fanfarons
+router.get('/fanfarons', fanfaronsControllers.getAllFanfaronsApi); // Route for all fanfarons
 
 module.exports = router;
