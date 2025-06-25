@@ -1,6 +1,5 @@
 
 const multer  = require('multer');
-//const upload = multer({ dest: 'public/uploads/fanfarons' });
 const path = require('path');
 
 const storage = multer.diskStorage({
@@ -24,11 +23,8 @@ const router = require('express').Router();
 const ctrl   = require('../controllers/fanfaronsController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
-// ⚠️-protège toutes les routes ci-dessous
-router.use(protect, authorize(['admin']));
-
-router.get('/',         ctrl.getAllFanfaronsAnnuaire);
-router.post('/',       upload.single('photoFanfaron'), ctrl.createFanfaron);
-router.put('/:id',     upload.single('photoFanfaron'), ctrl.updateFanfaron);
-router.delete('/:id',                    ctrl.removeFanfaron);
+router.get('/',                                       [protect, authorize(['admin'])], ctrl.getAllFanfaronsAnnuaire);
+router.post('/',      upload.single('photoFanfaron'), [protect, authorize(['admin'])], ctrl.createFanfaron);
+router.put('/:id',    upload.single('photoFanfaron'), [protect, authorize(['admin'])], ctrl.updateFanfaron);
+router.delete('/:id',                                 [protect, authorize(['admin'])], ctrl.removeFanfaron);
 module.exports = router;

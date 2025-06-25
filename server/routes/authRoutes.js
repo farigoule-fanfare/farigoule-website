@@ -15,8 +15,4 @@ router.post('/logout', protect, authController.handleLogout);
 // Protected: to check if the current user (based on cookie) is authenticated.
 router.get('/status', protect, authController.handleCheckAuthStatus);
 
-// No public registration route as per requirements.
-// If admin-triggered fanfaron creation is needed later,
-// it would be a separate, admin-protected route, likely not in authRoutes.
-
 module.exports = router; 
