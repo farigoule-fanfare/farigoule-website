@@ -23,7 +23,7 @@ export default function GestionCitations() {
   // Fetch fans and citations
   const fetchFanfarons = useCallback(async () => {
     try {
-      const res = await axiosWrapper({ method: 'get', url: 'admin/fanfarons' });
+      const res = await axiosWrapper({ method: 'get', url: 'api/fanfarons' });
       if (res.success && Array.isArray(res.data)) setFanfarons(res.data);
     } catch (err) {
       console.error('[FETCH FANFARONS ERROR]', err);
@@ -32,7 +32,7 @@ export default function GestionCitations() {
 
   const fetchCitations = useCallback(async () => {
     try {
-      const res = await axiosWrapper({ method: 'get', url: 'admin/citations' });
+      const res = await axiosWrapper({ method: 'get', url: 'api/citations' });
       if (res.success && Array.isArray(res.data)) {
         setCitations(res.data);
         const total = Math.ceil(res.data.length / ITEMS_PER_PAGE);
