@@ -6,11 +6,11 @@ const path = require('path'); // Import path module
 const routes = require('./routes/routes');
 const authRoutes = require('./routes/authRoutes'); // Import auth routes
 const userRoutes = require('./routes/userRoutes'); // Import user routes
-const fanfaronsRoutes = require('./routes/admin/fanfarons');
-const contratsRoutes = require('./routes/admin/contrats');
-const diaposRoutes = require('./routes/admin/diapos');
-const citationsRoutes = require('./routes/admin/citations');
-const adminRoutes = require('./routes/admin/manageUsers');
+const fanfaronsRoutes = require('./routes/fanfaronsRoutes');
+const contratsRoutes = require('./routes/contratsRoutes');
+const diaposRoutes = require('./routes/diaposRoutes');
+const citationsRoutes = require('./routes/citationsRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 
 const db = require('./services/databaseService'); // Ensure DB is initialized when server starts
