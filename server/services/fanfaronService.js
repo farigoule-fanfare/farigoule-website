@@ -1,4 +1,3 @@
-const { getAllFanfaronsAnnuaire } = require('../controllers/fanfaronsController');
 const db = require('./databaseService');
 
 
