@@ -14,10 +14,4 @@ router.get('/contrats/upcoming', controllers.getUpcomingContratsApi); // Route f
 router.get('/contrats/past', controllers.getPastContratsApi);       // Route for past contrats
 router.get('/fanfarons', controllers.getAllFanfaronsApi); // Route for all fanfarons
 
-
-// Example protected route structure (add actual protected routes later)
-// const { protect, authorize } = require('../middleware/authMiddleware');
-// router.get('/api/protected-data', protect, controllers.getSomeProtectedData);
-// router.post('/api/admin/action', protect, authorize(['admin']), controllers.doAdminAction);
-
 module.exports = router;
