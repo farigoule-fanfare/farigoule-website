@@ -6,7 +6,7 @@ RUN apk update
 WORKDIR /usr/app
 COPY . .
 RUN npm install
-RUN REACT_APP_RESTAPI_SERVER_URI=$REACT_APP_RESTAPI_SERVER_URI npm run build
+RUN npm run build
 
 FROM nginx@sha256:5e36bd7a8adfe291560a6849d3125438fbe244f29a567522099caceef32bce54 AS production
 
