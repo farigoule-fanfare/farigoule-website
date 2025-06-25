@@ -1,4 +1,4 @@
-const fanfaronService = require('../../services/fanfaronService');
+const fanfaronService = require('../services/fanfaronService');
 
 module.exports = {
   

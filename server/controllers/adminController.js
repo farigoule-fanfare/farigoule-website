@@ -1,5 +1,5 @@
 // server/controllers/adminController.js
-const userService = require('../../services/userService');
+const userService = require('../services/userService');
 const bcrypt = require('bcryptjs');
 const SALT_ROUNDS = 10;  // keep in sync with userService
 

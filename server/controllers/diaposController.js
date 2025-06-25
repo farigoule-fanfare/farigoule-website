@@ -1,4 +1,4 @@
-const diapoService = require('../../services/diapoService');
+const diapoService = require('../services/diapoService');
 
 module.exports = {
 

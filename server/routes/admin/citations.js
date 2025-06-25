@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const ctrl   = require('../../controllers/admin/citationsController');
+const ctrl   = require('../../controllers/citationsController');
 const { protect, authorize } = require('../../middleware/authMiddleware');
 
 // ⚠️-protège toutes les routes ci-dessous
