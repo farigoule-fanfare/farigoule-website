@@ -18,6 +18,22 @@ const fanfaronsController = {
   },
 
   /**
+   * GET /admin/fanfarons/
+   */
+  getAllFanfaronsAnnuaire: async (req, res) => {
+        try {
+            const fanfarons = await fanfaronService.getAllFanfaronsAnnuaire();
+            const dataWithUrls = fanfarons.map(f => ({
+            ...f,
+            photoUrl: `${process.env.REACT_APP_RESTAPI_SERVER_URI}/public/uploads/fanfarons/${f.photo}`
+            }));
+            res.json({ success: true, data: dataWithUrls });
+        } catch (e) {
+            res.status(500).json({ success: false, message: e.message });
+        }
+  },
+
+  /**
    * POST /admin/fanfarons
    */
   createFanfaron: async (req, res) => {

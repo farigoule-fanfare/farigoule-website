@@ -18,7 +18,7 @@ export default function GestionFanfarons() {
 
   const fetchList = useCallback(async () => {
     try {
-      const res = await axiosWrapper({ method: 'get', url: 'api/fanfarons/' });
+      const res = await axiosWrapper({ method: 'get', url: 'admin/fanfarons/' });
       if (res.success) {
         const arr = Array.isArray(res.data) ? res.data : Array.isArray(res.data.data) ? res.data.data : [];
         setFanfarons(arr);
