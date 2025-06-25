@@ -32,7 +32,7 @@ export default function GestionCitations() {
 
   const fetchCitations = useCallback(async () => {
     try {
-      const res = await axiosWrapper({ method: 'get', url: 'api/citations' });
+      const res = await axiosWrapper({ method: 'get', url: 'api/citations/ordered' });
       if (res.success && Array.isArray(res.data)) {
         setCitations(res.data);
         const total = Math.ceil(res.data.length / ITEMS_PER_PAGE);
