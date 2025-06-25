@@ -98,8 +98,6 @@ try {
 };
 
 module.exports = {
-    // registerFanfaronApi,
-    // updateFanfaronPasswordApi,
     getAllUsersApi,
     getCurrentPresidentApi,
     updateProfileApi,
