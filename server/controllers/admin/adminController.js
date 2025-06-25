@@ -4,19 +4,6 @@ const bcrypt = require('bcryptjs');
 const SALT_ROUNDS = 10;  // keep in sync with userService
 
 /**
- * GET /admin/fanfarons
- */
-exports.listUsers = async (req, res) => {
-  try {
-    const users = await userService.listAllUsers();
-    res.json({ success: true, data: users });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: err.message });
-  }
-};
-
-/**
  * POST /admin/fanfarons/:id/setPassword
  * Body: { password: 'newPlaintext' }
  */
