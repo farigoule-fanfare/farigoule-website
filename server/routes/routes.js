@@ -1,5 +1,4 @@
 const express = require("express");
-const controllers = require("../controllers/controllers");
 const citationControllers = require("../controllers/citationsController");
 const diaposControllers = require("../controllers/diaposController");
 const contratsControllers = require("../controllers/contratsController");
