@@ -1,6 +1,4 @@
 const multer  = require('multer');
-// Store carousel images in the dedicated folder
-//const upload = multer({ dest: 'public/uploads/carousel' });
 const path = require('path');
 
 // Stockage dans le dossier carousel
@@ -29,16 +27,13 @@ const router = require('express').Router();
 const ctrl   = require('../controllers/diaposController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
-// ⚠️-protège toutes les routes ci-dessous
-router.use(protect, authorize(['admin']));
-
 // POST a new diapo: /admin/diapos (file upload required)
-router.post('/',       upload.single('file'), ctrl.addDiapo);
+router.post('/',       upload.single('file'), [protect, authorize(['admin'])], ctrl.addDiapo);
 
 // PUT update a diapo by ID: /admin/diapos/:id (file upload optional)
-router.put('/:id',     upload.single('file'), ctrl.updateDiapo);
+router.put('/:id',     upload.single('file'), [protect, authorize(['admin'])], ctrl.updateDiapo);
 
 // DELETE a diapo by ID: /admin/diapos/:id
-router.delete('/:id',  ctrl.deleteDiapo);
+router.delete('/:id',                         [protect, authorize(['admin'])], ctrl.deleteDiapo);
 
 module.exports = router;
