@@ -1,25 +1,10 @@
 const fanfaronService = require('../../services/fanfaronService');
 
 module.exports = {
-  // GET /route/admin
-  async getAllFanfarons(req, res) {
-    try {
-      // Récupérer tous les fanfarons via le service
-      const fanfarons = await fanfaronService.getAllFanfarons();
-      // Construire les URLs des photos
-      const dataWithUrls = fanfarons.map(f => ({
-        ...f,
-        photoUrl: `${process.env.REACT_APP_RESTAPI_SERVER_URI}/public/uploads/fanfarons/${f.photo}`
-      }));
-      // Renvoi du tableau prêt à l'affichage
-      res.json({ success: true, data: dataWithUrls });
-    } catch (error) {
-      console.error('adminController.getAll error:', error);
-      res.status(500).json({ success: false, message: 'Erreur serveur', error: error.message });
-    }
-  },
-
-  // Autres actions d'administration (create, update, delete)
+  
+  /**
+   * POST /admin/fanfarons
+   */
   async createFanfaron(req, res) {
     try {
       const payload = {
@@ -36,6 +21,9 @@ module.exports = {
     }
   },
 
+  /**
+   * PUT /admin/fanfarons/:id
+   */
   async updateFanfaron(req, res) {
     try {
       const payload = {
@@ -50,7 +38,9 @@ module.exports = {
     }
   },
 
-
+  /**
+   * DELETE /admin/fanfarons/:id
+   */
   async removeFanfaron(req, res) {
     try {
       await fanfaronService.deleteFanfarons(req.params.id);
