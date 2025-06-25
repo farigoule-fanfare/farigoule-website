@@ -1,37 +1,6 @@
 const diapoService = require('../../services/diapoService');
 
 module.exports = {
-  /**
-   * GET /admin/diapos/latest?limit=5
-   */
-  async getLatestDiapos(req, res) {
-    try {
-      const limit = parseInt(req.query.limit, 10) || undefined;
-      const diapos = await diapoService.getLatestDiapos(limit);
-      return res.status(200).json({ success: true, diapos });
-    } catch (error) {
-      console.error('Controller getLatestDiapos error:', error.message);
-      return res.status(500).json({ success: false, message: error.message });
-    }
-  },
-
-  /**
-   * GET /admin/diapos
-   */
-  async getAllDiapos(req, res) {
-    try {
-      const diapos = await diapoService.getAllDiapos();
-      // Build full URLs for static carousel images
-      const diaposWithUrls = diapos.map(d => ({
-        ...d,
-        imageUrl: `${process.env.REACT_APP_RESTAPI_SERVER_URI}/public/uploads/carousel/${d.fichier}`
-      }));
-      return res.status(200).json({ success: true, data: diaposWithUrls });
-    } catch (error) {
-      console.error('Controller getAllDiapos error:', error.message);
-      return res.status(500).json({ success: false, message: 'Failed to retrieve all diapos' });
-    }
-  },
 
   /**
    * POST /admin/diapos
