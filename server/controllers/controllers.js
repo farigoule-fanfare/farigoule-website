@@ -1,6 +1,6 @@
 const services = require("../services/services");
 const { getAllCitationsWithAuthors } = require('../services/citationService');
-const citationService = require('../services/citationService');
+const { getAllFanfarons } = require('../services/fanfaronService');
 const diapoService = require('../services/diapoService');
 const contratService = require('../services/contratService');
 
@@ -126,7 +126,7 @@ const controller = {
     },
     getAllFanfaronsApi: async (req, res) => {
         try {
-            const fanfarons = await require('../services/fanfaronService').getAllFanfarons();
+            const fanfarons = await getAllFanfarons();
             const dataWithUrls = fanfarons.map(f => ({
             ...f,
             photoUrl: `${process.env.REACT_APP_RESTAPI_SERVER_URI}/public/uploads/fanfarons/${f.photo}`
