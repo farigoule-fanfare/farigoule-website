@@ -1,5 +1,4 @@
 const authService = require('../services/authService');
-const userService = require('../services/userService');
 
 /**
  * Middleware to protect routes.
@@ -16,7 +15,7 @@ async function protect(req, res, next) {
         const decoded = await authService.verifyToken(token);
         // Fetch user from DB to ensure they still exist and have up-to-date info
         // The decoded token should contain the user's ID.
-        const fanfaron = await userService.findFanfaronById(decoded.id);
+        const fanfaron = await authService.findFanfaronById(decoded.id);
 
         if (!fanfaron) {
             return res.status(401).json({ message: 'Not authorized, user not found' });
