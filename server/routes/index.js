@@ -1,6 +1,5 @@
 const router = require('express').Router();
 
-router.use('/admin',     require('./adminRoutes'));
 router.use('/auth',      require('./authRoutes'));
 router.use('/citations', require('./citationsRoutes'));
 router.use('/diapos',    require('./diaposRoutes'));
