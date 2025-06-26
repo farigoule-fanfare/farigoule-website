@@ -82,7 +82,7 @@ const authService = {
     await authRepo.updatePasswordById(userId, newHash);
   },
 
-  findFanfaronById:    (...a) => authRepo.findFanfaronById(...a),
+  getRolesById:    (...a) => authRepo.getRolesById(...a),
   findFanfaronByEmail: (...a) => authRepo.findFanfaronByEmail(...a),
   findFanfaronBySurnom: (...a) => authRepo.findFanfaronBySurnom(...a),
   comparePassword:     (...a) => authRepo.comparePassword(...a),

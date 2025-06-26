@@ -13,17 +13,16 @@ function parseRoles(raw) {
 
 const authRepository = {
      /* ---------- SELECT ---------- */
-  findFanfaronById(id) {
+  getRolesById(id) {
     if (!id) return Promise.resolve(null);
     const sql = `
-      SELECT id, surnom, prenom, nom, instrument, promo, bureau,
-             tel, email, photo, description, roles
+      SELECT id, surnom,
+      json_extract(roles, '$') AS roles
       FROM fanfarons WHERE id = ?`;
     return new Promise((resolve, reject) => {
       db.get(sql, [id], (err, row) => {
         if (err) return reject(err);
         if (!row) return resolve(null);
-        row.roles = parseRoles(row.roles);
         resolve(row);
       });
     });
