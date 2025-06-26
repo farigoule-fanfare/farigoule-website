@@ -7,51 +7,21 @@ const authController = {
      */
     handleLogin: async (req, res) => {
         const { identifier, password } = req.body;
-
         if (!identifier || !password) {
-            return res.status(400).json({ success: false, message: 'Email/Surnom and password are required.' });
+            return res.status(400).json({ success:false, message:'Email/Surnom and password are required.' });
         }
 
         try {
-            // Try finding user by email first, then by surnom
-            let fanfaron = await authService.findFanfaronByEmail(identifier);
-            if (!fanfaron) {
-                fanfaron = await authService.findFanfaronBySurnom(identifier);
-            }
-
-            if (!fanfaron) {
-                return res.status(401).json({ success: false, message: 'Invalid credentials.' });
-            }
-
-            // Compare password
-            const isMatch = await authService.comparePassword(password, fanfaron.password_hash);
-
-            if (!isMatch) {
-                return res.status(401).json({ success: false, message: 'Invalid credentials.' });
-            }
-
-            // Generate JWT
-            const token = authService.generateToken(fanfaron);
-
-            // Set JWT in HTTP-only cookie
-            res.cookie('authToken', token, {
-                httpOnly: true,       // Cannot be accessed by client-side JS
-                secure: process.env.NODE_ENV === 'production', // Send only over HTTPS in production
-                sameSite: 'strict',   // Helps prevent CSRF
-                maxAge: 60 * 60 * 1000 // 1 hour expiry (matches JWT expiry for consistency)
-                // path: '/' // Optional: restrict cookie path if needed
-            });
-
-            // Send back user info (excluding password hash)
-            const { password_hash, ...fanfaronInfo } = fanfaron; 
-            res.status(200).json({ success: true, message: 'Login successful', user: fanfaronInfo });
-
-        } catch (error) {
-            console.error("Login Error:", error);
-            res.status(500).json({ success: false, message: 'Internal server error during login.' });
+            const { user, token } = await authService.login(identifier, password);
+            // cookie + réponse HTTP = responsabilité du controller
+            res.cookie('authToken', token, {/* opts */});
+            res.status(200).json({ success:true, message:'Login successful', user });
+        } catch (err) {
+            // le service enverra des erreurs sémantiques ('INVALID_CREDENTIALS', etc.)
+            const code = err.code === 'INVALID_CREDENTIALS' ? 401 : 500;
+            res.status(code).json({ success:false, message: err.message });
         }
     },
-
     /**
      * Handles user logout.
      */
