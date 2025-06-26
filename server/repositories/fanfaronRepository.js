@@ -14,7 +14,7 @@ const fanfaronRepository = {
 
   /** Sélection complète (page admin / annuaire) */
   findAllAnnuaire() {
-    const sql = `SELECT * FROM fanfarons`;
+    const sql = `SELECT id,surnom, nom, prenom, instrument, promo, bureau, tel, email, photo FROM fanfarons`;
     return new Promise((resolve, reject) =>
       db.all(sql, [], (err, rows) => (err ? reject(err) : resolve(rows)))
     );
