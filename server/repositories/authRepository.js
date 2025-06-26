@@ -13,10 +13,10 @@ function parseRoles(raw) {
 
 const authRepository = {
      /* ---------- SELECT ---------- */
-  getRolesById(id) {
+  findFanfaronById(id) {
     if (!id) return Promise.resolve(null);
     const sql = `
-      SELECT id, surnom,
+      SELECT id, surnom, nom, prenom, tel, email,
       json_extract(roles, '$') AS roles
       FROM fanfarons WHERE id = ?`;
     return new Promise((resolve, reject) => {
