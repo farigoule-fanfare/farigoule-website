@@ -25,22 +25,17 @@ const userController = {
      */
     updateProfileApi: async (req, res, next) => {
         try {
-            const surnom = req.user && req.user.surnom;
-            if (!surnom) {
-                console.warn('Profile update: No authenticated user surnom.');
+            const userId = req.user?.id;
+            if (!userId) {
+                console.warn('Profile update: No authenticated user id.');
                 return res.status(401).json({ success: false, message: 'Non authentifié.' });
             }
-            // Find the user by surnom
-            const user = await userService.findFanfaronBySurnom(surnom);
-            if (!user) {
-                console.warn(`Profile update: No user found for surnom ${surnom}`);
-                return res.status(404).json({ success: false, message: 'Utilisateur non trouvé.' });
-            }
+
             const { nom, prenom, email, telephone } = req.body;
-            // Log the update attempt
-            console.log(`User surnom ${surnom} requests profile update:`, { nom, prenom, email, telephone });
-            const updatedUser = await userService.updateProfile(user.id, { nom, prenom, email, telephone });
-            res.status(200).json({ success: true, data: updatedUser });
+            console.log(`User id ${userId} requests profile update:`, { nom, prenom, email, telephone });
+
+            const updatedUser = await userService.updateProfile(userId, { nom, prenom, email, telephone });
+            return res.status(200).json({ success: true, data: updatedUser });
         } catch (error) {
             console.error('Profile update error:', error);
             res.status(500).json({ success: false, message: 'Erreur lors de la mise à jour du profil.', error: error.message });
@@ -53,8 +48,8 @@ const userController = {
      */
     changePasswordApi: async (req, res) => {
     try {
-        const surnom = req.user && req.user.surnom;
-        if (!surnom) {
+        const userId = req.user?.id;
+        if (!userId) {
         return res.status(401).json({ success: false, message: 'Non authentifié.' });
         }
 
@@ -64,7 +59,7 @@ const userController = {
         }
 
         // 1) Récupérer l’utilisateur depuis le service
-        const user = await userService.findFanfaronBySurnom(surnom);
+        const user = await userService.findFanfaronById(userId);
         if (!user) {
         return res.status(404).json({ success: false, message: 'Utilisateur non trouvé.' });
         }
