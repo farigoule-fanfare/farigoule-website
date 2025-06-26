@@ -1,6 +1,4 @@
 const userService = require('../services/userService');
-const bcrypt = require('bcryptjs');
-const SALT_ROUNDS = 10;
 
 const userController = {
     getCurrentPresidentApi: async (req, res, next) => {
@@ -39,64 +37,6 @@ const userController = {
         } catch (error) {
             console.error('Profile update error:', error);
             res.status(500).json({ success: false, message: 'Erreur lors de la mise à jour du profil.', error: error.message });
-        }
-    },
-
-    /**
-     * Permet à l’utilisateur authentifié de changer son propre mot de passe.
-     * Exige dans le body : { currentPassword, newPassword }
-     */
-    changePasswordApi: async (req, res) => {
-    try {
-        const userId = req.user?.id;
-        if (!userId) {
-        return res.status(401).json({ success: false, message: 'Non authentifié.' });
-        }
-
-        const { currentPassword, newPassword } = req.body;
-        if (!currentPassword || !newPassword) {
-        return res.status(400).json({ success: false, message: 'Both currentPassword and newPassword are required.' });
-        }
-
-        // 1) Récupérer l’utilisateur depuis le service
-        const user = await userService.findFanfaronById(userId);
-        if (!user) {
-        return res.status(404).json({ success: false, message: 'Utilisateur non trouvé.' });
-        }
-
-        // 2) Vérifier le mot de passe actuel
-        const isMatch = await bcrypt.compare(currentPassword, user.password_hash);
-        if (!isMatch) {
-        return res.status(401).json({ success: false, message: 'Mot de passe actuel incorrect.' });
-        }
-
-        // 3) Hasher et enregistrer le nouveau mot de passe
-        const salt = await bcrypt.genSalt(10);
-        const newHash = await bcrypt.hash(newPassword, salt);
-        await userService.updatePasswordById(user.id, newHash);
-
-        return res.status(200).json({ success: true, message: 'Mot de passe mis à jour.' });
-    } catch (error) {
-        console.error('changePasswordApi error:', error);
-        return res.status(500).json({ success: false, message: "Erreur serveur lors du changement de mot de passe." });
-    }
-    },  
-    
-    /**
-     * POST api/users/fanfarons/:id/setPassword
-     * Body: { password: 'newPlaintext' }
-     */
-    setPassword: async (req, res) => {
-        const { id } = req.params;
-        const { password } = req.body;
-        if (!password) return res.status(400).json({ success: false, message: 'Password required' });
-        try {
-        const hash = await bcrypt.hash(password, SALT_ROUNDS);
-        await userService.updatePasswordById(Number(id), hash);
-        res.json({ success: true });
-        } catch (err) {
-        console.error(err);
-        res.status(500).json({ success: false, message: err.message });
         }
     },
 

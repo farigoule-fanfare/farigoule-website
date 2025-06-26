@@ -50,9 +50,11 @@ const authService = {
     });
   }),
 
+  findFanfaronById:    (...a) => authRepo.findFanfaronById(...a),
   findFanfaronByEmail: (...a) => authRepo.findFanfaronByEmail(...a),
   findFanfaronBySurnom: (...a) => authRepo.findFanfaronBySurnom(...a),
   comparePassword:     (...a) => authRepo.comparePassword(...a),
+  updatePasswordById:  (...a) => authRepo.updatePasswordById(...a),
 };
 
 module.exports = authService;
