@@ -18,7 +18,7 @@ export default function GestionFanfarons() {
 
   const fetchList = useCallback(async () => {
     try {
-      const res = await axiosWrapper({ method: 'get', url: 'admin/fanfarons/' });
+      const res = await axiosWrapper({ method: 'get', url: 'api/fanfarons/annuaire/' });
       if (res.success) {
         const arr = Array.isArray(res.data) ? res.data : Array.isArray(res.data.data) ? res.data.data : [];
         setFanfarons(arr);
@@ -53,7 +53,7 @@ export default function GestionFanfarons() {
     Object.entries(form).forEach(([k, v]) => fd.append(k, v));
     if (photoFile) fd.append('photoFanfaron', photoFile);
     const method = editingId ? 'put' : 'post';
-    const url = editingId ? `admin/fanfarons/${editingId}` : 'admin/fanfarons';
+    const url = editingId ? `api/fanfarons/${editingId}` : 'api/fanfarons';
     try {
       const res = await axiosWrapper({ method, url, data: fd, isMultipart: true });
       if (res.success) {
@@ -87,7 +87,7 @@ export default function GestionFanfarons() {
   const handleDelete = async id => {
     if (!window.confirm('Supprimer ce fanfaron ?')) return;
     try {
-      const res = await axiosWrapper({ method: 'delete', url: `admin/fanfarons/${id}` });
+      const res = await axiosWrapper({ method: 'delete', url: `api/fanfarons/${id}` });
       if (res.success) fetchList();
     } catch (err) {
       console.error('[DELETE ERROR]', err);

@@ -3,14 +3,7 @@ const compression = require('compression');
 const cors = require('cors'); // Import CORS middleware
 const cookieParser = require('cookie-parser'); // Added cookie-parser
 const path = require('path'); // Import path module
-const routes = require('./routes/routes');
-const authRoutes = require('./routes/authRoutes'); // Import auth routes
-const userRoutes = require('./routes/userRoutes'); // Import user routes
-const fanfaronsRoutes = require('./routes/fanfaronsRoutes');
-const contratsRoutes = require('./routes/contratsRoutes');
-const diaposRoutes = require('./routes/diaposRoutes');
-const citationsRoutes = require('./routes/citationsRoutes');
-const adminRoutes = require('./routes/adminRoutes');
+const api = require('./routes');
 
 
 const db = require('./services/databaseService'); // Ensure DB is initialized when server starts
@@ -53,14 +46,7 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // --- Routes --- 
 // All API routes are prefixed with /route as per this setup
-app.use("/api", routes);
-app.use("/auth", authRoutes); // Mount auth routes
-app.use("/users", userRoutes); // Mount user routes at /api/users
-app.use('/admin/fanfarons', fanfaronsRoutes);
-app.use('/admin/contrats', contratsRoutes);
-app.use('/admin/diapos', diaposRoutes);
-app.use('/admin/citations', citationsRoutes);
-app.use('/admin/manageUsers', adminRoutes);
+app.use('/api', api);
 
 // --- Catch-all for server status (optional) ---
 // This should be after your specific API routes

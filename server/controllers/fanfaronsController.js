@@ -18,7 +18,7 @@ const fanfaronsController = {
   },
 
   /**
-   * GET /admin/fanfarons/
+   * GET /api/fanfarons/
    */
   getAllFanfaronsAnnuaire: async (req, res) => {
         try {
@@ -34,7 +34,7 @@ const fanfaronsController = {
   },
 
   /**
-   * POST /admin/fanfarons
+   * POST /api/fanfarons
    */
   createFanfaron: async (req, res) => {
     try {
@@ -53,7 +53,7 @@ const fanfaronsController = {
   },
 
   /**
-   * PUT /admin/fanfarons/:id
+   * PUT /api/fanfarons/:id
    */
   updateFanfaron: async (req, res) => {
     try {
@@ -70,7 +70,7 @@ const fanfaronsController = {
   },
 
   /**
-   * DELETE /admin/fanfarons/:id
+   * DELETE /api/fanfarons/:id
    */
   removeFanfaron: async (req, res) => {
     try {
