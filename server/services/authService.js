@@ -1,4 +1,4 @@
-// services/authService.js
+const authRepo = require('../repositories/authRepository');
 const jwt = require('jsonwebtoken');
 
 // IMPORTANT: Store your JWT secret securely, e.g. in an environment variable.
@@ -49,6 +49,10 @@ const authService = {
       resolve(decoded); // { id, surnom, roles, iat, exp }
     });
   }),
+
+  findFanfaronByEmail: (...a) => authRepo.findFanfaronByEmail(...a),
+  findFanfaronBySurnom: (...a) => authRepo.findFanfaronBySurnom(...a),
+  comparePassword:     (...a) => authRepo.comparePassword(...a),
 };
 
 module.exports = authService;

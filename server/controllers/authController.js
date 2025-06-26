@@ -1,4 +1,3 @@
-const userService = require('../services/userService');
 const authService = require('../services/authService');
 
 const authController = {
@@ -15,9 +14,9 @@ const authController = {
 
         try {
             // Try finding user by email first, then by surnom
-            let fanfaron = await userService.findFanfaronByEmail(identifier);
+            let fanfaron = await authService.findFanfaronByEmail(identifier);
             if (!fanfaron) {
-                fanfaron = await userService.findFanfaronBySurnom(identifier);
+                fanfaron = await authService.findFanfaronBySurnom(identifier);
             }
 
             if (!fanfaron) {
@@ -25,7 +24,7 @@ const authController = {
             }
 
             // Compare password
-            const isMatch = await userService.comparePassword(password, fanfaron.password_hash);
+            const isMatch = await authService.comparePassword(password, fanfaron.password_hash);
 
             if (!isMatch) {
                 return res.status(401).json({ success: false, message: 'Invalid credentials.' });
