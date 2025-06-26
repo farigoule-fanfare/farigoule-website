@@ -1,10 +1,6 @@
 // services/contratService.js
 const contratRepo = require('../repositories/contratRepository');
 
-/**
- * Service minimal : simple façade au-dessus du repository.
- * (Aucune règle métier pour l’instant ; on pourra étoffer plus tard.)
- */
 const contratService = {
   listAll() {
     return contratRepo.findAll();
