@@ -1,7 +1,7 @@
 const userService = require('../services/userService');
 
 const userController = {
-    getCurrentPresidentApi: async (req, res, next) => {
+    getCurrentPresident: async (req, res, next) => {
         try {
             const president = await userService.getCurrentPresident();
             if (!president) {
@@ -21,7 +21,7 @@ const userController = {
      * Update the authenticated user's profile (nom, prenom, email, telephone only)
      * Uses the surnom from the JWT (req.user.surnom) to identify the user.
      */
-    updateProfileApi: async (req, res, next) => {
+    updateProfile: async (req, res, next) => {
         try {
             const userId = req.user?.id;
             if (!userId) {
