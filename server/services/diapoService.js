@@ -1,60 +1,31 @@
-const db = require('./databaseService');
+// services/diapoService.js
+const diapoRepo = require('../repositories/diapoRepository');
 
 const diapoService = {
-  /**
-   * Fetches the latest diapos (carousel slides).
-   * @param {number} [limit=5]
-   */
-  getLatestDiapos: (limit = 5) => new Promise((resolve, reject) => {
-    const sql = `SELECT id, fichier, description, created_at FROM diapos ORDER BY id DESC LIMIT ?`;
-    db.all(sql, [limit], (err, rows) => err ? reject(err) : resolve(rows));
-  }),
+  getLatestDiapos(limit = 5) {
+    return diapoRepo.findLatest(limit);
+  },
 
-  /**
-   * Fetches a single random diapo.
-   */
-  getRandomDiapo: () => new Promise((resolve, reject) => {
-    const sql = `SELECT id, fichier, description, created_at FROM diapos ORDER BY RANDOM() LIMIT 1`;
-    db.get(sql, [], (err, row) => err ? reject(err) : resolve(row || null));
-  }),
+  getRandomDiapo() {
+    return diapoRepo.findRandom();
+  },
 
-  /**
-   * Fetches all diapos.
-   */
-  getAllDiapos: () => new Promise((resolve, reject) => {
-    const sql = `SELECT id, fichier, description, created_at FROM diapos ORDER BY id DESC`;
-    db.all(sql, [], (err, rows) => err ? reject(err) : resolve(rows));
-  }),
+  getAllDiapos() {
+    return diapoRepo.findAll();
+  },
 
-  /**
-   * Adds a new diapo.
-   */
-  addDiapo: ({ fichier, description }) => new Promise((resolve, reject) => {
-    const sql = `INSERT INTO diapos (fichier, description, created_at) VALUES (?, ?, datetime('now'))`;
-    db.run(sql, [fichier, description], function(err) {
-      err ? reject(err) : resolve({ id: this.lastID, fichier, description, created_at: new Date().toISOString() });
-    });
-  }),
+  addDiapo(data) {
+    // data : { fichier, description }
+    return diapoRepo.create(data);
+  },
 
-  /**
-   * Updates an existing diapo by ID.
-   */
-  updateDiapo: (id, { fichier, description }) => new Promise((resolve, reject) => {
-    const sql = `UPDATE diapos SET fichier = COALESCE(?, fichier), description = COALESCE(?, description) WHERE id = ?`;
-    db.run(sql, [fichier, description, id], function(err) {
-      err ? reject(err) : resolve({ id, fichier, description, changes: this.changes });
-    });
-  }),
+  updateDiapo(id, data) {
+    return diapoRepo.update(id, data);
+  },
 
-  /**
-   * Deletes a diapo by ID.
-   */
-  deleteDiapo: (id) => new Promise((resolve, reject) => {
-    const sql = `DELETE FROM diapos WHERE id = ?`;
-    db.run(sql, [id], function(err) {
-      err ? reject(err) : resolve({ deleted: this.changes });
-    });
-  })
+  deleteDiapo(id) {
+    return diapoRepo.remove(id);
+  },
 };
 
 module.exports = diapoService;
