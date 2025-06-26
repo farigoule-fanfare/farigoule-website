@@ -1,14 +1,16 @@
 const express = require('express');
-const authController = require('../controllers/authController');
-const { protect } = require('../middleware/authMiddleware'); // Import protect middleware
+const ctrl = require('../controllers/authController');
+const { protect, authorize } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
 // Public routes
-router.post('/login', authController.handleLogin);
+router.post('/login', ctrl.handleLogin);
 
 // Private routes
-router.post('/logout', protect, authController.handleLogout);
-router.get('/status', protect, authController.handleCheckAuthStatus);
+router.post('/logout', protect, ctrl.handleLogout);
+router.get('/status', protect, ctrl.handleCheckAuthStatus);
+router.put('/change-password', protect, ctrl.changePasswordApi);
+router.post('/:id/setPassword', [protect, authorize(['admin'])],  ctrl.setPassword);
 
 module.exports = router; 

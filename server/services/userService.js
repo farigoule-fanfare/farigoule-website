@@ -7,7 +7,6 @@ const userService = {
 
   // UPDATE
   updateProfile:       (...a) => userRepo.updateProfile(...a),
-  updatePasswordById:  (...a) => userRepo.updatePasswordById(...a),
   updateRolesById:     (...a) => userRepo.updateRolesById(...a),
 };
 
