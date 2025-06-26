@@ -1,7 +1,4 @@
 const db = require('../services/databaseService');
-const bcrypt = require('bcryptjs');
-
-const SALT_ROUNDS = 10;
 
 /** Utilitaire : transforme le champ JSON rôles en tableau */
 function parseRoles(raw) {
@@ -15,24 +12,11 @@ function parseRoles(raw) {
 
 const userRepository = {
   /* ---------- SELECT ---------- */
-  findFanfaronBySurnom(surnom) {
-    if (!surnom) return Promise.resolve(null);
-    const sql = 'SELECT * FROM fanfarons WHERE surnom = ?';
-    return new Promise((resolve, reject) => {
-      db.get(sql, [surnom], (err, row) => {
-        if (err) return reject(err);
-        if (!row) return resolve(null);
-        row.roles = parseRoles(row.roles);
-        resolve(row);
-      });
-    });
-  },
-
   findFanfaronById(id) {
     if (!id) return Promise.resolve(null);
     const sql = `
       SELECT id, surnom, prenom, nom, instrument, promo, bureau,
-             tel, email, photo, description, roles
+             tel, email, photo, description, roles, password_hash
       FROM fanfarons WHERE id = ?`;
     return new Promise((resolve, reject) => {
       db.get(sql, [id], (err, row) => {

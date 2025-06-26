@@ -44,6 +44,6 @@ const authRepository = {
         if (!plain || !hash) return Promise.resolve(false);
         return bcrypt.compare(plain, hash);
     },
-};
+}
 
 module.exports = authRepository;
