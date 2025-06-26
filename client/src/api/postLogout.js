@@ -4,6 +4,6 @@ export const postLogout = async () => {
     return axiosWrapper({
         data: {},
         method: "post",
-        url: "identity/logout",
+        url: "api/identity/logout",
     })
 }

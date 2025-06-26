@@ -18,12 +18,16 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage, fileFilter });
 
-// routes/admin/fanfarons.js
+// routes/api/fanfarons.js
 const router = require('express').Router();
 const ctrl   = require('../controllers/fanfaronsController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
-router.get('/',                                       [protect, authorize(['admin'])], ctrl.getAllFanfaronsAnnuaire);
+// Public routes
+router.get('/', ctrl.getAllFanfaronsApi); // Route for all fanfarons
+
+// Private routes
+router.get('/annuaire',                               [protect, authorize(['admin'])], ctrl.getAllFanfaronsAnnuaire);
 router.post('/',      upload.single('photoFanfaron'), [protect, authorize(['admin'])], ctrl.createFanfaron);
 router.put('/:id',    upload.single('photoFanfaron'), [protect, authorize(['admin'])], ctrl.updateFanfaron);
 router.delete('/:id',                                 [protect, authorize(['admin'])], ctrl.removeFanfaron);

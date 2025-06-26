@@ -27,13 +27,14 @@ const router = require('express').Router();
 const ctrl   = require('../controllers/diaposController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
-// POST a new diapo: /admin/diapos (file upload required)
+// Public routes
+router.get('/',       ctrl.getAllDiaposApi);    // Route for all diapos
+router.get('/latest', ctrl.getLatestDiaposApi); // Route for latest diapos
+router.get('/random', ctrl.getRandomDiapoApi);  // Route for random diapo
+
+// Private routes
 router.post('/',       upload.single('file'), [protect, authorize(['admin'])], ctrl.addDiapo);
-
-// PUT update a diapo by ID: /admin/diapos/:id (file upload optional)
 router.put('/:id',     upload.single('file'), [protect, authorize(['admin'])], ctrl.updateDiapo);
-
-// DELETE a diapo by ID: /admin/diapos/:id
 router.delete('/:id',                         [protect, authorize(['admin'])], ctrl.deleteDiapo);
 
 module.exports = router;

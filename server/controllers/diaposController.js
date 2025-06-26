@@ -59,7 +59,7 @@ const diaposController = {
   },
 
   /**
-   * POST /admin/diapos
+   * POST /api/diapos
    */
   addDiapo: async (req, res) => {
     try {
@@ -74,7 +74,7 @@ const diaposController = {
   },
 
   /**
-   * PUT /admin/diapos/:id
+   * PUT /api/diapos/:id
    */
   updateDiapo: async (req, res) =>{
     try {
@@ -90,7 +90,7 @@ const diaposController = {
   },
 
   /**
-   * DELETE /admin/diapos/:id
+   * DELETE /api/diapos/:id
    */
   deleteDiapo: async (req, res) => {
     try {

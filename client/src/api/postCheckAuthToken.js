@@ -4,6 +4,6 @@ export const postCheckAuthToken = async (data) => {
     return axiosWrapper({
         data,
         method: "post",
-        url: "identity/checkAuthToken",
+        url: "api/identity/checkAuthToken",
     })
 }
