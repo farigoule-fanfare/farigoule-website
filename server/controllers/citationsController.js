@@ -6,7 +6,7 @@ const citationsController = {
    */
   getCitationsApi: async (req, res) => {
       try {
-          const citations = await citationService.getAllCitationsWithAuthors();
+          const citations = await citationService.listRandom();
 
           return res.status(200).send({ success: true, data: citations })
       } catch (error) {
@@ -20,7 +20,7 @@ const citationsController = {
    */
   getAllCitationsOrdered: async (req, res) => {
     try {
-      const citations = await citationService.getAllCitationsWithAuthorsOrdered();
+      const citations = await citationService.listAlphabetic();
       return res.status(200).json({ success: true, data: citations });
     } catch (error) {
       console.error('Controller getAllCitations error:', error.message);
