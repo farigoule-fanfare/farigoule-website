@@ -3,17 +3,6 @@ const bcrypt = require('bcryptjs');
 const SALT_ROUNDS = 10;  // keep in sync with userService
 
 const userController = {
-
-    getAllUsersApi: async (req, res, next) => {
-        try {
-            const users = await userService.getAllUsers(); // Assuming you'll create this service function
-            res.status(200).json({ success: true, data: users });
-        } catch (error) {
-            console.error("Get all users API error:", error);
-            next(error); // Pass to error handling middleware
-        }
-    },
-
     getCurrentPresidentApi: async (req, res, next) => {
         try {
             const president = await userService.getCurrentPresident();
