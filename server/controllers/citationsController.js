@@ -4,7 +4,7 @@ const citationsController = {
   /**
    * GET /api/citations
    */
-  getCitationsApi: async (req, res) => {
+  listCitations: async (req, res) => {
       try {
           const citations = await citationService.listRandom();
 

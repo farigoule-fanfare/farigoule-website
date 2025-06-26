@@ -4,7 +4,7 @@ const fanfaronsController = {
   /**
    * GET /api/fanfarons/
    */
-  getAllFanfaronsApi: async (req, res) => {
+  listFanfarons: async (req, res) => {
         try {
             const fanfarons = await fanfaronService.getAllFanfarons();
             const dataWithUrls = fanfarons.map(f => ({

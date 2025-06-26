@@ -24,7 +24,7 @@ const ctrl   = require('../controllers/fanfaronsController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
 // Public routes
-router.get('/', ctrl.getAllFanfaronsApi); // Route for all fanfarons
+router.get('/', ctrl.listFanfarons); // Route for all fanfarons
 
 // Private routes
 router.get('/annuaire',                               [protect, authorize(['admin'])], ctrl.getAllFanfaronsAnnuaire);
