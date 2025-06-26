@@ -3,8 +3,8 @@ const ctrl   = require('../controllers/contratsController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
 // Public routes
-router.get('/upcoming', ctrl.getUpcomingContratsApi); // upcoming contrats
-router.get('/past',     ctrl.getPastContratsApi);     // past contrats
+router.get('/upcoming', ctrl.listUpcomingContrats); // upcoming contrats
+router.get('/past',     ctrl.listPastContrats);     // past contrats
 
 // Private routes
 router.get('/',       [protect, authorize(['admin'])], ctrl.getAllContrats); // get all contrats
