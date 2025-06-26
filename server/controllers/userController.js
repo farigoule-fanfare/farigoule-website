@@ -30,7 +30,6 @@ const userController = {
             }
 
             const { nom, prenom, email, telephone } = req.body;
-            console.log(`User id ${userId} requests profile update:`, { nom, prenom, email, telephone });
 
             const updatedUser = await userService.updateProfile(userId, { nom, prenom, email, telephone });
             return res.status(200).json({ success: true, data: updatedUser });
