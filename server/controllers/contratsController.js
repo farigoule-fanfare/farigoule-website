@@ -6,7 +6,7 @@ const contratsController = {
    */
   getUpcomingContratsApi: async (req, res) => {
       try {
-          const contrats = await contratService.getUpcomingContrats();
+          const contrats = await contratService.listUpcoming();
           res.status(200).json({ success: true, data: contrats });
       } catch (error) {
           console.error("Failed to get upcoming contrats:", error);
@@ -20,7 +20,7 @@ const contratsController = {
   getPastContratsApi: async (req, res) => {
       try {
           const limit = parseInt(req.query.limit, 10) || 3; // Default limit is 3
-          const contrats = await contratService.getPastContrats(limit);
+          const contrats = await contratService.listPast(limit);
           res.status(200).json({ success: true, data: contrats });
       } catch (error) {
           console.error("Failed to get past contrats:", error);
@@ -34,7 +34,7 @@ const contratsController = {
    */
   getAllContrats: async (req, res) => {
     try {
-      const contrats = await contratService.getAllContrats();
+      const contrats = await contratService.listAll();
       return res.status(200).json({ success: true, data:contrats });
     } catch (error) {
       console.error('Controller getPastContrats error:', error.message);
