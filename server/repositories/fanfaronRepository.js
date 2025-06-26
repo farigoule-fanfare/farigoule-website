@@ -49,7 +49,8 @@ const fanfaronRepository = {
           if (err) return reject(err);
           const newId = this.lastID;
           const row = db
-            .prepare('SELECT * FROM fanfarons WHERE id = ?')
+            .prepare(`SELECT surnom, nom, prenom, instrument, promo, bureau, email, tel, description, photo
+              FROM fanfarons WHERE id = ?`)
             .get(newId);
           resolve(row);
         }
@@ -106,7 +107,8 @@ const fanfaronRepository = {
         function (err) {
           if (err) return reject(err);
           const updated = db
-            .prepare('SELECT * FROM fanfarons WHERE id = ?')
+            .prepare(`SELECT surnom, nom, prenom, instrument, promo, bureau, email, tel, description, photo
+              FROM fanfarons WHERE id = ?`)
             .get(id);
           resolve(updated);
         }
