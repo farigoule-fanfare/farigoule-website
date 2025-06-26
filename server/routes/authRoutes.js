@@ -4,15 +4,11 @@ const { protect } = require('../middleware/authMiddleware'); // Import protect m
 
 const router = express.Router();
 
-// POST /route/auth/login
+// Public routes
 router.post('/login', authController.handleLogin);
 
-// POST /route/auth/logout
-// Protected: only an authenticated user should be able to log out their own session.
+// Private routes
 router.post('/logout', protect, authController.handleLogout);
-
-// GET /route/auth/status 
-// Protected: to check if the current user (based on cookie) is authenticated.
 router.get('/status', protect, authController.handleCheckAuthStatus);
 
 module.exports = router; 
