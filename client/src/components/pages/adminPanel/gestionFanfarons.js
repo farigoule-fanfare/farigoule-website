@@ -1,5 +1,6 @@
 // src/pages/GestionFanfarons.jsx
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useAuth } from '../../../context/AuthContext';
 import AdminPageLayout from '../../layout/AdminPageLayout';
 import { axiosWrapper } from '@api/axiosUtils';
 import Pagination from '../../utils/Pagination';
@@ -13,6 +14,9 @@ export default function GestionFanfarons() {
   const [editingId, setEditingId] = useState(null);
   const formRef = useRef(null);
   const [page, setPage] = useState(1);
+  const { currentUser } = useAuth();
+  const selfId = currentUser?.id ? String(currentUser.id) : null;
+  const isMe = (f) => selfId && String(f.id) === selfId;
 
 
 
@@ -189,7 +193,7 @@ export default function GestionFanfarons() {
                 <td>
                   <div className="adminPanel-buttons">
                   <button onClick={() => handleEditClick(f)} className="adminPanel-button" type="edit">✎</button>
-                  <button onClick={() => handleDelete(f.id)} className="adminPanel-button" type="delete">🗑</button>
+                  {!isMe(f) && (<button onClick={() => handleDelete(f.id)} className="adminPanel-button" type="delete" >🗑</button>)}
                   </div>
                 </td>
               </tr>
