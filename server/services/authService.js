@@ -1,133 +1,123 @@
-const authRepo = require('../repositories/authRepository');
+/**
+ * authService – authentication helpers grouped in a single module.
+ * ---------------------------------------------------------------------------
+ * Style  : Functional (no classes)
+ * Exports: authService object
+ * Depends: jsonwebtoken, bcryptjs, authRepository
+ * ---------------------------------------------------------------------------
+ */
+
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const SALT_ROUNDS = 10;
+const {
+  findFanfaronByEmail,
+  findFanfaronBySurnom,
+  comparePassword,
+  updatePasswordById,
+  findPasswordHashById,
+  getRolesById,
+} = require('../repositories/authRepository');
 
-// IMPORTANT: Store your JWT secret securely, e.g. in an environment variable.
-const JWT_SECRET = process.env.JWT_SECRET || 'YOUR_FALLBACK_SUPER_SECRET_KEY_CHANGE_ME';
-const JWT_EXPIRY = process.env.JWT_EXPIRY || '1h'; // e.g. "1h", "7d"
+/* ---------------------------------------------------------------------------
+ * Constants
+ * ------------------------------------------------------------------------- */
+const SALT_ROUNDS = Number.parseInt(process.env.SALT_ROUNDS ?? '10', 10);
+const JWT_SECRET = process.env.JWT_SECRET ?? '⚠️ CHANGE_ME_IN_PRODUCTION ⚠️';
+const JWT_EXPIRY = process.env.JWT_EXPIRY ?? '1h'; // e.g. "1h", "7d"
 
-/**
- * AuthService – gathers all authentication helpers in a single object
- */
-const authService = {
-  /**
-   * Generates a signed JWT for the given fanfaron.
-   * @param {object} fanfaron - Must contain { id, surnom, roles }.
-   * @returns {string} Signed JWT.
-   */
-  generateToken: (fanfaron) => {
-    if (!fanfaron || !fanfaron.id || !fanfaron.surnom || !fanfaron.roles) {
-      throw new Error('Invalid fanfaron object for token generation.');
-    }
-
-    const payload = {
-      id: fanfaron.id,
-      surnom: fanfaron.surnom,
-      roles: fanfaron.roles,
-    };
-
-    return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRY });
-  },
-
-  /**
-   * Verifies a JWT and resolves with its decoded payload.
-   * @param {string} token - JWT string.
-   * @returns {Promise<object>} Decoded payload if valid.
-   */
-  verifyToken: (token) => new Promise((resolve, reject) => {
-    if (!token) {
-      return reject(new Error('No token provided.'));
-    }
-
+/* ---------------------------------------------------------------------------
+ * Helpers
+ * ------------------------------------------------------------------------- */
+const signJwt = (payload) => jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRY });
+const asyncVerifyJwt = (token) =>
+  new Promise((resolve, reject) => {
     jwt.verify(token, JWT_SECRET, (err, decoded) => {
       if (err) {
-        if (err.name === 'TokenExpiredError') {
-          return reject(new Error('Token expired.'));
-        }
-        return reject(new Error('Invalid token.'));
+        return reject(
+          err.name === 'TokenExpiredError' ? new Error('Token expired') : new Error('Invalid token'),
+        );
       }
       resolve(decoded); // { id, surnom, roles, iat, exp }
     });
-  }),
+  });
+
+/* ---------------------------------------------------------------------------
+ * authService – public API
+ * ------------------------------------------------------------------------- */
+const authService = {
+  /**
+   * Generates a signed JWT from a fanfaron object.
+   * @param {object} fanfaron – requires { id, surnom, roles }
+   * @returns {string}
+   */
+  generateToken(fanfaron) {
+    const { id, surnom, roles } = fanfaron ?? {};
+    if (!id || !surnom || !roles) {
+      throw new TypeError('Invalid fanfaron supplied to generateToken');
+    }
+    return signJwt({ id, surnom, roles });
+  },
 
   /**
-   * Authentifie un fanfaron à partir d’un e-mail OU d’un surnom
-   * et renvoie { user, token }.
-   *
-   * @param {string} identifier – e-mail ou surnom
-   * @param {string} password   – mot de passe en clair
-   * @throws {Error} code: 'MISSING_FIELDS' | 'INVALID_CREDENTIALS'
+   * Decodes and validates a JWT.
+   * @param {string} token
+   * @returns {Promise<object>} – decoded payload
    */
-  login: async (identifier, password) => {
-    /* 0. Validation des entrées -------------------------------------------- */
+  verifyToken: asyncVerifyJwt,
+
+  /**
+   * Authenticates a user by e‑mail OR surnom and returns { user, token }.
+   * @throws {Error & {code: 'MISSING_FIELDS'|'INVALID_CREDENTIALS'}}
+   */
+  async login(identifier, password) {
     if (!identifier || !password) {
-      throw Object.assign(
-        new Error('Email/Surnom et mot de passe requis'),
-        { code: 'MISSING_FIELDS' }
-      );
+      throw Object.assign(new Error('Email/Surnom and password required'), { code: 'MISSING_FIELDS' });
     }
 
-    /* 1. Recherche du fanfaron --------------------------------------------- */
-    let fanfaron = await authRepo.findFanfaronByEmail(identifier);
-    if (!fanfaron) {
-      fanfaron = await authRepo.findFanfaronBySurnom(identifier);
-    }
-    if (!fanfaron) {
-      throw Object.assign(
-        new Error('Identifiants invalides'),
-        { code: 'INVALID_CREDENTIALS' }
-      );
+    const fanfaron =
+      (await findFanfaronByEmail(identifier)) || (await findFanfaronBySurnom(identifier));
+
+    const valid = fanfaron && (await comparePassword(password, fanfaron.password_hash));
+    if (!valid) {
+      throw Object.assign(new Error('Invalid credentials'), { code: 'INVALID_CREDENTIALS' });
     }
 
-    /* 2. Vérification du mot de passe -------------------------------------- */
-    const ok = await authRepo.comparePassword(password, fanfaron.password_hash);
-    if (!ok) {
-      throw Object.assign(
-        new Error('Identifiants invalides'),
-        { code: 'INVALID_CREDENTIALS' }
-      );
-    }
-
-    /* 3. Génération du JWT -------------------------------------------------- */
-    const token = authService.generateToken(fanfaron);   // utilise generateToken déjà défini
-
-    /* 4. Suppression du hash puis retour ----------------------------------- */
     const { password_hash, ...safeUser } = fanfaron;
-    return { user: safeUser, token };
+    return { user: safeUser, token: signJwt(safeUser) };
   },
 
-  adminSetPassword: async (adminId, targetUserId, newPw) =>{
-    if (!adminId || !targetUserId || !newPw)
+  /**
+   * Admin‑only: force‑set another user’s password.
+   */
+  async adminSetPassword(adminId, targetUserId, newPw) {
+    if (!adminId || !targetUserId || !newPw) {
       throw new Error('adminId, targetUserId, newPw required');
-
-    // a) empêcher l’admin de passer par ici pour lui-même
-    if (adminId === targetUserId)
+    }
+    if (adminId === targetUserId) {
       throw new Error('Use changePassword to modify your own password');
-
-    // b) hash et update
-    const newHash = await bcrypt.hash(newPw, SALT_ROUNDS);
-    await authRepo.updatePasswordById(targetUserId, newHash);
+    }
+    await updatePasswordById(targetUserId, await bcrypt.hash(newPw, SALT_ROUNDS));
   },
 
-  changePassword: async (userId, currentPw, newPw) => {
-    if (!userId || !currentPw || !newPw)
+  /**
+   * User: change own password.
+   */
+  async changePassword(userId, currentPw, newPw) {
+    if (!userId || !currentPw || !newPw) {
       throw new Error('userId, currentPw, newPw required');
+    }
 
-    // a) récupérer le hash actuel
-    const currentHash = await authRepo.findPasswordHashById(userId);
+    const currentHash = await findPasswordHashById(userId);
     if (!currentHash) throw new Error('User not found');
 
-    // b) vérifier l’ancien mot de passe
     const ok = await bcrypt.compare(currentPw, currentHash);
     if (!ok) throw new Error('Current password incorrect');
 
-    // c) hasher le nouveau mot de passe et stocker
-    const newHash = await bcrypt.hash(newPw, SALT_ROUNDS);
-    await authRepo.updatePasswordById(userId, newHash);
+    await updatePasswordById(userId, await bcrypt.hash(newPw, SALT_ROUNDS));
   },
 
-  getRolesById:    (...a) => authRepo.getRolesById(...a),
+  // Pass‑throughs -----------------------------------------------------------
+  getRolesById,
 };
 
 module.exports = authService;
