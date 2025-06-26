@@ -44,8 +44,8 @@ export const AuthProvider = ({ children }) => {
             // The backend for /auth/status returns { isAuthenticated: true, user: req.user }
             // So response.data from axiosWrapper for GET will be the { isAuthenticated, user } object if successful.
 
-            if (response && response.success && response.data && response.data.isAuthenticated && response.data.user) {
-                setCurrentUser(response.data.user);
+           if (response && response.success && response.isAuthenticated && response.user) {
+                setCurrentUser(response.user);
                 setIsAuthenticated(true);
             } else {
                 setCurrentUser(null);
