@@ -17,7 +17,7 @@ const authRepository = {
     if (!id) return Promise.resolve(null);
     const sql = `
       SELECT id, surnom, prenom, nom, instrument, promo, bureau,
-             tel, email, photo, description, roles, password_hash
+             tel, email, photo, description, roles
       FROM fanfarons WHERE id = ?`;
     return new Promise((resolve, reject) => {
       db.get(sql, [id], (err, row) => {
@@ -55,12 +55,21 @@ const authRepository = {
     });
   },
 
-    comparePassword(plain, hash) {
-        if (!plain || !hash) return Promise.resolve(false);
-        return bcrypt.compare(plain, hash);
-    },
+  comparePassword(plain, hash) {
+    if (!plain || !hash) return Promise.resolve(false);
+    return bcrypt.compare(plain, hash);
+  },
 
-    updatePasswordById(userId, newHash) {
+  findPasswordHashById(userId) {
+  const sql = 'SELECT password_hash FROM fanfarons WHERE id = ?';
+  return new Promise((resolve, reject) => {
+    db.get(sql, [userId], (err, row) =>
+      err ? reject(err) : resolve(row?.password_hash || null)
+    );
+  });
+},
+
+  updatePasswordById(userId, newHash) {
     if (!userId || !newHash) {
       return Promise.reject(new Error('userId et newHash requis'));
     }
