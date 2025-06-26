@@ -15,7 +15,7 @@ const {
   comparePassword,
   updatePasswordById,
   findPasswordHashById,
-  getRolesById,
+  findFanfaronById,
 } = require('../repositories/authRepository');
 
 /* ---------------------------------------------------------------------------
@@ -117,7 +117,7 @@ const authService = {
   },
 
   // Pass‑throughs -----------------------------------------------------------
-  getRolesById,
+  findFanfaronById,
 };
 
 module.exports = authService;
