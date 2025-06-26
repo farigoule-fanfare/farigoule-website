@@ -1,26 +1,38 @@
-// services/diapoService.js
 const diapoRepo = require('../repositories/diapoRepository');
 
+const BASE_URL = process.env.REACT_APP_RESTAPI_SERVER_URI;
+const buildImageUrl = (fichier) =>
+  `${BASE_URL}/public/uploads/carousel/${fichier}`;
+
+const addImageUrl = (diapo) => ({
+  ...diapo,
+  imageUrl: buildImageUrl(diapo.fichier),
+});
+
 const diapoService = {
-  getLatestDiapos(limit = 5) {
-    return diapoRepo.findLatest(limit);
+  async getAllDiapos() {
+    const diapos = await diapoRepo.findAll();
+    return diapos.map(addImageUrl);
   },
 
-  getRandomDiapo() {
-    return diapoRepo.findRandom();
+  async getLatestDiapos(limit = 5) {
+    const diapos = await diapoRepo.findLatest(limit);
+    return diapos.map(addImageUrl);
   },
 
-  getAllDiapos() {
-    return diapoRepo.findAll();
+  async getRandomDiapo() {
+    const diapo = await diapoRepo.findRandom();
+    return diapo ? addImageUrl(diapo) : null;
   },
 
-  addDiapo(data) {
-    // data : { fichier, description }
-    return diapoRepo.create(data);
+  async addDiapo({ fichier, description }) {
+    const created = await diapoRepo.create({ fichier, description });
+    return addImageUrl(created);
   },
 
-  updateDiapo(id, data) {
-    return diapoRepo.update(id, data);
+  async updateDiapo(id, { fichier, description }) {
+    const updated = await diapoRepo.update(id, { fichier, description });
+    return addImageUrl(updated);
   },
 
   deleteDiapo(id) {
