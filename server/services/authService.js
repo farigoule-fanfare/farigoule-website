@@ -22,7 +22,7 @@ const {
  * Constants
  * ------------------------------------------------------------------------- */
 const SALT_ROUNDS = Number.parseInt(process.env.SALT_ROUNDS ?? '10', 10);
-const JWT_SECRET = process.env.JWT_SECRET ?? '⚠️ CHANGE_ME_IN_PRODUCTION ⚠️';
+const JWT_SECRET = process.env.JWT_SECRET ?? '! CHANGE_ME_IN_PRODUCTION !';
 const JWT_EXPIRY = process.env.JWT_EXPIRY ?? '1h'; // e.g. "1h", "7d"
 
 /* ---------------------------------------------------------------------------
