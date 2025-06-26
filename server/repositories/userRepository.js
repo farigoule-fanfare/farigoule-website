@@ -111,13 +111,6 @@ const userRepository = {
       );
     });
   },
-
-  /* ---------- UTIL ---------- */
-
-  comparePassword(plain, hash) {
-    if (!plain || !hash) return Promise.resolve(false);
-    return bcrypt.compare(plain, hash);
-  },
 };
 
 module.exports = userRepository;
