@@ -77,16 +77,6 @@ const userRepository = {
     });
   },
 
-  updatePasswordById(userId, newHash) {
-    if (!userId || !newHash) {
-      return Promise.reject(new Error('userId et newHash requis'));
-    }
-    const sql = 'UPDATE fanfarons SET password_hash = ? WHERE id = ?';
-    return new Promise((resolve, reject) => {
-      db.run(sql, [newHash, userId], err => (err ? reject(err) : resolve()));
-    });
-  },
-
   updateRolesById(userId, rolesArray) {
     const sql = 'UPDATE fanfarons SET roles = ? WHERE id = ?';
     return new Promise((resolve, reject) => {

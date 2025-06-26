@@ -77,7 +77,7 @@ export default function GestionUtilisateurs() {
     if (!window.confirm(`Réinitialiser le mot de passe de ${u.surnom} ?`)) return;
     const newPass = generateRandomPassword();
     try {
-      await axiosWrapper({ method: 'post', url: `api/users/${u.id}/setPassword`, data: { password: newPass } });
+      await axiosWrapper({ method: 'post', url: `api/auth/${u.id}/setPassword`, data: { password: newPass } });
       showPasswordPopup(newPass);
     } catch (err) {
       console.error('RESET PASSWORD ERROR', err);
