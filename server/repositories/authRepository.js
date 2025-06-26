@@ -23,6 +23,7 @@ const authRepository = {
       db.get(sql, [id], (err, row) => {
         if (err) return reject(err);
         if (!row) return resolve(null);
+        row.roles = parseRoles(row.roles);
         resolve(row);
       });
     });
