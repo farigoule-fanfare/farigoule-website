@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }) => {
             // Corrected call to axiosWrapper
             const response = await axiosWrapper({ 
                 method: 'get', 
-                url: 'auth/status' 
+                url: 'api/auth/status' 
             });
             // The axiosWrapper seems to return { success: true, data: resGet.data.data ... } for GET
             // and for POST, it returns resPost.data which itself should contain { success, user, ... }
@@ -77,7 +77,7 @@ export const AuthProvider = ({ children }) => {
             // Corrected call to axiosWrapper
             const response = await axiosWrapper({ 
                 method: 'post', 
-                url: 'auth/login', 
+                url: 'api/auth/login', 
                 data: credentials 
             });
 
@@ -113,7 +113,7 @@ export const AuthProvider = ({ children }) => {
             // Corrected call to axiosWrapper, no data needed for logout POST
             await axiosWrapper({ 
                 method: 'post', 
-                url: 'auth/logout' 
+                url: 'api/auth/logout' 
             });
             // We don't typically need to check response for logout other than it didn't throw an error
         } catch (err) { // This catch is for unexpected errors not handled by axiosWrapper returning success:false

@@ -29,7 +29,7 @@ const citationsController = {
   },
 
   /**
-   * POST /admin/citations
+   * POST /api/citations
    */
   addCitation: async (req, res) => {
     try {
@@ -43,7 +43,7 @@ const citationsController = {
   },
 
   /**
-   * PUT /admin/citations/:id
+   * PUT /api/citations/:id
    */
   updateCitation: async (req, res) => {
     try {
@@ -58,7 +58,7 @@ const citationsController = {
   },
 
   /**
-   * DELETE /admin/citations/:id
+   * DELETE /api/citations/:id
    */
   deleteCitation: async (req, res) => {
     try {

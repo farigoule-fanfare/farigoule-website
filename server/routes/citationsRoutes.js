@@ -2,13 +2,13 @@ const router = require('express').Router();
 const ctrl   = require('../controllers/citationsController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
-// POST a new citation: /admin/citations
-router.post('/', [protect, authorize(['admin'])], ctrl.addCitation);
+// Public routes
+router.get("/", ctrl.getCitationsApi); // Route for all citations
 
-// PUT update a citation by ID: /admin/citations/:id
-router.put('/:id', [protect, authorize(['admin'])], ctrl.updateCitation);
-
-// DELETE a citation by ID: /admin/citations/:id
-router.delete('/:id', [protect, authorize(['admin'])], ctrl.deleteCitation);
+// Private routes
+router.get("/ordered", [protect, authorize(['admin'])], ctrl.getAllCitationsOrdered); // all citations ordered alphabetically
+router.post('/',       [protect, authorize(['admin'])], ctrl.addCitation);
+router.put('/:id',     [protect, authorize(['admin'])], ctrl.updateCitation);
+router.delete('/:id',  [protect, authorize(['admin'])], ctrl.deleteCitation);
 
 module.exports = router;

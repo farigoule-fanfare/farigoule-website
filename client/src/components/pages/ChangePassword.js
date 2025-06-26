@@ -31,7 +31,7 @@ export default function ChangePassword() {
     try {
       const res = await axiosWrapper({
         method: 'put',
-        url: 'users/change-password',
+        url: 'api/users/change-password',
         data: {
           currentPassword: form.currentPassword,
           newPassword: form.newPassword

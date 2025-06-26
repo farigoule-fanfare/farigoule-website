@@ -30,7 +30,7 @@ const contratsController = {
 
 
   /**
-   * GET /admin/contrats/
+   * GET /api/contrats/
    */
   getAllContrats: async (req, res) => {
     try {
@@ -43,7 +43,7 @@ const contratsController = {
   },
 
   /**
-   * POST /admin/contrats
+   * POST /api/contrats
    */
   addContrat: async (req, res) => {
     try {
@@ -57,7 +57,7 @@ const contratsController = {
   },
 
   /**
-   * PUT /admin/contrats/:id
+   * PUT /api/contrats/:id
    */
   updateContrat: async (req, res) => {
     try {
@@ -72,7 +72,7 @@ const contratsController = {
   },
 
   /**
-   * DELETE /admin/contrats/:id
+   * DELETE /api/contrats/:id
    */
   deleteContrat: async (req, res) => {
     try {
