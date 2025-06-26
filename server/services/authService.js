@@ -9,7 +9,6 @@ const JWT_EXPIRY = process.env.JWT_EXPIRY || '1h'; // e.g. "1h", "7d"
 
 /**
  * AuthService – gathers all authentication helpers in a single object
- * following the same pattern as userService.
  */
 const authService = {
   /**
@@ -52,6 +51,52 @@ const authService = {
     });
   }),
 
+  /**
+   * Authentifie un fanfaron à partir d’un e-mail OU d’un surnom
+   * et renvoie { user, token }.
+   *
+   * @param {string} identifier – e-mail ou surnom
+   * @param {string} password   – mot de passe en clair
+   * @throws {Error} code: 'MISSING_FIELDS' | 'INVALID_CREDENTIALS'
+   */
+  login: async (identifier, password) => {
+    /* 0. Validation des entrées -------------------------------------------- */
+    if (!identifier || !password) {
+      throw Object.assign(
+        new Error('Email/Surnom et mot de passe requis'),
+        { code: 'MISSING_FIELDS' }
+      );
+    }
+
+    /* 1. Recherche du fanfaron --------------------------------------------- */
+    let fanfaron = await authRepo.findFanfaronByEmail(identifier);
+    if (!fanfaron) {
+      fanfaron = await authRepo.findFanfaronBySurnom(identifier);
+    }
+    if (!fanfaron) {
+      throw Object.assign(
+        new Error('Identifiants invalides'),
+        { code: 'INVALID_CREDENTIALS' }
+      );
+    }
+
+    /* 2. Vérification du mot de passe -------------------------------------- */
+    const ok = await authRepo.comparePassword(password, fanfaron.password_hash);
+    if (!ok) {
+      throw Object.assign(
+        new Error('Identifiants invalides'),
+        { code: 'INVALID_CREDENTIALS' }
+      );
+    }
+
+    /* 3. Génération du JWT -------------------------------------------------- */
+    const token = authService.generateToken(fanfaron);   // utilise generateToken déjà défini
+
+    /* 4. Suppression du hash puis retour ----------------------------------- */
+    const { password_hash, ...safeUser } = fanfaron;
+    return { user: safeUser, token };
+  },
+
   adminSetPassword: async (adminId, targetUserId, newPw) =>{
     if (!adminId || !targetUserId || !newPw)
       throw new Error('adminId, targetUserId, newPw required');
@@ -83,9 +128,6 @@ const authService = {
   },
 
   getRolesById:    (...a) => authRepo.getRolesById(...a),
-  findFanfaronByEmail: (...a) => authRepo.findFanfaronByEmail(...a),
-  findFanfaronBySurnom: (...a) => authRepo.findFanfaronBySurnom(...a),
-  comparePassword:     (...a) => authRepo.comparePassword(...a),
 };
 
 module.exports = authService;
