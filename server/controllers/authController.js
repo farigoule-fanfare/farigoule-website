@@ -86,7 +86,7 @@ const authController = {
      * Permet à l’utilisateur authentifié de changer son propre mot de passe.
      * Exige dans le body : { currentPassword, newPassword }
      */
-    changePasswordApi: async (req, res) => {
+    changePassword: async (req, res) => {
     try {
         const userId = req.user?.id;
         if (!userId) {
@@ -117,7 +117,7 @@ const authController = {
 
         return res.status(200).json({ success: true, message: 'Mot de passe mis à jour.' });
     } catch (error) {
-        console.error('changePasswordApi error:', error);
+        console.error('changePassword error:', error);
         return res.status(500).json({ success: false, message: "Erreur serveur lors du changement de mot de passe." });
     }
     },  

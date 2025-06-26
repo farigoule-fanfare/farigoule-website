@@ -3,7 +3,7 @@ const ctrl   = require('../controllers/citationsController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
 // Public routes
-router.get("/", ctrl.getCitationsApi); // Route for all citations
+router.get("/", ctrl.listCitations); // Route for all citations
 
 // Private routes
 router.get("/ordered", [protect, authorize(['admin'])], ctrl.getAllCitationsOrdered); // all citations ordered alphabetically

@@ -4,7 +4,7 @@ const contratsController = {
   /**
    * GET /api/contrats/upcoming
    */
-  getUpcomingContratsApi: async (req, res) => {
+  listUpcomingContrats: async (req, res) => {
       try {
           const contrats = await contratService.listUpcoming();
           res.status(200).json({ success: true, data: contrats });
@@ -17,7 +17,7 @@ const contratsController = {
   /**
    * GET /api/contrats/past
    */
-  getPastContratsApi: async (req, res) => {
+  listPastContrats: async (req, res) => {
       try {
           const limit = parseInt(req.query.limit, 10) || 3; // Default limit is 3
           const contrats = await contratService.listPast(limit);

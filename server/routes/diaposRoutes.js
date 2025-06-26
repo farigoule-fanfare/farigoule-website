@@ -28,9 +28,9 @@ const ctrl   = require('../controllers/diaposController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
 // Public routes
-router.get('/',       ctrl.getAllDiaposApi);    // Route for all diapos
-router.get('/latest', ctrl.getLatestDiaposApi); // Route for latest diapos
-router.get('/random', ctrl.getRandomDiapoApi);  // Route for random diapo
+router.get('/',       ctrl.listDiapos);    // Route for all diapos
+router.get('/latest', ctrl.listLatestDiapos); // Route for latest diapos
+router.get('/random', ctrl.getRandomDiapo);  // Route for random diapo
 
 // Private routes
 router.post('/',       upload.single('file'), [protect, authorize(['admin'])], ctrl.addDiapo);
