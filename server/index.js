@@ -12,21 +12,23 @@ const app = express();
 const PORT = process.env.PORT || 5000; // Use environment variable for port or default to 5000
 
 app.use(require('morgan')('combined'));
-// TODO configure to work on CORS package
-app.use(cors({
-    origin: "*", // Allow requests from the frontend URL
-    credentials: true, // Allow credentials (cookies, authorization headers, etc.)}
-}))
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", process.env.FRONTEND_URL || 'http://localhost:3000');
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-    if (req.method === "OPTIONS") {
-      return res.sendStatus(200);
-    }
-    next();
-  });
+
+const FRONT_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
+
+const corsOptions = {
+  origin: FRONT_URL,
+  credentials: true,
+  methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: [
+    'Origin',
+    'X-Requested-With',
+    'Content-Type',
+    'Accept',
+    'Authorization',
+  ],
+  optionsSuccessStatus: 200,  // réponse aux pré-vol
+};
+app.use(cors(corsOptions));
 
 // Parse cookies
 app.use(cookieParser()); // Added cookie-parser middleware
