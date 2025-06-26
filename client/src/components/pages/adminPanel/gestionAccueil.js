@@ -37,7 +37,7 @@ export default function GestionAccueil() {
 
   const fetchDates = useCallback(async () => {
     try {
-      const res = await axiosWrapper({ method: 'get', url: 'admin/contrats/' });
+      const res = await axiosWrapper({ method: 'get', url: 'api/contrats/' });
       if (res.success && Array.isArray(res.data)) {
         setDates(res.data);
         if (datePage > Math.ceil(res.data.length / ITEMS_PER_PAGE)) setDatePage(1);
@@ -57,7 +57,7 @@ export default function GestionAccueil() {
     fd.append('description', diapoForm.description);
     if (diapoForm.file) fd.append('file', diapoForm.file);
     const method = editDiapoId ? 'put' : 'post';
-    const url = editDiapoId ? `admin/diapos/${editDiapoId}` : 'admin/diapos';
+    const url = editDiapoId ? `api/diapos/${editDiapoId}` : 'api/diapos';
     try {
       const res = await axiosWrapper({ method, url, data: fd, isMultipart: true });
       if (res.success) {
@@ -82,7 +82,7 @@ export default function GestionAccueil() {
   const handleDiapoDelete = async id => {
     if (!window.confirm('Supprimer cette diapo ?')) return;
     try {
-      const res = await axiosWrapper({ method: 'delete', url: `admin/diapos/${id}` });
+      const res = await axiosWrapper({ method: 'delete', url: `api/diapos/${id}` });
       if (res.success) fetchDiapos();
     } catch (err) { console.error('[DELETE DIAPO ERROR]', err); }
   };
@@ -94,7 +94,7 @@ export default function GestionAccueil() {
     e.preventDefault();
     const payload = { date: dateForm.date, lieu: dateForm.lieu, description: dateForm.description };
     const method = editDateId ? 'put' : 'post';
-    const url = editDateId ? `admin/contrats/${editDateId}` : 'admin/contrats';
+    const url = editDateId ? `api/contrats/${editDateId}` : 'api/contrats';
     try {
       const res = await axiosWrapper({ method, url, data: payload });
       if (res.success) {
@@ -119,7 +119,7 @@ export default function GestionAccueil() {
   const handleDateDelete = async id => {
     if (!window.confirm('Supprimer cette date ?')) return;
     try {
-      const res = await axiosWrapper({ method: 'delete', url: `admin/contrats/${id}` });
+      const res = await axiosWrapper({ method: 'delete', url: `api/contrats/${id}` });
       if (res.success) fetchDates();
     } catch (err) { console.error('[DELETE DATE ERROR]', err); }
   };

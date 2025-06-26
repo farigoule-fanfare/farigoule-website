@@ -59,7 +59,7 @@ export default function GestionCitations() {
     try {
       const payload = { auteur_id: citationForm.auteur_id, citation: citationForm.citation };
       const method = editCitationId ? 'put' : 'post';
-      const url = editCitationId ? `admin/citations/${editCitationId}` : 'admin/citations';
+      const url = editCitationId ? `api/citations/${editCitationId}` : 'api/citations';
       const res = await axiosWrapper({ method, url, data: payload });
       if (res.success) {
         setEditCitationId(null);
@@ -85,7 +85,7 @@ export default function GestionCitations() {
   const handleCitationDelete = async id => {
     if (!window.confirm('Supprimer cette citation ?')) return;
     try {
-      const res = await axiosWrapper({ method: 'delete', url: `admin/citations/${id}` });
+      const res = await axiosWrapper({ method: 'delete', url: `api/citations/${id}` });
       if (res.success) fetchCitations();
     } catch (err) {
       console.error('[DELETE CITATION ERROR]', err);

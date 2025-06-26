@@ -15,7 +15,7 @@ export default function GestionUtilisateurs() {
   /* ------------ FETCH USERS ------------- */
   const fetchUsers = useCallback ( async () => {
     try {
-      const res = await axiosWrapper({ method: 'get', url: 'admin/fanfarons/' });
+      const res = await axiosWrapper({ method: 'get', url: 'api/fanfarons/annuaire/' });
       if (res.success) {
         const list = Array.isArray(res.data) ? res.data : [];
         setUsers(list);
@@ -77,7 +77,7 @@ export default function GestionUtilisateurs() {
     if (!window.confirm(`Réinitialiser le mot de passe de ${u.surnom} ?`)) return;
     const newPass = generateRandomPassword();
     try {
-      await axiosWrapper({ method: 'post', url: `admin/manageUsers/${u.id}/setPassword`, data: { password: newPass } });
+      await axiosWrapper({ method: 'post', url: `api/admin/${u.id}/setPassword`, data: { password: newPass } });
       showPasswordPopup(newPass);
     } catch (err) {
       console.error('RESET PASSWORD ERROR', err);
@@ -91,7 +91,7 @@ export default function GestionUtilisateurs() {
     if (!window.confirm(confirmMsg)) return;
     const action = currentRole === 'admin' ? 'removeAdminRole' : 'addAdminRole';
     try {
-      await axiosWrapper({ method: 'post', url: `admin/manageUsers/${u.id}/${action}` });
+      await axiosWrapper({ method: 'post', url: `api/admin/${u.id}/${action}` });
       fetchUsers();
     } catch (err) {
       console.error('TOGGLE ADMIN ERROR', err);

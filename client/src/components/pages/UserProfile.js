@@ -48,7 +48,7 @@ export default function UserProfile() {
       console.log('Submitting user profile update:', form);
       const res = await axiosWrapper({
         method: 'put',
-        url: 'users/profile',
+        url: 'api/users/profile',
         data: form,
       });
       if (res.success) {
