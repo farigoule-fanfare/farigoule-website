@@ -1,6 +1,6 @@
 const userService = require('../services/userService');
 const bcrypt = require('bcryptjs');
-const SALT_ROUNDS = 10;  // keep in sync with userService
+const SALT_ROUNDS = 10;
 
 const userController = {
     getCurrentPresidentApi: async (req, res, next) => {
@@ -78,8 +78,6 @@ const userController = {
         // 3) Hasher et enregistrer le nouveau mot de passe
         const salt = await bcrypt.genSalt(10);
         const newHash = await bcrypt.hash(newPassword, salt);
-        // Vous pouvez soit appeler un service userService.updatePassword(user.id, newHash)
-        // soit, si vous n’avez pas encore ce service, l’écrire ici via SQL direct :
         await userService.updatePasswordById(user.id, newHash);
 
         return res.status(200).json({ success: true, message: 'Mot de passe mis à jour.' });
