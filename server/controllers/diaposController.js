@@ -4,7 +4,7 @@ const diaposController = {
   /**
    * GET /api/diapos/
    */
-  getAllDiaposApi: async (req, res) => {
+  listDiapos: async (req, res) => {
       try {
           const diapos = await diapoService.getAllDiapos();
           // Prepend the base URL for static files to the fichier names
@@ -22,7 +22,7 @@ const diaposController = {
   /**
    * GET /api/diapos/latest
    */
-  getLatestDiaposApi: async (req, res) => {
+  listLatestDiapos: async (req, res) => {
       try {
           const limit = parseInt(req.query.limit, 10) || 5;
           const diapos = await diapoService.getLatestDiapos(limit);
@@ -40,7 +40,7 @@ const diaposController = {
   /**
    * GET /api/diapos/random
    */
-  getRandomDiapoApi: async (req, res) => {
+  getRandomDiapo: async (req, res) => {
       try {
           const diapo = await diapoService.getRandomDiapo();
           if (!diapo) {
