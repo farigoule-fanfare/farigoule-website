@@ -15,20 +15,6 @@ function parseRoles(raw) {
 
 const userRepository = {
   /* ---------- SELECT ---------- */
-
-  findFanfaronByEmail(email) {
-    if (!email) return Promise.resolve(null);
-    const sql = 'SELECT * FROM fanfarons WHERE email = ?';
-    return new Promise((resolve, reject) => {
-      db.get(sql, [email], (err, row) => {
-        if (err) return reject(err);
-        if (!row) return resolve(null);
-        row.roles = parseRoles(row.roles);
-        resolve(row);
-      });
-    });
-  },
-
   findFanfaronBySurnom(surnom) {
     if (!surnom) return Promise.resolve(null);
     const sql = 'SELECT * FROM fanfarons WHERE surnom = ?';
@@ -74,71 +60,7 @@ const userRepository = {
     });
   },
 
-  listAllUsers() {
-    const sql = 'SELECT id, surnom, promo, roles FROM fanfarons';
-    return new Promise((resolve, reject) => {
-      db.all(sql, [], (err, rows) => {
-        if (err) return reject(err);
-        const users = rows.map(r => ({ ...r, roles: parseRoles(r.roles) }));
-        resolve(users);
-      });
-    });
-  },
-
-  /* ---------- INSERT ---------- */
-
-  async createFanfaron(data) {
-    if (!data?.surnom || !data.email || !data.plainPassword) {
-      throw new Error('Missing required fields (surnom, email, plainPassword)');
-    }
-
-    const hashedPassword = await bcrypt.hash(data.plainPassword, SALT_ROUNDS);
-    const rolesJson = JSON.stringify(
-      Array.isArray(data.roles) ? data.roles : ['fanfaron']
-    );
-
-    const sql = `
-      INSERT INTO fanfarons
-      (surnom, prenom, nom, instrument, promo, bureau,
-       tel, email, photo, description, password_hash, roles)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-
-    const params = [
-      data.surnom,
-      data.prenom || null,
-      data.nom || null,
-      data.instrument || null,
-      data.promo ? parseInt(data.promo, 10) : null,
-      data.bureau || null,
-      data.tel || null,
-      data.email,
-      data.photo || null,
-      data.description || null,
-      hashedPassword,
-      rolesJson,
-    ];
-
-    return new Promise((resolve, reject) => {
-      db.run(sql, params, function (err) {
-        if (err) {
-          if (err.code === 'SQLITE_CONSTRAINT') {
-            if (err.message.includes('.email'))
-              return reject(new Error(`Email exists: ${data.email}`));
-            if (err.message.includes('.surnom'))
-              return reject(new Error(`Surnom exists: ${data.surnom}`));
-          }
-          return reject(err);
-        }
-        userRepository
-          .findFanfaronById(this.lastID)
-          .then(resolve)
-          .catch(reject);
-      });
-    });
-  },
-
   /* ---------- UPDATE ---------- */
-
   updateProfile(userId, updates) {
     if (!userId) return Promise.reject(new Error('User ID is required'));
 
