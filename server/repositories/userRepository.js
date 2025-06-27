@@ -27,6 +27,21 @@ const userRepository = {
     });
   },
 
+  findFanfaronById(id) {
+    if (!id) return Promise.resolve(null);
+    const sql = `
+      SELECT id, nom, prenom, email, tel
+      FROM fanfarons WHERE id = ?`;
+    return new Promise((resolve, reject) => {
+      db.get(sql, [id], (err, row) => {
+        if (err) return reject(err);
+        if (!row) return resolve(null);
+        row.roles = parseRoles(row.roles);
+        resolve(row);
+      });
+    });
+  },
+
   findAllUsersRoles() {
     const sql = `
       SELECT id, surnom, promo, roles
