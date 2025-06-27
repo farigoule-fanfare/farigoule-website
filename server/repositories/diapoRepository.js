@@ -2,41 +2,25 @@
 const db = require('../services/databaseService');
 
 const diapoRepository = {
-  /** Dernières diapos (par défaut : 5) */
-  findLatest(limit = 5) {
-    const sql = `
-      SELECT id, fichier, description, created_at
-      FROM diapos
-      ORDER BY id DESC
-      LIMIT ?
-    `;
-    return new Promise((resolve, reject) =>
-      db.all(sql, [limit], (err, rows) => (err ? reject(err) : resolve(rows)))
-    );
-  },
+  
+  /** Récupération des diapos */
+  find({ order = 'desc', limit } = {}) {
+    const params = [];
+    const orderClause =
+      order === 'random' ? 'ORDER BY RANDOM()'
+      : `ORDER BY id ${order.toUpperCase()}`;
 
-  /** Une diapo aléatoire */
-  findRandom() {
-    const sql = `
-      SELECT id, fichier, description, created_at
-      FROM diapos
-      ORDER BY RANDOM()
-      LIMIT 1
-    `;
-    return new Promise((resolve, reject) =>
-      db.get(sql, [], (err, row) => (err ? reject(err) : resolve(row || null)))
-    );
-  },
+    const limitClause = limit ? 'LIMIT ?' : '';
+    if (limit) params.push(limit);
 
-  /** Toutes les diapos */
-  findAll() {
     const sql = `
       SELECT id, fichier, description, created_at
       FROM diapos
-      ORDER BY id DESC
+      ${orderClause}
+      ${limitClause}
     `;
     return new Promise((resolve, reject) =>
-      db.all(sql, [], (err, rows) => (err ? reject(err) : resolve(rows)))
+      db.all(sql, params, (err, rows) => (err ? reject(err) : resolve(rows)))
     );
   },
 
