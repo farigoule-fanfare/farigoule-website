@@ -10,7 +10,7 @@ const fanfaronsController = {
     }
   },
 
-  getAllFanfaronsAnnuaire: async (req, res) => {
+  listFanfaronsAnnuaire: async (req, res) => {
     try {
       const fanfarons = await fanfaronService.getAllFanfaronsAnnuaire();
       res.json({ success: true, data: fanfarons });
