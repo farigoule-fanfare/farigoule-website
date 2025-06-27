@@ -46,7 +46,7 @@ const userRepository = {
   
   getCurrentPresident() {
     const sql = `
-      SELECT surnom, prenom, nom, email, bureau, promo, tel
+      SELECT surnom, prenom, nom, email, tel
       FROM fanfarons
       WHERE lower(bureau) LIKE '%president%'
       ORDER BY promo DESC LIMIT 1`;
