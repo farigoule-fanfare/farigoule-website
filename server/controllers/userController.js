@@ -18,6 +18,20 @@ const userController = {
     },
 
     /**
+     * GET api/users/roles
+     * Renvoie la liste des rôles de tous les fanfarons
+     */
+    listUsersRoles: async (req, res) => {
+    try {
+      const fanfarons = await userService.findAllUsersRoles();
+      res.json({ success: true, data: fanfarons });
+    } catch (e) {
+      res.status(500).json({ success: false, message: e.message });
+    }
+  },
+
+
+    /**
      * Update the authenticated user's profile (nom, prenom, email, telephone only)
      * Uses the surnom from the JWT (req.user.surnom) to identify the user.
      */
@@ -45,7 +59,7 @@ const userController = {
     addAdminRole: async (req, res) => {
         const { id } = req.params;
         try {
-        const user = await userService.findFanfaronById(Number(id));
+        const user = await userService.findRolesById(Number(id));
         if (!user) return res.status(404).json({ success: false, message: 'User not found' });
         const roles = Array.from(new Set([ ...user.roles, 'admin' ]));
         await userService.updateRolesById(Number(id), roles);
@@ -62,7 +76,7 @@ const userController = {
     removeAdminRole: async (req, res) => {
         const { id } = req.params;
         try {
-        const user = await userService.findFanfaronById(Number(id));
+        const user = await userService.findRolesById(Number(id));
         if (!user) return res.status(404).json({ success: false, message: 'User not found' });
         // never remove admin from yourself: check req.user.id if you have auth middleware
         const filtered = user.roles.filter(r => r !== 'admin');
