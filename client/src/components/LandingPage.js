@@ -42,7 +42,7 @@ function LandingPage() {
             try {
                 setLoading(prev => ({ ...prev, diapos: true }));
                 setError(prev => ({ ...prev, diapos: null }));
-                const response = await axiosWrapper({ method: 'get', url: 'api/diapos' });
+                const response = await axiosWrapper({ method: 'get', url: 'api/diapos?limit=6&order=desc' });
                 if (response.success && response.data) {
                     setDiapos(response.data);
                 } else {
