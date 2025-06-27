@@ -27,7 +27,7 @@ const { protect, authorize } = require('../middleware/authMiddleware');
 router.get('/', ctrl.listFanfarons); // Route for all fanfarons
 
 // Private routes
-router.get('/annuaire',                               [protect, authorize(['admin'])], ctrl.getAllFanfaronsAnnuaire);
+router.get('/annuaire',                               [protect, authorize(['admin'])], ctrl.listFanfaronsAnnuaire);
 router.post('/',      upload.single('photoFanfaron'), [protect, authorize(['admin'])], ctrl.createFanfaron);
 router.put('/:id',    upload.single('photoFanfaron'), [protect, authorize(['admin'])], ctrl.updateFanfaron);
 router.delete('/:id',                                 [protect, authorize(['admin'])], ctrl.removeFanfaron);
