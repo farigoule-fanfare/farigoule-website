@@ -27,12 +27,11 @@ const router = require('express').Router();
 const ctrl   = require('../controllers/diaposController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
-// Public routes
-router.get('/',       ctrl.listDiapos);    // Route for all diapos
-router.get('/latest', ctrl.listLatestDiapos); // Route for latest diapos
-router.get('/random', ctrl.getRandomDiapo);  // Route for random diapo
+// Public : 5 diapos aléatoires
+router.get('/', (req, res, next) => { req.query.order = 'desc'; req.query.limit = '5'; ctrl.listDiapos(req, res, next);});
 
 // Private routes
+router.get('/ordered', [protect, authorize(['admin'])], (req, res, next) => { req.query.order = 'desc'; ctrl.listDiapos(req, res, next); });
 router.post('/',       upload.single('file'), [protect, authorize(['admin'])], ctrl.addDiapo);
 router.put('/:id',     upload.single('file'), [protect, authorize(['admin'])], ctrl.updateDiapo);
 router.delete('/:id',                         [protect, authorize(['admin'])], ctrl.deleteDiapo);
