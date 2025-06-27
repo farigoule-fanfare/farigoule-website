@@ -28,7 +28,10 @@ const ctrl   = require('../controllers/diaposController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
 // Public : 5 diapos aléatoires
-router.get('/', (req, res, next) => { req.query.order = 'desc'; req.query.limit = '5'; ctrl.listDiapos(req, res, next);});
+router.get('/', (req, res, next) => {
+  if (req.query.order === undefined) req.query.order = 'random';
+  if (req.query.limit === undefined) req.query.limit = '5';
+  ctrl.listDiapos(req, res, next);});
 
 // Private routes
 router.get('/ordered', [protect, authorize(['admin'])], (req, res, next) => { req.query.order = 'desc'; ctrl.listDiapos(req, res, next); });
