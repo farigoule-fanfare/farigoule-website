@@ -12,11 +12,10 @@ function parseRoles(raw) {
 
 const userRepository = {
   /* ---------- SELECT ---------- */
-  findFanfaronById(id) {
+  findRolesById(id) {
     if (!id) return Promise.resolve(null);
     const sql = `
-      SELECT id, surnom, prenom, nom, instrument, promo, bureau,
-             tel, email, photo, description, roles, password_hash
+      SELECT id, roles
       FROM fanfarons WHERE id = ?`;
     return new Promise((resolve, reject) => {
       db.get(sql, [id], (err, row) => {
@@ -28,17 +27,33 @@ const userRepository = {
     });
   },
 
+  findAllUsersRoles() {
+    const sql = `
+      SELECT id, surnom, promo, roles
+      FROM fanfarons`
+    return new Promise((resolve, reject) => {
+      db.all(sql, [], (err, rows) => {
+        if (err) return reject(err);
+        // parse the JSON‐string roles field into an array
+        const users = rows.map(r => ({ 
+          ...r, 
+          roles: parseRoles(r.roles) 
+        }));
+        resolve(users);
+      });
+    });
+  },
+  
   getCurrentPresident() {
     const sql = `
-      SELECT id, surnom, prenom, nom, email, bureau, promo, tel, roles
+      SELECT surnom, prenom, nom, email, bureau, promo, tel
       FROM fanfarons
       WHERE lower(bureau) LIKE '%president%'
-      ORDER BY id DESC LIMIT 1`;
+      ORDER BY promo DESC LIMIT 1`;
     return new Promise((resolve, reject) => {
       db.get(sql, [], (err, row) => {
         if (err) return reject(err);
         if (!row) return resolve(null);
-        row.roles = parseRoles(row.roles);
         resolve(row);
       });
     });

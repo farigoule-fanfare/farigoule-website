@@ -2,7 +2,11 @@ const userRepo = require('../repositories/userRepository');
 
 const userService = {
   // SELECT
-  findFanfaronById:    (...a) => userRepo.findFanfaronById(...a),
+  findRolesById:    (...a) => userRepo.findRolesById(...a),
+  async findAllUsersRoles() {
+    const fanfarons = await userRepo.findAllUsersRoles();
+    return fanfarons;
+   },
   getCurrentPresident: (...a) => userRepo.getCurrentPresident(...a),
 
   // UPDATE
