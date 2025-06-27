@@ -1,25 +1,32 @@
 const db = require('../services/databaseService');
 
+function buildWhere({ author, search }, params) {
+  const clauses = [];
+  if (author)  { clauses.push('c.auteur_id = ?');            params.push(author); }
+  if (search)  { clauses.push('LOWER(c.citation) LIKE ?');   params.push(`%${search.toLowerCase()}%`); }
+  return clauses.length ? `WHERE ${clauses.join(' AND ')}` : '';
+}
+
 const citationRepository = {
   /**
-   * Récupère toutes les citations + surnom auteur.
-   * @param {'random'|'alpha'} order
-   * @returns {Promise<Array>}
+   * Récupère les citations avec éventuels filtres.
+   * @param {{ order?:'random'|'alpha', author?:number, search?:string }}
    */
-  findAllWithAuthors(order = 'random') {
+  findAll({ order = 'random', author, search } = {}) {
+    const params = [];
+    const where  = buildWhere({ author, search }, params);
     const orderClause = order === 'alpha' ? 'ORDER BY c.citation' : 'ORDER BY RANDOM()';
+
     const sql = `
-      SELECT
-        c.id,
-        c.citation,
-        c.auteur_id,
-        COALESCE(f.surnom, 'Anonyme') AS auteurCitation
+      SELECT c.id, c.citation, c.auteur_id,
+             COALESCE(f.surnom, 'Anonyme') AS auteurCitation
       FROM citations c
       LEFT JOIN fanfarons f ON c.auteur_id = f.id
+      ${where}
       ${orderClause}
     `;
     return new Promise((resolve, reject) =>
-      db.all(sql, [], (err, rows) => (err ? reject(err) : resolve(rows)))
+      db.all(sql, params, (err, rows) => (err ? reject(err) : resolve(rows)))
     );
   },
 
