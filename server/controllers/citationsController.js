@@ -3,28 +3,25 @@ const citationService = require('../services/citationService');
 const citationsController = {
   /**
    * GET /api/citations
+   * ex. /api/citations?order=alpha&author=5&search=truc
    */
   listCitations: async (req, res) => {
-      try {
-          const citations = await citationService.listRandom();
-
-          return res.status(200).send({ success: true, data: citations })
-      } catch (error) {
-          console.error("API Error fetching citations:", error);
-          res.status(500).json({ error: "Failed to fetch citations" });
-      }
-    },
-
-  /**
-   * GET /api/citations/ordered
-   */
-  getAllCitationsOrdered: async (req, res) => {
     try {
-      const citations = await citationService.listAlphabetic();
+      const { order = 'random', author, search } = req.query;
+
+      // validation légère
+      const orderOpt = order === 'alpha' ? 'alpha' : 'random';
+      const filters  = {
+        order : orderOpt,
+        author: author ? parseInt(author, 10) : undefined,
+        search: search?.trim()
+      };
+
+      const citations = await citationService.list(filters);
       return res.status(200).json({ success: true, data: citations });
-    } catch (error) {
-      console.error('Controller getAllCitations error:', error.message);
-      return res.status(500).json({ success: false, message: error.message });
+    } catch (err) {
+      console.error('API citations error:', err);
+      res.status(500).json({ success: false, message: 'Unable to fetch citations' });
     }
   },
 
