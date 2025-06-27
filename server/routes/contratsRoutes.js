@@ -3,11 +3,12 @@ const ctrl   = require('../controllers/contratsController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
 // Public routes
-router.get('/upcoming', ctrl.listUpcomingContrats); // upcoming contrats
-router.get('/past',     ctrl.listPastContrats);     // past contrats
+// Alias rétro-compatibles (optionnel mais pratique)
+router.get('/upcoming', (req, res, next) => {req.query.scope = 'upcoming';ctrl.listContrats(req, res, next);});
+router.get('/past', (req, res, next) => {req.query.scope = 'past';ctrl.listContrats(req, res, next);});
 
 // Private routes
-router.get('/',       [protect, authorize(['admin'])], ctrl.getAllContrats); // get all contrats
+router.get('/',       [protect, authorize(['admin'])], ctrl.listContrats); // get all contrats
 router.post('/',      [protect, authorize(['admin'])], ctrl.addContrat);
 router.put('/:id',    [protect, authorize(['admin'])], ctrl.updateContrat);
 router.delete('/:id', [protect, authorize(['admin'])], ctrl.deleteContrat);

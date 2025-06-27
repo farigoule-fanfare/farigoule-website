@@ -1,53 +1,33 @@
 const db = require('../services/databaseService');
 
-// Helper : YYYY-MM-DD (fuseau du serveur)
-function todayIso() {
-  const d = new Date();
-  return d.toISOString().slice(0, 10);
+function buildWhere({ since, until }, params) {
+  const clauses = [];
+  if (since) { clauses.push('date >= ?'); params.push(since); }
+  if (until) { clauses.push('date <  ?'); params.push(until); }
+  return clauses.length ? `WHERE ${clauses.join(' AND ')}` : '';
 }
 
 const contratRepository = {
-  /** Tous les contrats, du plus récent au plus ancien */
-  findAll() {
-    const sql = `
-      SELECT id, date, lieu, description
-      FROM contrats
-      ORDER BY date DESC
-    `;
-    return new Promise((resolve, reject) =>
-      db.all(sql, [], (err, rows) => (err ? reject(err) : resolve(rows)))
-    );
-  },
+  /**
+   * Récupération générique des contrats.
+   * @param {{ since?:string, until?:string, order?:'asc'|'desc', limit?:number }}
+   */
+  find({ since, until, order = 'desc', limit }) {
+    const params = [];
+    const where   = buildWhere({ since, until }, params);
+    const orderBy = `ORDER BY date ${order.toUpperCase()}`;
+    const limitCl = limit ? 'LIMIT ?' : '';
+    if (limit) params.push(limit);
 
-  /** Prochains contrats (>= today), tri ascendant, limit paramétrable */
-  findUpcoming(limit = 3) {
     const sql = `
       SELECT id, date, lieu, description
       FROM contrats
-      WHERE date >= ?
-      ORDER BY date ASC
-      LIMIT ?
+      ${where}
+      ${orderBy}
+      ${limitCl}
     `;
     return new Promise((resolve, reject) =>
-      db.all(sql, [todayIso(), limit], (err, rows) =>
-        err ? reject(err) : resolve(rows)
-      )
-    );
-  },
-
-  /** Contrats passés (< today), tri descendant, limit paramétrable */
-  findPast(limit = 3) {
-    const sql = `
-      SELECT id, date, lieu, description
-      FROM contrats
-      WHERE date < ?
-      ORDER BY date DESC
-      LIMIT ?
-    `;
-    return new Promise((resolve, reject) =>
-      db.all(sql, [todayIso(), limit], (err, rows) =>
-        err ? reject(err) : resolve(rows)
-      )
+      db.all(sql, params, (err, rows) => (err ? reject(err) : resolve(rows)))
     );
   },
 
