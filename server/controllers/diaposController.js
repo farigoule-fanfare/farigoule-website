@@ -1,40 +1,31 @@
 const diapoService = require('../services/diapoService');
 
 const diaposController = {
+  /**
+   * GET /          (public)  → 5 dernières diapos
+   * GET /ordered   (admin)   → toutes les diapos (flag all=true injecté par la route)
+   *
+   * ?order=random  → tirage aléatoire
+   * ?limit=N       → limite personnalisée (ignorée si all=true)
+   */
   async listDiapos(req, res) {
     try {
-      const diapos = await diapoService.getAllDiapos();
-      res.status(200).json({ success: true, data: diapos });
+      const { order, limit, all } = req.query;
+
+      const opts = {
+        order: order === 'random' ? 'random' : 'desc',
+        limit: all === 'true' ? undefined
+                              : (limit ? parseInt(limit, 10) : 5),
+      };
+
+      const diapos = await diapoService.list(opts);
+      return res.status(200).json({ success: true, data: diapos });
     } catch (err) {
       console.error('[listDiapos]', err);
-      res.status(500).json({ success: false, message: 'Failed to retrieve diapos' });
+      res.status(500).json({ success: false, message: 'Unable to fetch diapos' });
     }
   },
-
-  async listLatestDiapos(req, res) {
-    try {
-      const limit = parseInt(req.query.limit, 10) || 5;
-      const diapos = await diapoService.getLatestDiapos(limit);
-      res.status(200).json({ success: true, data: diapos });
-    } catch (err) {
-      console.error('[listLatestDiapos]', err);
-      res.status(500).json({ success: false, message: 'Failed to retrieve diapos' });
-    }
-  },
-
-  async getRandomDiapo(req, res) {
-    try {
-      const diapo = await diapoService.getRandomDiapo();
-      if (!diapo) {
-        return res.status(404).json({ success: false, message: 'No diapos found.' });
-      }
-      res.status(200).json({ success: true, data: diapo });
-    } catch (err) {
-      console.error('[getRandomDiapo]', err);
-      res.status(500).json({ success: false, message: 'Failed to retrieve diapo' });
-    }
-  },
-
+  
   async addDiapo(req, res) {
     try {
       const fichier = req.file ? req.file.filename : null;
