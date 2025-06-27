@@ -1,44 +1,22 @@
 const contratService = require('../services/contratService');
 
 const contratsController = {
-  /**
-   * GET /api/contrats/upcoming
-   */
-  listUpcomingContrats: async (req, res) => {
-      try {
-          const contrats = await contratService.listUpcoming();
-          res.status(200).json({ success: true, data: contrats });
-      } catch (error) {
-          console.error("Failed to get upcoming contrats:", error);
-          res.status(500).json({ success: false, message: 'Failed to retrieve upcoming contrats' });
-      }
-  },
-
-  /**
-   * GET /api/contrats/past
-   */
-  listPastContrats: async (req, res) => {
-      try {
-          const limit = parseInt(req.query.limit, 10) || 3; // Default limit is 3
-          const contrats = await contratService.listPast(limit);
-          res.status(200).json({ success: true, data: contrats });
-      } catch (error) {
-          console.error("Failed to get past contrats:", error);
-          res.status(500).json({ success: false, message: 'Failed to retrieve past contrats' });
-      }
-  },
-
-
-  /**
-   * GET /api/contrats/
-   */
-  getAllContrats: async (req, res) => {
+  /** GET /api/contrats */
+  listContrats: async (req, res) => {
     try {
-      const contrats = await contratService.listAll();
-      return res.status(200).json({ success: true, data:contrats });
-    } catch (error) {
-      console.error('Controller getPastContrats error:', error.message);
-      return res.status(500).json({ success: false, message: error.message });
+      const { scope, since, until, order, limit } = req.query;
+      const filters = {
+        scope,
+        since: since?.trim(),
+        until: until?.trim(),
+        order,
+        limit: limit ? parseInt(limit, 10) : undefined,
+      };
+      const contrats = await contratService.list(filters);
+      res.status(200).json({ success: true, data: contrats });
+    } catch (e) {
+      console.error('Contrats API error:', e);
+      res.status(500).json({ success: false, message: 'Unable to fetch contrats' });
     }
   },
 
