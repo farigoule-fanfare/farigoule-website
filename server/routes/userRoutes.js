@@ -10,6 +10,7 @@ router.get('/current-president', ctrl.getCurrentPresident);
 router.put('/profile', protect, ctrl.updateProfile);
 
 // Private routes(admin only)
+router.get('/roles', [protect, authorize(['admin'])], ctrl.listUsersRoles);
 router.post('/:id/addAdminRole', [protect, authorize(['admin'])], ctrl.addAdminRole);
 router.post('/:id/removeAdminRole', [protect, authorize(['admin'])], ctrl.removeAdminRole);
 

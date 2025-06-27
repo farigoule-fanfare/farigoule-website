@@ -15,7 +15,7 @@ export default function GestionUtilisateurs() {
   /* ------------ FETCH USERS ------------- */
   const fetchUsers = useCallback ( async () => {
     try {
-      const res = await axiosWrapper({ method: 'get', url: 'api/fanfarons/annuaire/' });
+      const res = await axiosWrapper({ method: 'get', url: 'api/users/roles' });
       if (res.success) {
         const list = Array.isArray(res.data) ? res.data : [];
         setUsers(list);
