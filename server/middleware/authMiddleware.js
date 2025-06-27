@@ -34,7 +34,7 @@ async function protect(req, res, next) {
       return res.status(401).json({ message: 'Not authorized, user not found' });
     }
 
-    req.user = fanfaron;          // { id, surnom, roles, … }
+    req.user = fanfaron;
     next();
   } catch (err) {
     console.error('Auth Protect Middleware Error:', err);
