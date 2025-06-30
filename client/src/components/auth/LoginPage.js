@@ -25,8 +25,6 @@ function LoginPage() {
             return;
         }
         await login({ identifier, password });
-        // On success, useEffect will handle redirect
-        // On failure, authError from context will display the message
     };
 
     if (isLoading && !currentUser && !isAuthenticated) {
