@@ -6,7 +6,7 @@ import './NousPage.css';
 const NousPage = () => {
   return (
     <ContentPageLayout title="Nous">
-      <div class="presentation-fanfare">
+      <div className="presentation-fanfare">
         <h2>🎺 La Farigoule</h2>
         <p>
           <strong>La Farigoule</strong>, fanfare déjantée, festive et haute en couleurs, fait vibrer Marseille et tout le sud-est de la France ! Composée d’élèves ingénieurs de l’École Centrale Méditerranée, notre troupe burlesque mêle passion musicale et joie communicative.
