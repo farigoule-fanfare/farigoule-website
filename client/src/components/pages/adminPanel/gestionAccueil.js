@@ -1,4 +1,3 @@
-// src/pages/GestionAccueil.jsx
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import AdminPageLayout from '../../layout/AdminPageLayout';
 import { axiosWrapper } from '@api/axiosUtils';
@@ -8,46 +7,48 @@ import './gestionAccueil.css';
 export default function GestionAccueil() {
   const ITEMS_PER_PAGE = 10;
 
-  // Diaporama state
   const [diapos, setDiapos] = useState([]);
   const [editDiapoId, setEditDiapoId] = useState(null);
   const [diapoForm, setDiapoForm] = useState({ description: '', file: null });
   const diapoFormRef = useRef(null);
 
-  // Dates state
   const [dates, setDates] = useState([]);
   const [editDateId, setEditDateId] = useState(null);
   const [dateForm, setDateForm] = useState({ date: '', lieu: '', description: '' });
   const dateFormRef = useRef(null);
 
-  // Pagination state
   const [diapoPage, setDiapoPage] = useState(1);
   const [datePage, setDatePage] = useState(1);
 
-  // Fetchers
   const fetchDiapos = useCallback(async () => {
     try {
       const res = await axiosWrapper({ method: 'get', url: 'api/diapos/ordered' });
-      if (res.success && Array.isArray(res.data)) {
+      if (Array.isArray(res.data)) {
         setDiapos(res.data);
         if (diapoPage > Math.ceil(res.data.length / ITEMS_PER_PAGE)) setDiapoPage(1);
       }
-    } catch (err) { console.error('[FETCH DIAPOS ERROR]', err); }
+    } catch (err) {
+      console.error('[FETCH DIAPOS ERROR]', err);
+    }
   }, [diapoPage]);
 
   const fetchDates = useCallback(async () => {
     try {
       const res = await axiosWrapper({ method: 'get', url: 'api/contrats/' });
-      if (res.success && Array.isArray(res.data)) {
+      if (Array.isArray(res.data)) {
         setDates(res.data);
         if (datePage > Math.ceil(res.data.length / ITEMS_PER_PAGE)) setDatePage(1);
       }
-    } catch (err) { console.error('[FETCH DATES ERROR]', err); }
+    } catch (err) {
+      console.error('[FETCH DATES ERROR]', err);
+    }
   }, [datePage]);
 
-  useEffect(() => { fetchDiapos(); fetchDates(); }, [fetchDiapos, fetchDates]);
+  useEffect(() => {
+    fetchDiapos();
+    fetchDates();
+  }, [fetchDiapos, fetchDates]);
 
-  // Handlers for Diapos
   const handleDiapoChange = e => setDiapoForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   const handleDiapoFileChange = e => setDiapoForm(prev => ({ ...prev, file: e.target.files[0] }));
 
@@ -59,13 +60,13 @@ export default function GestionAccueil() {
     const method = editDiapoId ? 'put' : 'post';
     const url = editDiapoId ? `api/diapos/${editDiapoId}` : 'api/diapos';
     try {
-      const res = await axiosWrapper({ method, url, data: fd, isMultipart: true });
-      if (res.success) {
-        setEditDiapoId(null);
-        setDiapoForm({ description: '', file: null });
-        fetchDiapos();
-      }
-    } catch (err) { console.error('[SUBMIT DIAPO ERROR]', err); }
+      await axiosWrapper({ method, url, data: fd, isMultipart: true });
+      setEditDiapoId(null);
+      setDiapoForm({ description: '', file: null });
+      fetchDiapos();
+    } catch (err) {
+      console.error('[SUBMIT DIAPO ERROR]', err);
+    }
   };
 
   const handleDiapoEdit = d => {
@@ -82,12 +83,13 @@ export default function GestionAccueil() {
   const handleDiapoDelete = async id => {
     if (!window.confirm('Supprimer cette diapo ?')) return;
     try {
-      const res = await axiosWrapper({ method: 'delete', url: `api/diapos/${id}` });
-      if (res.success) fetchDiapos();
-    } catch (err) { console.error('[DELETE DIAPO ERROR]', err); }
+      await axiosWrapper({ method: 'delete', url: `api/diapos/${id}` });
+      fetchDiapos();
+    } catch (err) {
+      console.error('[DELETE DIAPO ERROR]', err);
+    }
   };
 
-  // Handlers for Dates
   const handleDateChange = e => setDateForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleDateSubmit = async e => {
@@ -96,13 +98,13 @@ export default function GestionAccueil() {
     const method = editDateId ? 'put' : 'post';
     const url = editDateId ? `api/contrats/${editDateId}` : 'api/contrats';
     try {
-      const res = await axiosWrapper({ method, url, data: payload });
-      if (res.success) {
-        setEditDateId(null);
-        setDateForm({ date: '', lieu: '', description: '' });
-        fetchDates();
-      }
-    } catch (err) { console.error('[SUBMIT DATE ERROR]', err); }
+      await axiosWrapper({ method, url, data: payload });
+      setEditDateId(null);
+      setDateForm({ date: '', lieu: '', description: '' });
+      fetchDates();
+    } catch (err) {
+      console.error('[SUBMIT DATE ERROR]', err);
+    }
   };
 
   const handleDateEdit = d => {
@@ -119,12 +121,13 @@ export default function GestionAccueil() {
   const handleDateDelete = async id => {
     if (!window.confirm('Supprimer cette date ?')) return;
     try {
-      const res = await axiosWrapper({ method: 'delete', url: `api/contrats/${id}` });
-      if (res.success) fetchDates();
-    } catch (err) { console.error('[DELETE DATE ERROR]', err); }
+      await axiosWrapper({ method: 'delete', url: `api/contrats/${id}` });
+      fetchDates();
+    } catch (err) {
+      console.error('[DELETE DATE ERROR]', err);
+    }
   };
 
-  // Pagination
   const totalDiapoPages = Math.ceil(diapos.length / ITEMS_PER_PAGE);
   const diapoLast = diapoPage * ITEMS_PER_PAGE;
   const diapoFirst = diapoLast - ITEMS_PER_PAGE;
