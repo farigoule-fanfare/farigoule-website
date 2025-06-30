@@ -7,7 +7,6 @@ import PageWrapper from "./components/PageWrapper";
 import NotFound from "@components/NotFound";
 import LandingPage from "@components/LandingPage";
 import LoginPage from "./components/auth/LoginPage";
-import Chat from "@components/pages/Chat";
 import NousPage from "./components/pages/NousPage";
 import ContactPage from "./components/pages/ContactPage";
 import Symphonies from "./components/pages/Symphonies";
@@ -46,165 +45,133 @@ export function RoutesComponent(props) {
             <Routes>
                 {/* Public routes */}
                 <Route path="/">
-                    <Route
-                        index
-                        element={
-                            <PageWrapper privatePage={false}>
-                                <LandingPage />
-                            </PageWrapper>
-                        }
-                    />
-                    <Route
-                        path="gaga"
-                        element={
-                            <PageWrapper privatePage={false}>
-                                <LandingPage />
-                            </PageWrapper>
-                        }
-                    />
-                    <Route path="login" element={<LoginPage />} />
-
-                    {/* Admin pages protected by both authentication and admin role */}
-                    <Route
-                        path="adminPanel"
-                        element={
-                            <RequireAuth>
-                              <AdminRoute>
-                                <PageWrapper privatePage={true}>
-                                  <AdminPanel />
-                                </PageWrapper>
-                              </AdminRoute>
-                            </RequireAuth>
-                        }
-                    />
-                    <Route
-                        path="gestionAccueil"
-                        element={
-                            <RequireAuth>
-                              <AdminRoute>
-                                <PageWrapper privatePage={true}>
-                                  <GestionAccueil />
-                                </PageWrapper>
-                              </AdminRoute>
-                            </RequireAuth>
-                        }
-                    />
-                    <Route
-                        path="gestionCitations"
-                        element={
-                            <RequireAuth>
-                              <AdminRoute>
-                                <PageWrapper privatePage={true}>
-                                  <GestionCitations />
-                                </PageWrapper>
-                              </AdminRoute>
-                            </RequireAuth>
-                        }
-                    />
-                    <Route
-                        path="gestionFanfarons"
-                        element={
-                            <RequireAuth>
-                              <AdminRoute>
-                                <PageWrapper privatePage={true}>
-                                  <GestionFanfarons />
-                                </PageWrapper>
-                              </AdminRoute>
-                            </RequireAuth>
-                        }
-                    />
-
-                    <Route
-                        path="gestionUsers"
-                        element={
-                            <RequireAuth>
-                              <AdminRoute>
-                                <PageWrapper privatePage={true}>
-                                  <GestionUsers />
-                                </PageWrapper>
-                              </AdminRoute>
-                            </RequireAuth>
-                        }
-                    />
-                    
-
-                    {/* Other public pages */}
-                    <Route
-                        path="nous"
-                        element={
-                            <PageWrapper privatePage={false}>
-                                <NousPage />
-                            </PageWrapper>
-                        }
-                    />
-                    <Route
-                        path="contact"
-                        element={
-                            <PageWrapper privatePage={false}>
-                                <ContactPage />
-                            </PageWrapper>
-                        }
-                    />
-                    <Route
-                        path="symphonies"
-                        element={
-                            <PageWrapper privatePage={false}>
-                                <Symphonies />
-                            </PageWrapper>
-                        }
-                    />
-                    <Route
-                        path="portraits"
-                        element={
-                            <PageWrapper privatePage={false}>
-                                <Portraits />
-                            </PageWrapper>
-                        }
-                    />
-
-                    {/* Profile page (authenticated users) */}
-                    <Route
-                        path="profile"
-                        element={
-                            <RequireAuth>
-                                <PageWrapper privatePage={true}>
-                                    <UserProfile />
-                                </PageWrapper>
-                            </RequireAuth>
-                        }
-                    />
-
-                    {/* Change password page (authenticated users) */}
-                    <Route
-                        path="change-password"
-                        element={
-                            <RequireAuth>
-                                <PageWrapper privatePage={true}>
-                                    <ChangePassword />
-                                </PageWrapper>
-                            </RequireAuth>
-                        }
-                    />
-
-                    {/* Catch-all for this level */}
-                    <Route
-                        path="*"
-                        element={
-                            <PageWrapper privatePage={false}>
-                                <NotFound />
-                            </PageWrapper>
-                        }
-                    />
-                </Route>
-
-                {/* Chat (authenticated users) */}
                 <Route
-                    path="/chat"
+                    index
+                    element={
+                        <PageWrapper privatePage={false}>
+                            <LandingPage />
+                        </PageWrapper>
+                    }
+                />
+                <Route path="login" element={<LoginPage />} />
+
+                {/* Other public pages */}
+                <Route
+                    path="nous"
+                    element={
+                        <PageWrapper privatePage={false}>
+                            <NousPage />
+                        </PageWrapper>
+                    }
+                />
+                <Route
+                    path="contact"
+                    element={
+                        <PageWrapper privatePage={false}>
+                            <ContactPage />
+                        </PageWrapper>
+                    }
+                />
+                <Route
+                    path="symphonies"
+                    element={
+                        <PageWrapper privatePage={false}>
+                            <Symphonies />
+                        </PageWrapper>
+                    }
+                />
+                <Route
+                    path="portraits"
+                    element={
+                        <PageWrapper privatePage={false}>
+                            <Portraits />
+                        </PageWrapper>
+                    }
+                />
+
+                {/* Profile page (authenticated users) */}
+                <Route
+                    path="profile"
                     element={
                         <RequireAuth>
                             <PageWrapper privatePage={true}>
-                                <Chat />
+                                <UserProfile />
                             </PageWrapper>
+                        </RequireAuth>
+                    }
+                />
+
+                {/* Change password page (authenticated users) */}
+                <Route
+                    path="change-password"
+                    element={
+                        <RequireAuth>
+                            <PageWrapper privatePage={true}>
+                                <ChangePassword />
+                            </PageWrapper>
+                        </RequireAuth>
+                    }
+                />
+
+                {/* Admin pages protected by both authentication and admin role */}
+                <Route
+                    path="adminPanel"
+                    element={
+                        <RequireAuth>
+                            <AdminRoute>
+                            <PageWrapper privatePage={true}>
+                                <AdminPanel />
+                            </PageWrapper>
+                            </AdminRoute>
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path="gestionAccueil"
+                    element={
+                        <RequireAuth>
+                            <AdminRoute>
+                            <PageWrapper privatePage={true}>
+                                <GestionAccueil />
+                            </PageWrapper>
+                            </AdminRoute>
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path="gestionCitations"
+                    element={
+                        <RequireAuth>
+                            <AdminRoute>
+                            <PageWrapper privatePage={true}>
+                                <GestionCitations />
+                            </PageWrapper>
+                            </AdminRoute>
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path="gestionFanfarons"
+                    element={
+                        <RequireAuth>
+                            <AdminRoute>
+                            <PageWrapper privatePage={true}>
+                                <GestionFanfarons />
+                            </PageWrapper>
+                            </AdminRoute>
+                        </RequireAuth>
+                    }
+                />
+
+                <Route
+                    path="gestionUsers"
+                    element={
+                        <RequireAuth>
+                            <AdminRoute>
+                            <PageWrapper privatePage={true}>
+                                <GestionUsers />
+                            </PageWrapper>
+                            </AdminRoute>
                         </RequireAuth>
                     }
                 />
