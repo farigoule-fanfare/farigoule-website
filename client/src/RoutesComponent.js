@@ -1,193 +1,96 @@
-// Copyright © FINANCE SECURITY GmbH - All rights reserved.
 import React, { useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 
+// Layout
 import PageWrapper from "./components/PageWrapper";
-import NotFound from "@components/NotFound";
+
+// Pages publiques
 import LandingPage from "@components/LandingPage";
 import LoginPage from "./components/auth/LoginPage";
 import NousPage from "./components/pages/NousPage";
 import ContactPage from "./components/pages/ContactPage";
 import Symphonies from "./components/pages/Symphonies";
 import Portraits from "./components/pages/Portraits";
+
+// Pages utilisateurs
+import UserProfile from "./components/pages/UserProfile";
+import ChangePassword from './components/pages/ChangePassword';
+
+// Admin
 import AdminPanel from "./components/pages/adminPanel/mainPanel";
 import GestionFanfarons from "./components/pages/adminPanel/gestionFanfarons";
 import GestionAccueil from "./components/pages/adminPanel/gestionAccueil";
 import GestionCitations from "./components/pages/adminPanel/gestionCitations";
 import GestionUsers from "./components/pages/adminPanel/gestionUsers";
-import UserProfile from "./components/pages/UserProfile";
-import RequireAuth from "./components/utils/RequireAuth";
-import ChangePassword from './components/pages/ChangePassword';
 
-// Wrapper to restrict access to admin-only routes
+// Utilitaires
+import RequireAuth from "./components/utils/RequireAuth";
+import NotFound from "@components/NotFound";
+
+// Restriction admin
 function AdminRoute({ children }) {
   const { currentUser } = useAuth();
   const roles = currentUser?.roles || [];
-  if (!roles.includes('admin')) {
-    // Redirect non-admin users to home or a not-authorized page
+  if (!roles.includes("admin")) {
     return <Navigate to="/" replace />;
   }
   return children;
 }
 
-export function RoutesComponent(props) {
-    const location = useLocation();
+// Wrappers de page
+const PublicPage = ({ children }) => (
+  <PageWrapper privatePage={false}>{children}</PageWrapper>
+);
 
-    // Scroll to top on route change
-    useEffect(() => {
-        const scrollTop = setTimeout(() => window.scrollTo(0, 0), 500);
-        return () => clearTimeout(scrollTop);
-    }, [location]);
+const PrivatePage = ({ children }) => (
+  <RequireAuth>
+    <PageWrapper privatePage>{children}</PageWrapper>
+  </RequireAuth>
+);
 
-    return (
-        <div id="route" className="main-content">
-            <Routes>
-                {/* Public routes */}
-                <Route path="/">
-                <Route
-                    index
-                    element={
-                        <PageWrapper privatePage={false}>
-                            <LandingPage />
-                        </PageWrapper>
-                    }
-                />
-                <Route path="login" element={<LoginPage />} />
+const AdminPage = ({ children }) => (
+  <RequireAuth>
+    <AdminRoute>
+      <PageWrapper privatePage>{children}</PageWrapper>
+    </AdminRoute>
+  </RequireAuth>
+);
 
-                {/* Other public pages */}
-                <Route
-                    path="nous"
-                    element={
-                        <PageWrapper privatePage={false}>
-                            <NousPage />
-                        </PageWrapper>
-                    }
-                />
-                <Route
-                    path="contact"
-                    element={
-                        <PageWrapper privatePage={false}>
-                            <ContactPage />
-                        </PageWrapper>
-                    }
-                />
-                <Route
-                    path="symphonies"
-                    element={
-                        <PageWrapper privatePage={false}>
-                            <Symphonies />
-                        </PageWrapper>
-                    }
-                />
-                <Route
-                    path="portraits"
-                    element={
-                        <PageWrapper privatePage={false}>
-                            <Portraits />
-                        </PageWrapper>
-                    }
-                />
+export function RoutesComponent() {
+  const location = useLocation();
 
-                {/* Profile page (authenticated users) */}
-                <Route
-                    path="profile"
-                    element={
-                        <RequireAuth>
-                            <PageWrapper privatePage={true}>
-                                <UserProfile />
-                            </PageWrapper>
-                        </RequireAuth>
-                    }
-                />
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
 
-                {/* Change password page (authenticated users) */}
-                <Route
-                    path="change-password"
-                    element={
-                        <RequireAuth>
-                            <PageWrapper privatePage={true}>
-                                <ChangePassword />
-                            </PageWrapper>
-                        </RequireAuth>
-                    }
-                />
+  return (
+    <div id="route" className="main-content">
+      <Routes>
+        {/* Routes publiques */}
+        <Route path="/" element={<PublicPage><LandingPage /></PublicPage>} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/nous" element={<PublicPage><NousPage /></PublicPage>} />
+        <Route path="/contact" element={<PublicPage><ContactPage /></PublicPage>} />
+        <Route path="/symphonies" element={<PublicPage><Symphonies /></PublicPage>} />
+        <Route path="/portraits" element={<PublicPage><Portraits /></PublicPage>} />
 
-                {/* Admin pages protected by both authentication and admin role */}
-                <Route
-                    path="adminPanel"
-                    element={
-                        <RequireAuth>
-                            <AdminRoute>
-                            <PageWrapper privatePage={true}>
-                                <AdminPanel />
-                            </PageWrapper>
-                            </AdminRoute>
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path="gestionAccueil"
-                    element={
-                        <RequireAuth>
-                            <AdminRoute>
-                            <PageWrapper privatePage={true}>
-                                <GestionAccueil />
-                            </PageWrapper>
-                            </AdminRoute>
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path="gestionCitations"
-                    element={
-                        <RequireAuth>
-                            <AdminRoute>
-                            <PageWrapper privatePage={true}>
-                                <GestionCitations />
-                            </PageWrapper>
-                            </AdminRoute>
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path="gestionFanfarons"
-                    element={
-                        <RequireAuth>
-                            <AdminRoute>
-                            <PageWrapper privatePage={true}>
-                                <GestionFanfarons />
-                            </PageWrapper>
-                            </AdminRoute>
-                        </RequireAuth>
-                    }
-                />
+        {/* Routes privées (utilisateur connecté) */}
+        <Route path="/profile" element={<PrivatePage><UserProfile /></PrivatePage>} />
+        <Route path="/change-password" element={<PrivatePage><ChangePassword /></PrivatePage>} />
 
-                <Route
-                    path="gestionUsers"
-                    element={
-                        <RequireAuth>
-                            <AdminRoute>
-                            <PageWrapper privatePage={true}>
-                                <GestionUsers />
-                            </PageWrapper>
-                            </AdminRoute>
-                        </RequireAuth>
-                    }
-                />
+        {/* Routes admin */}
+        <Route path="/adminPanel" element={<AdminPage><AdminPanel /></AdminPage>} />
+        <Route path="/gestionAccueil" element={<AdminPage><GestionAccueil /></AdminPage>} />
+        <Route path="/gestionCitations" element={<AdminPage><GestionCitations /></AdminPage>} />
+        <Route path="/gestionFanfarons" element={<AdminPage><GestionFanfarons /></AdminPage>} />
+        <Route path="/gestionUsers" element={<AdminPage><GestionUsers /></AdminPage>} />
 
-                {/* Global 404 */}
-                <Route
-                    path="*"
-                    element={
-                        <PageWrapper privatePage={false}>
-                            <NotFound />
-                        </PageWrapper>
-                    }
-                />
-            </Routes>
-        </div>
-    );
+        {/* 404 */}
+        <Route path="*" element={<PublicPage><NotFound /></PublicPage>} />
+      </Routes>
+    </div>
+  );
 }
 
 export default RoutesComponent;
