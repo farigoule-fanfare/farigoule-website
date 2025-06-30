@@ -30,7 +30,7 @@ const authRepository = {
 
   findFanfaronByEmail(email) {
     if (!email) return Promise.resolve(null);
-    const sql = `SELECT id, surnom, nom, prenom, tel, email, password_hash
+    const sql = `SELECT id, surnom, nom, prenom, tel, email, roles, password_hash
                 FROM fanfarons WHERE email = ?`;
     return new Promise((resolve, reject) => {
       db.get(sql, [email], (err, row) => {
@@ -44,7 +44,7 @@ const authRepository = {
 
   findFanfaronBySurnom(surnom) {
     if (!surnom) return Promise.resolve(null);
-    const sql = `SELECT id, surnom, nom, prenom, tel, email, password_hash
+    const sql = `SELECT id, surnom, nom, prenom, tel, email, roles, password_hash
                 FROM fanfarons WHERE surnom = ?`;
     return new Promise((resolve, reject) => {
       db.get(sql, [surnom], (err, row) => {
