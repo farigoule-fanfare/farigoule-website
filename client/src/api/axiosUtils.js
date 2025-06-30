@@ -9,10 +9,9 @@ export const axiosInstance = axios.create({
 
 export const axiosWrapper = async ({ url, method, data, isMultipart = false }) => {
   try {
-    let response;
-    let headers = { 'Accept': 'application/json' };
-
     const fullUrl = `${process.env.REACT_APP_RESTAPI_SERVER_URI}/${url}`;
+    const headers = { 'Accept': 'application/json' };
+
     const axiosConfig = {
       method,
       url: fullUrl,
@@ -27,42 +26,14 @@ export const axiosWrapper = async ({ url, method, data, isMultipart = false }) =
         delete axiosConfig.headers['Content-Type']; // Let browser set it
       }
     } else {
-      return {
-        success: false,
-        message: "Wrong method type provided",
-        errorReason: "invalidParameters"
-      };
+      throw new Error("Méthode HTTP invalide");
     }
 
     const res = await axiosInstance(axiosConfig);
-    const httpStatus = res.status;
-    const body = res.data;
-
-    // ✅ Si le corps contient un champ "success", on garde l'ancien comportement
-    if (typeof body === 'object' && body !== null && 'success' in body) {
-      if (body.success) {
-        return body;
-      } else {
-        throw new Error(body.message || "Operation failed");
-      }
-    }
-
-    // ✅ Sinon on suppose que c'est une réponse nouvelle version, basée sur les codes HTTP
-    if (httpStatus >= 200 && httpStatus < 300) {
-      return { data: body }; // nouvelle interface
-    } else {
-      throw new Error(body?.message || "Operation failed");
-    }
-
+    return { data: res.data };
   } catch (e) {
-    const errorDetail = e?.response?.data;
-    const reason = errorDetail?.errorReason || errorDetail?.message || e.message || "unknownReason";
-
-    return {
-      success: false,
-      error: e,
-      errorReason: reason,
-      message: errorDetail?.message || reason
-    };
+    const message = e?.response?.data?.message || e.message || "Erreur inconnue";
+    e.message = message; // utile si on relance l'erreur
+    throw e;
   }
 };
