@@ -1,30 +1,22 @@
-// src/pages/GestionCitations.jsx
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import AdminPageLayout from '../../layout/AdminPageLayout';
 import { axiosWrapper } from '@api/axiosUtils';
 import Pagination from '../../utils/Pagination';
-//import './gestionCitations.css';
 
 export default function GestionCitations() {
   const ITEMS_PER_PAGE = 10;
 
-  // Data state
   const [citations, setCitations] = useState([]);
   const [fanfarons, setFanfarons] = useState([]);
-
-  // Form/edit state
   const [editCitationId, setEditCitationId] = useState(null);
   const [citationForm, setCitationForm] = useState({ auteur_id: '', citation: '' });
   const citationFormRef = useRef(null);
-
-  // Pagination state
   const [citationPage, setCitationPage] = useState(1);
 
-  // Fetch fans and citations
   const fetchFanfarons = useCallback(async () => {
     try {
       const res = await axiosWrapper({ method: 'get', url: 'api/fanfarons' });
-      if (res.success && Array.isArray(res.data)) setFanfarons(res.data);
+      if (Array.isArray(res.data)) setFanfarons(res.data);
     } catch (err) {
       console.error('[FETCH FANFARONS ERROR]', err);
     }
@@ -33,7 +25,7 @@ export default function GestionCitations() {
   const fetchCitations = useCallback(async () => {
     try {
       const res = await axiosWrapper({ method: 'get', url: 'api/citations/ordered' });
-      if (res.success && Array.isArray(res.data)) {
+      if (Array.isArray(res.data)) {
         setCitations(res.data);
         const total = Math.ceil(res.data.length / ITEMS_PER_PAGE);
         if (citationPage > total) setCitationPage(1);
@@ -48,7 +40,6 @@ export default function GestionCitations() {
     fetchCitations();
   }, [fetchFanfarons, fetchCitations]);
 
-  // Handlers
   const handleCitationChange = e => {
     const { name, value } = e.target;
     setCitationForm(prev => ({ ...prev, [name]: value }));
@@ -60,12 +51,10 @@ export default function GestionCitations() {
       const payload = { auteur_id: citationForm.auteur_id, citation: citationForm.citation };
       const method = editCitationId ? 'put' : 'post';
       const url = editCitationId ? `api/citations/${editCitationId}` : 'api/citations';
-      const res = await axiosWrapper({ method, url, data: payload });
-      if (res.success) {
-        setEditCitationId(null);
-        setCitationForm({ auteur_id: '', citation: '' });
-        fetchCitations();
-      }
+      await axiosWrapper({ method, url, data: payload });
+      setEditCitationId(null);
+      setCitationForm({ auteur_id: '', citation: '' });
+      fetchCitations();
     } catch (err) {
       console.error('[SUBMIT CITATION ERROR]', err);
     }
@@ -85,14 +74,13 @@ export default function GestionCitations() {
   const handleCitationDelete = async id => {
     if (!window.confirm('Supprimer cette citation ?')) return;
     try {
-      const res = await axiosWrapper({ method: 'delete', url: `api/citations/${id}` });
-      if (res.success) fetchCitations();
+      await axiosWrapper({ method: 'delete', url: `api/citations/${id}` });
+      fetchCitations();
     } catch (err) {
       console.error('[DELETE CITATION ERROR]', err);
     }
   };
 
-  // Pagination
   const totalPages = Math.ceil(citations.length / ITEMS_PER_PAGE);
   const lastIndex = citationPage * ITEMS_PER_PAGE;
   const firstIndex = lastIndex - ITEMS_PER_PAGE;
@@ -117,16 +105,16 @@ export default function GestionCitations() {
                 <td>{c.citation}</td>
                 <td>
                   <div className="adminPanel-buttons">
-                  <button
-                    type='edit'
-                    onClick={() => handleCitationEdit(c)}
-                    className="adminPanel-button"
-                  >✎</button>
-                  <button
-                    type='delete'
-                    onClick={() => handleCitationDelete(c.id)}
-                    className="adminPanel-button"
-                  >🗑</button>
+                    <button
+                      type='edit'
+                      onClick={() => handleCitationEdit(c)}
+                      className="adminPanel-button"
+                    >✎</button>
+                    <button
+                      type='delete'
+                      onClick={() => handleCitationDelete(c.id)}
+                      className="adminPanel-button"
+                    >🗑</button>
                   </div>
                 </td>
               </tr>

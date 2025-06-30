@@ -21,25 +21,25 @@ function PageWrapper(props) {
         const fetchAllCitations = async () => {
             try {
                 const response = await axiosWrapper({
-                    url: "api/citations", // Path after REACT_APP_RESTAPI_SERVER_URI
+                    url: "api/citations",
                     method: "get"
                 });
 
-                if (response && response.success && response.data && response.data.length > 0) {
-                    const allCitations = response.data;
+                const allCitations = response.data;
+
+                if (Array.isArray(allCitations) && allCitations.length > 0) {
                     setCitationsArray(allCitations);
-                    // Immediately set a random citation from the fetched array
                     const randomIndex = Math.floor(Math.random() * allCitations.length);
                     setCitationObject(allCitations[randomIndex]); 
                 } else {
-                    console.warn("No citations fetched or API call was not successful. Response:", response);
-                    setCitationsArray([]); // Ensure it's an empty array if fetch fails or no data
+                    console.warn("No citations fetched or empty list. Response:", response);
+                    setCitationsArray([]);
                 }
-            }
-            catch (e) {
+                }
+                catch (e) {
                 console.error("Error in fetchAllCitations calling axiosWrapper:", e);
-                setCitationsArray([]); // Ensure it's an empty array on error
-            }
+                setCitationsArray([]);
+                }
         };
 
         fetchAllCitations();
