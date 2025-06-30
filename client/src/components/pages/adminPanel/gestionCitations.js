@@ -1,183 +1,37 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useCrudList } from './helpers/useCrudList';
 import AdminPageLayout from '../../layout/AdminPageLayout';
-import { axiosWrapper } from '@api/axiosUtils';
-import Pagination from '../../utils/Pagination';
+import AdminCrudSection   from './helpers/AdminCrudSection';
 
 export default function GestionCitations() {
-  const ITEMS_PER_PAGE = 10;
-
-  const [citations, setCitations] = useState([]);
-  const [fanfarons, setFanfarons] = useState([]);
-  const [editCitationId, setEditCitationId] = useState(null);
-  const [citationForm, setCitationForm] = useState({ auteur_id: '', citation: '' });
-  const citationFormRef = useRef(null);
-  const [citationPage, setCitationPage] = useState(1);
-
-  const fetchFanfarons = useCallback(async () => {
-    try {
-      const res = await axiosWrapper({ method: 'get', url: 'api/fanfarons' });
-      if (Array.isArray(res.data)) setFanfarons(res.data);
-    } catch (err) {
-      console.error('[FETCH FANFARONS ERROR]', err);
-    }
-  }, []);
-
-  const fetchCitations = useCallback(async () => {
-    try {
-      const res = await axiosWrapper({ method: 'get', url: 'api/citations/ordered' });
-      if (Array.isArray(res.data)) {
-        setCitations(res.data);
-        const total = Math.ceil(res.data.length / ITEMS_PER_PAGE);
-        if (citationPage > total) setCitationPage(1);
-      }
-    } catch (err) {
-      console.error('[FETCH CITATIONS ERROR]', err);
-    }
-  }, [citationPage]);
-
-  useEffect(() => {
-    fetchFanfarons();
-    fetchCitations();
-  }, [fetchFanfarons, fetchCitations]);
-
-  const handleCitationChange = e => {
-    const { name, value } = e.target;
-    setCitationForm(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleCitationSubmit = async e => {
-    e.preventDefault();
-    try {
-      const payload = { auteur_id: citationForm.auteur_id, citation: citationForm.citation };
-      const method = editCitationId ? 'put' : 'post';
-      const url = editCitationId ? `api/citations/${editCitationId}` : 'api/citations';
-      await axiosWrapper({ method, url, data: payload });
-      setEditCitationId(null);
-      setCitationForm({ auteur_id: '', citation: '' });
-      fetchCitations();
-    } catch (err) {
-      console.error('[SUBMIT CITATION ERROR]', err);
-    }
-  };
-
-  const handleCitationEdit = c => {
-    setEditCitationId(c.id);
-    setCitationForm({ auteur_id: String(c.auteur_id), citation: c.citation });
-    citationFormRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleCitationCancel = () => {
-    setEditCitationId(null);
-    setCitationForm({ auteur_id: '', citation: '' });
-  };
-
-  const handleCitationDelete = async id => {
-    if (!window.confirm('Supprimer cette citation ?')) return;
-    try {
-      await axiosWrapper({ method: 'delete', url: `api/citations/${id}` });
-      fetchCitations();
-    } catch (err) {
-      console.error('[DELETE CITATION ERROR]', err);
-    }
-  };
-
-  const totalPages = Math.ceil(citations.length / ITEMS_PER_PAGE);
-  const lastIndex = citationPage * ITEMS_PER_PAGE;
-  const firstIndex = lastIndex - ITEMS_PER_PAGE;
-  const currentCitations = citations.slice(firstIndex, lastIndex);
+  // juste pour alimenter le <select> Fanfaron
+  const { list: fanfarons } = useCrudList({ url: 'api/fanfarons', itemsPerPage: 500 });
 
   return (
-    <AdminPageLayout title="Gestion des citations">
-      <section className="adminPanel-section">
-        <h2>Citations</h2>
-        <table className="adminPanel-table">
-          <thead>
-            <tr>
-              <th>Fanfaron</th>
-              <th>Citation</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentCitations.map(c => (
-              <tr key={c.id}>
-                <td>{c.auteurCitation}</td>
-                <td>{c.citation}</td>
-                <td>
-                  <div className="adminPanel-buttons">
-                    <button
-                      type='edit'
-                      onClick={() => handleCitationEdit(c)}
-                      className="adminPanel-button"
-                    >✎</button>
-                    <button
-                      type='delete'
-                      onClick={() => handleCitationDelete(c.id)}
-                      className="adminPanel-button"
-                    >🗑</button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <Pagination
-          currentPage={citationPage}
-          totalPages={totalPages}
-          onPageChange={setCitationPage}
-        />
-
-        <div className="contentPage-form-wrapper" ref={citationFormRef}>
-          <form onSubmit={handleCitationSubmit} className="contentPage-form">
-            <h3>{editCitationId ? 'Éditer une citation' : 'Ajouter une citation'}</h3>
-            <div className="contentPage-form-group">
-              <label htmlFor="auteur_id" className="contentPage-label">Fanfaron :</label>
-              <select
-                id="auteur_id"
-                name="auteur_id"
-                value={citationForm.auteur_id}
-                onChange={handleCitationChange}
-                required
-                className="contentPage-input"
-              >
-                <option value="">Sélectionner</option>
-                {fanfarons.map(f => (
-                  <option key={f.id} value={String(f.id)}>{f.surnom}</option>
-                ))}
-              </select>
-            </div>
-            <div className="contentPage-form-group">
-              <label htmlFor="citation" className="contentPage-label">Citation :</label>
-              <input
-                id="citation"
-                name="citation"
-                type="text"
-                value={citationForm.citation}
-                onChange={handleCitationChange}
-                required
-                className="contentPage-input"
-              />
-            </div>
-            <div className="adminPanel-buttons">
-              <button
-                type={editCitationId ? "update" : "submit"}
-                className="adminPanel-button"
-              >
-                {editCitationId ? 'Mettre à jour' : 'Envoyer'}
-              </button>
-              {editCitationId && (
-                <button
-                  type="cancel"
-                  onClick={handleCitationCancel}
-                  className="adminPanel-button"
-                >
-                  Annuler
-                </button>
-              )}
-            </div>
-          </form>
-        </div>
-      </section>
+    <AdminPageLayout title ="Gestion des citations">
+      <AdminCrudSection
+        title="Gestion des citations"
+        listUrl="api/citations/ordered"
+        saveUrl="api/citations"
+        updateUrl={id => `api/citations/${id}`}
+        deleteUrl={id => `api/citations/${id}`}
+        tableCols={[
+          { key: 'auteurCitation', header: 'Fanfaron' },
+          { key: 'citation',       header: 'Citation' },
+        ]}
+        formFields={() => [
+          {
+            name: 'auteur_id',
+            label: 'Fanfaron',
+            type: 'select',
+            required: true,
+            options: [
+              { value: '', label: 'Sélectionner' },
+              ...fanfarons.map(f => ({ value: f.id, label: f.surnom })),
+            ],
+          },
+          { name: 'citation', label: 'Citation', type: 'text', required: true },
+        ]}
+      />
     </AdminPageLayout>
   );
 }
