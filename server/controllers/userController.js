@@ -4,19 +4,19 @@ const userController = {
   async getCurrentPresident(req, res) {
     try {
       const president = await userService.getCurrentPresident();
-      res.json({ success: true, data: president ?? null });
+      res.status(200).json(president ?? null);
     } catch (e) {
       console.error('[getCurrentPresident]', e);
-      res.status(500).json({ success: false, message: e.message });
+      res.status(500).json({ message: e.message });
     }
   },
 
   async listUsersRoles(req, res) {
     try {
       const roles = await userService.getAllUsersRoles();
-      res.json({ success: true, data: roles });
+      res.status(200).json(roles);
     } catch (e) {
-      res.status(500).json({ success: false, message: e.message });
+      res.status(500).json({ message: e.message });
     }
   },
 
@@ -24,33 +24,33 @@ const userController = {
     try {
       const userId = req.user?.id;
       if (!userId) {
-        return res.status(401).json({ success: false, message: 'Non authentifié.' });
+        return res.status(401).json({ message: 'Non authentifié.' });
       }
       const updated = await userService.updateProfile(userId, req.body);
-      res.json({ success: true, data: updated });
+      res.status(200).json(updated);
     } catch (e) {
       console.error('[updateProfile]', e);
-      res.status(500).json({ success: false, message: e.message });
+      res.status(500).json({ message: e.message });
     }
   },
 
   async addAdminRole(req, res) {
     try {
       await userService.addAdminRole(Number(req.params.id));
-      res.json({ success: true });
+      res.status(200).json({ message: 'Rôle admin ajouté.' });
     } catch (e) {
       const status = e.message === 'User not found' ? 404 : 500;
-      res.status(status).json({ success: false, message: e.message });
+      res.status(status).json({ message: e.message });
     }
   },
 
   async removeAdminRole(req, res) {
     try {
       await userService.removeAdminRole(Number(req.params.id));
-      res.json({ success: true });
+      res.status(200).json({ message: 'Rôle admin retiré.' });
     } catch (e) {
       const status = e.message === 'User not found' ? 404 : 500;
-      res.status(status).json({ success: false, message: e.message });
+      res.status(status).json({ message: e.message });
     }
   },
 };
