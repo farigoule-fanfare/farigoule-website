@@ -124,7 +124,7 @@ export default function AdminCrudSection({
             </button>
             {editId && (
               <button
-                className="adminPanel-button-green"
+                className="adminPanel-button"
                 type="button"
                 onClick={() => {
                   setForm(emptyForm);
