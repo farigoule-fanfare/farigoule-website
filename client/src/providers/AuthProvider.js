@@ -21,69 +21,50 @@ function AuthProvider(props) {
 
     const logout = async () => {
         try {
-            const d = await postLogout()
-
-            if (!d?.success) {
-                throw new Error("Failed to logout")
-            }
-        }
-        catch (e) {
-        }
-        finally {
-            // Remove tokens from localStorage what allow application to know who you are
+            await axiosWrapper({ method: 'post', url: 'api/auth/logout' });
+        } catch (e) {
+            console.warn("Logout échoué côté serveur (ignoré côté client)", e);
+        } finally {
+            // Nettoyage local, quoi qu’il arrive
             localStorage.removeItem("FarigouleToken");
-            // Remove information from state what allow application to know who you are
             setUserFunction();
-            // Will redirect you to home
-            navigate(`/`, {
-                replace: false,
-            })
+            navigate(`/`, { replace: false });
         }
-    }
+    };
+
 
     const checkIfUserIsAuthenticated = async (thenSetUser = true, logoutOnFail = true, shouldRefreshToken = true) => {
-        let storedUser = JSON.parse(
-            localStorage.getItem("FarigouleToken")
-        )
+        const storedUser = JSON.parse(localStorage.getItem("FarigouleToken"));
 
         if (!storedUser || !storedUser?.id) {
-            if (logoutOnFail) {
-                logout()
-            }
-            else {
-                setUserFunction()
-            }
-            setLoading(false)
-            return ({})
+            if (logoutOnFail) logout();
+            else setUserFunction();
+            setLoading(false);
+            return {};
         }
 
-        else {
-            try {
-                const isTokenValid = await postCheckAuthToken({ shouldRefreshToken })
+        try {
+            const res = await axiosWrapper({
+            method: 'post',
+            url: 'api/auth/check-token',
+            data: { shouldRefreshToken }
+            });
 
-                if (!isTokenValid || !isTokenValid.success) {
-                    throw new Error("Token is expired or not valid")
-                }
+            // TODO: set user from res.data (à adapter si le backend renvoie l'user ici)
+            const newUser = res.data || {};
 
-                // TODO set user based on data returned by postCheckAuthToken
-                let newUser = {}
+            if (thenSetUser) setUserFunction(newUser);
+            setLoading(false);
+            return newUser;
 
-                if (thenSetUser) {
-                    setUserFunction(newUser)
-                }
-                setLoading(false)
-                return (newUser)
-            }
-            catch (e) {
-                if (logoutOnFail) {
-                    logout()
-                }
-                setLoading(false)
-                setUserFunction()
-                return ({})
-            }
+        } catch (e) {
+            if (logoutOnFail) logout();
+            setUserFunction();
+            setLoading(false);
+            return {};
         }
-    }
+    };
+
 
     // // On component mount, load saved "User" 
     useEffect(() => {
