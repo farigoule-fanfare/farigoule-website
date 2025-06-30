@@ -10,10 +10,6 @@ const addImageUrl = (diapo) => ({
   imageUrl: buildImageUrl(diapo.fichier),
 });
 
-function list({ order = 'desc', limit } = {}) {
-  return diapoRepo.find({ order, limit }).then((d) => d.map(addImageUrl));
-}
-
 const diapoService = {
   /**
    * Récupère des diapos selon l’ordre et la limite demandés.
@@ -21,7 +17,7 @@ const diapoService = {
    * @param {'random'|'desc'} [opts.order='random']  Tri aléatoire ou décroissant.
    * @param {number}   [opts.limit=5]               Nombre max de lignes (undefined → sans limite).
    */
-  async list({ order = 'random', limit = 5 } = {}) {
+  async list({ order = 'random', limit } = {}) {
     const diapos = await diapoRepo.find({ order, limit });
     return diapos.map(addImageUrl);
   },

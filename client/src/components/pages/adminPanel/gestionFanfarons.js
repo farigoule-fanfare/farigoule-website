@@ -1,204 +1,85 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useAuth } from '../../../context/AuthContext';
+import React from 'react';
 import AdminPageLayout from '../../layout/AdminPageLayout';
-import { axiosWrapper } from '@api/axiosUtils';
-import Pagination from '../../utils/Pagination';
-import './gestionFanfaron.css';
+import AdminCrudSection from './helpers/AdminCrudSection';
+import { useAuth } from '../../../context/AuthContext';
 
 export default function GestionFanfarons() {
-  const ITEMS_PER_PAGE = 10;
-  const [fanfarons, setFanfarons] = useState([]);
-  const [form, setForm] = useState({ surnom: '', nom: '', prenom: '', instrument: '', promo: '', bureau: '', email: '', tel: '', description: '' });
-  const [photoFile, setPhotoFile] = useState(null);
-  const [editingId, setEditingId] = useState(null);
-  const formRef = useRef(null);
-  const [page, setPage] = useState(1);
   const { currentUser } = useAuth();
-  const selfId = currentUser?.id ? String(currentUser.id) : null;
-  const isMe = (f) => selfId && String(f.id) === selfId;
+  const selfId = currentUser ? String(currentUser.id) : null;
+  const isMe = (row) => selfId && String(row.id) === selfId;
 
-  const fetchList = useCallback(async () => {
-    try {
-      const res = await axiosWrapper({ method: 'get', url: 'api/fanfarons/annuaire/' });
-      const arr = Array.isArray(res.data) ? res.data : [];
-      setFanfarons(arr);
-      const total = Math.ceil(arr.length / ITEMS_PER_PAGE);
-      if (page > total) setPage(1);
-    } catch (err) {
-      console.error('[FETCH ERROR]', err);
-    }
-  }, [page]);
-
-  useEffect(() => {
-    fetchList();
-  }, [fetchList]);
-
-  const sorted = [...fanfarons].sort((a, b) => {
-    const pa = Number(a.promo), pb = Number(b.promo);
+  /* ---- Tri promo desc puis surnom ---- */
+  const sortFn = (a, b) => {
+    const pa = Number(a.promo);
+    const pb = Number(b.promo);
     if (pb !== pa) return pb - pa;
     return a.surnom.localeCompare(b.surnom, 'fr');
-  });
+  };
 
-  const lastIndex = page * ITEMS_PER_PAGE;
-  const firstIndex = lastIndex - ITEMS_PER_PAGE;
-  const current = sorted.slice(firstIndex, lastIndex);
+  /* ---- Colonnes tableau ---- */
+  const tableCols = [
+    { key: 'surnom',     header: 'Surnom' },
+    { key: 'nom',        header: 'Nom' },
+    { key: 'prenom',     header: 'Prénom' },
+    { key: 'instrument', header: 'Instrument' },
+    { key: 'promo',      header: 'Promo' },
+    { key: 'bureau',     header: 'Bureau' },
+    { key: 'tel',        header: 'Téléphone' },
+    { key: 'email',      header: 'Email' },
+    {
+      key: 'photoUrl',
+      header: 'Photo',
+      render: (v, row) =>
+        v ? (
+          <img src={v} alt={row.surnom} className="apercuDiapo" />
+        ) : (
+          <span className="gestionFanfarons-noPhoto">Aucune photo</span>
+        ),
+    },
+  ];
 
-  const handleChange = e => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  const handleFileChange = e => setPhotoFile(e.target.files[0] || null);
+  /* ---- Schéma formulaire ---- */
+  const formFields = [
+    { name: 'surnom',     label: 'Surnom',     type: 'text',     required: true },
+    { name: 'nom',        label: 'Nom',        type: 'text' },
+    { name: 'prenom',     label: 'Prénom',     type: 'text' },
+    { name: 'instrument', label: 'Instrument', type: 'text',     required: true },
+    { name: 'promo',      label: 'Promo',      type: 'number',   required: true },
+    { name: 'bureau',     label: 'Bureau',     type: 'text' },
+    { name: 'email',      label: 'Mail',       type: 'mail' },
+    { name: 'tel',        label: 'Téléphone',  type: 'text' },
+    { name: 'description',label: 'Description',type: 'textarea' },
+    { name: 'photoFanfaron', label: 'Photo',   type: 'file' },
+  ];
 
-  const handleSubmit = async e => {
-    e.preventDefault();
+  /* ---- Payload FormData ---- */
+  const prepareData = (form) => {
     const fd = new FormData();
-    Object.entries(form).forEach(([k, v]) => fd.append(k, v));
-    if (photoFile) fd.append('photoFanfaron', photoFile);
-    const method = editingId ? 'put' : 'post';
-    const url = editingId ? `api/fanfarons/${editingId}` : 'api/fanfarons';
-    try {
-      await axiosWrapper({ method, url, data: fd, isMultipart: true });
-      await fetchList();
-      setForm({ surnom: '', nom: '', prenom: '', instrument: '', promo: '', bureau: '', email: '', tel: '', description: '' });
-      setPhotoFile(null);
-      setEditingId(null);
-    } catch (err) {
-      console.error('[SUBMIT ERROR]', err);
-    }
-  };
-
-  const handleEditClick = f => {
-    setEditingId(f.id);
-    setForm({
-      surnom: f.surnom,
-      nom: f.nom,
-      prenom: f.prenom,
-      instrument: f.instrument,
-      promo: f.promo,
-      bureau: f.bureau,
-      email: f.email,
-      tel: f.tel,
-      description: f.description
+    Object.entries(form).forEach(([k, v]) => {
+      if (k === 'photoFanfaron') {
+        if (v) fd.append('photoFanfaron', v);
+      } else {
+        fd.append(k, v);
+      }
     });
-    setPhotoFile(null);
-    formRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleDelete = async id => {
-    if (!window.confirm('Supprimer ce fanfaron ?')) return;
-    try {
-      await axiosWrapper({ method: 'delete', url: `api/fanfarons/${id}` });
-      fetchList();
-    } catch (err) {
-      console.error('[DELETE ERROR]', err);
-    }
+    return { data: fd, isMultipart: true };
   };
 
   return (
     <AdminPageLayout title="Gestion des fanfarons">
-      {/* Formulaire */}
-      <div className="contentPage-form-wrapper" ref={formRef}>
-        <form onSubmit={handleSubmit} className="contentPage-form">
-          <h3>{editingId ? 'Éditer un fanfaron' : 'Ajouter un fanfaron'}</h3>
-          {['surnom','nom','prenom','instrument','promo','bureau','email','tel'].map(field => (
-            <div key={field} className="contentPage-form-group">
-              <label htmlFor={field} className="contentPage-label">
-                {field === 'email' ? 'Mail :' : field.charAt(0).toUpperCase() + field.slice(1) + ' :'}
-              </label>
-              <input
-                id={field}
-                name={field}
-                type={field === 'promo' ? 'number' : field === 'email' ? 'mail' : 'text'}
-                value={form[field]}
-                onChange={handleChange}
-                required={['surnom','instrument','promo'].includes(field)}
-                className="contentPage-input"
-              />
-            </div>
-          ))}
-          <div className="contentPage-form-group">
-            <label htmlFor="description" className="contentPage-label">Description :</label>
-            <textarea
-              id="description"
-              name="description"
-              value={form.description}
-              onChange={handleChange}
-              className="contentPage-textarea"
-            />
-          </div>
-          <div className="contentPage-form-group">
-            <label htmlFor="photoFanfaron" className="contentPage-label">Photo :</label>
-            <input
-              id="photoFanfaron"
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="contentPage-input"
-            />
-          </div>
-          <div className="adminPanel-buttons">
-            <button type = {editingId ? "update" : "submit"} className="adminPanel-button">
-              {editingId ? 'Mettre à jour' : 'Créer'}
-            </button>
-            {editingId && (
-              <button
-                type="cancel"
-                onClick={() => { setEditingId(null); setForm({ surnom: '', nom: '', prenom: '', instrument: '', promo: '', bureau: '', email: '', tel: '', description: '' }); setPhotoFile(null); }}
-                className="adminPanel-button"
-              >
-                Annuler
-              </button>
-            )}
-          </div>
-        </form>
-      </div>
-
-      <div className="adminPanel-section">
-        <table className="adminPanel-table">
-          <thead>
-            <tr>
-              <th>Surnom</th>
-              <th>Nom</th>
-              <th>Prénom</th>
-              <th>Instrument</th>
-              <th>Promo</th>
-              <th>Bureau</th>
-              <th>Téléphone</th>
-              <th>Email</th>
-              <th>Photo</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {current.map(f => (
-              <tr key={f.id}>
-                <td>{f.surnom}</td>
-                <td>{f.nom}</td>
-                <td>{f.prenom}</td>
-                <td>{f.instrument}</td>
-                <td>{f.promo}</td>
-                <td>{f.bureau}</td>
-                <td>{f.tel}</td>
-                <td>{f.email}</td>
-                <td>
-                  {f.photoUrl
-                    ? <img src={f.photoUrl} alt={f.surnom} className="apercuDiapo" />
-                    : <span className="gestionFanfarons-noPhoto">Aucune photo</span>
-                  }
-                </td>
-                <td>
-                  <div className="adminPanel-buttons">
-                  <button onClick={() => handleEditClick(f)} className="adminPanel-button" type="edit">✎</button>
-                  {!isMe(f) && (<button onClick={() => handleDelete(f.id)} className="adminPanel-button" type="delete" >🗑</button>)}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <Pagination
-          currentPage={page}
-          totalPages={ Math.ceil(sorted.length / ITEMS_PER_PAGE)}
-          onPageChange={setPage}
-        />
-        </div>
+      <AdminCrudSection 
+        title="Les fanfarons"
+        listUrl="api/fanfarons/annuaire/"
+        saveUrl="api/fanfarons"
+        updateUrl={(id) => `api/fanfarons/${id}`}
+        deleteUrl={(id) => `api/fanfarons/${id}`}
+        tableCols={tableCols}
+        formFields={formFields}
+        sortFn={sortFn}
+        itemsPerPage={10}
+        prepareData={prepareData}
+        canDelete={(row) => !isMe(row)}
+      />
     </AdminPageLayout>
   );
 }
