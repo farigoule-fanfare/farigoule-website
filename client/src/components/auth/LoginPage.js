@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import './LoginPage.css'; // We will create this file next
+import './LoginPage.css';
 
 function LoginPage() {
     const [identifier, setIdentifier] = useState('');
@@ -10,7 +10,7 @@ function LoginPage() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const from = location.state?.from?.pathname || '/'; // Path to redirect to after login
+    const from = location.state?.from?.pathname || '/';
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -21,31 +21,21 @@ function LoginPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!identifier || !password) {
-            // Basic client-side validation, AuthContext error will handle backend errors
-            // Or set a local error state here if preferred
             alert('Login and password are required.'); 
             return;
         }
-        const result = await login({ identifier, password });
-        if (result && result.success) {
-            navigate(from, { replace: true });
-        } 
-        // Error handling is done via the 'authError' from context below
+        await login({ identifier, password });
+        // On success, useEffect will handle redirect
+        // On failure, authError from context will display the message
     };
 
     if (isLoading && !currentUser && !isAuthenticated) {
-        // Show loading only if initial auth check is happening and user is not yet authenticated
-        // or if login process is ongoing.
         return <div className="login-container"><p>Loading...</p></div>;
     }
-    
-    // If already authenticated (e.g. due to effect redirect not happening instantly, or re-render)
-    // it might be better to show null or a redirecting message if the effect hasn't fired.
-    // However, the useEffect should handle redirection quickly.
 
     return (
         <div className="login-container">
-            <h1>Enter the Matrix</h1> {/* Inspired by tartiflette.php */}
+            <h1>Enter the Matrix</h1>
             <form onSubmit={handleSubmit} className="login-form">
                 <div className="form-group">
                     <label htmlFor="identifier">Login (Surnom or Email)</label>
@@ -83,4 +73,4 @@ function LoginPage() {
     );
 }
 
-export default LoginPage; 
+export default LoginPage;

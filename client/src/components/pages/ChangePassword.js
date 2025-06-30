@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { axiosWrapper } from '../../api/axiosUtils';
 import ContentPageLayout from '../layout/ContentPageLayout';
-//import './ChangePassword.css';
 
 export default function ChangePassword() {
   const [form, setForm] = useState({
@@ -29,7 +28,7 @@ export default function ChangePassword() {
 
     setLoading(true);
     try {
-      const res = await axiosWrapper({
+      await axiosWrapper({
         method: 'put',
         url: 'api/auth/change-password',
         data: {
@@ -37,11 +36,10 @@ export default function ChangePassword() {
           newPassword: form.newPassword
         }
       });
-      setStatus(res.success
-        ? 'Votre mot de passe a bien été changé.'
-        : `Erreur : ${res.message || 'échec de la modification.'}`);
+      setStatus('Votre mot de passe a bien été changé.');
     } catch (err) {
-      setStatus('Erreur réseau ou inattendue.');
+      const message = err?.response?.data?.message || 'Erreur réseau ou inattendue.';
+      setStatus(`Erreur : ${message}`);
       console.error(err);
     } finally {
       setLoading(false);
