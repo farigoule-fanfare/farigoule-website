@@ -4,18 +4,18 @@ const fanfaronsController = {
   listFanfarons: async (req, res) => {
     try {
       const fanfarons = await fanfaronService.getAllFanfarons();
-      res.json({ success: true, data: fanfarons });
+      res.status(200).json(fanfarons);
     } catch (e) {
-      res.status(500).json({ success: false, message: e.message });
+      res.status(500).json({ message: e.message });
     }
   },
 
   listFanfaronsAnnuaire: async (req, res) => {
     try {
       const fanfarons = await fanfaronService.getAllFanfaronsAnnuaire();
-      res.json({ success: true, data: fanfarons });
+      res.status(200).json(fanfarons);
     } catch (e) {
-      res.status(500).json({ success: false, message: e.message });
+      res.status(500).json({ message: e.message });
     }
   },
 
@@ -23,10 +23,10 @@ const fanfaronsController = {
     try {
       const payload = { ...req.body, photo: req.file?.filename || null };
       const fanfaron = await fanfaronService.createFanfarons(payload);
-      res.json({ success: true, data: fanfaron });
+      res.status(201).json(fanfaron);
     } catch (error) {
       console.error('[createFanfaron]', error);
-      res.status(500).json({ success: false, message: error.message });
+      res.status(500).json({ message: error.message });
     }
   },
 
@@ -34,20 +34,20 @@ const fanfaronsController = {
     try {
       const payload = { ...req.body, photo: req.file?.filename || null };
       const fanfaron = await fanfaronService.updateFanfarons(req.params.id, payload);
-      res.json({ success: true, data: fanfaron });
+      res.status(200).json(fanfaron);
     } catch (error) {
       console.error('[updateFanfaron]', error);
-      res.status(500).json({ success: false, message: error.message });
+      res.status(500).json({ message: error.message });
     }
   },
 
   removeFanfaron: async (req, res) => {
     try {
       await fanfaronService.deleteFanfarons(req.params.id);
-      res.json({ success: true });
+      res.status(200).json({ message: 'Suppression réussie' });
     } catch (error) {
       console.error('[removeFanfaron]', error);
-      res.status(500).json({ success: false, message: error.message });
+      res.status(500).json({ message: error.message });
     }
   },
 };
