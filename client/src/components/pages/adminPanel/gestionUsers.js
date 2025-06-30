@@ -13,19 +13,18 @@ export default function GestionUtilisateurs() {
   const [page, setPage] = useState(1);
 
   /* ------------ FETCH USERS ------------- */
-  const fetchUsers = useCallback ( async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       const res = await axiosWrapper({ method: 'get', url: 'api/users/roles' });
-      if (res.success) {
-        const list = Array.isArray(res.data) ? res.data : [];
-        setUsers(list);
-        const totalPages = Math.ceil(list.length / ITEMS_PER_PAGE);
-        if (page > totalPages) setPage(1);
-      }
+      const list = Array.isArray(res.data) ? res.data : [];
+      setUsers(list);
+      const totalPages = Math.ceil(list.length / ITEMS_PER_PAGE);
+      if (page > totalPages) setPage(1);
     } catch (err) {
       console.error('FETCH USERS ERROR', err);
     }
-  },[ITEMS_PER_PAGE, page]);
+  }, [ITEMS_PER_PAGE, page]);
+
 
   useEffect(() => { fetchUsers(); }, [fetchUsers]);
 

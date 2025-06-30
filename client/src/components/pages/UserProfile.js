@@ -37,7 +37,7 @@ export default function UserProfile() {
   }
 
   const handleChange = (e) => {
-  const { name, value } = e.target;
+    const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
   };
 
@@ -46,23 +46,19 @@ export default function UserProfile() {
     setStatus(null);
     try {
       console.log('Submitting user profile update:', form);
-      const res = await axiosWrapper({
+      await axiosWrapper({
         method: 'put',
         url: 'api/users/profile',
         data: form,
       });
-      if (res.success) {
-        setStatus('Modifications enregistrées.');
-        await checkAuthStatus();
-      } else {
-        setStatus('Erreur lors de la mise à jour.');
-        console.error('Update error:', res.error || res.message);
-      }
+      setStatus('Modifications enregistrées.');
+      await checkAuthStatus();
     } catch (err) {
-      setStatus('Erreur inattendue.');
-      console.error('Unexpected error:', err);
+      const msg = err?.response?.data?.message || 'Erreur lors de la mise à jour.';
+      setStatus(msg);
+      console.error('Update error:', msg);
     }
-  };
+};
 
   return (
     <ContentPageLayout title="Mon Profil">
