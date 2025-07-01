@@ -25,7 +25,7 @@ import GestionCitations from "@components/AdminPanel/pages/gestionCitations";
 import GestionUsers from     "@components/AdminPanel/pages/gestionUsers";
 
 // Utilitaires
-import RequireAuth from      "@components/utils/RequireAuth";
+import RequireAuth from      "@components/common/RequireAuth";
 import NotFound from         "@components/common/NotFound";
 
 // Restriction admin
