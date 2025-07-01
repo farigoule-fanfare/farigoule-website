@@ -5,8 +5,8 @@ import PropTypes from "prop-types";
 import Loading from "@components/utils/Loading";
 import {axiosWrapper} from '@api/axiosUtils';
 
-const Header = lazy(() => import("@components/Header"));
-const Footer = lazy(() => import("@components/Footer"));
+const Header = lazy(() => import("@components/common/Header"));
+const Footer = lazy(() => import("@components/common/Footer"));
 const RequireAuth = lazy(() => import("@components/utils/RequireAuth"));
 
 // TODO envoyer si l'utilisateur est connecté ou non + 
