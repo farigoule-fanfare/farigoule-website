@@ -91,26 +91,20 @@ const Portraits = () => {
             className="blocFanfaron"
             onClick={() => setSelectedId(selectedId === f.id ? null : f.id)}
           >
-            <p className="pNomFanfaron">
-              <strong>{f.surnom}</strong><br />
-              {`${f.instrument.charAt(0).toUpperCase() + f.instrument.slice(1)}${f.promo ? ` (${f.promo})` :""}`}
-            </p>
-            {(f.bureau && ["president","chefmu","trez","com","biere"].includes(f.bureau)) && (
-              <p className="pImageBureau">
+            <div className='pInfosFanfaron'>
+              <p>
+                <strong>{f.surnom}</strong><br />
+                {`${f.instrument.charAt(0).toUpperCase() + f.instrument.slice(1)}${f.promo ? ` (${f.promo})` :""}`}
+              </p>
+              {(f.bureau && ["president","chefmu","trez","com","biere"].includes(f.bureau)) && (
                 <img
                   src={require(`../../img/boutons/bouton-${f.bureau}.png`)}
                   alt="Bureau"
                   className="imageBureau"
                 />
-              </p>
-            )}
-            <p className="pApercuFanfaron">
-              <img
-                src={f.photoUrl}
-                alt="Fanfaron"
-                className="apercuFanfaron"
-              />
-            </p>
+              )}
+            </div>
+            <img src={f.photoUrl} alt="Fanfaron" className="apercuFanfaron"/>
           </div>
         ))}
       </div>
