@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { AuthContext } from "@context/auth";
 
-import { postCheckAuthToken } from "@api/postCheckAuthToken"
-import { postLogout } from "@api/postLogout"
+import { postCheckAuthToken } from "@services/postCheckAuthToken"
+import { postLogout } from "@services/postLogout"
 
 import Loading from "@components/utils/Loading"
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { axiosWrapper } from '@api/axiosUtils';
+import { axiosWrapper } from '@services/axiosUtils';
 
 /**
  * Gestion générique d’une liste + pagination.

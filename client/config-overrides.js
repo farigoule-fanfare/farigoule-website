@@ -11,6 +11,5 @@ module.exports = override(
     "@components": path.resolve(__dirname, "src/components"),
     '@context': path.resolve(__dirname, 'src/context'),
     '@providers': path.resolve(__dirname, 'src/providers'),
-    '@api': path.resolve(__dirname, 'src/api'),
   })
 );
