@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@features/auth';
+import useCitations from './hooks/useCitations';
 import './Header.css';
 
 import logoFarigouleSrc from '@assets/images/logo-farigoule.png';
@@ -16,13 +17,13 @@ import boutonPortraitsHoverSrc from '@assets/images/boutons/bouton-portraits-hov
 import boutonContactSrc from '@assets/images/boutons/bouton-contact.png';
 import boutonContactHoverSrc from '@assets/images/boutons/bouton-contact-hover.png';
 
-function Header(props) {
+function Header() {
     const [isAccueilHovered, setIsAccueilHovered] = useState(false);
     const [isNousHovered, setIsNousHovered] = useState(false);
     const [isSymphoniesHovered, setIsSymphoniesHovered] = useState(false);
     const [isPortraitsHovered, setIsPortraitsHovered] = useState(false);
     const [isContactHovered, setIsContactHovered] = useState(false);
-
+    const { citation, auteurCitation } = useCitations(); 
     const { isAuthenticated, currentUser, logout, isLoading } = useAuth();
     const navigate = useNavigate();
 
@@ -39,8 +40,8 @@ function Header(props) {
             </p>
             <div className="blocHeader">
                 <blockquote className="blocCitation">
-                    <p className="citation">{props.citation}</p>
-                    <p className="auteurCitation">{props.auteurCitation}</p>
+                    <p className="citation">{citation}</p>
+                    <p className="auteurCitation">{auteurCitation}</p>
                 </blockquote>
 
                 <div className="auth-status-header">
@@ -82,9 +83,6 @@ function Header(props) {
     );
 }
 
-Header.propTypes = {
-    citation: PropTypes.string.isRequired,
-    auteurCitation: PropTypes.string.isRequired,
-};
+Header.propTypes = {};
 
 export default Header;

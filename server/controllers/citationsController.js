@@ -7,20 +7,24 @@ const citationsController = {
    */
   listCitations: async (req, res) => {
     try {
-      const { order = 'random', author, search } = req.query;
-
-      const orderOpt = order === 'alpha' ? 'alpha' : 'random';
-      const filters = {
-        order: orderOpt,
-        author: author ? parseInt(author, 10) : undefined,
-        search: search?.trim()
-      };
-
-      const citations = await citationService.list(filters);
+      const citations = await citationService.list();
       return res.status(200).json(citations);
     } catch (err) {
       console.error('API citations error:', err);
       return res.status(500).json({ message: 'Unable to fetch citations' });
+    }
+  },
+
+  /**
+   * GET /api/citations/random
+   */
+  randomCitation: async (_req, res) => {
+    try {
+      const row = await citationService.random();
+      return res.status(200).json(row);
+    } catch (err) {
+      console.error('API random citation error:', err);
+      return res.status(500).json({ message: 'Unable to fetch random citation' });
     }
   },
 
