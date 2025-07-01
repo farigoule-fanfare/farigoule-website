@@ -17,14 +17,14 @@ export default function CrudTable({ rows, cols, rowActions }) {
             ))}
             {rowActions && (
               <td>
-                <div className="adminPanel-buttons">
+                <div className="contentPage-buttons">
                   {rowActions(r).map((a, i) => (
                     <button
                       key={i}
                       type="button"
                       disabled={a.disabled}
                       onClick={a.onClick}
-                      className={`adminPanel-button ${a.className || ''}`.trim()}
+                      className={`contentPage-button ${a.className || ''}`.trim()}
                     >
                       {a.icon} {a.label}
                     </button>

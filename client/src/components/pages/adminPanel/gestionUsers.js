@@ -86,13 +86,13 @@ export default function GestionUtilisateurs() {
       {
         icon: '🔑',
         label: 'Reset MP',
-        className: 'adminPanel-button--edit',
+        className: 'contentPage-button--edit',
         onClick: () => handleResetPassword(u),
       },
       {
         icon: getHighestRole(u.roles) === 'admin' ? '⬇' : '⬆',
         label: getHighestRole(u.roles) === 'admin' ? 'Retirer admin' : 'Ajouter admin',
-        className: 'adminPanel-button--delete',
+        className: 'contentPage-button--delete',
         onClick: () => handleToggleAdmin(u),
       },
     ];
