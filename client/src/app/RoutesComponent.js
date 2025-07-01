@@ -12,7 +12,7 @@ import NousPage from         "@components/Public/pages/NousPage";
 import ContactPage from      "@components/Public/pages/ContactPage";
 import Symphonies from       "@components/Public/pages/Symphonies";
 import Portraits from        "@components/Public/pages/Portraits";
-  Public
+
 // Pages utilisateurs  
 import UserProfile from      "@components/Profile/UserProfile";
 import ChangePassword from   "@components/Auth/ChangePassword";
