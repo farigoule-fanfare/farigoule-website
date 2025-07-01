@@ -4,17 +4,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './Header.css';
 
-import logoFarigouleSrc from '../../img/logo-farigoule.png';
-import boutonAccueilSrc from '../../img/boutons/bouton-accueil.png';
-import boutonAccueilHoverSrc from '../../img/boutons/bouton-accueil-hover.png';
-import boutonNousSrc from '../../img/boutons/bouton-nous.png';
-import boutonNousHoverSrc from '../../img/boutons/bouton-nous-hover.png';
-import boutonSymphoniesSrc from '../../img/boutons/bouton-symphonies.png';
-import boutonSymphoniesHoverSrc from '../../img/boutons/bouton-symphonies-hover.png';
-import boutonPortraitsSrc from '../../img/boutons/bouton-portraits.png';
-import boutonPortraitsHoverSrc from '../../img/boutons/bouton-portraits-hover.png';
-import boutonContactSrc from '../../img/boutons/bouton-contact.png';
-import boutonContactHoverSrc from '../../img/boutons/bouton-contact-hover.png';
+import logoFarigouleSrc from '@assets/images/logo-farigoule.png';
+import boutonAccueilSrc from '@assets/images/boutons/bouton-accueil.png';
+import boutonAccueilHoverSrc from '@assets/images/boutons/bouton-accueil-hover.png';
+import boutonNousSrc from '@assets/images/boutons/bouton-nous.png';
+import boutonNousHoverSrc from '@assets/images/boutons/bouton-nous-hover.png';
+import boutonSymphoniesSrc from '@assets/images/boutons/bouton-symphonies.png';
+import boutonSymphoniesHoverSrc from '@assets/images/boutons/bouton-symphonies-hover.png';
+import boutonPortraitsSrc from '@assets/images/boutons/bouton-portraits.png';
+import boutonPortraitsHoverSrc from '@assets/images/boutons/bouton-portraits-hover.png';
+import boutonContactSrc from '@assets/images/boutons/bouton-contact.png';
+import boutonContactHoverSrc from '@assets/images/boutons/bouton-contact-hover.png';
 
 function Header(props) {
     const [isAccueilHovered, setIsAccueilHovered] = useState(false);

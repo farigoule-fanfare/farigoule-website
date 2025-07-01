@@ -1,6 +1,6 @@
 import React from 'react';
 import ContentPageLayout from '../layout/ContentPageLayout';
-import nousImage from '@img/nous.jpg'; 
+import nousImage from '@assets/images/nous.jpg'; 
 import './NousPage.css';
 
 const NousPage = () => {

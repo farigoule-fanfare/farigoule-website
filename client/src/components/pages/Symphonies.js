@@ -4,12 +4,12 @@ import ContentPageLayout from "../layout/ContentPageLayout";
 import "./Symphonies.css";
 
 // Import audio files
-import epic from "../../mp3/epic.mp3";
-import disco from "../../mp3/disco.mp3";
-import mestizaje from "../../mp3/mesti.mp3";
-import oneTit from "../../mp3/onetit.mp3";
-import kro from "../../mp3/kro.mp3";
-import boys from "../../mp3/boys.mp3";
+import epic from      "@assets/audio/epic.mp3";
+import disco from     "@assets/audio/disco.mp3";
+import mestizaje from "@assets/audio/mesti.mp3";
+import oneTit from    "@assets/audio/onetit.mp3";
+import kro from       "@assets/audio/kro.mp3";
+import boys from      "@assets/audio/boys.mp3";
 
 
 const audioMap = {

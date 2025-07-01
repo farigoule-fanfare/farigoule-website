@@ -1,6 +1,6 @@
 import React from 'react';
 import AdminPageLayout from '../../layout/AdminPageLayout';
-import AdminCrudSection from './helpers/AdminCrudSection';
+import AdminCrudSection from '../components/AdminCrudSection';
 
 export default function GestionAccueil() {
   return (
