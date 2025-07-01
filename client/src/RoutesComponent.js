@@ -6,12 +6,12 @@ import { useAuth } from "@features/auth";
 import PageWrapper from      "@components/common/PageWrapper";
     
 // Pages publiques     
-import LandingPage from      "@components/Public/pages/LandingPage";
+import { LandingPage } from "@features/public";
 import { LoginPage } from '@features/auth';
-import NousPage from         "@components/Public/pages/NousPage";
-import ContactPage from      "@components/Public/pages/ContactPage";
-import Symphonies from       "@components/Public/pages/Symphonies";
-import Portraits from        "@components/Public/pages/Portraits";
+import { NousPage } from "@features/public";
+import { ContactPage } from "@features/public";
+import { Symphonies } from "@features/public";
+import { Portraits } from "@features/public";
 
 // Pages utilisateurs  
 import UserProfile from      "@components/Profile/UserProfile";
