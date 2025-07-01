@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import './App.css';
 
 import { RoutesComponent } from './RoutesComponent';
-import { AuthProvider } from '@context/AuthContext';
+import { AuthProvider } from "@features/auth";
 
 export function App(props) {
   return (

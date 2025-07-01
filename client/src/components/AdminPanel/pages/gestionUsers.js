@@ -1,7 +1,7 @@
 import React from 'react';
 import AdminPageLayout from '../../layout/AdminPageLayout';
 import AdminCrudSection from '../components/AdminCrudSection';
-import { useAuth } from '../../../context/AuthContext';
+import { useAuth } from '@features/auth';
 import { axiosWrapper } from '@services/axiosUtils';
 
 export default function GestionUtilisateurs() {
