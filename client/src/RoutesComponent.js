@@ -28,32 +28,20 @@ import GestionUsers from     "@components/AdminPanel/pages/gestionUsers";
 import RequireAuth from      "@components/common/RequireAuth";
 import NotFound from         "@components/common/NotFound";
 
-// Restriction admin
-function AdminRoute({ children }) {
-  const { currentUser } = useAuth();
-  const roles = currentUser?.roles || [];
-  if (!roles.includes("admin")) {
-    return <Navigate to="/" replace />;
-  }
-  return children;
-}
-
 // Wrappers de page
 const PublicPage = ({ children }) => (
-  <PageWrapper privatePage={false}>{children}</PageWrapper>
+  <PageWrapper>{children}</PageWrapper>
 );
 
 const PrivatePage = ({ children }) => (
   <RequireAuth>
-    <PageWrapper privatePage>{children}</PageWrapper>
+    <PageWrapper>{children}</PageWrapper>
   </RequireAuth>
 );
 
 const AdminPage = ({ children }) => (
-  <RequireAuth>
-    <AdminRoute>
-      <PageWrapper privatePage>{children}</PageWrapper>
-    </AdminRoute>
+  <RequireAuth requiredRole="admin">
+      <PageWrapper>{children}</PageWrapper>
   </RequireAuth>
 );
 
