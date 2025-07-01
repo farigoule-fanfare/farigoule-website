@@ -45,27 +45,6 @@
     font-size: 1em;
 }
 
-.login-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #c10000; /* Example red color, similar to Farigoule theme */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 1.1em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.login-button:hover {
-    background-color: #a10000; /* Darker red on hover */
-}
-
-.login-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
 .error-message {
     color: #c10000; /* Red for errors */
     background-color: #fdd;

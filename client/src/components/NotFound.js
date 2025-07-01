@@ -13,7 +13,7 @@ function NotFound() {
       <p style={{ textAlign: 'center' }}>
         <button
         onClick={() => navigate('/')}
-        className='adminPanel-button' type="submit"
+        className='contentPage-button contentPage-button--submit' type="submit"
         onMouseEnter={e => e.currentTarget.style.backgroundColor = '#0056b3'}
         onMouseLeave={e => e.currentTarget.style.backgroundColor = '#007bff'}
         >
@@ -30,7 +30,7 @@ function NotFound() {
       
         <button
           onClick={() => navigate('/')}
-          className='adminPanel-button' type="submit"
+          className='contentPage-button contentPage-button--submit' type="submit"
           onMouseEnter={e => e.currentTarget.style.backgroundColor = '#0056b3'}
           onMouseLeave={e => e.currentTarget.style.backgroundColor = '#007bff'}
         >
