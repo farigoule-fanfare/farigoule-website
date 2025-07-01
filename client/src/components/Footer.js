@@ -79,8 +79,8 @@ function Footer () {
             <button
               onClick={handleLogout}
               disabled={isLoading}
-              className="adminPanel-button"
-              type = 'delete'
+              className="adminPanel-button adminPanel-button--delete"
+              type = 'button'
             >
               Déconnexion
             </button><br />
