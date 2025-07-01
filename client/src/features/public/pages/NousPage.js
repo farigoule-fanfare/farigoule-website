@@ -1,5 +1,5 @@
 import React from 'react';
-import ContentPageLayout from '../../layout/ContentPageLayout';
+import ContentPageLayout from '../../../components/layout/ContentPageLayout';
 import nousImage from '@assets/images/nous.jpg'; 
 import './NousPage.css';
 
