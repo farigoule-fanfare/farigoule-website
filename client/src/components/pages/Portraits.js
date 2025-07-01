@@ -85,26 +85,29 @@ const Portraits = () => {
         className={`blocAnnuaire container ${selectedFanfaron ? "twoColumns" : ""}`}
       >
         {fanfaronsSorted.map(f => (
+          
           <div
             key={f.id}
             id={f.id}
             className="blocFanfaron"
             onClick={() => setSelectedId(selectedId === f.id ? null : f.id)}
           >
-            <div className='pInfosFanfaron'>
-              <p>
+              <p className="pInfosFanfaron">
                 <strong>{f.surnom}</strong><br />
                 {`${f.instrument.charAt(0).toUpperCase() + f.instrument.slice(1)}${f.promo ? ` (${f.promo})` :""}`}
               </p>
+              
+            <div className="wrapperPhoto">
               {(f.bureau && ["president","chefmu","trez","com","biere"].includes(f.bureau)) && (
                 <img
                   src={require(`../../img/boutons/bouton-${f.bureau}.png`)}
                   alt="Bureau"
-                  className="imageBureau"
+                  className="badgeBureau"
                 />
               )}
-            </div>
+            
             <img src={f.photoUrl} alt="Fanfaron" className="apercuFanfaron"/>
+            </div>
           </div>
         ))}
       </div>
