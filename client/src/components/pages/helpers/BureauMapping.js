@@ -1,4 +1,3 @@
-// src/utils/BureauMapping.js
 export const BureauMapping = {
   "":         "Blairo",        // valeur vide → sans-poste
   president:  "Président(e)",
@@ -6,4 +5,5 @@ export const BureauMapping = {
   trez:       "Trésorier(e)",
   com:        "Respo Com’",
   biere:      "Respo Bière",
+  prev:       "Respo Prév’",
 };
