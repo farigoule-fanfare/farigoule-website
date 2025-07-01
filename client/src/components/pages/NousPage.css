@@ -1,18 +1,3 @@
-/* Styles for NousPage.js, adapted from old nous.css */
-
-.container-nous-page {
-  padding: 20px;
-  max-width: 900px; /* Or your preferred max width */
-  margin: 0 auto; /* Center the content */
-}
-
-/* Alignement des paragraphes */
-.pTexteFarigoule {
-  text-align: justify;
-  margin-bottom: 1em; /* Add some spacing between paragraphs */
-  line-height: 1.6; /* Improve readability */
-}
-
 .pPhotoFarigoule {
   text-align: center;
   margin-top: 1em;
