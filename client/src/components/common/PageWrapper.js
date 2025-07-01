@@ -1,112 +1,47 @@
-// Copyright © FINANCE SECURITY GmbH - All rights reserved.
-import React, { useEffect, useState, lazy, Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 import PropTypes from "prop-types";
 
 import Loading from "@components/common/Loading";
-import {axiosWrapper} from '@services/axiosUtils';
 
 const Header = lazy(() => import("@components/common/Header"));
 const Footer = lazy(() => import("@components/common/Footer"));
 const RequireAuth = lazy(() => import("@components/common/RequireAuth"));
 
-// TODO envoyer si l'utilisateur est connecté ou non + 
-// TODO infos président
-function PageWrapper(props) {
-    const [citationsArray, setCitationsArray] = useState([]);
-    const [citationObject, setCitationObject] = useState({ citation: "", auteurCitation: "" });
-    const [president] = useState({ nom: "", phone: "" });
+/**
+ * PageWrapper : enveloppe générique d’une page
+ * ─ Structure : Header / Main / Footer
+ * ─ Code-splitting : Header, Footer, RequireAuth chargés paresseusement
+ * ─ Option « privatePage » : encapsule le contenu dans <RequireAuth>
+ *   avec « requiredRole » si nécessaire.
+ * NB : Le Header et le Footer gèrent désormais eux-mêmes leurs données
+ *      (citations, président, etc.). Le wrapper reste purement structurel.
+ */
+function PageWrapper({ children, privatePage = false, requiredRole }) {
+  const Content = (
+    <div id="pageWrapperContainer" className="wrapper">
+      <Header />
 
-    // Fetch all citations on initial component mount
-    useEffect(() => {
-        const fetchAllCitations = async () => {
-            try {
-                const response = await axiosWrapper({
-                    url: "api/citations",
-                    method: "get"
-                });
+      <main className="wrapper-content">{children}</main>
 
-                const allCitations = response.data;
+      <Footer />
+    </div>
+  );
 
-                if (Array.isArray(allCitations) && allCitations.length > 0) {
-                    setCitationsArray(allCitations);
-                    const randomIndex = Math.floor(Math.random() * allCitations.length);
-                    setCitationObject(allCitations[randomIndex]); 
-                } else {
-                    console.warn("No citations fetched or empty list. Response:", response);
-                    setCitationsArray([]);
-                }
-                }
-                catch (e) {
-                console.error("Error in fetchAllCitations calling axiosWrapper:", e);
-                setCitationsArray([]);
-                }
-        };
-
-        fetchAllCitations();
-        getPresident(); // Assuming this is intended to run on mount too
-    }, []); // Empty dependency array: runs only once on mount
-
-    // Effect to cycle through citationsArray every 10 seconds
-    useEffect(() => {
-        if (citationsArray.length === 0) return; // Don't run interval if no citations
-
-        const interval = setInterval(() => {
-            let randomIndex = Math.floor(Math.random() * citationsArray.length);
-            // Simple way to try to avoid immediate repeat if more than one citation
-            // Ensure citationObject.citation is not undefined before comparing
-            if (citationObject.citation !== undefined && citationsArray[randomIndex].citation === citationObject.citation) {
-                randomIndex = (randomIndex + 1) % citationsArray.length;
-            }
-            setCitationObject(citationsArray[randomIndex]);
-        }, 10000); // Cycle every 10 seconds
-
-        return () => clearInterval(interval); // Cleanup interval on component unmount
-    }, [citationsArray, citationObject.citation]); // Dependencies for re-evaluating cycle logic
-
-    // TODO load infos président depuis la liste des fanfarons avec le numéro de téléphone
-    const getPresident = async () => {
-        try {
-            // TODO: Implement president fetching
-        }
-        catch (e) {
-            // console.error("Failed to fetch president info:", e);
-        }
-    }
-
-    const pageContent = (
-        <div id="pageWrapperContainer" className="wrapper">
-            <Header
-                citation={citationObject.citation}
-                auteurCitation={citationObject.auteurCitation}
-            />
-            <main className={"wrapper-content"}>
-                {props.children}
-            </main>
-            <Footer
-                president={president}
-                // isConnected and isAdmin will be updated in the next step using useAuth()
-                // isConnected={false} 
-                // isAdmin={false} 
-            />
-        </div>
-    );
-
-    return (
-        <Suspense fallback={<Loading />}>
-            {props.privatePage ? (
-                <RequireAuth requiredRole={props.requiredRole}>
-                    {pageContent}
-                </RequireAuth>
-            ) : (
-                pageContent
-            )}
-        </Suspense>
-    );
+  return (
+    <Suspense fallback={<Loading />}> 
+      {privatePage ? (
+        <RequireAuth requiredRole={requiredRole}>{Content}</RequireAuth>
+      ) : (
+        Content
+      )}
+    </Suspense>
+  );
 }
 
 PageWrapper.propTypes = {
-    privatePage: PropTypes.bool,
-    requiredRole: PropTypes.string //oneOf["fanfaron", "admin"] - comment indicates previous thought, actual is string
+  children: PropTypes.node.isRequired,
+  privatePage: PropTypes.bool,
+  requiredRole: PropTypes.string,
 };
 
 export default PageWrapper;
