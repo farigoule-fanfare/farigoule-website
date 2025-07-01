@@ -27,6 +27,7 @@
   gap: 1.5rem;
   justify-content: center;
   width: 100%;
+  margin-bottom: 2rem;
 }
 
 .portrait-container.noDesc #annuaire {
@@ -126,49 +127,4 @@
   width: 100%;
   height: auto;
   border-radius: 0.5rem;
-}
-
-/* --- Filtres (en bas de page) --- */
-.filtrerResultats {
-  display: table;
-  margin: 1.5rem auto;
-  background-color: rgba(255,255,255,0.85);
-  border: 0.15rem solid black;
-  border-radius: 0.5rem;
-  padding: 1rem 2rem;
-  width: 80%;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  text-align: center;
-}
-
-.filtrerResultats h3 {
-  margin:       0 0 1rem;
-  font-size:    1.25rem;
-  font-weight:  bold;
-}
-
-.filtrerResultats label {
-  display:       block;
-  margin:        0.5rem 0;
-  font-weight:   500;
-}
-
-.filtrerResultats label select {
-  margin-left:   0.5rem;
-}
-
-/* Bouton “Retour en haut” */
-.filtrerResultats .backToTop, .portrait-header .alertTooMany{
-  display:       inline-block;
-  margin-top:    0.1rem;
-  padding:       0.25rem 0.75rem;
-  text-decoration: none;
-  border:        0.1rem solid #999;
-  border-radius: 0.5rem;
-  background:    #fff;
-  color:         #333;
-  transition:    background-color 0.2s;
-}
-.filtrerResultats .backToTop:hover, .portrait-header .alertTooMany:hover {
-  background-color: #f0f0f0;
 }

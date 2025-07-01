@@ -68,7 +68,7 @@ const Portraits = () => {
         <h2 className="titre-annuaire" id="annuaire-title">L’annuaire des fanfarons</h2>
         {fanfarons.length > 20 && (
           <button
-            className="alertTooMany"
+            className="contentPage-button contentPage-button--submit"
             onClick={() => {
               setSelectedId(null);
               const el = document.getElementById("filtrerResultats");
@@ -122,49 +122,66 @@ const Portraits = () => {
       )}
     </div>
 
-    <div id="filtrerResultats" className="filtrerResultats">
-      <h3>Filtrer les résultats</h3>
-      <label>
-        Instrument:
-        <select value={filterInstrument} onChange={e => setFilterInstrument(e.target.value)}>
-          <option value="">Tous</option>
-          {instruments.map(inst => (
-            <option key={inst} value={inst}>{inst.charAt(0).toUpperCase() + inst.slice(1)}</option>
-          ))}
-        </select>
-      </label>
-      <label>
-        Promo:
-        <select value={filterPromo} onChange={e => setFilterPromo(e.target.value)}>
-          <option value="">Toutes</option>
-          {promos.map(p => (
-            <option key={p} value={p}>{p}</option>
-          ))}
-        </select>
-      </label>
-      <label>
-        Bureau :
-        <select
-          value={filterBureau}
-          onChange={e => setFilterBureau(e.target.value)}
-        >
-          {bureauOptions.map(opt => (
-            <option key={opt.value || "__empty"} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-      </label>
-      <button
-        type="button"
-        className="backToTop"
-        onClick={() => {
-          const el = document.getElementById("annuaire-title");
-          if (el) el.scrollIntoView({ behavior: "smooth" });
-        }}
+    {/* --- Filtrer les résultats --- */}
+    <div id="filtrerResultats" className="contentPage-form-wrapper">
+      <form
+        className="contentPage-form"
+        onSubmit={e => e.preventDefault()}
       >
-        Retour en haut
-      </button>
+        <h3 style={{gridColumn:'1 / -1'}}>Filtrer les résultats</h3>
+
+        <div className="contentPage-form-group">
+          <label htmlFor="instrument" className="contentPage-label">Instrument :</label>
+          <select
+            id="instrument"
+            className="contentPage-input"
+            value={filterInstrument}
+            onChange={e => setFilterInstrument(e.target.value)}
+          >
+            <option value="">Tous</option>
+            {instruments.map(inst => (
+              <option key={inst} value={inst}>{inst.charAt(0).toUpperCase()+inst.slice(1)}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="contentPage-form-group">
+          <label htmlFor="promo" className="contentPage-label">Promo :</label>
+          <select
+            id="promo"
+            className="contentPage-input"
+            value={filterPromo}
+            onChange={e => setFilterPromo(e.target.value)}
+          >
+            <option value="">Toutes</option>
+            {promos.map(p => <option key={p} value={p}>{p}</option>)}
+          </select>
+        </div>
+
+        <div className="contentPage-form-group">
+          <label htmlFor="bureau" className="contentPage-label">Bureau :</label>
+          <select
+            id="bureau"
+            className="contentPage-input"
+            value={filterBureau}
+            onChange={e => setFilterBureau(e.target.value)}
+          >
+            {bureauOptions.map(opt => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="contentPage-buttons" style={{gridColumn:'1 / -1'}}>
+          <button
+            type="button"
+            className="contentPage-button contentPage-button--submit"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
+            Retour en haut
+          </button>
+        </div>
+      </form>
     </div>
   </ContentPageLayout>
   );
