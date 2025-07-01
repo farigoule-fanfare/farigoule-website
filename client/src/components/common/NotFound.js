@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import ContentPageLayout from './layout/ContentPageLayout';
-import LostImg from '@assets/images/not-found.png'; // remplacez 'lost.png' par le nom de votre fichier
+import ContentPageLayout from '../layout/ContentPageLayout';
+import LostImg from '@assets/images/not-found.png';
 
 function NotFound() {
   const navigate = useNavigate();

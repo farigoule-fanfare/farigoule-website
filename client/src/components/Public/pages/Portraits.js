@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 
 import { axiosWrapper } from "@api/axiosUtils";
 
-import ContentPageLayout from "../layout/ContentPageLayout";
-import FanfaronDescription from "./helpers/FanfaronDescription";
-import { BureauMapping } from "./helpers/BureauMapping"
+import ContentPageLayout from "../../layout/ContentPageLayout";
+import FanfaronDescription from "../components/FanfaronDescription";
+import { BureauMapping } from "../components/BureauMapping"
 
 import "./Portraits.css";
 
