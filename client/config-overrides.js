@@ -12,7 +12,5 @@ module.exports = override(
     '@context': path.resolve(__dirname, 'src/context'),
     '@providers': path.resolve(__dirname, 'src/providers'),
     '@api': path.resolve(__dirname, 'src/api'),
-    '@mp3': path.resolve(__dirname, 'src/mp3'),
-    '@fonts': path.resolve(__dirname, 'src/fonts'),
   })
 );
