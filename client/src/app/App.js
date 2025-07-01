@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 import './App.css';
 
-import { RoutesComponent } from '../RoutesComponent';
+import { RoutesComponent } from './RoutesComponent';
 import ContextProvider from '../ContextProvider';
 
 export function App(props) {
