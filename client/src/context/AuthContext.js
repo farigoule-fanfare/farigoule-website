@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { axiosWrapper } from '@api/axiosUtils';
+import { axiosWrapper } from '@services/axiosUtils';
 
 const AuthContext = createContext(null);
 

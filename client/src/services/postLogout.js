@@ -1,4 +1,4 @@
-import { axiosWrapper } from '@api/axiosUtils'
+import { axiosWrapper } from '@services/axiosUtils'
 
 export const postLogout = async () => {
     return axiosWrapper({
