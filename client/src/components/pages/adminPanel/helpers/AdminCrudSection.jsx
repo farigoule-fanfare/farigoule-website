@@ -74,7 +74,7 @@ export default function AdminCrudSection({
       acts.push({
         icon: '✎',
         label: '',
-        className: 'adminPanel-button--edit',
+        className: 'contentPage-button--edit',
         onClick: () => {
           setForm({ ...row });
           if (form.photoFanfaron !== undefined) form.photoFanfaron = '';
@@ -89,7 +89,7 @@ export default function AdminCrudSection({
       acts.push({
         icon: '🗑',
         label: '',
-        className: 'adminPanel-button--delete',
+        className: 'contentPage-button--delete',
         onClick: async () => {
           if (window.confirm('Supprimer ?')) {
             await axiosWrapper({ method: 'delete', url: deleteUrl(row.id) });
@@ -113,7 +113,7 @@ export default function AdminCrudSection({
         rows={rows}
         cols={tableCols}
         rowActions={(r) =>
-          (actions(r) || []).map((a) => ({ ...a, className: `adminPanel-button ${a.className || ''}` }))
+          (actions(r) || []).map((a) => ({ ...a, className: `contentPage-button ${a.className || ''}` }))
         }
       />
 
@@ -126,16 +126,16 @@ export default function AdminCrudSection({
           onChange={setForm}
           onSubmit={handleSubmit}
         >
-          <div className="adminPanel-buttons">
+          <div className="contentPage-buttons">
             <button
-              className="adminPanel-button adminPanel-button--submit"
+              className="contentPage-button contentPage-button--submit"
               type="submit"
             >
               {editId ? 'Mettre à jour' : 'Envoyer'}
             </button>
             {editId && (
               <button
-                className="adminPanel-button adminPanel-button--cancel"
+                className="contentPage-button contentPage-button--cancel"
                 type="button"
                 onClick={() => {
                   setForm(emptyForm);
