@@ -3,7 +3,6 @@ import { useAuth } from '../../context/AuthContext';
 import { axiosWrapper } from '../../api/axiosUtils';
 import ContentPageLayout from '../layout/ContentPageLayout';
 import { useNavigate } from 'react-router-dom';
-import './UserProfile.css';
 
 export default function UserProfile() {
   const { currentUser, isLoading, checkAuthStatus } = useAuth();
@@ -109,16 +108,10 @@ export default function UserProfile() {
               onChange={handleChange}
             />
           </div>
-          <button className='userProfile-button' type="submit">Enregistrer</button>
 
-            <div className="contentPage-actions">
-              <button
-                  onClick={handleChangePassword}
-                  className="adminPanel-button"
-                  type = "submit"
-              >
-                  Modifier mon mot de passe
-                </button>
+          <div className="contentPage-buttons">
+              <button className='contentPage-button contentPage-button--submit' type="submit">Enregistrer</button>
+              <button className="contentPage-button contentPage-button--update" onClick={handleChangePassword} type = "button" >Modifier mon mot de passe</button>
         </div>
         </form>
         {status && <div className="adminPanel-status">{status}</div>}

@@ -47,10 +47,10 @@ function Header(props) {
                     {isAuthenticated && (
                         <>
                             <span className="auth-user">Bienvenue, {currentUser?.surnom} !</span>
-                            <button onClick={handleGoProfile} className="adminPanel-button adminPanel-button--edit" type="button">
+                            <button onClick={handleGoProfile} className="contentPage-button contentPage-button--edit" type="button">
                                 Mon profil
                             </button>
-                            <button onClick={handleLogout} disabled={isLoading} className="adminPanel-button adminPanel-button--delete" type="button">
+                            <button onClick={handleLogout} disabled={isLoading} className="contentPage-button contentPage-button--delete" type="button">
                                 Déconnexion
                             </button>
                         </>

@@ -59,7 +59,7 @@ function LoginPage() {
                 </div>
                 {authError && <p className="error-message">{authError}</p>}
                 <div className="form-group">
-                    <button type="submit" disabled={isLoading} className="login-button">
+                    <button type="submit" disabled={isLoading} className="contentPage-button contentPage-button--submit">
                         {isLoading ? 'Connecting...' : 'Se connecter'}
                     </button>
                 </div>
