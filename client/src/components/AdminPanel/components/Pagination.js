@@ -1,4 +1,5 @@
 import React from 'react';
+import './Pagination.css';
 
 export default function Pagination({ currentPage, totalPages, onPageChange }) {
   const getPageRange = () => {
