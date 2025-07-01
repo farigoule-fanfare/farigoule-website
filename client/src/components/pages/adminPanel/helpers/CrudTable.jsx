@@ -17,7 +17,7 @@ export default function CrudTable({ rows, cols, rowActions }) {
             ))}
             {rowActions && (
               <td>
-                <div className="contentPage-buttons">
+                <div className="contentPage-buttons--actions">
                   {rowActions(r).map((a, i) => (
                     <button
                       key={i}
