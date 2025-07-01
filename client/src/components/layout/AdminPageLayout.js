@@ -51,9 +51,7 @@ export default function AdminLayout({ title, children }) {
 
         {/* ======= Contenu spécifique ======= */}
         <section className="admin-panel-content">
-          <div className="content-page-main">
             {children}
-          </div>
         </section>
       </div>
     </ContentPageLayout>
