@@ -1,4 +1,4 @@
-import { axiosWrapper } from '@api/axiosUtils'
+import { axiosWrapper } from '@services/axiosUtils'
 
 export const postCheckAuthToken = async (data) => {
     return axiosWrapper({

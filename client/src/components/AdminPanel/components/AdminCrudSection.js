@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import Pagination from '../../utils/Pagination';
-import { axiosWrapper } from '@api/axiosUtils';
+import { axiosWrapper } from '@services/axiosUtils';
 import { useCrudList } from '@hooks/useCrudList';
 import CrudTable from './CrudTable';
 import CrudForm from './CrudForm';

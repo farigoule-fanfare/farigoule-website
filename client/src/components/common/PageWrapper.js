@@ -3,7 +3,7 @@ import React, { useEffect, useState, lazy, Suspense } from "react";
 import PropTypes from "prop-types";
 
 import Loading from "@components/utils/Loading";
-import {axiosWrapper} from '@api/axiosUtils';
+import {axiosWrapper} from '@services/axiosUtils';
 
 const Header = lazy(() => import("@components/common/Header"));
 const Footer = lazy(() => import("@components/common/Footer"));

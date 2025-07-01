@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ContentPageLayout from '../../layout/ContentPageLayout';
 import Slider from 'react-slick';
-import { axiosWrapper } from '../../../api/axiosUtils';
+import { axiosWrapper } from '@services/axiosUtils';
 
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { axiosWrapper } from "@api/axiosUtils";
+import { axiosWrapper } from "@services/axiosUtils";
 
 import ContentPageLayout from "../../layout/ContentPageLayout";
 import FanfaronDescription from "../components/FanfaronDescription";
