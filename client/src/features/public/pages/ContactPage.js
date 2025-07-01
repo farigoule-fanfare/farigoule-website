@@ -1,5 +1,5 @@
 import React from 'react';
-import ContentPageLayout from '../../layout/ContentPageLayout';
+import ContentPageLayout from '../../../components/layout/ContentPageLayout';
 
 const ContactPage = () => {
   return (
