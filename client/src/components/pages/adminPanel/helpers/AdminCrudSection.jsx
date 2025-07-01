@@ -65,7 +65,7 @@ export default function AdminCrudSection({
     refetch();
   };
 
-  /* ---------------- Actions par défaut ---------------- */
+   /* ---------------- Actions par défaut ---------------- */
   const defaultRowActions = (row) => {
     const acts = [];
 
@@ -74,6 +74,7 @@ export default function AdminCrudSection({
       acts.push({
         icon: '✎',
         label: '',
+        className: 'adminPanel-button--edit',
         onClick: () => {
           setForm({ ...row });
           if (form.photoFanfaron !== undefined) form.photoFanfaron = '';
@@ -88,6 +89,7 @@ export default function AdminCrudSection({
       acts.push({
         icon: '🗑',
         label: '',
+        className: 'adminPanel-button--delete',
         onClick: async () => {
           if (window.confirm('Supprimer ?')) {
             await axiosWrapper({ method: 'delete', url: deleteUrl(row.id) });
@@ -107,7 +109,13 @@ export default function AdminCrudSection({
     <section className="adminPanel-section">
       {title && <h2>{title}</h2>}
 
-      <CrudTable rows={rows} cols={tableCols} rowActions={actions} />
+      <CrudTable
+        rows={rows}
+        cols={tableCols}
+        rowActions={(r) =>
+          (actions(r) || []).map((a) => ({ ...a, className: `adminPanel-button ${a.className || ''}` }))
+        }
+      />
 
       <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
 
@@ -119,12 +127,15 @@ export default function AdminCrudSection({
           onSubmit={handleSubmit}
         >
           <div className="adminPanel-buttons">
-            <button className="adminPanel-button" type="submit">
+            <button
+              className="adminPanel-button adminPanel-button--submit"
+              type="submit"
+            >
               {editId ? 'Mettre à jour' : 'Envoyer'}
             </button>
             {editId && (
               <button
-                className="adminPanel-button"
+                className="adminPanel-button adminPanel-button--cancel"
                 type="button"
                 onClick={() => {
                   setForm(emptyForm);
