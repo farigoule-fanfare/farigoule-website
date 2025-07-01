@@ -2,12 +2,12 @@
 import React, { useEffect, useState, lazy, Suspense } from "react";
 import PropTypes from "prop-types";
 
-import Loading from "@components/utils/Loading";
+import Loading from "@components/common/Loading";
 import {axiosWrapper} from '@services/axiosUtils';
 
 const Header = lazy(() => import("@components/common/Header"));
 const Footer = lazy(() => import("@components/common/Footer"));
-const RequireAuth = lazy(() => import("@components/utils/RequireAuth"));
+const RequireAuth = lazy(() => import("@components/common/RequireAuth"));
 
 // TODO envoyer si l'utilisateur est connecté ou non + 
 // TODO infos président
