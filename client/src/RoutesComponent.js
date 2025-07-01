@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
-import { useAuth } from "./context/AuthContext";
+import { useAuth } from "@features/auth";
 
 // Layout
 import PageWrapper from      "@components/common/PageWrapper";
     
 // Pages publiques     
 import LandingPage from      "@components/Public/pages/LandingPage";
-import LoginPage from        "@components/Auth/LoginPage";
+import { LoginPage } from '@features/auth';
 import NousPage from         "@components/Public/pages/NousPage";
 import ContactPage from      "@components/Public/pages/ContactPage";
 import Symphonies from       "@components/Public/pages/Symphonies";

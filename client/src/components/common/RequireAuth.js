@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation, Navigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext'; // Adjusted path
+import { useAuth } from '@features/auth'; // Adjusted path
 import Loading from './Loading'; // Assuming Loading component is in the same directory or adjust path
 import PropTypes from 'prop-types';
 
