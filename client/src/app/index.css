@@ -10,7 +10,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* Copied from old global.css */
-  background: url("./img/background.jpg"); /* Adjusted path to be relative to src/img */
+  background: url("@assets/images/background.jpg");
   font-family: 'Open Sans', sans-serif; /* Requires font import */
 }
 

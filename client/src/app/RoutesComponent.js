@@ -1,32 +1,32 @@
 import React, { useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
-import { useAuth } from "./context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 // Layout
-import PageWrapper from "@components/common/PageWrapper";
+import PageWrapper from "../components/common/PageWrapper";
 
 // Pages publiques
 import LandingPage from "@components/LandingPage";
-import LoginPage from   "@components/auth/LoginPage";
-import NousPage from    "@components/pages/NousPage";
-import ContactPage from "@components/pages/ContactPage";
-import Symphonies from  "@components/pages/Symphonies";
-import Portraits from   "@components/pages/Portraits";
+import LoginPage from "../components/auth/LoginPage";
+import NousPage from "../components/pages/NousPage";
+import ContactPage from "../components/pages/ContactPage";
+import Symphonies from "../components/pages/Symphonies";
+import Portraits from "../components/pages/Portraits";
 
 // Pages utilisateurs
-import UserProfile from    "@components/pages/UserProfile";
-import ChangePassword from '@components/pages/ChangePassword';
+import UserProfile from "../components/pages/UserProfile";
+import ChangePassword from '../components/pages/ChangePassword';
 
 // Admin
-import AdminPanel from       "@components/AdminPanel/pages/mainPanel";
-import GestionFanfarons from "@components/AdminPanel/pages/gestionFanfarons";
-import GestionAccueil from   "@components/AdminPanel/pages/gestionAccueil";
-import GestionCitations from "@components/AdminPanel/pages/gestionCitations";
-import GestionUsers from     "@components/AdminPanel/pages/gestionUsers";
+import AdminPanel from "../components/AdminPanel/pages/mainPanel";
+import GestionFanfarons from "../components/AdminPanel/pages/gestionFanfarons";
+import GestionAccueil from "../components/AdminPanel/pages/gestionAccueil";
+import GestionCitations from "../components/pages/adminPanel/gestionCitations";
+import GestionUsers from "../components/AdminPanel/pages/gestionUsers";
 
 // Utilitaires
-import RequireAuth from "@components/utils/RequireAuth";
-import NotFound from    "@components/NotFound";
+import RequireAuth from "../components/utils/RequireAuth";
+import NotFound from "@components/NotFound";
 
 // Restriction admin
 function AdminRoute({ children }) {
