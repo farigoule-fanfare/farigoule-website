@@ -3,7 +3,7 @@ import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 
 // Layout
-import PageWrapper from "./components/PageWrapper";
+import PageWrapper from "./components/common/PageWrapper";
 
 // Pages publiques
 import LandingPage from "@components/LandingPage";
