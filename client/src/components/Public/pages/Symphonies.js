@@ -1,6 +1,6 @@
 // src/components/pages/Symphonies.js
 import React, { useState } from "react";
-import ContentPageLayout from "../layout/ContentPageLayout";
+import ContentPageLayout from "../../layout/ContentPageLayout";
 import "./Symphonies.css";
 
 // Import audio files
