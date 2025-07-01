@@ -99,44 +99,6 @@
   }
 }
 
-/* Pagination */
-.pagination {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-bottom: var(--gap);
-}
-
-.pagination button {
-  width: 2.5rem;
-  padding: 0.5rem;
-  border: none;
-  border-radius: var(--border-radius);
-  background-color: var(--primary);
-  color: #fff;
-  cursor: pointer;
-  transition: filter 0.2s;
-}
-
-.pagination button[disabled] {
-  background-color: #6c757d;
-  cursor: default;
-}
-
-.pagination button:not([disabled]):hover {
-  filter: brightness(0.9);
-}
-
-.pagination button.active {
-  background-color: var(--success);
-  font-weight: bold;
-}
-.pagination span {
-  align-self: center;
-  padding: 0.3rem 0.6rem;
-}
-
-
 /* Format date sur deux lignes */
 .date-cell {
   white-space: nowrap;
