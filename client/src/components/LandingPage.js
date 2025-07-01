@@ -87,76 +87,74 @@ function LandingPage() {
 
     return (
         <ContentPageLayout title="Où avez-vous vu nos danseurs moldaves ?">
-            <div className="landing-page-content">
-                <section className="blocCarousel">
-                    {loading.diapos && <p>Chargement du carousel...</p>}
-                    {error.diapos && <p className="error-message">Erreur carousel: {error.diapos}</p>}
-                    {!loading.diapos && !error.diapos && (
-                        diapos.length > 0 ? (
-                            <Slider {...sliderSettings}>
-                                {diapos.map(item => (
-                                    <div key={item.id} className="carousel-slide">
-                                        <img src={item.imageUrl} alt={item.description} className='carousel-picture'/>
-                                        {item.description && <p className="carousel-caption">{item.description}</p>}
-                                    </div>
-                                ))}
-                            </Slider>
+            <section className="blocCarousel">
+                {loading.diapos && <p>Chargement du carousel...</p>}
+                {error.diapos && <p className="error-message">Erreur carousel: {error.diapos}</p>}
+                {!loading.diapos && !error.diapos && (
+                    diapos.length > 0 ? (
+                        <Slider {...sliderSettings}>
+                            {diapos.map(item => (
+                                <div key={item.id} className="carousel-slide">
+                                    <img src={item.imageUrl} alt={item.description} className='carousel-picture'/>
+                                    {item.description && <p className="carousel-caption">{item.description}</p>}
+                                </div>
+                            ))}
+                        </Slider>
+                    ) : (
+                        <p>Aucune image à afficher dans le carousel.</p>
+                    )
+                )}
+            </section>
+
+            <section className="blocDatesDeezer">
+                <div className="dates-container">
+                    <h2>Nos prochaines dates</h2>
+                    {loading.contrats && <p>Chargement des dates...</p>}
+                    {error.contrats && <p className="error-message">Erreur dates: {error.contrats}</p>}
+                    {!loading.contrats && !error.contrats && (
+                        upcomingContrats.length > 0 ? (
+                            upcomingContrats.map(contrat => (
+                                <p key={contrat.id}>
+                                    <span className="date">{formatDate(contrat.date)}</span><br />
+                                    {contrat.lieu}
+                                    {contrat.description && <><br /><span className="description">{contrat.description}</span></>}
+                                </p>
+                            ))
                         ) : (
-                            <p>Aucune image à afficher dans le carousel.</p>
+                            <p><br />Aucune date à venir pour le moment.</p>
                         )
                     )}
-                </section>
 
-                <section className="blocDatesDeezer">
-                    <div className="dates-container">
-                        <h2>Nos prochaines dates</h2>
-                        {loading.contrats && <p>Chargement des dates...</p>}
-                        {error.contrats && <p className="error-message">Erreur dates: {error.contrats}</p>}
-                        {!loading.contrats && !error.contrats && (
-                            upcomingContrats.length > 0 ? (
-                                upcomingContrats.map(contrat => (
-                                    <p key={contrat.id}>
-                                        <span className="date">{formatDate(contrat.date)}</span><br />
-                                        {contrat.lieu}
-                                        {contrat.description && <><br /><span className="description">{contrat.description}</span></>}
-                                    </p>
-                                ))
-                            ) : (
-                                <p><br />Aucune date à venir pour le moment.</p>
-                            )
-                        )}
-
-                        <h2>Et avant ?</h2>
-                        {!loading.contrats && !error.contrats && (
-                            pastContrats.length > 0 ? (
-                                pastContrats.map(contrat => (
-                                    <p key={contrat.id}>
-                                        <span className="date">{formatDate(contrat.date)}</span><br />
-                                        {contrat.lieu}
-                                        {contrat.description && <><br /><span className="description">{contrat.description}</span></>}
-                                    </p>
-                                ))
-                            ) : (
-                                <p>Aucune date passée récente.</p>
-                            )
-                        )}
+                    <h2>Et avant ?</h2>
+                    {!loading.contrats && !error.contrats && (
+                        pastContrats.length > 0 ? (
+                            pastContrats.map(contrat => (
+                                <p key={contrat.id}>
+                                    <span className="date">{formatDate(contrat.date)}</span><br />
+                                    {contrat.lieu}
+                                    {contrat.description && <><br /><span className="description">{contrat.description}</span></>}
+                                </p>
+                            ))
+                        ) : (
+                            <p>Aucune date passée récente.</p>
+                        )
+                    )}
+                </div>
+                <div className="deezer-container">
+                    <h2>Notre répertoire</h2>
+                    <div className="deezer-embed">
+                        <iframe
+                            title="deezer-widget"
+                            src="https://widget.deezer.com/widget/light/playlist/12284699171"
+                            width="100%"
+                            height="380"
+                            frameBorder="0"
+                            allowTransparency="true"
+                            allow="encrypted-media; clipboard-write"
+                        ></iframe>
                     </div>
-                    <div className="deezer-container">
-                        <h2>Notre répertoire</h2>
-                        <div className="deezer-embed">
-                            <iframe
-                                title="deezer-widget"
-                                src="https://widget.deezer.com/widget/light/playlist/12284699171"
-                                width="100%"
-                                height="380"
-                                frameBorder="0"
-                                allowTransparency="true"
-                                allow="encrypted-media; clipboard-write"
-                            ></iframe>
-                        </div>
-                    </div>
-                </section>
-            </div>
+                </div>
+            </section>
         </ContentPageLayout>
     );
 }
