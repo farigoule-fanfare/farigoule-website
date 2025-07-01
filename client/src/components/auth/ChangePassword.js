@@ -1,6 +1,6 @@
 // src/components/User/ChangePassword.js
 import React, { useState } from 'react';
-import { axiosWrapper } from '../../api/axiosUtils';
+import { axiosWrapper } from '@services/axiosUtils';
 import ContentPageLayout from '../layout/ContentPageLayout';
 
 export default function ChangePassword() {

@@ -18,7 +18,6 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage, fileFilter });
 
-// routes/api/fanfarons.js
 const router = require('express').Router();
 const ctrl   = require('../controllers/fanfaronsController');
 const { protect, authorize } = require('../middleware/authMiddleware');

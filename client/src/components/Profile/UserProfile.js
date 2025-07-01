@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { axiosWrapper } from '../../api/axiosUtils';
+import { axiosWrapper } from '@services/axiosUtils';
 import ContentPageLayout from '../layout/ContentPageLayout';
 import { useNavigate } from 'react-router-dom';
 
