@@ -1,7 +1,7 @@
 // src/layout/AdminLayout.jsx
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext'; // adapte selon ton hook
+import { useAuth } from '@features/auth'; // adapte selon ton hook
 import ContentPageLayout from './ContentPageLayout';
 import './AdminPageLayout.css';                     // styles pour .admin-panel-*
 
