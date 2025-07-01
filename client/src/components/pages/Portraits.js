@@ -100,7 +100,7 @@ const Portraits = () => {
             <div className="wrapperPhoto">
               {(f.bureau && ["president","chefmu","trez","com","biere","prev"].includes(f.bureau)) && (
                 <img
-                  src={require(`../../img/icones-bureau/icon-${f.bureau}.png`)}
+                  src={require(`@assets/images/icones-bureau/icon-${f.bureau}.png`)}
                   alt="Bureau"
                   className="badgeBureau"
                 />

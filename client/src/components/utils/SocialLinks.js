@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import './SocialLinks.css'; // We'll create this CSS file next
 
 // Import social media button images (normal and hover states)
-import facebookIcon from '../../img/boutons/bouton-facebook.png';
-import facebookIconHover from '../../img/boutons/bouton-facebook-hover.png';
-import youtubeIcon from '../../img/boutons/bouton-youtube.png';
-import youtubeIconHover from '../../img/boutons/bouton-youtube-hover.png';
-// import instagramIcon from '../../img/boutons/bouton-instagram.png';
-import instagramIcon from '../../img/boutons/bouton-instagram.png';
-import instagramIconHover from '../../img/boutons/bouton-instagram-hover.png';
+import facebookIcon from '@assets/images/boutons/bouton-facebook.png';
+import facebookIconHover from '@assets/images/boutons/bouton-facebook-hover.png';
+import youtubeIcon from '@assets/images/boutons/bouton-youtube.png';
+import youtubeIconHover from '@assets/images/boutons/bouton-youtube-hover.png';
+// import instagramIcon from '@assets/images/boutons/bouton-instagram.png';
+import instagramIcon from '@assets/images/boutons/bouton-instagram.png';
+import instagramIconHover from '@assets/images/boutons/bouton-instagram-hover.png';
 
 // Define a type or key for managing hover states if not using individual states
 const SOCIAL_KEYS = {
