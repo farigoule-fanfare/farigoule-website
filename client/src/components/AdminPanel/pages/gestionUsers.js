@@ -80,7 +80,7 @@ export default function GestionUtilisateurs() {
   ];
 
   /* -------- Row actions -------- */
-  const rowActions = (u) => {
+  const rowActions = (u, refetch) => {
     if (isMe(u)) return [];
     return [
       {
@@ -93,7 +93,10 @@ export default function GestionUtilisateurs() {
         icon: getHighestRole(u.roles) === 'admin' ? '⬇' : '⬆',
         label: getHighestRole(u.roles) === 'admin' ? 'Retirer admin' : 'Ajouter admin',
         className: 'contentPage-button--delete',
-        onClick: () => handleToggleAdmin(u),
+        onClick: async () => {
+          await handleToggleAdmin(u);
+          refetch();
+        },
       },
     ];
   };
