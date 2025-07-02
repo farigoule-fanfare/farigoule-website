@@ -1,96 +1,65 @@
-const db = require('../services/databaseService');
+const { _native: db } = require('../services/databaseService');
 
 const citationRepository = {
   /**
-   * Récupère toutes les citations
+   * Récupère toutes les citations.
+   * @returns {Promise<Array<{id:number,citation:string,auteur_id:number|null,auteurCitation:string}>>}
    */
-  findAll() {
-    const sql = `
+  async findAll() {
+    return db.prepare(`
       SELECT c.id, c.citation, c.auteur_id,
              COALESCE(f.surnom, 'Anonyme') AS auteurCitation
-      FROM citations c
-      LEFT JOIN fanfarons f ON c.auteur_id = f.id
-      ORDER BY c.citation
-    `;
-    return new Promise((resolve, reject) =>
-      db.all(sql, [], (err, rows) => (err ? reject(err) : resolve(rows)))
-    );
+        FROM citations c
+        LEFT JOIN fanfarons f ON c.auteur_id = f.id
+       ORDER BY c.citation
+    `).all();
   },
 
   /**
-   * Renvoie 1 citation tirée au hasard.
-   * @returns {Promise<{ id:number, citation:string, auteurCitation:string }>}
+   * Renvoie une citation tirée au hasard.
+   * @returns {Promise<{id:number,citation:string,auteur_id:number|null,auteurCitation:string}|null>}
    */
-  findRandom() {
-    const sql = `
+  async findRandom() {
+    return db.prepare(`
       SELECT c.id, c.citation, c.auteur_id,
              COALESCE(f.surnom, 'Anonyme') AS auteurCitation
-      FROM citations c
-      LEFT JOIN fanfarons f ON c.auteur_id = f.id
-      ORDER BY RANDOM()
-      LIMIT 1
-    `;
-    return new Promise((resolve, reject) =>
-      db.get(sql, [], (err, row) => (err ? reject(err) : resolve(row)))
-    );
-  },
- 
-  /**
-   * Vérifie l’existence d’une citation identique (mot pour mot).
-   * @param {string} citation
-   * @returns {Promise<boolean>}
-   */
-  existsExact(citation) {
-    const sql = 'SELECT 1 FROM citations WHERE citation = ? LIMIT 1';
-    return new Promise((resolve, reject) =>
-      db.get(sql, [citation], (err, row) => (err ? reject(err) : resolve(!!row)))
-    );
+        FROM citations c
+        LEFT JOIN fanfarons f ON c.auteur_id = f.id
+       ORDER BY RANDOM()
+       LIMIT 1
+    `).get();
   },
 
-  /**
-   * Insère une nouvelle citation.
-   * @param {{ citation: string, auteur_id: number|null }}
-   * @returns {Promise<{ id:number, citation:string, auteur_id:number|null }>}
-   */
-  create({ citation, auteur_id }) {
-    const sql = 'INSERT INTO citations (citation, auteur_id) VALUES (?, ?)';
-    return new Promise((resolve, reject) =>
-      db.run(sql, [citation, auteur_id], function (err) {
-        if (err) return reject(err);
-        resolve({ id: this.lastID, citation, auteur_id });
-      })
-    );
+  /** Vérifie l'existence d'une citation identique (mot pour mot). */
+  async existsExact(citation) {
+    const row = db
+      .prepare('SELECT 1 FROM citations WHERE citation = ? LIMIT 1')
+      .get(citation);
+    return !!row;
   },
 
-  /**
-   * Met à jour une citation.
-   * @param {number} id
-   * @param {{ citation?: string, auteur_id?: number|null }}
-   * @returns {Promise<{ changes:number }>}
-   */
-  update(id, { citation, auteur_id }) {
-    const sql = 'UPDATE citations SET citation = ?, auteur_id = ? WHERE id = ?';
-    return new Promise((resolve, reject) =>
-      db.run(sql, [citation, auteur_id, id], function (err) {
-        if (err) return reject(err);
-        resolve({ changes: this.changes });
-      })
-    );
+  /** Insère une nouvelle citation et renvoie son id. */
+  async create({ citation, auteur_id }) {
+    const { lastInsertRowid } = db
+      .prepare('INSERT INTO citations (citation, auteur_id) VALUES (?, ?)')
+      .run(citation, auteur_id);
+    return { id: lastInsertRowid, citation, auteur_id };
   },
 
-  /**
-   * Supprime une citation.
-   * @param {number} id
-   * @returns {Promise<{ deleted:number }>}
-   */
-  remove(id) {
-    const sql = 'DELETE FROM citations WHERE id = ?';
-    return new Promise((resolve, reject) =>
-      db.run(sql, [id], function (err) {
-        if (err) return reject(err);
-        resolve({ deleted: this.changes });
-      })
-    );
+  /** Met à jour une citation existante. */
+  async update(id, { citation, auteur_id }) {
+    const { changes } = db
+      .prepare('UPDATE citations SET citation = ?, auteur_id = ? WHERE id = ?')
+      .run(citation, auteur_id, id);
+    return { changes };
+  },
+
+  /** Supprime une citation ; renvoie le nombre de lignes supprimées. */
+  async remove(id) {
+    const { changes } = db
+      .prepare('DELETE FROM citations WHERE id = ?')
+      .run(id);
+    return { deleted: changes };
   },
 };
 

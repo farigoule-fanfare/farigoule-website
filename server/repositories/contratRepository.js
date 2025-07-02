@@ -1,5 +1,6 @@
-const db = require('../services/databaseService');
+const { _native: db } = require('../services/databaseService');
 
+/** Construit dynamiquement la clause WHERE (date >= since AND date < until). */
 function buildWhere({ since, until }, params) {
   const clauses = [];
   if (since) { clauses.push('date >= ?'); params.push(since); }
@@ -9,10 +10,11 @@ function buildWhere({ since, until }, params) {
 
 const contratRepository = {
   /**
-   * Récupération générique des contrats.
-   * @param {{ since?:string, until?:string, order?:'asc'|'desc', limit?:number }}
+   * Recherche générique de contrats.
+   * @param {{ since?:string, until?:string, order?:'asc'|'desc', limit?:number }} opts
+   * @returns {Promise<Array<{id:number,date:string,lieu:string,description:string}>>}
    */
-  find({ since, until, order = 'desc', limit }) {
+  async find({ since, until, order = 'desc', limit } = {}) {
     const params = [];
     const where   = buildWhere({ since, until }, params);
     const orderBy = `ORDER BY date ${order.toUpperCase()}`;
@@ -21,51 +23,51 @@ const contratRepository = {
 
     const sql = `
       SELECT id, date, lieu, description
-      FROM contrats
-      ${where}
-      ${orderBy}
-      ${limitCl}
+        FROM contrats
+        ${where}
+        ${orderBy}
+        ${limitCl}
     `;
-    return new Promise((resolve, reject) =>
-      db.all(sql, params, (err, rows) => (err ? reject(err) : resolve(rows)))
-    );
+    return db.prepare(sql).all(...params);
   },
 
-  /** Insertion */
-  create({ date, lieu, description }) {
-    const sql = `INSERT INTO contrats (date, lieu, description) VALUES (?, ?, ?)`;
-    return new Promise((resolve, reject) =>
-      db.run(sql, [date, lieu, description], function (err) {
-        if (err) return reject(err);
-        resolve({ id: this.lastID, date, lieu, description });
-      })
-    );
+  /**
+   * Insertion d'un contrat.
+   * @param {{ date:string, lieu:string, description:string }} data
+   * @returns {Promise<{id:number,date:string,lieu:string,description:string}>}
+   */
+  async create({ date, lieu, description }) {
+    const { lastInsertRowid } = db
+      .prepare('INSERT INTO contrats (date, lieu, description) VALUES (?, ?, ?)')
+      .run(date, lieu, description);
+    return { id: lastInsertRowid, date, lieu, description };
   },
 
-  /** Mise à jour */
-  update(id, { date, lieu, description }) {
-    const sql = `
-      UPDATE contrats
-      SET date = ?, lieu = ?, description = ?
-      WHERE id = ?
-    `;
-    return new Promise((resolve, reject) =>
-      db.run(sql, [date, lieu, description, id], function (err) {
-        if (err) return reject(err);
-        resolve({ changes: this.changes });
-      })
-    );
+  /**
+   * Mise à jour d'un contrat.
+   * @param {number} id
+   * @param {{ date:string, lieu:string, description:string }} patch
+   * @returns {Promise<{changes:number}>}
+   */
+  async update(id, { date, lieu, description }) {
+    const { changes } = db
+      .prepare(
+        'UPDATE contrats SET date = ?, lieu = ?, description = ? WHERE id = ?'
+      )
+      .run(date, lieu, description, id);
+    return { changes };
   },
 
-  /** Suppression */
-  remove(id) {
-    const sql = `DELETE FROM contrats WHERE id = ?`;
-    return new Promise((resolve, reject) =>
-      db.run(sql, [id], function (err) {
-        if (err) return reject(err);
-        resolve({ deleted: this.changes });
-      })
-    );
+  /**
+   * Suppression d'un contrat.
+   * @param {number} id
+   * @returns {Promise<{deleted:number}>}
+   */
+  async remove(id) {
+    const { changes } = db
+      .prepare('DELETE FROM contrats WHERE id = ?')
+      .run(id);
+    return { deleted: changes };
   },
 };
 

@@ -112,8 +112,7 @@ export default function AdminCrudSection({
       <CrudTable
         rows={rows}
         cols={tableCols}
-        rowActions={(r) =>
-          (actions(r) || []).map((a) => ({ ...a, className: `contentPage-button ${a.className || ''}` }))
+        rowActions={(r) =>(actions(r, refetch) || []).map((a) => ({...a, className: `contentPage-button ${a.className || ''}`,}))
         }
       />
 
