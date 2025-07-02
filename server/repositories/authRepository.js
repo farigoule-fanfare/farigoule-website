@@ -9,44 +9,28 @@ function parseRoles(raw) {
     return [];
   }
 }
-
+const ALLOWED_FIELDS = new Set(['id', 'email', 'surnom']); /* Champs autorisés pour filtrer – évite les injections SQL           */
 const authRepository = {
-     /* ---------- SELECT ---------- */
-  findFanfaronById(id) {
-    if (!id) return Promise.resolve(null);
+
+  /**
+   * Trouve un fanfaron selon un filtre { field, value }.
+   * @param {{ field: string, value: string|number }} filter
+   * @returns {Promise<object|null>}
+   */
+      findFanfaronBy({ field, value }) {
+    if (!field || value == null) return Promise.resolve(null);
+    if (!ALLOWED_FIELDS.has(field))
+      return Promise.reject(new Error(`Champ '${field}' non autorisé`));
+
     const sql = `
-      SELECT id, surnom, nom, prenom, tel, email, roles
-      FROM fanfarons WHERE id = ?`;
-    return new Promise((resolve, reject) => {
-      db.get(sql, [id], (err, row) => {
-        if (err) return reject(err);
-        if (!row) return resolve(null);
-        row.roles = parseRoles(row.roles);
-        resolve(row);
-      });
-    });
-  },
+      SELECT id, surnom, nom, prenom, tel, email, roles, password_hash
+      FROM fanfarons
+      WHERE ${field} = ?
+      LIMIT 1
+    `;
 
-  findFanfaronByEmail(email) {
-    if (!email) return Promise.resolve(null);
-    const sql = `SELECT id, surnom, nom, prenom, tel, email, roles, password_hash
-                FROM fanfarons WHERE email = ?`;
     return new Promise((resolve, reject) => {
-      db.get(sql, [email], (err, row) => {
-        if (err) return reject(err);
-        if (!row) return resolve(null);
-        row.roles = parseRoles(row.roles);
-        resolve(row);
-      });
-    });
-  },
-
-  findFanfaronBySurnom(surnom) {
-    if (!surnom) return Promise.resolve(null);
-    const sql = `SELECT id, surnom, nom, prenom, tel, email, roles, password_hash
-                FROM fanfarons WHERE surnom = ?`;
-    return new Promise((resolve, reject) => {
-      db.get(sql, [surnom], (err, row) => {
+      db.get(sql, [value], (err, row) => {
         if (err) return reject(err);
         if (!row) return resolve(null);
         row.roles = parseRoles(row.roles);
@@ -62,7 +46,7 @@ const authRepository = {
       err ? reject(err) : resolve(row?.password_hash || null)
     );
   });
-},
+  },
 
   updatePasswordById(userId, newHash) {
     if (!userId || !newHash) {

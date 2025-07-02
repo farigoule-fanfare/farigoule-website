@@ -29,7 +29,7 @@ async function protect(req, res, next) {
     const decoded = await authService.verifyToken(token);
 
     // 4) On recharge l’utilisateur pour avoir ses rôles à jour
-    const fanfaron = await authService.findFanfaronById(decoded.id);
+    const fanfaron = await authService.getUserById(decoded.id);
     if (!fanfaron) {
       return res.status(401).json({ message: 'Not authorized, user not found' });
     }
