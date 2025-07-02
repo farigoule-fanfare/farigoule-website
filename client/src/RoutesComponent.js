@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
-import { useAuth } from "@features/auth";
 
 // Layout
 import PageWrapper from      "@components/common/PageWrapper";
@@ -14,8 +13,8 @@ import { Symphonies } from "@features/public";
 import { Portraits } from "@features/public";
 
 // Pages utilisateurs  
-import UserProfile from      "@components/Profile/UserProfile";
-import ChangePassword from   "@components/Auth/ChangePassword";
+import { UserProfile } from      "@features/profile";
+import { ChangePassword } from   "@features/profile";
 
 // Admin
 import AdminPanel from       "@components/AdminPanel/pages/mainPanel";
