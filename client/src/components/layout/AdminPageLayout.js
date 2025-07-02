@@ -1,9 +1,7 @@
-// src/layout/AdminLayout.jsx
-import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '@features/auth'; // adapte selon ton hook
+import { useAuth } from '@features/auth';
 import ContentPageLayout from './ContentPageLayout';
-import './AdminPageLayout.css';                     // styles pour .admin-panel-*
+import './AdminPageLayout.css';
 
 export default function AdminLayout({ title, children }) {
   const { logout } = useAuth();
@@ -11,7 +9,7 @@ export default function AdminLayout({ title, children }) {
 
   const handleLogout = async () => {
     await logout();
-    navigate('/login');
+    navigate('/');
   };
 
   const menuItems = [
@@ -25,7 +23,6 @@ export default function AdminLayout({ title, children }) {
   return (
     <ContentPageLayout title={title} hideSocialLinks>
       <div className="admin-panel-container">
-        {/* ======= Menu latéral ======= */}
         <aside className="admin-panel-menu">
           <nav className="menuAdminContainer">
             {menuItems.map((item, idx) =>
@@ -40,7 +37,7 @@ export default function AdminLayout({ title, children }) {
                   onClick={item.action}
                   role="button"
                   tabIndex={0}
-                  onKeyPress={e => e.key === 'Enter' && item.action()}
+                  onKeyDown={e => e.key === 'Enter' && item.action()}
                 >
                   {item.label}
                 </div>
@@ -49,7 +46,6 @@ export default function AdminLayout({ title, children }) {
           </nav>
         </aside>
 
-        {/* ======= Contenu spécifique ======= */}
         <section className="admin-panel-content">
             {children}
         </section>
