@@ -1,73 +1,82 @@
-// repositories/diapoRepository.js
-const db = require('../services/databaseService');
+const { _native: db } = require('../services/databaseService');
 
 const diapoRepository = {
-  
-  /** Récupération des diapos */
-  find({ order = 'desc', limit } = {}) {
-    const params = [];
-    const orderClause =
-      order === 'random' ? 'ORDER BY RANDOM()'
+  /**
+   * Récupère des diapos, éventuellement limitées et/ou triées.
+   * @param {Object}   [options]
+   * @param {'asc'|'desc'|'random'} [options.order='desc']
+   * @param {number}  [options.limit]
+   * @returns {Promise<Array<{id:number,fichier:string,description:string,created_at:number}>>}
+   */
+  async find({ order = 'desc', limit } = {}) {
+    // Construction dynamique des clauses ORDER / LIMIT
+    const orderClause = order === 'random'
+      ? 'ORDER BY RANDOM()'
       : `ORDER BY id ${order.toUpperCase()}`;
 
     const limitClause = limit ? 'LIMIT ?' : '';
-    if (limit) params.push(limit);
-
     const sql = `
       SELECT id, fichier, description, created_at
-      FROM diapos
-      ${orderClause}
-      ${limitClause}
+        FROM diapos
+        ${orderClause}
+        ${limitClause}
     `;
-    return new Promise((resolve, reject) =>
-      db.all(sql, params, (err, rows) => (err ? reject(err) : resolve(rows)))
-    );
+
+    const stmt = db.prepare(sql);
+    return limit ? stmt.all(limit) : stmt.all();
   },
 
-  /** Insertion */
-  create({ fichier, description }) {
-    const sql = `
-      INSERT INTO diapos (fichier, description, created_at)
-      VALUES (?, ?, datetime('now'))
-    `;
-    return new Promise((resolve, reject) =>
-      db.run(sql, [fichier, description], function (err) {
-        if (err) return reject(err);
-        resolve({
-          id: this.lastID,
-          fichier,
-          description,
-          created_at: new Date().toISOString(),
-        });
-      })
-    );
+  /**
+   * Insère une nouvelle diapo et renvoie ses métadonnées.
+   * @param {{fichier:string, description:string}} payload
+   * @returns {Promise<{id:number,fichier:string,description:string,created_at:string}>}
+   */
+  async create({ fichier, description }) {
+    const { lastInsertRowid } = db
+      .prepare(`
+        INSERT INTO diapos (fichier, description, created_at)
+        VALUES (?, ?, strftime('%s','now'))
+      `)
+      .run(fichier, description);
+
+    return {
+      id: lastInsertRowid,
+      fichier,
+      description,
+      created_at: new Date().toISOString(),
+    };
   },
 
-  /** Mise à jour (ne modifie que les champs fournis) */
-  update(id, { fichier, description }) {
-    const sql = `
-      UPDATE diapos
-      SET fichier = COALESCE(?, fichier),
-          description = COALESCE(?, description)
-      WHERE id = ?
-    `;
-    return new Promise((resolve, reject) =>
-      db.run(sql, [fichier, description, id], function (err) {
-        if (err) return reject(err);
-        resolve({ id, fichier, description, changes: this.changes });
-      })
-    );
+  /**
+   * Met à jour une diapo (seuls les champs fournis sont modifiés).
+   * @param {number} id
+   * @param {{fichier?:string, description?:string}} patch
+   * @returns {Promise<{id:number,fichier?:string,description?:string,changes:number}>}
+   */
+  async update(id, { fichier, description }) {
+    const { changes } = db
+      .prepare(`
+        UPDATE diapos
+           SET fichier     = COALESCE(?, fichier),
+               description = COALESCE(?, description)
+         WHERE id = ?
+      `)
+      .run(fichier, description, id);
+
+    return { id, fichier, description, changes };
   },
 
-  /** Suppression */
-  remove(id) {
-    const sql = `DELETE FROM diapos WHERE id = ?`;
-    return new Promise((resolve, reject) =>
-      db.run(sql, [id], function (err) {
-        if (err) return reject(err);
-        resolve({ deleted: this.changes });
-      })
-    );
+  /**
+   * Supprime une diapo.
+   * @param {number} id
+   * @returns {Promise<{deleted:number}>}
+   */
+  async remove(id) {
+    const { changes } = db
+      .prepare('DELETE FROM diapos WHERE id = ?')
+      .run(id);
+
+    return { deleted: changes };
   },
 };
 
