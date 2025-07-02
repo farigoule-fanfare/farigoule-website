@@ -30,14 +30,14 @@ export default function useCitations() {
       }
     };
 
-    fetchCitation();                    // 1er appel immédiat
-    const id = setInterval(fetchCitation, 10_000); // puis toutes les 10 s
+    fetchCitation();
+    const id = setInterval(fetchCitation, 10_000);
 
     return () => {
       isMounted = false;
-      clearInterval(id);                // nettoyage interval
+      clearInterval(id);
     };
   }, []);
 
-  return { citation, auteur };          // ↩️ à consommer dans <Header/>
+  return { citation, auteur };
 }

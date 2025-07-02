@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@features/auth';
 import { axiosWrapper } from '@services/axiosUtils';
-import ContentPageLayout from '../../../components/layout/ContentPageLayout';
+import { ContentPageLayout } from "@shell"
 import { useNavigate } from 'react-router-dom';
 
 export default function UserProfile() {
