@@ -25,7 +25,7 @@ import GestionUsers from     "@components/AdminPanel/pages/gestionUsers";
 
 // Utilitaires
 import { RequireAuth } from      "@features/auth";
-import NotFound from         "@components/common/NotFound";
+import { NotFound } from         "@features/public";
 
 // Wrappers de page
 const PublicPage = ({ children }) => (
