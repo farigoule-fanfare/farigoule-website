@@ -25,7 +25,7 @@ import GestionCitations from "@components/AdminPanel/pages/gestionCitations";
 import GestionUsers from     "@components/AdminPanel/pages/gestionUsers";
 
 // Utilitaires
-import RequireAuth from      "@components/common/RequireAuth";
+import { RequireAuth } from      "@features/auth";
 import NotFound from         "@components/common/NotFound";
 
 // Wrappers de page
