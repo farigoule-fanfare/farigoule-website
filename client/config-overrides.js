@@ -8,6 +8,7 @@ module.exports = override(
     "@assets":  path.resolve(__dirname, "src/assets"),
     '@features': path.resolve(__dirname, 'src/features'),
     '@shared':   path.resolve(__dirname, 'src/shared'),
+    '@shell':   path.resolve(__dirname, 'src/shell'),
 
     //Temporary for migration
     "@hooks":   path.resolve(__dirname, "src/hooks"),

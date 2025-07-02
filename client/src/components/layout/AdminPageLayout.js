@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@features/auth';
-import ContentPageLayout from './ContentPageLayout';
+import { ContentPageLayout } from "@shell"
 import './AdminPageLayout.css';
 
 export default function AdminLayout({ title, children }) {

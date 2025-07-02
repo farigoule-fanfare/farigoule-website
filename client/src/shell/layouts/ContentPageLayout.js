@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SocialLinks from '@components/common/SocialLinks';
+import SocialLinks from '../components/SocialLinks';
 import './ContentPageLayout.css'; // We'll create this CSS file next
 
 function ContentPageLayout({ title, children, hideSocialLinks = false, }) {

@@ -1,7 +1,7 @@
 // src/components/User/ChangePassword.js
 import React, { useState } from 'react';
 import { axiosWrapper } from '@services/axiosUtils';
-import ContentPageLayout from '../../../components/layout/ContentPageLayout';
+import { ContentPageLayout } from "@shell"
 
 export default function ChangePassword() {
   const [form, setForm] = useState({
