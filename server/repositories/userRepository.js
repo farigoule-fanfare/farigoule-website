@@ -1,6 +1,6 @@
 const { _native: db } = require('../services/databaseService');
 
-/** Utilitaire : transforme le champ JSON rôles en tableau */
+/** Utilitaires **/
 function parseRoles(raw) {
   try {
     const parsed = JSON.parse(raw);
@@ -8,6 +8,15 @@ function parseRoles(raw) {
   } catch {
     return [];
   }
+}
+
+function runUpdate(id, fields) {
+  if (!id) throw new Error('id manquant');
+  if (!Object.keys(fields).length) throw new Error('Aucun champ à mettre à jour');
+
+  const setClause = Object.keys(fields).map(k => `${k} = ?`).join(', ');
+  const params = [...Object.values(fields), id];
+  db.prepare(`UPDATE fanfarons SET ${setClause} WHERE id = ?`).run(...params);
 }
 
 const userRepository = {
@@ -47,43 +56,19 @@ const userRepository = {
   },
 
   /* ---------- UPDATE ---------- */
-  async updateProfile(userId, updates) {
-    if (!userId) throw new Error('User ID is required');
-
+  /** Mise à jour des infos « profil » (nom, e-mail, etc.) */
+  updateProfile(id, { nom, prenom, email, telephone }) {
     const fields = {};
-    if (updates.nom !== undefined) fields.nom = updates.nom;
-    if (updates.prenom !== undefined) fields.prenom = updates.prenom;
-    if (updates.email !== undefined) fields.email = updates.email;
-    if (updates.telephone !== undefined) fields.tel = updates.telephone;
-    if (!Object.keys(fields).length)
-      throw new Error('No valid fields');
-
-    const setClause = Object.keys(fields)
-      .map(f => `${f} = ?`)
-      .join(', ');
-    const sql = `UPDATE fanfarons SET ${setClause} WHERE id = ?`;
-    const params = [...Object.values(fields), userId];
-
-    try {
-      const { changes } = db.prepare(sql).run(...params);
-      if (changes === 0) return null;
-    } catch (err) {
-      if (
-        err.code === 'SQLITE_CONSTRAINT' &&
-        String(err.message).includes('.email')
-      ) {
-        throw new Error('Cet email est déjà utilisé.');
-      }
-      throw err;
-    }
-
-    return userRepository.findFanfaronById(userId);
+    if (nom      !== undefined) fields.nom  = nom;
+    if (prenom   !== undefined) fields.prenom = prenom;
+    if (email    !== undefined) fields.email  = email;
+    if (telephone!== undefined) fields.tel    = telephone;
+    runUpdate(id, fields);
   },
 
-  async updateRolesById(userId, rolesArray) {
-    db.prepare('UPDATE fanfarons SET roles = ? WHERE id = ?')
-      .run(JSON.stringify(rolesArray), userId);
+  /** Remplace complètement le tableau des rôles */
+  updateRolesById(id, rolesArray) {
+    runUpdate(id, { roles: JSON.stringify(rolesArray ?? []) });
   },
 };
-
 module.exports = userRepository;
