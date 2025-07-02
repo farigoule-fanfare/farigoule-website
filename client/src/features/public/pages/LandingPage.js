@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ContentPageLayout from '../../../components/layout/ContentPageLayout';
+import { ContentPageLayout } from "@shell"
 import Slider from 'react-slick';
 import { axiosWrapper } from '@services/axiosUtils';
 

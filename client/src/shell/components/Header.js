@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@features/auth';
-import useCitations from './hooks/useCitations';
+import useCitations from '../hooks/useCitations';
 import './Header.css';
 
 import logoFarigouleSrc from '@assets/images/logo-farigoule.png';

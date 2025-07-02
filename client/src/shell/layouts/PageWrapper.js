@@ -1,10 +1,10 @@
 import React, { lazy, Suspense } from "react";
 import PropTypes from "prop-types";
 
-import Loading from "@components/common/Loading";
+import Loading from "../components/Loading";
 
-const Header = lazy(() => import("@components/common/Header"));
-const Footer = lazy(() => import("@components/common/Footer"));
+const Header = lazy(() => import("../components/Header"));
+const Footer = lazy(() => import("../components/Footer"));
 
 
 function PageWrapper({ children }) {

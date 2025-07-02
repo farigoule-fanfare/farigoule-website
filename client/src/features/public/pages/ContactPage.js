@@ -1,6 +1,5 @@
 import React from 'react';
-import ContentPageLayout from '../../../components/layout/ContentPageLayout';
-
+import { ContentPageLayout } from "@shell"
 const ContactPage = () => {
   return (
     <ContentPageLayout title="Envoyer un message">

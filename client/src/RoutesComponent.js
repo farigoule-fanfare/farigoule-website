@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 
 // Layout
-import PageWrapper from      "@components/common/PageWrapper";
+import { PageWrapper } from      "@shell";
     
 // Pages publiques     
 import { LandingPage } from "@features/public";
