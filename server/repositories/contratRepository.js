@@ -1,4 +1,4 @@
-const { _native: db } = require('../services/databaseService');
+const db = require('../services/databaseService');
 
 /** Construit dynamiquement la clause WHERE (date >= since AND date < until). */
 function buildWhere({ since, until }, params) {
