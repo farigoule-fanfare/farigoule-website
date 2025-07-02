@@ -1,27 +1,29 @@
-const db = require('../services/databaseService');
+const { _native: db } = require('../services/databaseService');
+
+const SELECT_LIGHT = `
+  SELECT id, surnom, instrument, promo, bureau, description, photo
+    FROM fanfarons
+`;
+
+const SELECT_FULL = `
+  SELECT id, surnom, nom, prenom, instrument, promo, bureau,
+         tel, email, photo, description
+    FROM fanfarons
+`;
 
 const fanfaronRepository = {
   /** Sélection légère pour l’affichage public */
-  findAll() {
-    const sql = `
-      SELECT id, surnom, instrument, promo, bureau, description, photo
-      FROM fanfarons
-    `;
-    return new Promise((resolve, reject) =>
-      db.all(sql, [], (err, rows) => (err ? reject(err) : resolve(rows)))
-    );
+  async findAll() {
+    return db.prepare(SELECT_LIGHT).all();
   },
 
   /** Sélection complète (page admin / annuaire) */
-  findAllAnnuaire() {
-    const sql = `SELECT id,surnom, nom, prenom, instrument, promo, bureau, tel, email, photo FROM fanfarons`;
-    return new Promise((resolve, reject) =>
-      db.all(sql, [], (err, rows) => (err ? reject(err) : resolve(rows)))
-    );
+  async findAllAnnuaire() {
+    return db.prepare(SELECT_FULL).all();
   },
 
-  /** Insertion */
-  create(data) {
+  /** Insertion d’un fanfaron et retour de la ligne créée */
+  async create(data) {
     const {
       surnom,
       nom,
@@ -37,29 +39,36 @@ const fanfaronRepository = {
 
     const insertSql = `
       INSERT INTO fanfarons
-      (surnom, nom, prenom, instrument, promo, bureau, email, tel, description, photo)
+        (surnom, nom, prenom, instrument, promo, bureau, email, tel, description, photo)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    return new Promise((resolve, reject) => {
-      db.run(
-        insertSql,
-        [surnom, nom, prenom, instrument, promo, bureau, email, tel, description, photo],
-        function (err) {
-          if (err) return reject(err);
-          const newId = this.lastID;
-          const row = db
-            .prepare(`SELECT surnom, nom, prenom, instrument, promo, bureau, email, tel, description, photo
-              FROM fanfarons WHERE id = ?`)
-            .get(newId);
-          resolve(row);
-        }
+    const { lastInsertRowid } = db
+      .prepare(insertSql)
+      .run(
+        surnom,
+        nom,
+        prenom,
+        instrument,
+        promo,
+        bureau,
+        email,
+        tel,
+        description,
+        photo,
       );
-    });
+
+    return db
+      .prepare(
+        `SELECT surnom, nom, prenom, instrument, promo, bureau,
+                email, tel, description, photo
+           FROM fanfarons WHERE id = ?`
+      )
+      .get(lastInsertRowid);
   },
 
-  /** Mise à jour */
-  update(id, data) {
+  /** Mise à jour d’un fanfaron et retour de la ligne modifiée */
+  async update(id, data) {
     const {
       surnom,
       nom,
@@ -74,57 +83,46 @@ const fanfaronRepository = {
     } = data;
 
     const updateSql = `
-      UPDATE fanfarons
-      SET surnom = ?,
-          nom = ?,
-          prenom = ?,
-          instrument = ?,
-          promo = ?,
-          bureau = ?,
-          email = ?,
-          tel = ?,
-          description = ?,
-          photo = COALESCE(?, photo)
+      UPDATE fanfarons SET
+        surnom       = ?,
+        nom          = ?,
+        prenom       = ?,
+        instrument   = ?,
+        promo        = ?,
+        bureau       = ?,
+        email        = ?,
+        tel          = ?,
+        description  = ?,
+        photo        = COALESCE(?, photo)
       WHERE id = ?
     `;
 
-    return new Promise((resolve, reject) => {
-      db.run(
-        updateSql,
-        [
-          surnom,
-          nom,
-          prenom,
-          instrument,
-          promo,
-          bureau,
-          email,
-          tel,
-          description,
-          photo,
-          id,
-        ],
-        function (err) {
-          if (err) return reject(err);
-          const updated = db
-            .prepare(`SELECT surnom, nom, prenom, instrument, promo, bureau, email, tel, description, photo
-              FROM fanfarons WHERE id = ?`)
-            .get(id);
-          resolve(updated);
-        }
-      );
-    });
+    db.prepare(updateSql).run(
+      surnom,
+      nom,
+      prenom,
+      instrument,
+      promo,
+      bureau,
+      email,
+      tel,
+      description,
+      photo,
+      id,
+    );
+
+    return db
+      .prepare(
+        `SELECT surnom, nom, prenom, instrument, promo, bureau, email, tel, description, photo
+           FROM fanfarons WHERE id = ?`
+      )
+      .get(id);
   },
 
-  /** Suppression */
-  remove(id) {
-    const sql = `DELETE FROM fanfarons WHERE id = ?`;
-    return new Promise((resolve, reject) =>
-      db.run(sql, [id], function (err) {
-        if (err) reject(err);
-        else resolve();
-      })
-    );
+  /** Suppression ; renvoie le nombre de lignes supprimées */
+  async remove(id) {
+    const { changes } = db.prepare('DELETE FROM fanfarons WHERE id = ?').run(id);
+    return { deleted: changes };
   },
 };
 

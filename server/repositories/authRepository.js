@@ -1,6 +1,9 @@
-const db = require('../services/databaseService');
+const { _native: db } = require('../services/databaseService');
 
-/** Utilitaire : transforme le champ JSON rôles en tableau */
+/**
+ * Transforme le JSON stocké dans la colonne « roles » en tableau JS.
+ * Renvoie [] si le champ est vide ou invalide.
+ */
 function parseRoles(raw) {
   try {
     const parsed = JSON.parse(raw);
@@ -9,54 +12,53 @@ function parseRoles(raw) {
     return [];
   }
 }
-const ALLOWED_FIELDS = new Set(['id', 'email', 'surnom']); /* Champs autorisés pour filtrer – évite les injections SQL           */
-const authRepository = {
 
+const ALLOWED_FIELDS = new Set(['id', 'email', 'surnom']);
+
+const authRepository = {
   /**
-   * Trouve un fanfaron selon un filtre { field, value }.
-   * @param {{ field: string, value: string|number }} filter
+   * Cherche un fanfaron suivant un champ (id, email, …).
+   * @param {{ field?: string, value: string|number }}
    * @returns {Promise<object|null>}
    */
-      findFanfaronBy({ field, value }) {
-    if (!field || value == null) return Promise.resolve(null);
-    if (!ALLOWED_FIELDS.has(field))
-      return Promise.reject(new Error(`Champ '${field}' non autorisé`));
-
-    const sql = `
-      SELECT id, surnom, nom, prenom, tel, email, roles, password_hash
-      FROM fanfarons
-      WHERE ${field} = ?
-      LIMIT 1
-    `;
-
-    return new Promise((resolve, reject) => {
-      db.get(sql, [value], (err, row) => {
-        if (err) return reject(err);
-        if (!row) return resolve(null);
-        row.roles = parseRoles(row.roles);
-        resolve(row);
-      });
-    });
-  },
-
-  findPasswordHashById(userId) {
-  const sql = 'SELECT password_hash FROM fanfarons WHERE id = ?';
-  return new Promise((resolve, reject) => {
-    db.get(sql, [userId], (err, row) =>
-      err ? reject(err) : resolve(row?.password_hash || null)
-    );
-  });
-  },
-
-  updatePasswordById(userId, newHash) {
-    if (!userId || !newHash) {
-      return Promise.reject(new Error('userId et newHash requis'));
+    async findFanfaronBy({ field = 'id', value }) {
+    if (!ALLOWED_FIELDS.has(field)) {
+      throw new Error(`Champ non autorisé : ${field}`);
     }
-    const sql = 'UPDATE fanfarons SET password_hash = ? WHERE id = ?';
-    return new Promise((resolve, reject) => {
-      db.run(sql, [newHash, userId], err => (err ? reject(err) : resolve()));
-    });
+
+    const row = db
+      .prepare(
+        `SELECT id, surnom, nom, prenom, tel, email, roles, password_hash
+          FROM fanfarons
+          WHERE ${field} = ?
+          LIMIT 1`,
+      )
+      .get(value);
+
+    return row ? { ...row, roles: parseRoles(row.roles) } : null;
+  },
+
+  /**
+   * Renvoie le hash du mot de passe pour un id donné, ou null si absent.
+   */
+  async findPasswordHashById(userId) {
+    const row = db
+      .prepare('SELECT password_hash FROM fanfarons WHERE id = ?')
+      .get(userId);
+    return row ? row.password_hash : null;
+  },
+
+  /**
+   * Met à jour le hash du mot de passe ; renvoie true si une ligne est touchée.
+   */
+  async updatePasswordById(userId, newHash) {
+    const { changes } = db
+      .prepare(
+        'UPDATE fanfarons SET password_hash = ? WHERE id = ?',
+      )
+      .run(newHash, userId);
+
+    return changes > 0;
   },
 }
-
 module.exports = authRepository;
