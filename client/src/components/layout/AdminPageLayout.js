@@ -22,8 +22,6 @@ export default function AdminLayout({ title, children }) {
 
   return (
     <ContentPageLayout title={title} hideSocialLinks>
-      <div className="admin-panel-container">
-        <aside className="admin-panel-menu">
           <nav className="menuAdminContainer">
             {menuItems.map((item, idx) =>
               item.to ? (
@@ -44,12 +42,10 @@ export default function AdminLayout({ title, children }) {
               )
             )}
           </nav>
-        </aside>
 
         <section className="admin-panel-content">
             {children}
         </section>
-      </div>
     </ContentPageLayout>
   );
 }
