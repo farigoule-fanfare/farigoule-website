@@ -1,11 +1,9 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const {
-  findFanfaronByEmail,
-  findFanfaronBySurnom,
+  findFanfaronBy,
   updatePasswordById,
   findPasswordHashById,
-  findFanfaronById,
 } = require('../repositories/authRepository');
 
 /* ---------------------------------------------------------------------------
@@ -56,25 +54,44 @@ const authService = {
   verifyToken: asyncVerifyJwt,
 
   /**
-   * Authenticates a user by e‑mail OR surnom and returns { user, token }.
-   * @throws {Error & {code: 'MISSING_FIELDS'|'INVALID_CREDENTIALS'}}
+   * Authentifie un utilisateur par email **ou** surnom.
+   * @param {string} identifier (email ou surnom)
+   * @param {string} password
    */
   async login(identifier, password) {
     if (!identifier || !password) {
-      throw Object.assign(new Error('Email/Surnom and password required'), { code: 'MISSING_FIELDS' });
+      throw Object.assign(
+        new Error('Identifiant et mot de passe requis'),
+        { code: 'MISSING_FIELDS' },
+      );
     }
 
-    const fanfaron =
-      (await findFanfaronByEmail(identifier)) || (await findFanfaronBySurnom(identifier));
+    /* Détermine dynamiquement le champ à filtrer */
+    const field = identifier.includes('@') ? 'email' : 'surnom';
+    const fanfaron = await findFanfaronBy({ field, value: identifier });
 
-    const valid = fanfaron && (await bcrypt.compare(password, fanfaron.password_hash));
-    if (!valid) {
-      throw Object.assign(new Error('Invalid credentials'), { code: 'INVALID_CREDENTIALS' });
+    const ok = fanfaron && (await comparePassword(password, fanfaron.password_hash));
+    if (!ok) {
+      throw Object.assign(new Error('Identifiants invalides'), { code: 'INVALID_CREDENTIALS' });
     }
 
     const { password_hash, ...safeUser } = fanfaron;
     return { user: safeUser, token: signJwt(safeUser) };
   },
+
+  /**
+   * Récupère un fanfaron par son id et retire le hash.
+   * @param {number|string} id
+   * @returns {Promise<object|null>}  // user sans password_hash
+   */
+  async getUserById(id) {
+    if (!id) return null;
+    const fanfaron = await findFanfaronBy({ field: 'id', value: id });
+    if (!fanfaron) return null;
+    const { password_hash, ...safe } = fanfaron;
+    return safe;
+  },
+
 
   /**
    * Admin‑only: force‑set another user’s password.
@@ -105,9 +122,6 @@ const authService = {
 
     await updatePasswordById(userId, await bcrypt.hash(newPw, SALT_ROUNDS));
   },
-
-  // Pass‑throughs -----------------------------------------------------------
-  findFanfaronById,
 };
 
 module.exports = authService;
