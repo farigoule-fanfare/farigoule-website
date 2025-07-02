@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import PropTypes          from 'prop-types';
-import Loading            from './Loading';
+import Loading            from '../../../components/common/Loading';
 import { useAuth }        from '@features/auth';
 
 function RequireAuth({ children, requiredRole }) {
