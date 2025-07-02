@@ -70,7 +70,7 @@ const authService = {
     const field = identifier.includes('@') ? 'email' : 'surnom';
     const fanfaron = await findFanfaronBy({ field, value: identifier });
 
-    const ok = fanfaron && (await comparePassword(password, fanfaron.password_hash));
+    const ok = fanfaron && (await bcrypt.compare(password, fanfaron.password_hash));
     if (!ok) {
       throw Object.assign(new Error('Identifiants invalides'), { code: 'INVALID_CREDENTIALS' });
     }
