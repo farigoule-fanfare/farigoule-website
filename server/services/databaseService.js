@@ -1,90 +1,59 @@
-const sqlite3 = require('sqlite3').verbose();
+// services/databaseService.js
 const path = require('path');
+const Database = require('better-sqlite3');
 
-// Define the path for the database file
-// It will be created in the 'server/database/' directory
 const DB_PATH = path.resolve(__dirname, '..', 'database', 'farigoule.sqlite');
+const dbNative = new Database(DB_PATH, { timeout: 3000 });
 
-// Create or open the database
-// The OPEN_READWRITE flag means the database is opened for reading and writing.
-// The OPEN_CREATE flag means the database is created if it does not already exist.
-const db = new sqlite3.Database(DB_PATH, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
-    if (err) {
-        console.error("Error opening database:", err.message);
-    } else {
-        console.log('Connected to the SQLite database at', DB_PATH);
-        // We can initialize tables here if needed, or call a separate init function
-        initializeDb();
+/* ------------------------------------------------------------------ */
+/*  Wrapper rétro-compatibilité sqlite3 : get / all / run (callbacks)  */
+/* ------------------------------------------------------------------ */
+function wrap(method) {
+  /* method = (sql, params) => résultat synchrone */
+  return (sql, params = [], cb = () => {}) => {
+    try {
+      const res = method(sql, params);
+      /* on répond de façon asynchrone comme avant */
+      setImmediate(() => cb(null, res));
+    } catch (err) {
+      setImmediate(() => cb(err));
     }
-});
-
-// Function to initialize database tables
-function initializeDb() {
-    db.serialize(() => {
-        // Create fanfarons table
-        // TODO: Finalize columns - consider adding email, password_hash, roles for authentication
-        db.run(`CREATE TABLE IF NOT EXISTS fanfarons (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            surnom TEXT UNIQUE NOT NULL,
-            prenom TEXT,                    -- From original schema, will be NULL if not in JSON
-            nom TEXT,                       -- From original schema, will be NULL if not in JSON
-            instrument TEXT,                -- From JSON export
-            promo INTEGER,                  -- From JSON export (ensure it's INTEGER)
-            bureau TEXT,                    -- From JSON export (e.g., 'president', 'tresorier', 'membre', 'biere')
-            tel TEXT,                       -- From JSON export
-            email TEXT UNIQUE,              -- Mapped from 'mail' in JSON, or new for auth
-            photo TEXT,                     -- From JSON export (filename)
-            description TEXT,               -- From JSON export
-            password_hash TEXT,             -- For new auth system
-            roles TEXT DEFAULT 'fanfaron'   -- For new auth system (e.g., 'fanfaron,admin')
-        )`, (err) => {
-            if (err) {
-                console.error("Error creating/altering fanfarons table:", err.message);
-            }
-        });
-
-        // Create citations table
-        db.run(`CREATE TABLE IF NOT EXISTS citations (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            citation TEXT NOT NULL,
-            auteur_id INTEGER,
-            FOREIGN KEY (auteur_id) REFERENCES fanfarons (id) ON DELETE SET NULL -- Keep citation if fanfaron deleted
-        )`, (err) => {
-            if (err) {
-                console.error("Error creating citations table:", err.message);
-            }
-        });
-
-        // Create diapos table for carousel images
-        db.run(`CREATE TABLE IF NOT EXISTS diapos (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            fichier TEXT NOT NULL,         -- Filename of the image
-            description TEXT,              -- Caption for the image
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP -- To sort by latest if needed
-        )`, (err) => {
-            if (err) {
-                console.error("Error creating diapos table:", err.message);
-            }
-        });
-
-        // Create contrats table for dates/events
-        db.run(`CREATE TABLE IF NOT EXISTS contrats (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            date DATE NOT NULL,                -- Store as YYYY-MM-DD
-            lieu TEXT,                     -- Location of the event
-            description TEXT,              -- Optional details about the event
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )`, (err) => {
-            if (err) {
-                console.error("Error creating contrats table:", err.message);
-            }
-        });
-
-        // TODO: Add other tables as needed (e.g., for chat messages, page content, etc.)
-
-        console.log("Database tables checked/initialized.");
-    });
+  };
 }
 
-// Export the database connection
-module.exports = db; 
+const db = {
+  /* API « sqlite3 » ------------------------------- */
+  get : wrap((sql, p) => dbNative.prepare(sql).get(p)),
+  all : wrap((sql, p) => dbNative.prepare(sql).all(p)),
+  run : wrap((sql, p) => dbNative.prepare(sql).run(p)),
+  /* API native better-sqlite3 --------------------- */
+  prepare : (...a) => dbNative.prepare(...a),
+  exec    : (...a) => dbNative.exec(...a),
+  /* on expose la connexion brute si besoin */
+  _native : dbNative,
+};
+
+/* ------------------------------------------------------------------ */
+/*  DDL (table roles JSON par défaut)                                  */
+/* ------------------------------------------------------------------ */
+db.exec(`
+  CREATE TABLE IF NOT EXISTS fanfarons (
+    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    surnom        TEXT UNIQUE NOT NULL,
+    prenom        TEXT,
+    nom           TEXT,
+    instrument    TEXT,
+    promo         INTEGER,
+    bureau        TEXT,
+    tel           TEXT,
+    email         TEXT UNIQUE,
+    photo         TEXT,
+    description   TEXT,
+    password_hash TEXT,
+    roles         TEXT NOT NULL DEFAULT '["fanfaron"]'
+  );
+  /* … autres tables … */
+`);
+
+console.log('SQLite schema ready (better-sqlite3, wrapper sqlite3).');
+module.exports = db;
