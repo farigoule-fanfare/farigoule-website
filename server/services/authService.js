@@ -1,18 +1,8 @@
-/**
- * authService – authentication helpers grouped in a single module.
- * ---------------------------------------------------------------------------
- * Style  : Functional (no classes)
- * Exports: authService object
- * Depends: jsonwebtoken, bcryptjs, authRepository
- * ---------------------------------------------------------------------------
- */
-
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const {
   findFanfaronByEmail,
   findFanfaronBySurnom,
-  comparePassword,
   updatePasswordById,
   findPasswordHashById,
   findFanfaronById,
@@ -77,7 +67,7 @@ const authService = {
     const fanfaron =
       (await findFanfaronByEmail(identifier)) || (await findFanfaronBySurnom(identifier));
 
-    const valid = fanfaron && (await comparePassword(password, fanfaron.password_hash));
+    const valid = fanfaron && (await bcrypt.compare(password, fanfaron.password_hash));
     if (!valid) {
       throw Object.assign(new Error('Invalid credentials'), { code: 'INVALID_CREDENTIALS' });
     }

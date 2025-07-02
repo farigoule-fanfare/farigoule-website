@@ -1,5 +1,4 @@
 const db = require('../services/databaseService');
-const bcrypt = require('bcryptjs');
 
 /** Utilitaire : transforme le champ JSON rôles en tableau */
 function parseRoles(raw) {
@@ -54,11 +53,6 @@ const authRepository = {
         resolve(row);
       });
     });
-  },
-
-  comparePassword(plain, hash) {
-    if (!plain || !hash) return Promise.resolve(false);
-    return bcrypt.compare(plain, hash);
   },
 
   findPasswordHashById(userId) {
