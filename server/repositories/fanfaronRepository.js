@@ -1,4 +1,4 @@
-const { _native: db } = require('../services/databaseService');
+const db = require('../services/databaseService');
 
 const SELECT_LIGHT = `
   SELECT id, surnom, instrument, promo, bureau, description, photo

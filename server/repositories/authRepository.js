@@ -1,4 +1,4 @@
-const { _native: db } = require('../services/databaseService');
+const db = require('../services/databaseService');
 
 /**
  * Transforme le JSON stocké dans la colonne « roles » en tableau JS.
