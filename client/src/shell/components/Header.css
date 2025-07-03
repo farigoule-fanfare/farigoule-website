@@ -55,19 +55,39 @@ header {
   margin-top: 0px;
 }
 
-.tableauMenu {
+.headerNavBar {
   width: 680px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
   text-align: center;
-  margin-top: 0px;
 }
 
-.tableauMenu > div > span {
+@media (min-width: 768px) {
+  .headerNavBar {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+}
+
+.headerNavBarItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.headerNavBarItemTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.headerNavBar > div > span {
   visibility: hidden;
 }
-.tableauMenu > div:hover > span {
+.headerNavBar > div:hover > span {
   visibility: visible;
 }
-
 
 .boutonAccueil,
 .boutonNous,
@@ -83,7 +103,6 @@ header {
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  margin: 0.25rem 0;
   padding: 0.35rem 0.75rem;
   font-size: 1rem;
 }
@@ -130,7 +149,7 @@ header {
     text-align: right;
   }
 
-  .tableauMenu {
+  .headerNavBar {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
@@ -138,16 +157,16 @@ header {
     width: 100%;
   }
 
-  .tableauMenu div {
+  .headerNavBar div {
     width: 4.2rem;
   }
 
-  .tableauMenu img {
+  .headerNavBar img {
     width: 4.2rem;
     height: 4.2rem;
   }
 
-  .tableauMenu span {
+  .headerNavBar span {
     display: block;
     font-size: 0.7em;
     font-weight: bold;

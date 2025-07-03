@@ -57,7 +57,7 @@ function Header() {
                     )}
                 </div>
 
-                <div className="flex flex-wrap justify-center gap-2 mt-4 md:flex-nowrap md:justify-between tableauMenu">
+                <div className="headerNavBar">
                     {[{
                         title: 'Accueil', link: '/', img: boutonAccueilSrc, hover: boutonAccueilHoverSrc, isHovered: isAccueilHovered, setHovered: setIsAccueilHovered, className: 'boutonAccueil'
                     }, {
@@ -69,8 +69,8 @@ function Header() {
                     }, {
                         title: 'Contact', link: '/contact', img: boutonContactSrc, hover: boutonContactHoverSrc, isHovered: isContactHovered, setHovered: setIsContactHovered, className: 'boutonContact'
                     }].map(({ title, link, img, hover, isHovered, setHovered, className }) => (
-                        <div key={title} className="flex flex-col items-center" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-                            <span className="text-sm font-semibold">{title}</span>
+                        <div key={title} className="headerNavBarItem" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+                            <span className="headerNavBarItemTitle">{title}</span>
                             <Link to={link}>
                                 <img src={isHovered ? hover : img} alt={`Bouton ${title}`} className={className} />
                             </Link>
