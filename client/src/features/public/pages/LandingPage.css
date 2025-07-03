@@ -48,6 +48,9 @@
     max-width: 500px;
 }
 
+.deezer-embed {
+    padding: 0.5rem 0;
+}
 
 
 /* Optionnel : ajuster la responsivité */
