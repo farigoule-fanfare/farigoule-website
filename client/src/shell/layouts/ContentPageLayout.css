@@ -157,11 +157,12 @@
 }
 
 /* Modificateurs */
-.contentPage-button--submit  { background: var(--primary); color:#fff; }
-.contentPage-button--cancel  { background: var(--warning); color:#000; }
-.contentPage-button--update  { background: var(--success); color:#fff; }
-.contentPage-button--edit    { background: var(--warning); color:#000; padding:0.4rem 0.8rem; font-size:0.9rem; }
-.contentPage-button--delete  { background: var(--danger);  color:#fff; padding:0.4rem 0.8rem; font-size:0.9rem; }
+.contentPage-button--submit        { background: var(--primary); color:#fff; }
+.contentPage-button--cancel        { background: var(--warning); color:#000; }
+.contentPage-button--update        { background: var(--success); color:#fff; }
+.contentPage-button--submit-tight  { background: var(--primary); color:#fff; padding:0.4rem 0.8rem; font-size:0.9rem;}
+.contentPage-button--edit          { background: var(--warning); color:#000; padding:0.4rem 0.8rem; font-size:0.9rem; }
+.contentPage-button--delete        { background: var(--danger);  color:#fff; padding:0.4rem 0.8rem; font-size:0.9rem; }
 
 .contentPage-button:hover    { filter:brightness(0.9); }
 .contentPage-button:disabled { background:#ccc; cursor:not-allowed; }
