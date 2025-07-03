@@ -1,0 +1,15 @@
+.pPhotoFarigoule {
+  text-align: center;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+/* La photo de la Farigoule */
+.photoFarigoule {
+  width: 100%; /* Make it responsive */
+  max-width: 800px; /* But not larger than its original intended size */
+  border: 3px solid black;
+  border-radius: 10px;
+  display: block; /* To allow margin auto to center if needed, and control layout */
+  margin: 0 auto; /* Center the image if its container is wider */
+}
