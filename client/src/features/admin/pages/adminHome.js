@@ -1,6 +1,6 @@
 // MenuAdminPage.js
 import React from 'react';
-import AdminPageLayout from '../../layout/AdminPageLayout';
+import AdminPageLayout from '../layouts/AdminPageLayout';
 
 
 export default function AdminHome() {
