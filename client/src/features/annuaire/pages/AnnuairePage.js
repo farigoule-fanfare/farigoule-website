@@ -1,23 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import ContentPageLayout from '../layout/ContentPageLayout';
-import { axiosWrapper } from '@api/axiosUtils';
-import Pagination from '../utils/Pagination';
+import { ContentPageLayout } from '@shell';
+import { axiosWrapper } from '@services/axiosUtils';
+import { Pagination } from '@shared';
 
-export default function GestionFanfarons() {
+export default function Annuaire() {
   const [fanfarons, setFanfarons] = useState([]);
   const [page, setPage] = useState(1);
 
   const fetchList = useCallback(async () => {
     try {
-      const res = await axiosWrapper({ method: 'get', url: 'api/fanfarons/' });
-      if (res.success) {
-        const arr = Array.isArray(res.data)
-          ? res.data
-          : Array.isArray(res.data.data)
-          ? res.data.data
-          : [];
-        setFanfarons(arr);
-      }
+      const res = await axiosWrapper({ method: 'get', url: 'api/fanfarons/annuaire' });
+      setFanfarons(res.data);
     } catch (err) {
       console.error('[FETCH ERROR]', err);
     }
@@ -73,7 +66,6 @@ export default function GestionFanfarons() {
               <th>Instrument</th>
               <th>Téléphone</th>
               <th>Email</th>
-              <th>Promo</th>
             </tr>
           </thead>
           <tbody>
@@ -85,7 +77,6 @@ export default function GestionFanfarons() {
                 <td>{capitalize(f.instrument)}</td>
                 <td>{f.tel}</td>
                 <td>{f.email}</td>
-                <td>{f.promo}</td>
               </tr>
             ))}
           </tbody>

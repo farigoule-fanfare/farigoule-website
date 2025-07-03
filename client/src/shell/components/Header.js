@@ -48,6 +48,9 @@ function Header() {
                     {isAuthenticated && (
                         <>
                             <span className="auth-user">Bienvenue, {currentUser?.surnom} !</span>
+                            <button onClick={handleGoAnnuaire} className="contentPage-button contentPage-button--submit-tight" type="submit">
+                                Annuaire
+                            </button>
                             <button onClick={handleGoProfile} className="contentPage-button contentPage-button--edit" type="button">
                                 Mon profil
                             </button>
