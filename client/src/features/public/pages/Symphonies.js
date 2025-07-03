@@ -1,46 +1,30 @@
-<<<<<<< HEAD:client/src/components/pages/Symphonies.js
-// src/components/pages/Symphonies.jsx
 import React, { useState, useRef, useEffect } from "react";
-import ContentPageLayout from "../layout/ContentPageLayout";
-import { armAngleDeg } from "./helpers/armAngle";
+import { ContentPageLayout } from "@shell";
+import { armAngleDeg } from "../components/armAngle";
 import "./Symphonies.css";
 
 // --- Jaquette connue uniquement pour CD 2
-import cd2Cover from "../../img/symphonies/cover-cd2.png";
-import cd1Cover from "../../img/symphonies/cover-cd1.png";
-import image_toneArm from "../../img/symphonies/tonearm.png"
-=======
-// src/components/pages/Symphonies.js
-import React, { useState } from "react";
-import { ContentPageLayout } from "@shell"
-import "./Symphonies.css";
-
-// Import audio files
-import epic from      "@assets/audio/epic.mp3";
-import disco from     "@assets/audio/disco.mp3";
-import mestizaje from "@assets/audio/mesti.mp3";
-import oneTit from    "@assets/audio/onetit.mp3";
-import kro from       "@assets/audio/kro.mp3";
-import boys from      "@assets/audio/boys.mp3";
->>>>>>> dev-clean:client/src/features/public/pages/Symphonies.js
+import cd2Cover from "@assets/images/symphonies/cover-cd2.png";
+import cd1Cover from "@assets/images/symphonies/cover-cd1.png";
+import image_toneArm from "@assets/images/symphonies/tonearm.png"
 
 // === PISTES CD 1 (déjà présentes dans ton ancien fichier) ===
-import epic      from "../../mp3/cd1/epic.mp3";
-import disco     from "../../mp3/cd1/disco.mp3";
-import mestizaje from "../../mp3/cd1/mesti.mp3";
-import oneTit    from "../../mp3/cd1/onetit.mp3";
-import kro       from "../../mp3/cd1/kro.mp3";
-import boys      from "../../mp3/cd1/boys.mp3";
+import epic      from "@assets/audio/cd1/epic.mp3";
+import disco     from "@assets/audio/cd1/disco.mp3";
+import mestizaje from "@assets/audio/cd1/mesti.mp3";
+import oneTit    from "@assets/audio/cd1/onetit.mp3";
+import kro       from "@assets/audio/cd1/kro.mp3";
+import boys      from "@assets/audio/cd1/boys.mp3";
 
 // === PISTES CD 2 (fichiers .m4a que tu viens d’ajouter) ===
-import prodigy    from "../../mp3/cd2/2_Prodigy.m4a";
-import letsGet    from "../../mp3/cd2/3_Let_s Get.m4a";
-import biture     from "../../mp3/cd2/4_Biture.m4a";
-import passtime   from "../../mp3/cd2/5_Passtime.m4a";
-import jalousie   from "../../mp3/cd2/6_Jalousie.m4a";
-import backataone from "../../mp3/cd2/7_Backataone.m4a";
-import n99        from "../../mp3/cd2/8_99.m4a";
-import fastFuse   from "../../mp3/cd2/1_FastFuse.m4a";
+import prodigy    from "@assets/audio/cd2/2_Prodigy.m4a";
+import letsGet    from "@assets/audio/cd2/3_Let_s Get.m4a";
+import biture     from "@assets/audio/cd2/4_Biture.m4a";
+import passtime   from "@assets/audio/cd2/5_Passtime.m4a";
+import jalousie   from "@assets/audio/cd2/6_Jalousie.m4a";
+import backataone from "@assets/audio/cd2/7_Backataone.m4a";
+import n99        from "@assets/audio/cd2/8_99.m4a";
+import fastFuse   from "@assets/audio/cd2/1_FastFuse.m4a";
 
 // --------------------
 // 1) On décrit les deux albums dans un tableau :
