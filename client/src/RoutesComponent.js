@@ -24,8 +24,8 @@ import { GestionCitations } from "@features/admin";
 import { GestionUsers } from     "@features/admin";
 
 // Utilitaires
-import { RequireAuth } from "@features/auth";
-import { LoginPage } from '@features/auth';
+import { RequireAuth } from      "@features/auth";
+import { LoginPage } from        '@features/auth';
 
 // Wrappers de page
 const PublicPage = ({ children }) => (
