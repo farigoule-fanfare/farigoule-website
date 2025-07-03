@@ -1,60 +1,40 @@
-const db = require('./databaseService');
+const diapoRepo = require('../repositories/diapoRepository');
+
+const BASE_URL = process.env.REACT_APP_RESTAPI_SERVER_URI;
+const buildImageUrl = (fichier) =>
+  `${BASE_URL}/public/uploads/carousel/${fichier}`;
+
+
+const addImageUrl = (diapo) => ({
+  ...diapo,
+  imageUrl: buildImageUrl(diapo.fichier),
+});
 
 const diapoService = {
   /**
-   * Fetches the latest diapos (carousel slides).
-   * @param {number} [limit=5]
+   * Récupère des diapos selon l’ordre et la limite demandés.
+   * @param {Object}   opts
+   * @param {'random'|'desc'} [opts.order='random']  Tri aléatoire ou décroissant.
+   * @param {number}   [opts.limit=5]               Nombre max de lignes (undefined → sans limite).
    */
-  getLatestDiapos: (limit = 5) => new Promise((resolve, reject) => {
-    const sql = `SELECT id, fichier, description, created_at FROM diapos ORDER BY id DESC LIMIT ?`;
-    db.all(sql, [limit], (err, rows) => err ? reject(err) : resolve(rows));
-  }),
+  async list({ order = 'random', limit } = {}) {
+    const diapos = await diapoRepo.find({ order, limit });
+    return diapos.map(addImageUrl);
+  },
 
-  /**
-   * Fetches a single random diapo.
-   */
-  getRandomDiapo: () => new Promise((resolve, reject) => {
-    const sql = `SELECT id, fichier, description, created_at FROM diapos ORDER BY RANDOM() LIMIT 1`;
-    db.get(sql, [], (err, row) => err ? reject(err) : resolve(row || null));
-  }),
+  async addDiapo({ fichier, description }) {
+    const created = await diapoRepo.create({ fichier, description });
+    return addImageUrl(created);
+  },
 
-  /**
-   * Fetches all diapos.
-   */
-  getAllDiapos: () => new Promise((resolve, reject) => {
-    const sql = `SELECT id, fichier, description, created_at FROM diapos ORDER BY id DESC`;
-    db.all(sql, [], (err, rows) => err ? reject(err) : resolve(rows));
-  }),
+  async updateDiapo(id, { fichier, description }) {
+    const updated = await diapoRepo.update(id, { fichier, description });
+    return addImageUrl(updated);
+  },
 
-  /**
-   * Adds a new diapo.
-   */
-  addDiapo: ({ fichier, description }) => new Promise((resolve, reject) => {
-    const sql = `INSERT INTO diapos (fichier, description, created_at) VALUES (?, ?, datetime('now'))`;
-    db.run(sql, [fichier, description], function(err) {
-      err ? reject(err) : resolve({ id: this.lastID, fichier, description, created_at: new Date().toISOString() });
-    });
-  }),
-
-  /**
-   * Updates an existing diapo by ID.
-   */
-  updateDiapo: (id, { fichier, description }) => new Promise((resolve, reject) => {
-    const sql = `UPDATE diapos SET fichier = COALESCE(?, fichier), description = COALESCE(?, description) WHERE id = ?`;
-    db.run(sql, [fichier, description, id], function(err) {
-      err ? reject(err) : resolve({ id, fichier, description, changes: this.changes });
-    });
-  }),
-
-  /**
-   * Deletes a diapo by ID.
-   */
-  deleteDiapo: (id) => new Promise((resolve, reject) => {
-    const sql = `DELETE FROM diapos WHERE id = ?`;
-    db.run(sql, [id], function(err) {
-      err ? reject(err) : resolve({ deleted: this.changes });
-    });
-  })
+  deleteDiapo(id) {
+    return diapoRepo.remove(id);
+  },
 };
 
 module.exports = diapoService;
