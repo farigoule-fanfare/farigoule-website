@@ -100,9 +100,13 @@
   cursor: pointer;
 }
 
+.pInfosFanfaron{
+  margin: 0;
+}
+
 .wrapperPhoto{
   position: relative;
-  margin-top: 0.5rem;
+  margin-top: .75rem;
 }
 
 .badgeBureau{
