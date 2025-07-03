@@ -1,31 +1,31 @@
 import React, { useEffect } from "react";
-import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 // Layout
 import { PageWrapper } from      "@shell";
     
 // Pages publiques     
-import { LandingPage } from "@features/public";
-import { LoginPage } from '@features/auth';
-import { NousPage } from "@features/public";
-import { ContactPage } from "@features/public";
-import { Symphonies } from "@features/public";
-import { Portraits } from "@features/public";
+import { LandingPage } from      "@features/public";
+import { NousPage } from         "@features/public";
+import { ContactPage } from      "@features/public";
+import { Symphonies } from       "@features/public";
+import { Portraits } from        "@features/public";
+import { NotFound } from         "@features/public";
 
-// Pages utilisateurs  
+// Pages auth  
 import { UserProfile } from      "@features/profile";
 import { ChangePassword } from   "@features/profile";
 
-// Admin
-import AdminPanel from       "@components/AdminPanel/pages/mainPanel";
-import GestionFanfarons from "@components/AdminPanel/pages/gestionFanfarons";
-import GestionAccueil from   "@components/AdminPanel/pages/gestionAccueil";
-import GestionCitations from "@components/AdminPanel/pages/gestionCitations";
-import GestionUsers from     "@components/AdminPanel/pages/gestionUsers";
+// Pages admin
+import { AdminHome } from        "@features/admin";
+import { GestionFanfarons } from "@features/admin";
+import { GestionAccueil } from   "@features/admin";
+import { GestionCitations } from "@features/admin";
+import { GestionUsers } from     "@features/admin";
 
 // Utilitaires
-import { RequireAuth } from      "@features/auth";
-import { NotFound } from         "@features/public";
+import { RequireAuth } from "@features/auth";
+import { LoginPage } from '@features/auth';
 
 // Wrappers de page
 const PublicPage = ({ children }) => (
@@ -67,7 +67,7 @@ export function RoutesComponent() {
         <Route path="/change-password" element={<PrivatePage><ChangePassword /></PrivatePage>} />
 
         {/* Routes admin */}
-        <Route path="/adminPanel" element={<AdminPage><AdminPanel /></AdminPage>} />
+        <Route path="/adminPanel" element={<AdminPage><AdminHome /></AdminPage>} />
         <Route path="/gestionAccueil" element={<AdminPage><GestionAccueil /></AdminPage>} />
         <Route path="/gestionCitations" element={<AdminPage><GestionCitations /></AdminPage>} />
         <Route path="/gestionFanfarons" element={<AdminPage><GestionFanfarons /></AdminPage>} />

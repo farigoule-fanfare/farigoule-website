@@ -1,6 +1,6 @@
 import React from 'react';
-import AdminPageLayout from '../../layout/AdminPageLayout';
-import AdminCrudSection from '../components/AdminCrudSection';
+import AdminPageLayout from '../layouts/AdminPageLayout';
+import AdminCrudSection from '../components/crud/AdminCrudSection';
 import { useAuth } from '@features/auth';
 import { axiosWrapper } from '@services/axiosUtils';
 
