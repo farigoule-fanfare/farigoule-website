@@ -1,6 +1,6 @@
-import { useCrudList } from '@hooks/useCrudList';
-import AdminPageLayout from '../../layout/AdminPageLayout';
-import AdminCrudSection   from '../components/AdminCrudSection';
+import { useCrudList } from '../hooks/useCrudList';
+import AdminPageLayout from '../layouts/AdminPageLayout';
+import AdminCrudSection   from '../components/crud/AdminCrudSection';
 
 export default function GestionCitations() {
   // juste pour alimenter le <select> Fanfaron
