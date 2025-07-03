@@ -37,6 +37,7 @@
   height: auto;
   border-radius: 8px;
   margin: 0 auto;
+  pointer-events: none;
 }
 
 /* Scrollable description */
