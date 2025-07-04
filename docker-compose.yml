@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   client:
     image: ${REGISTRY:-ghcr.io}/${IMAGE_OWNER:-your-github-username}/farigoule-client:${TAG:-latest}
