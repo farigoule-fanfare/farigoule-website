@@ -31,7 +31,7 @@ export default function GestionFanfarons() {
       header: 'Photo',
       render: (v, row) =>
         v ? (
-          <img src={v} alt={row.surnom} className="apercuDiapo" />
+          <img src={v} alt={row.surnom} className="apercuAdminFanfaron" />
         ) : (
           <span className="gestionFanfarons-noPhoto">Aucune photo</span>
         ),
