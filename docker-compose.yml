@@ -30,6 +30,8 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - JWT_EXPIRY=${JWT_EXPIRY}
       - FRONTEND_URL=${FRONTEND_URL}
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
     volumes:
       - farigoule-db-storage:/usr/app/database/
       - farigoule-uploads-storage:/usr/app/public/uploads
