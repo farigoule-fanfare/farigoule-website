@@ -18,7 +18,7 @@ export default function GestionAccueil() {
             key: 'imageUrl',
             header: 'Aperçu',
             render: (v, d) => (
-              <img src={d.imageUrl} alt={d.description} className="apercuDiapo" />
+              <img src={d.imageUrl} alt={d.description} className="apercuAdminDiapo" />
             ),
           },
           { key: 'description', header: 'Texte' },
