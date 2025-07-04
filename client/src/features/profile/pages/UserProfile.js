@@ -47,7 +47,7 @@ export default function UserProfile() {
       console.log('Submitting user profile update:', form);
       await axiosWrapper({
         method: 'put',
-        url: 'api/users/profile',
+        url: 'users/profile',
         data: form,
       });
       setStatus('Modifications enregistrées.');

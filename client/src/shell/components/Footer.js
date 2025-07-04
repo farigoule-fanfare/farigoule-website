@@ -18,7 +18,7 @@ function Footer () {
       setLoadingPresident(true)
       setErrorPresident(null)
       try {
-        const res = await axiosWrapper({ url: 'api/users/current-president', method: 'get' })
+        const res = await axiosWrapper({ url: 'users/current-president', method: 'get' })
         if (res.data) setPresidentInfo(res.data)
         else throw new Error(res?.error || 'Erreur inconnue')
       } catch (err) {
