@@ -1,7 +1,7 @@
 const contratService = require('../services/contratService');
 
 const contratsController = {
-  /** GET /api/contrats */
+  /** GET /contrats */
   listContrats: async (req, res) => {
     try {
       const { scope, since, until, order, limit } = req.query;
@@ -20,7 +20,7 @@ const contratsController = {
     }
   },
 
-  /** POST /api/contrats */
+  /** POST /contrats */
   addContrat: async (req, res) => {
     try {
       const { date, lieu, description } = req.body;
@@ -32,7 +32,7 @@ const contratsController = {
     }
   },
 
-  /** PUT /api/contrats/:id */
+  /** PUT /contrats/:id */
   updateContrat: async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
@@ -45,7 +45,7 @@ const contratsController = {
     }
   },
 
-  /** DELETE /api/contrats/:id */
+  /** DELETE /contrats/:id */
   deleteContrat: async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
