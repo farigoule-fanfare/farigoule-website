@@ -1,8 +1,5 @@
 const diapoRepo = require('../repositories/diapoRepository');
-
-const BASE_URL = process.env.REACT_APP_RESTAPI_SERVER_URI;
-const buildImageUrl = (fichier) =>
-  `${BASE_URL}/public/uploads/carousel/${fichier}`;
+const buildImageUrl = (fichier) => `/public/uploads/carousel/${fichier}`;
 
 
 const addImageUrl = (diapo) => ({
