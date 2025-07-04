@@ -8,10 +8,10 @@ export default function GestionAccueil() {
       {/* -------- Diaporama -------- */}
       <AdminCrudSection
         title="Diaporama"
-        listUrl="api/diapos/ordered"
-        saveUrl="api/diapos"
-        updateUrl={id => `api/diapos/${id}`}
-        deleteUrl={id => `api/diapos/${id}`}
+        listUrl="diapos/ordered"
+        saveUrl="diapos"
+        updateUrl={id => `diapos/${id}`}
+        deleteUrl={id => `diapos/${id}`}
         itemsPerPage={5}    
         tableCols={[
           {
@@ -38,10 +38,10 @@ export default function GestionAccueil() {
       {/* -------- Prochaines dates -------- */}
       <AdminCrudSection
         title="Prochaines dates"
-        listUrl="api/contrats"
-        saveUrl="api/contrats"
-        updateUrl={id => `api/contrats/${id}`}
-        deleteUrl={id => `api/contrats/${id}`}
+        listUrl="contrats"
+        saveUrl="contrats"
+        updateUrl={id => `contrats/${id}`}
+        deleteUrl={id => `contrats/${id}`}
         tableCols={[
           {
             key: 'date',
