@@ -2,9 +2,6 @@ services:
   client:
     image: ghcr.io/chibranche/farigoule-client:${TAG}
     container_name: farigoule-client
-    build:
-      context: ./client
-      dockerfile: Dockerfile
     environment:
       - NODE_ENV=production
       - VIRTUAL_HOST=fanfare-farigoule.com
@@ -21,9 +18,6 @@ services:
   server:
     image: ghcr.io/chibranche/farigoule-server:${TAG}  
     container_name: farigoule-server
-    build:
-      context: ./server
-      dockerfile: Dockerfile
     environment:
       - NODE_ENV=production
       - PORT=${SERVER_PORT}
@@ -64,5 +58,4 @@ volumes:
     name : farigoule-uploads-storage
 networks:
   farigoule-network:
-    external: true
     name: farigoule-network
