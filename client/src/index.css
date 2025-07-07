@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 body {
   margin: 0;
   /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,7 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* Copied from old global.css */
-  background: url("./img/background.jpg"); /* Adjusted path to be relative to src/img */
+  background: url("@assets/images/background.jpg");
   font-family: 'Open Sans', sans-serif; /* Requires font import */
 }
 
@@ -38,9 +34,6 @@ h3 {
   font-size: 1.2em;
 }
 
-/* th styling was moved to Footer.css as .tableauFooter th */
-/* a styling was moved to Header.css and Footer.css, can be centralized if desired */
-
 strong {
   font-weight: bold;
 }
@@ -53,33 +46,3 @@ form {
   border: 1px solid black;
   border-radius: 10px;
 }
-
-/* Social media buttons styling from old global.css */
-/* These might be part of a specific component or general layout */
-.premierTitre, .blocSocial {
-  display: inline-block;
-  vertical-align: top;
-}
-
-.premierTitre {
-  width: 860px; /* Consider responsiveness */
-  margin-top: 10px;
-}
-
-.blocSocial {
-  margin-left: 10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.boutonFacebook, .boutonTwitter, .boutonYoutube {
-  width: 40px;
-  height: 40px;
-  /* Ensure these images are in /img/boutons/ or similar */
-}
-
-/* IMPORTANT: Font imports are needed for 'Open Sans', 'Lobster', 'Marck Script'. */
-/* These should be added, e.g., via Google Fonts <link> in public/index.html or @import in this CSS file. */
-
-/* Example @import for Google Fonts (place at the top of this file): */
-/* @import url('https://fonts.googleapis.com/css2?family=Lobster&family=Marck+Script&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap'); */
