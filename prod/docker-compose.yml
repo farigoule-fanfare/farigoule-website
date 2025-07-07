@@ -7,16 +7,19 @@ services:
       - VIRTUAL_HOST=fanfare-farigoule.com
       - LETSENCRYPT_HOST=fanfare-farigoule.com
       - API_BACKEND_URL=${API_BACKEND_URL}
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     ports:
       - "${CLIENT_PORT}:80"
     restart: unless-stopped
     networks:
       - farigoule-network
+      - nginx-proxy-ginfo
     depends_on:
       - server
 
   server:
-    image: ghcr.io/chibranche/farigoule-server:${TAG}  
+    image: ghcr.io/chibranche/farigoule-server:${TAG}
     container_name: farigoule-server
     environment:
       - NODE_ENV=production
@@ -24,6 +27,8 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - JWT_EXPIRY=${JWT_EXPIRY}
       - FRONTEND_URL=${FRONTEND_URL}
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
     volumes:
@@ -40,14 +45,15 @@ services:
       # Intervalle = 300 s (5 min) ; --cleanup supprime l’ancienne image après maj
       # --label-enable : ne touche qu’aux conteneurs marqués ci-dessus
       command: >
-        --interval 300
+        --interval 3600
         --cleanup
         --label-enable
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
-        - ~/.docker:/config:ro
+        - /home/ginfo/.docker/config.json:/config.json:ro
       environment:
         - TZ=Europe/Paris
+        - REGISTRY_AUTH_FILE=/config.json
 
 volumes:
   farigoule-db-storage:
@@ -59,3 +65,5 @@ volumes:
 networks:
   farigoule-network:
     name: farigoule-network
+  nginx-proxy-ginfo:
+    external: true
