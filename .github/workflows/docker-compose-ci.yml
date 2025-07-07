@@ -20,33 +20,10 @@ jobs:
 #───────────────────────────────────────────────────────────────────────────────
 # 1) CI : vérifier que le build passe sur les PR
 #───────────────────────────────────────────────────────────────────────────────
-  list-envs:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      actions: read
-    steps:
-      - name: Lister les environnements
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const { data } = await github.request(
-              'GET /repos/{owner}/{repo}/environments',
-              {
-                owner: context.repo.owner,
-                repo: context.repo.repo
-              }
-            );
-            console.log(
-              'Environnements disponibles :',
-              data.environments.map(e => e.name)
-            );
-
-  
   validate-build:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    environment: "Production – farigoule-vercel-server" 
+    environment: 'Production – farigoule-vercel-server'
     env:
       # tag factice pour la substitution ${TAG:-latest}
       TAG: test-pr
@@ -72,7 +49,7 @@ jobs:
   build-and-push:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
-    environment: production
+    environment: 'Production – farigoule-vercel-server'
     permissions:
       contents: read
       packages: write
