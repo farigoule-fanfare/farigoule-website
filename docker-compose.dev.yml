@@ -1,29 +1,15 @@
-# docker-compose.yml
-
-# We define the environment variables here so docker-compose knows about them.
-# The GitHub Actions workflow will populate these values during the run.
-# For local development, you might need a .env file to set these.
-# Example .env file content:
-# REGISTRY=ghcr.io
-# IMAGE_OWNER=your-github-username
-# TAG=latest
-
 services:
   client:
-    # This is the crucial change: defining the image name for the registry.
-    image: ${DOCKER_CLIENT_IMAGE}
+    image: ${REGISTRY:-ghcr.io}/${IMAGE_OWNER:-your-github-username}/farigoule-client:${TAG:-latest}
     container_name: farigoule-client
-    env_file:
-      - "client/.env"
     build:
       context: ./client
       dockerfile: Dockerfile
-      args:
-        REACT_APP_RESTAPI_SERVER_URI: ${REACT_APP_RESTAPI_SERVER_URI}
     environment:
       - NODE_ENV=production
       - VIRTUAL_HOST=fanfare-farigoule.com
       - LETSENCRYPT_HOST=fanfare-farigoule.com
+      - API_BACKEND_URL=${API_BACKEND_URL}
     ports:
       - "${CLIENT_PORT}:80"
     restart: unless-stopped
@@ -33,19 +19,19 @@ services:
       - server
 
   server:
-    # And the same change for the server.
-    image: ${DOCKER_SERVER_IMAGE}
+    image: ${REGISTRY:-ghcr.io}/${IMAGE_OWNER:-your-github-username}/farigoule-server:${TAG:-latest}
     container_name: farigoule-server
-    env_file:
-      - "server/.env"
     build:
       context: ./server
       dockerfile: Dockerfile
     environment:
       - NODE_ENV=production
       - PORT=${SERVER_PORT}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRY=${JWT_EXPIRY}
       - FRONTEND_URL=${FRONTEND_URL}
-      - REACT_APP_RESTAPI_SERVER_URI=${REACT_APP_RESTAPI_SERVER_URI}
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
     volumes:
       - farigoule-db-storage:/usr/app/database/
       - farigoule-uploads-storage:/usr/app/public/uploads
@@ -56,14 +42,9 @@ services:
 volumes:
   farigoule-db-storage:
     driver: local
-    # 'name' is redundant here when the key is the same. Can be removed.
-    name: farigoule-db-storage
   farigoule-uploads-storage:
     driver: local
-    name: farigoule-uploads-storage
 
 networks:
   farigoule-network:
     driver: bridge
-    # 'name' is redundant here as well.
-    name: farigoule-network
