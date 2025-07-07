@@ -1,20 +1,17 @@
 const express = require("express");
 const router = express.Router();
-
-const userController = require("../controllers/userController");
+const ctrl = require("../controllers/userController");
 const { protect, authorize } = require('../middleware/authMiddleware');
 
-// Mounted at /route/users
-// router.post('/register', protect, authorize(['admin']), userController.registerFanfaronApi); // Admin only
-// router.put('/update-password/:id', protect, authorize(['admin']), userController.updateFanfaronPasswordApi); // Admin only
+// Public routes
+router.get('/current-president', ctrl.getCurrentPresident);
 
-// New public route for current president
-router.get('/current-president', userController.getCurrentPresidentApi);
+// Protected routes (authenticated users)
+router.put('/profile', protect, ctrl.updateProfile);
 
-// AUTH ONLY: Route pour qu'un fanfaron puisse modifier son profil (nom, prénom, téléphone, email)
-router.put('/profile', protect, userController.updateProfileApi);
-
-+ // AUTH ONLY: Route pour que l’utilisateur change son propre mot de passe
-+ router.put('/change-password', protect, userController.changePasswordApi);
+// Private routes(admin only)
+router.get('/roles', [protect, authorize(['admin'])], ctrl.listUsersRoles);
+router.post('/:id/addAdminRole', [protect, authorize(['admin'])], ctrl.addAdminRole);
+router.post('/:id/removeAdminRole', [protect, authorize(['admin'])], ctrl.removeAdminRole);
 
 module.exports = router; 
