@@ -22,16 +22,26 @@ jobs:
 #───────────────────────────────────────────────────────────────────────────────
   list-envs:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
     steps:
       - name: Lister les environnements
         uses: actions/github-script@v6
         with:
           script: |
-            const { data } = await github.rest.repos.listEnvironmentsForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo
-            });
-            console.log("Environnements :", data.environments.map(e => e.name));
+            const { data } = await github.request(
+              'GET /repos/{owner}/{repo}/environments',
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo
+              }
+            );
+            console.log(
+              'Environnements disponibles :',
+              data.environments.map(e => e.name)
+            );
+
   
   validate-build:
     if: github.event_name == 'pull_request'
