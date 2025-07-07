@@ -3,11 +3,11 @@ name: Docker Compose CI/CD
 on:
   # ——— Pull-requests : simple validation du build
   pull_request:
-    branches: [ "main", "dev" ]
+    branches: [ "main", "preprod"]
 
   # ——— Pushes : build + push des images
   push:
-    branches: [ "main", "dev" ]
+    branches: [ "main"]
 
 # Variables « techniques » communes (ne contiennent ni secrets ni vars)
 env:
