@@ -23,7 +23,7 @@ jobs:
   validate-build:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    environment: Production - farigoule-vercel-server
+    environment: "Production – farigoule-vercel-server"
     env:
       # tag factice pour la substitution ${TAG:-latest}
       TAG: test-pr
