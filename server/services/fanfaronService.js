@@ -1,127 +1,35 @@
-const db = require('./databaseService');
+const fanfaronRepo = require('../repositories/fanfaronRepository');
+const buildPhotoUrl = (photo) => `/public/uploads/fanfarons/${photo}`;
 
+const addPhotoUrl = (f) => ({
+  ...f,
+  photoUrl: buildPhotoUrl(f.photo),
+});
 
-module.exports = {
-  /**
-   * Récupère tous les fanfarons
-   * @returns {Promise<Array>} liste des fanfarons
-   */
-  getAllFanfarons: () =>
-    new Promise((resolve, reject) => {
-      db.all('SELECT * FROM fanfarons', (err, rows) => {
-        if (err) reject(err);
-        else resolve(rows);
-      });
-    }),
+const fanfaronService = {
+  async getAllFanfarons() {
+    const fanfarons = await fanfaronRepo.findAll();
+    return fanfarons.map(addPhotoUrl);
+  },
 
-  /**
-   * Crée un nouveau fanfaron
-   * @param {Object} data - champs du fanfaron
-   * @returns {Promise<Object>} fanfaron inséré (avec id)
-   */
-  createFanfarons: data =>
-    new Promise((resolve, reject) => {
-      const {
-        surnom,
-        nom,
-        prenom,
-        instrument,
-        promo,
-        bureau,
-        email,
-        tel,
-        description,
-        photo
-      } = data;
-      const stmt = db.prepare(
-        `INSERT INTO fanfarons
-         (surnom,nom,prenom, instrument, promo, bureau, email, tel, description, photo)
-         VALUES (?, ?,?,?, ?, ?, ?, ?, ?, ?)`
-      );
-      stmt.run(
-        surnom,
-        nom,
-        prenom,
-        instrument,
-        promo,
-        bureau,
-        email,
-        tel,
-        description,
-        photo,
-        function(err) {
-          if (err) return reject(err);
-          const newF = db.prepare('SELECT * FROM fanfarons WHERE id = ?').get(this.lastID);
-          resolve(newF);
-        }
-      );
-    }),
+  async getAllFanfaronsAnnuaire() {
+    const fanfarons = await fanfaronRepo.findAllAnnuaire();
+    return fanfarons.map(addPhotoUrl);
+  },
 
-  /**
-   * Met à jour un fanfaron existant
-   * @param {number|string} id - identifiant du fanfaron
-   * @param {Object} data - champs à mettre à jour
-   * @returns {Promise<Object>} fanfaron mis à jour
-   */
-  updateFanfarons: (id, data) =>
-    new Promise((resolve, reject) => {
-      const {
-        surnom,
-        nom,
-        prenom,
-        instrument,
-        promo,
-        bureau,
-        email,
-        tel,
-        description,
-        photo
-      } = data;
-      const stmt = db.prepare(
-        `UPDATE fanfarons
-         SET surnom = ?,
-             nom = ?,
-             prenom = ?,
-             instrument = ?,
-             promo = ?,
-             bureau = ?,
-             email = ?,
-             tel = ?,
-             description = ?,
-             photo = COALESCE(?, photo)
-         WHERE id = ?`
-      );
-      stmt.run(
-        surnom,
-        nom,
-        prenom,
-        instrument,
-        promo,
-        bureau,
-        email,
-        tel,
-        description,
-        photo,
-        id,
-        function(err) {
-          if (err) return reject(err);
-          const updated = db.prepare('SELECT * FROM fanfarons WHERE id = ?').get(id);
-          resolve(updated);
-        }
-      );
-    }),
+  async createFanfarons(data) {
+    const created = await fanfaronRepo.create(data);
+    return addPhotoUrl(created);
+  },
 
-  /**
-   * Supprime un fanfaron par son identifiant
-   * @param {number|string} id - identifiant du fanfaron
-   * @returns {Promise<void>}
-   */
-  deleteFanfarons: id =>
-    new Promise((resolve, reject) => {
-      const stmt = db.prepare('DELETE FROM fanfarons WHERE id = ?');
-      stmt.run(id, function(err) {
-        if (err) reject(err);
-        else resolve();
-      });
-    })
+  async updateFanfarons(id, data) {
+    const updated = await fanfaronRepo.update(id, data);
+    return addPhotoUrl(updated);
+  },
+
+  deleteFanfarons(id) {
+    return fanfaronRepo.remove(id);
+  },
 };
+
+module.exports = fanfaronService;
