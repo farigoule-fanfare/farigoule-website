@@ -23,6 +23,7 @@ jobs:
   validate-build:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    environment: production
     env:
       # tag factice pour la substitution ${TAG:-latest}
       TAG: test-pr
@@ -48,6 +49,7 @@ jobs:
   build-and-push:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
+    environment: production
     permissions:
       contents: read
       packages: write
