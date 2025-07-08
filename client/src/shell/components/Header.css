@@ -1,0 +1,182 @@
+/* Styles for Header component */
+
+header {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 1000px;
+  margin: 0 auto 1rem auto;
+  padding: 0 10px;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+.blocLogo {
+  width: 300px;
+  flex-shrink: 0;
+}
+
+.logoFarigoule {
+  width: 100%;
+  height: auto;
+  margin-top: 5%;
+}
+
+.blocHeader {
+  width: 680px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0;
+}
+
+.blocCitation {
+  overflow: hidden;
+  height: 160px;
+  margin: 15px 10px 0px 10px;
+  background-image: url("@assets/images/background-citation.png");
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  padding: 1.2rem 1.2rem 0.5rem 0.5rem;
+}
+
+.citation {
+  font-family: 'Marck Script', cursive;
+  font-size: 1.5em;
+  text-align: justify;
+  text-indent: 5rem;
+}
+
+.auteurCitation {
+  font-weight: bold;
+  font-style: italic;
+  text-align: right;
+  margin-top: 0px;
+}
+
+.headerNavBar {
+  width: 680px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .headerNavBar {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+}
+
+.headerNavBarItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.headerNavBarItemTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.headerNavBar > div > span {
+  visibility: hidden;
+}
+.headerNavBar > div:hover > span {
+  visibility: visible;
+}
+
+.boutonAccueil,
+.boutonNous,
+.boutonSymphonies,
+.boutonPortraits,
+.boutonContact {
+  width: 85px;
+  height: 85px;
+}
+
+.auth-status-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 1rem;
+}
+
+.auth-user {
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap !important;
+    padding: 0 1rem;
+  }
+
+  .blocLogo {
+    display: none;
+  }
+
+  .blocHeader {
+    width: 100%;
+    align-items: center;
+  }
+
+  .blocCitation {
+    width: 100%;
+    height: 130px;
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: top left;
+    padding: 1rem 1rem 0.5rem 0.5rem;
+    border-left: none;
+  }
+
+  .citation {
+    text-indent: 4.5rem;
+    font-size: 1.2em;
+    text-align: justify;
+  }
+
+  .auteurCitation {
+    text-align: right;
+  }
+
+  .headerNavBar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .headerNavBar div {
+    width: 4.2rem;
+  }
+
+  .headerNavBar img {
+    width: 4.2rem;
+    height: 4.2rem;
+  }
+
+  .headerNavBar span {
+    display: block;
+    font-size: 0.7em;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+    visibility: visible !important;
+  }
+
+  .auth-status-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+}
