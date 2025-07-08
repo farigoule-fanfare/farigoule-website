@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
         setIsLoading(true);
         setError(null);
         try {
-            const { data } = await axiosWrapper({ method: 'get', url: 'api/auth/status' });
+            const { data } = await axiosWrapper({ method: 'get', url: 'auth/status' });
             if (data?.isAuthenticated && data?.user) {
                 setCurrentUser(data.user);
                 setIsAuthenticated(true);
@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
         setIsLoading(true);
         setError(null);
         try {
-            const { data } = await axiosWrapper({ method: 'post', url: 'api/auth/login', data: credentials });
+            const { data } = await axiosWrapper({ method: 'post', url: 'auth/login', data: credentials });
             if (data?.user) {
                 setCurrentUser(data.user);
                 setIsAuthenticated(true);
@@ -77,7 +77,7 @@ export const AuthProvider = ({ children }) => {
         setIsLoading(true);
         setError(null);
         try {
-            await axiosWrapper({ method: 'post', url: 'api/auth/logout' });
+            await axiosWrapper({ method: 'post', url: 'auth/logout' });
         } catch (err) {
             console.error("Logout error:", err.message);
         } finally {
