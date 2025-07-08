@@ -35,37 +35,32 @@ const fanfaronRepository = {
       tel,
       description,
       photo,
+      roles,
     } = data;
 
     const insertSql = `
       INSERT INTO fanfarons
-        (surnom, nom, prenom, instrument, promo, bureau, email, tel, description, photo)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (surnom, nom, prenom, instrument, promo, bureau, email, tel, description, photo, roles)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    const { lastInsertRowid } = db
-      .prepare(insertSql)
-      .run(
-        surnom,
-        nom,
-        prenom,
-        instrument,
-        promo,
-        bureau,
-        email,
-        tel,
-        description,
-        photo,
-      );
+    const info = db.prepare(insertSql).run(
+      surnom, nom, prenom, instrument,
+      promo, bureau, email || null, tel,
+      description, photo, roles,
+    );
+
+    const id = info.lastInsertRowid;
 
     return db
       .prepare(
-        `SELECT surnom, nom, prenom, instrument, promo, bureau,
-                email, tel, description, photo
-           FROM fanfarons WHERE id = ?`
+        `SELECT id, surnom, nom, prenom, instrument, promo, bureau,
+                email, tel, description, roles, photo
+          FROM fanfarons WHERE id = ?`
       )
-      .get(lastInsertRowid);
+      .get(id);
   },
+
 
   /** Mise à jour d’un fanfaron et retour de la ligne modifiée */
   async update(id, data) {
