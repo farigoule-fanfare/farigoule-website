@@ -18,7 +18,19 @@ const fanfaronService = {
   },
 
   async createFanfarons(data) {
-    const created = await fanfaronRepo.create(data);
+    let newData = { ...data };
+    newData.roles = JSON.stringify(["fanfaron"]);
+
+    if (!newData.email || newData.email.trim() === '') {
+      newData.email = null;
+    }
+    const created = await fanfaronRepo.create(newData);
+
+    if (!created.email) {
+      const defaultEmail = `user${created.id}@local`;
+      await fanfaronRepo.update(created.id, { ...created, email: defaultEmail });
+      created.email = defaultEmail;
+    }
     return addPhotoUrl(created);
   },
 

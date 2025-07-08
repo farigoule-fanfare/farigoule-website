@@ -22,7 +22,7 @@ function Header() {
     const [isSymphoniesHovered, setIsSymphoniesHovered] = useState(false);
     const [isPortraitsHovered, setIsPortraitsHovered] = useState(false);
     const [isContactHovered, setIsContactHovered] = useState(false);
-    const { citation, auteurCitation } = useCitations(); 
+    const { citation, auteur } = useCitations(); 
     const { isAuthenticated, currentUser, logout, isLoading } = useAuth();
     const navigate = useNavigate();
 
@@ -40,7 +40,7 @@ function Header() {
             <div className="blocHeader">
                 <blockquote className="blocCitation">
                     <p className="citation">{citation}</p>
-                    <p className="auteurCitation">{auteurCitation}</p>
+                    <p className="auteurCitation">{auteur}</p>
                 </blockquote>
 
                 <div className="auth-status-header">
