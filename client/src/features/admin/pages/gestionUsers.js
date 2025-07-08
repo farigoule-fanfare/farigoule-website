@@ -49,7 +49,7 @@ export default function GestionUtilisateurs() {
     if (!window.confirm(`Réinitialiser le mot de passe de ${u.surnom} ?`)) return;
     const newPass = generateRandomPassword();
     try {
-      await axiosWrapper({ method: 'post', url: 'api/auth/admin-set-password', data: { userId: u.id, newPassword: newPass } });
+      await axiosWrapper({ method: 'post', url: 'auth/admin-set-password', data: { userId: u.id, newPassword: newPass } });
       showPasswordPopup(newPass);
     } catch (err) {
       console.error('RESET PASSWORD ERROR', err);
@@ -65,7 +65,7 @@ export default function GestionUtilisateurs() {
     if (!window.confirm(confirmMsg)) return;
     const action = currentRole === 'admin' ? 'removeAdminRole' : 'addAdminRole';
     try {
-      await axiosWrapper({ method: 'post', url: `api/users/${u.id}/${action}` });
+      await axiosWrapper({ method: 'post', url: `users/${u.id}/${action}` });
     } catch (err) {
       console.error('TOGGLE ADMIN ERROR', err);
     }
@@ -104,7 +104,7 @@ export default function GestionUtilisateurs() {
   return (
     <AdminPageLayout title="Gestion des utilisateurs">
       <AdminCrudSection
-        listUrl="api/users/roles"
+        listUrl="users/roles"
         tableCols={tableCols}
         formFields={null}
         sortFn={sortFn}
