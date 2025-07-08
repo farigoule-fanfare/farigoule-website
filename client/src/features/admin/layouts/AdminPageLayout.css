@@ -109,3 +109,7 @@
   display: block;
 }
 
+/* Responsive adjustments for pictures */
+.apercuAdminDiapo, .apercuAdminFanfaron {
+  width: 100%;
+}
