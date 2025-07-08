@@ -36,7 +36,7 @@ function LandingPage() {
             try {
                 setLoading(prev => ({ ...prev, diapos: true }));
                 setError(prev => ({ ...prev, diapos: null }));
-                const response = await axiosWrapper({ method: 'get', url: 'api/diapos?limit=6&order=desc' });
+                const response = await axiosWrapper({ method: 'get', url: 'diapos?limit=6&order=desc' });
                 setDiapos(response.data);
             } catch (err) {
                 console.error("LandingPage Error fetching diapos:", err);
@@ -55,8 +55,8 @@ function LandingPage() {
                 setError(prev => ({ ...prev, contrats: null }));
 
                 const [upcomingRes, pastRes] = await Promise.all([
-                    axiosWrapper({ method: 'get', url: 'api/contrats/upcoming' }),
-                    axiosWrapper({ method: 'get', url: 'api/contrats/past' })
+                    axiosWrapper({ method: 'get', url: 'contrats/upcoming' }),
+                    axiosWrapper({ method: 'get', url: 'contrats/past' })
                 ]);
 
                 setUpcomingContrats(upcomingRes.data);

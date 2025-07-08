@@ -2,8 +2,8 @@ const citationService = require('../services/citationService');
 
 const citationsController = {
   /**
-   * GET /api/citations
-   * ex. /api/citations?order=alpha&author=5&search=truc
+   * GET /citations
+   * ex. /citations?order=alpha&author=5&search=truc
    */
   listCitations: async (req, res) => {
     try {
@@ -16,7 +16,7 @@ const citationsController = {
   },
 
   /**
-   * GET /api/citations/random
+   * GET /citations/random
    */
   randomCitation: async (_req, res) => {
     try {
@@ -29,7 +29,7 @@ const citationsController = {
   },
 
   /**
-   * POST /api/citations
+   * POST /citations
    */
   addCitation: async (req, res) => {
     try {
@@ -43,7 +43,7 @@ const citationsController = {
   },
 
   /**
-   * PUT /api/citations/:id
+   * PUT /citations/:id
    */
   updateCitation: async (req, res) => {
     try {
@@ -59,7 +59,7 @@ const citationsController = {
   },
 
   /**
-   * DELETE /api/citations/:id
+   * DELETE /citations/:id
    */
   deleteCitation: async (req, res) => {
     try {

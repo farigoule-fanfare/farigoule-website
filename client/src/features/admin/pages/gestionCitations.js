@@ -4,16 +4,16 @@ import AdminCrudSection   from '../components/crud/AdminCrudSection';
 
 export default function GestionCitations() {
   // juste pour alimenter le <select> Fanfaron
-  const { list: fanfarons } = useCrudList({ url: 'api/fanfarons', itemsPerPage: 500 });
+  const { list: fanfarons } = useCrudList({ url: 'fanfarons', itemsPerPage: 500 });
 
   return (
     <AdminPageLayout title ="Gestion des citations">
       <AdminCrudSection
         title="Gestion des citations"
-        listUrl="api/citations/ordered"
-        saveUrl="api/citations"
-        updateUrl={id => `api/citations/${id}`}
-        deleteUrl={id => `api/citations/${id}`}
+        listUrl="citations/ordered"
+        saveUrl="citations"
+        updateUrl={id => `citations/${id}`}
+        deleteUrl={id => `citations/${id}`}
         tableCols={[
           { key: 'auteurCitation', header: 'Fanfaron' },
           { key: 'citation',       header: 'Citation' },
