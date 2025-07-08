@@ -1,9 +1,5 @@
-// services/fanfaronService.js
 const fanfaronRepo = require('../repositories/fanfaronRepository');
-
-const BASE_URL = process.env.REACT_APP_RESTAPI_SERVER_URI;
-const buildPhotoUrl = (photo) =>
-  `${BASE_URL}/public/uploads/fanfarons/${photo}`;
+const buildPhotoUrl = (photo) => `/public/uploads/fanfarons/${photo}`;
 
 const addPhotoUrl = (f) => ({
   ...f,
