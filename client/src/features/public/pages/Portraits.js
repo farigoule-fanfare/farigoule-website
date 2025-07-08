@@ -22,7 +22,7 @@ const Portraits = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await axiosWrapper({ method: "get", url: "api/fanfarons" });
+        const res = await axiosWrapper({ method: "get", url: "fanfarons" });
         setFanfarons(res.data);
       } catch (e) {
         setError(e?.response?.data?.message || e.message);

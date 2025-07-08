@@ -9,7 +9,7 @@ export const axiosInstance = axios.create({
 
 export const axiosWrapper = async ({ url, method, data, isMultipart = false }) => {
   try {
-    const fullUrl = `${process.env.REACT_APP_RESTAPI_SERVER_URI}/${url}`;
+    const fullUrl = `api/${url}`;
     const headers = { 'Accept': 'application/json' };
 
     const axiosConfig = {

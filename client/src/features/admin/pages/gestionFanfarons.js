@@ -31,7 +31,7 @@ export default function GestionFanfarons() {
       header: 'Photo',
       render: (v, row) =>
         v ? (
-          <img src={v} alt={row.surnom} className="apercuDiapo" />
+          <img src={v} alt={row.surnom} className="apercuAdminFanfaron" />
         ) : (
           <span className="gestionFanfarons-noPhoto">Aucune photo</span>
         ),
@@ -69,10 +69,10 @@ export default function GestionFanfarons() {
     <AdminPageLayout title="Gestion des fanfarons">
       <AdminCrudSection 
         title="Les fanfarons"
-        listUrl="api/fanfarons/annuaire/"
-        saveUrl="api/fanfarons"
-        updateUrl={(id) => `api/fanfarons/${id}`}
-        deleteUrl={(id) => `api/fanfarons/${id}`}
+        listUrl="fanfarons/annuaire/"
+        saveUrl="fanfarons"
+        updateUrl={(id) => `fanfarons/${id}`}
+        deleteUrl={(id) => `fanfarons/${id}`}
         tableCols={tableCols}
         formFields={formFields}
         sortFn={sortFn}

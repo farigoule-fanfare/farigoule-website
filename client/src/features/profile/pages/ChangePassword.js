@@ -30,7 +30,7 @@ export default function ChangePassword() {
     try {
       await axiosWrapper({
         method: 'put',
-        url: 'api/auth/change-password',
+        url: 'auth/change-password',
         data: {
           currentPassword: form.currentPassword,
           newPassword: form.newPassword

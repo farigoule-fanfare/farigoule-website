@@ -13,7 +13,7 @@ export default function useCitations() {
     const fetchCitation = async () => {
       try {
         const res = await axiosWrapper({
-          url: "api/citations",
+          url: "citations",
           method: "get",
         });
 
