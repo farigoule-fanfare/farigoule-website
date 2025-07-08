@@ -1,0 +1,115 @@
+/* MenuAdminPage.css */
+/* Variables globales */
+:root {
+  --border-radius: 0.4rem;
+  --gap: 1rem;
+  --primary: #007bff;
+  --success: #28a745;
+}
+
+
+.menuAdminContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.menuAdminContainer .menuItem {
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  color: #2c3e50;
+  font-weight: 500;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.menuAdminContainer .menuItem:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.menuAdminContainer .logoutItem {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.menuAdminContainer .logoutItem:hover {
+  background: #c0392b;
+}
+
+/* Tableaux */
+
+.adminPanel-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--gap);
+  background-color: #ffffff71;
+}
+
+.adminPanel-table tbody td{
+  padding: .5rem .75rem;
+  vertical-align: middle;
+}
+
+.adminPanel-table tbody td:last-child{
+  padding-top: .25rem;
+  padding-bottom: .25rem;
+}
+
+.adminPanel-table .contentPage-buttons {
+  margin: 0 0;
+}
+
+.adminPanel-table th,
+.adminPanel-table td {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  text-align: center;
+  white-space: normal;
+}
+
+.adminPanel-table thead th {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.adminPanel-section {
+  max-width: 1000px;
+  margin: 0 auto 2rem auto;
+}
+
+/* For responsive column wrapping */
+.adminPanel-table td {
+  word-break: break-word;
+  white-space: normal;
+  max-width: 100%;
+  vertical-align: top;
+}
+
+/* Responsive table wrapper */
+@media (max-width: 768px) {
+  .adminPanel-table {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+  }
+}
+
+/* Format date sur deux lignes */
+.date-cell {
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.date-cell span {
+  display: block;
+}
+
+/* Responsive adjustments for pictures */
+.apercuAdminDiapo, .apercuAdminFanfaron {
+  width: 100%;
+}

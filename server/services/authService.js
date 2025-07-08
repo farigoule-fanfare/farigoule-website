@@ -1,68 +1,127 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const {
+  findFanfaronBy,
+  updatePasswordById,
+  findPasswordHashById,
+} = require('../repositories/authRepository');
 
-// IMPORTANT: Store your JWT secret securely!
-// Use an environment variable (e.g., process.env.JWT_SECRET)
-// instead of hardcoding.
-// Generate a strong secret key.
-const JWT_SECRET = process.env.JWT_SECRET || 'YOUR_FALLBACK_SUPER_SECRET_KEY_CHANGE_ME'; // Replace with env variable
-const JWT_EXPIRY = process.env.JWT_EXPIRY || '1h'; // Token expiry time (e.g., 1 hour, 7 days)
+/* ---------------------------------------------------------------------------
+ * Constants
+ * ------------------------------------------------------------------------- */
+const SALT_ROUNDS = Number.parseInt(process.env.SALT_ROUNDS ?? '10', 10);
+const JWT_SECRET = process.env.JWT_SECRET ?? '! CHANGE_ME_IN_PRODUCTION !';
+const JWT_EXPIRY = process.env.JWT_EXPIRY ?? '1h'; // e.g. "1h", "7d"
 
-/**
- * Generates a JWT for a given fanfaron.
- * @param {object} fanfaron - The fanfaron object (must include id, surnom, roles).
- * @returns {string} The generated JWT.
- */
-function generateToken(fanfaron) {
-    if (!fanfaron || !fanfaron.id || !fanfaron.surnom || !fanfaron.roles) {
-        throw new Error('Invalid fanfaron object for token generation.');
-    }
-
-    const payload = {
-        id: fanfaron.id,
-        surnom: fanfaron.surnom,
-        roles: fanfaron.roles // Include roles in the token payload for authorization checks
-    };
-
-    const options = {
-        expiresIn: JWT_EXPIRY
-    };
-
-    try {
-        const token = jwt.sign(payload, JWT_SECRET, options);
-        return token;
-    } catch (error) {
-        console.error("Error signing JWT:", error);
-        throw new Error('Could not generate token.');
-    }
-}
-
-/**
- * Verifies a JWT.
- * @param {string} token - The JWT string to verify.
- * @returns {Promise<object>} The decoded token payload if verification is successful.
- * @throws {Error} If verification fails (invalid token, expired, etc.).
- */
-function verifyToken(token) {
-    return new Promise((resolve, reject) => {
-        if (!token) {
-            return reject(new Error('No token provided.'));
-        }
-
-        jwt.verify(token, JWT_SECRET, (err, decoded) => {
-            if (err) {
-                // Handle specific errors like expiration
-                if (err.name === 'TokenExpiredError') {
-                    return reject(new Error('Token expired.'));
-                }
-                console.error("JWT Verification Error:", err.message);
-                return reject(new Error('Invalid token.'));
-            }
-            resolve(decoded); // Decoded payload (e.g., { id, surnom, roles, iat, exp })
-        });
+/* ---------------------------------------------------------------------------
+ * Helpers
+ * ------------------------------------------------------------------------- */
+const signJwt = (payload) => jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRY });
+const asyncVerifyJwt = (token) =>
+  new Promise((resolve, reject) => {
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+      if (err) {
+        return reject(
+          err.name === 'TokenExpiredError' ? new Error('Token expired') : new Error('Invalid token'),
+        );
+      }
+      resolve(decoded); // { id, surnom, roles, iat, exp }
     });
-}
+  });
 
-module.exports = {
-    generateToken,
-    verifyToken
-}; 
+/* ---------------------------------------------------------------------------
+ * authService – public API
+ * ------------------------------------------------------------------------- */
+const authService = {
+  /**
+   * Generates a signed JWT from a fanfaron object.
+   * @param {object} fanfaron – requires { id, surnom, roles }
+   * @returns {string}
+   */
+  generateToken(fanfaron) {
+    const { id, surnom, roles } = fanfaron ?? {};
+    if (!id || !surnom || !roles) {
+      throw new TypeError('Invalid fanfaron supplied to generateToken');
+    }
+    return signJwt({ id, surnom, roles });
+  },
+
+  /**
+   * Decodes and validates a JWT.
+   * @param {string} token
+   * @returns {Promise<object>} – decoded payload
+   */
+  verifyToken: asyncVerifyJwt,
+
+  /**
+   * Authentifie un utilisateur par email **ou** surnom.
+   * @param {string} identifier (email ou surnom)
+   * @param {string} password
+   */
+  async login(identifier, password) {
+    if (!identifier || !password) {
+      throw Object.assign(
+        new Error('Identifiant et mot de passe requis'),
+        { code: 'MISSING_FIELDS' },
+      );
+    }
+
+    /* Détermine dynamiquement le champ à filtrer */
+    const field = identifier.includes('@') ? 'email' : 'surnom';
+    const fanfaron = await findFanfaronBy({ field, value: identifier });
+
+    const ok = fanfaron && (await bcrypt.compare(password, fanfaron.password_hash));
+    if (!ok) {
+      throw Object.assign(new Error('Identifiants invalides'), { code: 'INVALID_CREDENTIALS' });
+    }
+
+    const { password_hash, ...safeUser } = fanfaron;
+    return { user: safeUser, token: signJwt(safeUser) };
+  },
+
+  /**
+   * Récupère un fanfaron par son id et retire le hash.
+   * @param {number|string} id
+   * @returns {Promise<object|null>}  // user sans password_hash
+   */
+  async getUserById(id) {
+    if (!id) return null;
+    const fanfaron = await findFanfaronBy({ field: 'id', value: id });
+    if (!fanfaron) return null;
+    const { password_hash, ...safe } = fanfaron;
+    return safe;
+  },
+
+
+  /**
+   * Admin‑only: force‑set another user’s password.
+   */
+  async adminSetPassword(adminId, targetUserId, newPw) {
+    if (!adminId || !targetUserId || !newPw) {
+      throw new Error('adminId, targetUserId, newPw required');
+    }
+    if (adminId === targetUserId) {
+      throw new Error('Use changePassword to modify your own password');
+    }
+    await updatePasswordById(targetUserId, await bcrypt.hash(newPw, SALT_ROUNDS));
+  },
+
+  /**
+   * User: change own password.
+   */
+  async changePassword(userId, currentPw, newPw) {
+    if (!userId || !currentPw || !newPw) {
+      throw new Error('userId, currentPw, newPw required');
+    }
+
+    const currentHash = await findPasswordHashById(userId);
+    if (!currentHash) throw new Error('User not found');
+
+    const ok = await bcrypt.compare(currentPw, currentHash);
+    if (!ok) throw new Error('Current password incorrect');
+
+    await updatePasswordById(userId, await bcrypt.hash(newPw, SALT_ROUNDS));
+  },
+};
+
+module.exports = authService;

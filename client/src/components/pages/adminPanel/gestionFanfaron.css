@@ -1,8 +1,0 @@
-/* page gestions fanfarons*/
-
-.gestionFanfarons-photo {
-  max-width: 9rem;
-  max-height: 9rem;
-  object-fit: cover;
-  border-radius: 0.25rem;
-}
