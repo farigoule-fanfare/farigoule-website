@@ -18,10 +18,10 @@ const NousPage = () => {
 
         <h3>🎉 La Farigoule, c’est :</h3>
         <ul>
-          <li>- Des musiciens au cœur aussi grand que leur groove</li>
-          <li>- Des prestations dans les rues de Marseille : du Vieux-Port au parc Longchamp, en passant par la Canebière, et au-delà</li>
-          <li>- Une énergie explosive, une ambiance burlesque, et des costumes débridés</li>
-          <li>- Et surtout, la fête, partout, pour tout le monde !</li>
+          <li>Des musiciens au cœur aussi grand que leur groove</li>
+          <li>Des prestations dans les rues de Marseille : du Vieux-Port au parc Longchamp, en passant par la Canebière, et au-delà</li>
+          <li>Une énergie explosive, une ambiance burlesque, et des costumes débridés</li>
+          <li>Et surtout, la fête, partout, pour tout le monde !</li>
         </ul>
         <p className="pPhotoFarigoule">
           <img src={nousImage} alt="Présentation de la Farigoule" className="photoFarigoule" />
