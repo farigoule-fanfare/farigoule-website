@@ -9,5 +9,6 @@ module.exports = override(
     '@features': path.resolve(__dirname, "src/features"),
     '@shell':    path.resolve(__dirname, "src/shell"),
     "@services": path.resolve(__dirname, "src/services"),
+    "@shared":   path.resolve(__dirname, "src/shared"),
   })
 );
