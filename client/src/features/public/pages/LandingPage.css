@@ -1,5 +1,6 @@
  .blocCarousel {
     margin-bottom: 40px; /* Space below carousel */
+    text-align: center; /* message displayed while loading */
 }
 
 .carousel-slide {
