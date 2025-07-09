@@ -34,9 +34,9 @@ function Header() {
 
     return (
         <header>
-            <p className="blocLogo">
+            <div className="blocLogo">
                 <img src={logoFarigouleSrc} alt="Logo de la Farigoule" className="logoFarigoule" />
-            </p>
+            </div>
             <div className="blocHeader">
                 <blockquote className="blocCitation">
                     <p className="citation">{citation}</p>
