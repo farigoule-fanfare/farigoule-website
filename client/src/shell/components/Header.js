@@ -48,15 +48,17 @@ function Header() {
                     {isAuthenticated && (
                         <>
                             <span className="auth-user">Bienvenue, {currentUser?.surnom} !</span>
-                            <button onClick={handleGoAnnuaire} className="contentPage-button contentPage-button--submit-tight" type="submit">
-                                Annuaire
-                            </button>
-                            <button onClick={handleGoProfile} className="contentPage-button contentPage-button--edit" type="button">
-                                Mon profil
-                            </button>
-                            <button onClick={handleLogout} disabled={isLoading} className="contentPage-button contentPage-button--delete" type="button">
-                                Déconnexion
-                            </button>
+                            <div className='auth-status-header-buttons'>
+                                <button onClick={handleGoAnnuaire} className="contentPage-button contentPage-button--submit-tight" type="submit">
+                                    Annuaire
+                                </button>
+                                <button onClick={handleGoProfile} className="contentPage-button contentPage-button--edit" type="button">
+                                    Mon profil
+                                </button>
+                                <button onClick={handleLogout} disabled={isLoading} className="contentPage-button contentPage-button--delete" type="button">
+                                    Déconnexion
+                                </button>
+                            </div>
                         </>
                     )}
                 </div>
