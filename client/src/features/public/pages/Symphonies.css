@@ -1,17 +1,172 @@
-/* symphonies.css : styles pour la page symphonies.php */
-
-#lecteurCD
-{
-  display: block;
-  width: 100%;
-  margin: auto;
+:root {
+  --size-vinyl: clamp(180px, 60vmin, 360px); /* diamètre du disque */
+  --accent: #ff0080; /* rose accent */
+  --text-color: #fff;
+  --bg: #111;
+  --wood-left: 10%;
+  --wood-right: 20%; 
 }
-.trackButton {
-  background: none;
-  border: none;
-  color: blue;
-  text-decoration: underline;
+
+/* ---------- Sélecteur d’albums ---------- */
+.album-tabs {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.album-tabs button {
+  background: transparent;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  padding: 0.3rem 0.7rem;
+  border-radius: 4px;
   cursor: pointer;
   font: inherit;
-  padding: 0;
+  transition: background 0.25s, color 0.25s;
+}
+
+.album-tabs button.active,
+.album-tabs button:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ---------- Plateau vinyle ---------- */
+.turntable-box{
+  top: calc(var(--size-vinyl) * 0.1);
+  position: relative;
+  width: calc(var(--size-vinyl)*1.1);
+  height: calc(var(--size-vinyl)*1.08);
+  margin: 2rem auto 4rem;
+  max-width: 100%;
+}
+
+.turntable{
+  position: absolute;
+  top: 0;
+  border-radius: 10%;
+}
+
+.turntable::before{
+  content:"";
+  position:absolute;
+  inset: -10% -20% -8% -10%;
+  background:url("@assets/images/symphonies/turntable-bg.jpg") center/cover no-repeat;
+  border-radius:8px;
+  z-index:-1;
+  pointer-events:none;
+  box-shadow:0 8px 16px rgba(0,0,0,.6);
+}
+
+.vinyl {
+  width: var(--size-vinyl);
+  height: var(--size-vinyl);
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+  margin: 0 auto; 
+}
+
+.vinyl::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  background:
+      url("@assets/images/symphonies/vinyl-rim_hole.png") center/contain no-repeat,
+      var(--cover) center/38% no-repeat;
+  transition:filter .3s;
+}
+
+@keyframes spin{
+  from{ transform:rotate(0deg); }
+  to  { transform:rotate(360deg); }
+}
+
+/* Rotation appliquée au pseudo-élément seulement */
+.spinning::after{
+  animation: spin 3.5s linear infinite;
+}
+
+/* ---------- Bras de lecture ---------- */
+.tonearm-wrap {
+  position: absolute;
+  width: 55%; /* ajuste à la taille de ton SVG */
+  top: 0%;
+  left: 75%;
+  --pivot-x: 52%;   /* mets ici tes vraies valeurs… */
+  --pivot-y: 10%;   /* …ou en % : 4.5%, 4.2%        */
+  transform-origin: var(--pivot-x) var(--pivot-y); /* point de pivot (dépend du visuel) */
+  transition: transform 0.6s ease;
+  pointer-events:none;
+}
+
+.tonearm {
+  width: 100%;
+}
+
+/* ---------- Bouton Play / Pause ---------- */
+.btn-play{
+  position:absolute;
+  bottom:0%;
+  left:100%;
+  transform:translateX(-50%);
+  width:3rem;
+  height:3rem;
+
+  /* Texte (icône) */
+  font-size:1.8rem;
+  color:#393939;                /* blanc au-dessus de l’image */
+  border:none;
+  cursor:pointer;
+  background:transparent;    /* le fond sera géré par ::before */
+  overflow:hidden;           /* masque l’image si elle déborde */
+} 
+
+/* L’image placée “sous” le symbole */
+.btn-play::before{
+  content:"";
+  position:absolute;
+  inset:0;                   /* couvre 100 % du bouton */
+  background:url("@assets/images/boutons/bouton-play.png") center/cover no-repeat;
+  transition:filter .25s;
+  z-index:-1;                /* derrière le texte */
+}
+
+/* Petit effet au survol */
+.btn-play:hover::before{
+  filter:brightness(1.15);
+}
+
+/* ---------- Sélecteur de pistes ---------- */
+.track-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  font-weight: bold;
+}
+
+.track-selector button {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.track-selector button:hover {
+  transform: scale(1.2);
+}
+
+.track-title {
+  min-width: 9rem;
+  text-align: center;
+  font-size: large;
+}
+
+.track-selector button, .btn-play, .album-tabs button {
+  -webkit-tap-highlight-color: transparent;
 }
