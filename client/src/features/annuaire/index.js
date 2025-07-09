@@ -1,0 +1,1 @@
+export { default as Annuaire } from './pages/AnnuairePage';

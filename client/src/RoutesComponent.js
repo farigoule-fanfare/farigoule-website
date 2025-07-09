@@ -15,6 +15,7 @@ import { NotFound } from         "@features/public";
 // Pages auth  
 import { UserProfile } from      "@features/profile";
 import { ChangePassword } from   "@features/profile";
+import { Annuaire } from         "@features/annuaire";
 
 // Pages admin
 import { AdminHome } from        "@features/admin";
@@ -65,6 +66,7 @@ export function RoutesComponent() {
         {/* Routes privées (utilisateur connecté) */}
         <Route path="/profile" element={<PrivatePage><UserProfile /></PrivatePage>} />
         <Route path="/change-password" element={<PrivatePage><ChangePassword /></PrivatePage>} />
+        <Route path="/annuaire" element={<PrivatePage><Annuaire /></PrivatePage>} />
 
         {/* Routes admin */}
         <Route path="/adminPanel" element={<AdminPage><AdminHome /></AdminPage>} />
