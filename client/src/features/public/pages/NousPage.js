@@ -48,9 +48,9 @@ const NousPage = () => {
 
         <h3>📸 Sur ce site, vous trouverez :</h3>
         <ul>
-          <li>- Le <strong>portrait de nos fanfarons</strong></li>
-          <li>- Des <strong>photos</strong> hautes en couleurs</li>
-          <li>- Et un <strong>extrait mp3 de notre CD</strong> pour embarquer dans l’univers  de la Farigoule</li>
+          <li>Le <strong>portrait de nos fanfarons</strong></li>
+          <li>Des <strong>photos</strong> hautes en couleurs</li>
+          <li>Et un <strong>extrait mp3 de notre CD</strong> pour embarquer dans l’univers  de la Farigoule</li>
         </ul>
 
        <p style={{ fontWeight: 'bold', fontSize: '1.2em', marginTop: '1em', textAlign: 'center'}}> 🧡 On est la Farigoule et on vous aime !</p>

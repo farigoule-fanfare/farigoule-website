@@ -126,6 +126,17 @@
     width: 100%;
     padding-top: 1rem;
   }
+  
+  ul {
+    padding-left: 1.1em !important; /* réduit fortement l'indentation */
+    margin-left: 0 !important;
+    text-align: left !important;
+  }
+  ul li {
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+    text-align: left !important;
+  }
 }
 
 /* Boutons du formulaire */
