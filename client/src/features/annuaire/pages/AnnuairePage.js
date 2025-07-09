@@ -9,7 +9,7 @@ export default function Annuaire() {
 
   const fetchList = useCallback(async () => {
     try {
-      const res = await axiosWrapper({ method: 'get', url: 'api/fanfarons/annuaire' });
+      const res = await axiosWrapper({ method: 'get', url: 'fanfarons/annuaire' });
       setFanfarons(res.data);
     } catch (err) {
       console.error('[FETCH ERROR]', err);
