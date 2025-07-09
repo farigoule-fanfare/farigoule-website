@@ -151,19 +151,21 @@ header {
 
   .headerNavBar {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: space-evenly;
     gap: 0.5rem;
     width: 100%;
   }
 
   .headerNavBar div {
-    width: 4.2rem;
+    max-width: 4.2rem;
+    min-width: 3.5rem;
   }
 
   .headerNavBar img {
+    max-width: 100%;
     width: 4.2rem;
-    height: 4.2rem;
+    height: auto;
   }
 
   .headerNavBar span {
