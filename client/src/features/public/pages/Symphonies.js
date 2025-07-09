@@ -3,12 +3,11 @@ import { ContentPageLayout } from "@shell";
 import { armAngleDeg } from "../components/armAngle";
 import "./Symphonies.css";
 
-// --- Jaquette connue uniquement pour CD 2
 import cd2Cover from "@assets/images/symphonies/cover-cd2.png";
 import cd1Cover from "@assets/images/symphonies/cover-cd1.png";
 import image_toneArm from "@assets/images/symphonies/tonearm.png"
 
-// === PISTES CD 1 (déjà présentes dans ton ancien fichier) ===
+// === PISTES CD 1 ===
 import epic      from "@assets/audio/cd1/epic.mp3";
 import disco     from "@assets/audio/cd1/disco.mp3";
 import mestizaje from "@assets/audio/cd1/mesti.mp3";
@@ -16,7 +15,7 @@ import oneTit    from "@assets/audio/cd1/onetit.mp3";
 import kro       from "@assets/audio/cd1/kro.mp3";
 import boys      from "@assets/audio/cd1/boys.mp3";
 
-// === PISTES CD 2 (fichiers .m4a que tu viens d’ajouter) ===
+// === PISTES CD 2  ===
 import prodigy    from "@assets/audio/cd2/2_Prodigy.m4a";
 import letsGet    from "@assets/audio/cd2/3_Let_s Get.m4a";
 import biture     from "@assets/audio/cd2/4_Biture.m4a";
@@ -27,7 +26,7 @@ import n99        from "@assets/audio/cd2/8_99.m4a";
 import fastFuse   from "@assets/audio/cd2/1_FastFuse.m4a";
 
 // --------------------
-// 1) On décrit les deux albums dans un tableau :
+// 1) Tableau des deux albums :
 const albums = [
   {
     id: "cd1",
@@ -150,7 +149,7 @@ export default function Symphonies() {
       const p = audioRef.current.play();
       if (p) p.catch(console.error);
     }
-  }, [albumIdx, trackIdx]); //  eslint-disable-line react-hooks/exhaustive-deps
+  }, [albumIdx, trackIdx]);
 
   /* -- Play / Pause ------------------------------------------------- */
   const togglePlay = () => {
@@ -181,10 +180,12 @@ export default function Symphonies() {
 
   return (
     <ContentPageLayout title="Symphonies">
-      <p>- Entre variété française et reggae bolchévique, le premier album de la Farigoule - les Culs, Vettes et Tanches - sorti en 2012, propose des compositions florales variées.
-Ses six pistes déjantées, mettra l'ambiance dans toutes vos soirées.</p>
-      <p>- Après trois ans d'une attente interminable et un joli coup de pouce de John Williams, notre second CD est sorti à l'été 2017 !
-Vous pourrez vous le procurer sur le Vieux Port dès que vous nous verrez, ou n'importe où d'ailleurs, n'hésitez pas</p>
+      <ul>
+        <li>Entre variété française et reggae bolchévique, le premier album de la Farigoule - les Culs, Vettes et Tanches - sorti en 2012, propose des compositions florales variées.
+          Ses six pistes déjantées, mettra l'ambiance dans toutes vos soirées.</li>
+        <li>Après trois ans d'une attente interminable et un joli coup de pouce de John Williams, notre second CD est sorti à l'été 2017 !
+          Vous pourrez vous le procurer sur le Vieux Port dès que vous nous verrez, ou sur n'importe quel autre set, n'hésitez pas !</li>
+      </ul>
       {/* Sélecteur de CD */}
       <AlbumSelector
         albums={albums}
