@@ -138,6 +138,13 @@ header {
   font-weight: 600;
 }
 
+.auth-status-header-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 60%;
+  }
+
 @media (max-width: 768px) {
   header {
     padding: 1rem;
@@ -191,7 +198,16 @@ header {
 
   .auth-status-header {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 0.3rem;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  
+  .auth-user {
+    width: 100%;
+    text-align: center;
+  }
+
+  .auth-status-header-buttons {
+    width: 100%;
   }
 }
