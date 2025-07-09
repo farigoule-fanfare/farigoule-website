@@ -77,6 +77,13 @@ header {
   align-items: center;
 }
 
+.headerNavBarItem a {
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+
 .headerNavBarItemTitle {
   font-size: 0.875rem;
   font-weight: 600;
@@ -87,6 +94,10 @@ header {
 }
 .headerNavBar > div:hover > span {
   visibility: visible;
+}
+
+.headerNavBar img {
+  pointer-events: none;
 }
 
 .boutonAccueil,
