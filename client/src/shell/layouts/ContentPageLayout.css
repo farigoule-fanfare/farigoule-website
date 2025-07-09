@@ -8,44 +8,43 @@
 }
 
 .content-page-layout {
-  padding-top: 5px;
   width: 100%;
   max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
-  box-sizing: border-box;
+  box-sizing: border-box;  
+  padding: 0 1.2rem;
 }
 
-/* Titre et réseaux sociaux sur une seule ligne, comme dans l'ancien .premierTitre + .blocSocial */
-
 .content-page-header {
-  position: relative;          /* nécessaire pour le positionnement absolu des icônes */
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;     /* centre le titre horizontalement */
-  max-width: 1000px;
-  margin: 0 auto 10px auto;    /* centre le bloc header sur la page */
-  padding: 0 20px;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto 1rem auto;
   flex-wrap: wrap;
 }
 
-/* Le titre reste centré dans son bloc */
 .content-page-title {
   font-family: 'Lobster', cursive;
   text-align: center;
   margin: 0 auto;
-  /*flex-grow: 1;*/             /* prend l’espace dispo */
 }
 
-/* Zone de contenu principal, centrée */
+.content-page-social {
+  position: absolute;
+  right: 0%;
+  display: flex;
+  gap: 0.5rem;
+}
+
 .content-page-main {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 0 20px;
   text-align: justify;
 }
 
-/* Responsive fallback */
 @media (max-width: 768px) {
   .content-page-header {
     display: block;
@@ -53,35 +52,29 @@
 
   .content-page-title {
     width: auto;
-    text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 0.5rem;
   }
-}
-
-.content-page-social {
-  position: absolute;
-  top: 50%;
-  right: 20px;
-  transform: translateY(-50%);
-  display: flex;
-  gap: 0.5rem;
-}
-
-/* === RWD === */
-@media (max-width: 768px) {
-  .content-page-header {
-    display: block;
-    text-align: center;
-  }
+  
   .content-page-social {
     position: static;
-    transform: none;
-    margin-top: 10px;
     justify-content: center;
   }
 }
 
-/* ----------- Content ------------*/
+/* ---------- Content -----------*/
+@media (max-width: 768px) {
+  ul {
+    padding-left: 1.1em;
+    margin-left: 0;
+    text-align: left;
+  }
+  ul li {
+    padding-left: 0;
+    margin-left: 0;
+    text-align: left;
+  }
+}
+/* ----------- Forms ------------*/
 .contentPage-form-wrapper {
   width: 100%;
   margin-bottom: 2rem;
@@ -96,7 +89,7 @@
 
 .contentPage-form-group {
   margin-bottom: 1rem;
-  display: contents; /* permet au grid de fonctionner */
+  display: contents;
 }
 
 .contentPage-label {
@@ -125,17 +118,6 @@
     grid-template-columns: 1fr;
     width: 100%;
     padding-top: 1rem;
-  }
-
-  ul {
-    padding-left: 1.1em;
-    margin-left: 0;
-    text-align: left;
-  }
-  ul li {
-    padding-left: 0;
-    margin-left: 0;
-    text-align: left;
   }
 }
 
