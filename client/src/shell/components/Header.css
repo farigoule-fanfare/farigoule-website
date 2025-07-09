@@ -94,9 +94,6 @@ header {
 }
 
 .headerNavBarItem a {
-  outline: none;
-  box-shadow: none;
-  background: transparent;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -201,7 +198,7 @@ header {
     align-items: center;
     gap: 0.4rem;
   }
-  
+
   .auth-user {
     width: 100%;
     text-align: center;
