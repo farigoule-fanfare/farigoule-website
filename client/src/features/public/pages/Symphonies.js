@@ -84,6 +84,15 @@ function Turntable({ cover, isPlaying, angle, onPlayPause }) {
   return (
     <div className="turntable-box">
       <div className="turntable">
+        {/* Bouton Play / Pause */}
+        <button
+          className="btn-play"
+          onClick={onPlayPause}
+          aria-label={isPlaying ? "Mettre en pause" : "Lecture"}
+        >
+          {isPlaying ? "❚❚" : "▶"}
+        </button>
+        
         {/* Disque vinyle (cover injectée via CSS custom property) */}
         <div
           className={`vinyl ${isPlaying ? "spinning" : ""}`}
@@ -100,15 +109,6 @@ function Turntable({ cover, isPlaying, angle, onPlayPause }) {
           alt=""
           aria-hidden="true"
         /></div>
-
-        {/* Bouton Play / Pause */}
-        <button
-          className="btn-play"
-          onClick={onPlayPause}
-          aria-label={isPlaying ? "Mettre en pause" : "Lecture"}
-        >
-          {isPlaying ? "❚❚" : "▶"}
-        </button>
       </div>
     </div>
   );
