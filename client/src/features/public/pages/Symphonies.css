@@ -109,20 +109,26 @@
 /* ---------- Bouton Play / Pause ---------- */
 .btn-play{
   position:absolute;
-  bottom:0%;
-  left:100%;
-  transform:translateX(-50%);
-  width:3rem;
-  height:3rem;
+  top:85%;
+  left:97%;
+  width:13%;
+  height:13%;
 
   /* Texte (icône) */
-  font-size:1.8rem;
-  color:#393939;                /* blanc au-dessus de l’image */
+  font-size:150%;
+  color:#393939;
   border:none;
   cursor:pointer;
-  background:transparent;    /* le fond sera géré par ::before */
-  overflow:hidden;           /* masque l’image si elle déborde */
+  background:transparent;
+  overflow:hidden;
+  padding: 0;
 } 
+
+@media screen and (max-width: 768px) {
+  .btn-play{
+    font-size: 100%;
+  }
+}
 
 /* L’image placée “sous” le symbole */
 .btn-play::before{
