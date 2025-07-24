@@ -1,12 +1,12 @@
 // Mock repository to control responses during tests
-jest.mock('../repositories/diapoRepository', () => ({
+jest.mock('../../repositories/diapoRepository', () => ({
   create: jest.fn(async data => ({ id: 1, ...data })),
   update: jest.fn(async (id, patch) => ({ id, ...patch })),
   remove: jest.fn(async () => ({ deleted: 1 })),
 }));
 
-const diapoRepo = require('../repositories/diapoRepository');
-const diapoService = require('../services/diapoService');
+const diapoRepo = require('../../repositories/diapoRepository');
+const diapoService = require('../../services/diapoService');
 
 beforeEach(() => {
   jest.clearAllMocks();

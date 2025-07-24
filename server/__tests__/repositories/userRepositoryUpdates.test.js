@@ -1,12 +1,12 @@
 // Mock DB to track executed queries
-jest.mock('../services/databaseService', () => ({
+jest.mock('../../services/databaseService', () => ({
   prepare: jest.fn(sql => {
     global.lastQuery = sql;
     return { run: jest.fn((...params) => { global.lastParams = params; }) };
   }),
 }));
 
-const userRepo = require('../repositories/userRepository');
+const userRepo = require('../../repositories/userRepository');
 
 beforeEach(() => {
   global.lastQuery = undefined;

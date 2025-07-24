@@ -1,9 +1,9 @@
-jest.mock('../services/databaseService', () => {
+jest.mock('../../services/databaseService', () => {
   global.runMock = jest.fn();
   return { prepare: jest.fn(() => ({ run: global.runMock })) };
 });
 
-const diapoRepo = require('../repositories/diapoRepository');
+const diapoRepo = require('../../repositories/diapoRepository');
 
 describe('diapoRepository.update', () => {
   beforeEach(() => {

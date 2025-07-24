@@ -1,4 +1,4 @@
-jest.mock('../repositories/fanfaronRepository', () => ({
+jest.mock('../../repositories/fanfaronRepository', () => ({
   findAll: jest.fn(async () => []),
   findAllAnnuaire: jest.fn(async () => []),
   create: jest.fn(),
@@ -6,8 +6,8 @@ jest.mock('../repositories/fanfaronRepository', () => ({
   remove: jest.fn(async () => ({ deleted: 1 })),
 }));
 
-const fanfaronRepo = require('../repositories/fanfaronRepository');
-const fanfaronService = require('../services/fanfaronService');
+const fanfaronRepo = require('../../repositories/fanfaronRepository');
+const fanfaronService = require('../../services/fanfaronService');
 
 describe('fanfaronService', () => {
   beforeEach(() => {
