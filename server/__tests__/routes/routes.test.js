@@ -66,6 +66,14 @@ describe('routes', () => {
       expect(reqArg.query.limit).toBe('5');
     });
 
+    test('GET /diapos uses provided query values', async () => {
+      const res = await request(app).get('/diapos?order=asc&limit=2');
+      expect(res.status).toBe(200);
+      const reqArg = diaposCtrl.listDiapos.mock.calls[0][0];
+      expect(reqArg.query.order).toBe('asc');
+      expect(reqArg.query.limit).toBe('2');
+    });
+
     test('GET /diapos/ordered injects params', async () => {
       const res = await request(app).get('/diapos/ordered');
       expect(res.status).toBe(200);
@@ -121,6 +129,15 @@ describe('routes', () => {
       const res = await request(app)
         .post('/fanfarons')
         .attach('photoFanfaron', Buffer.alloc(0), '');
+      expect(res.status).toBe(201);
+      const reqArg = fanfaronsCtrl.createFanfaron.mock.calls[0][0];
+      expect(reqArg.file).toBeUndefined();
+    });
+    
+    test('POST /fanfarons without file', async () => {
+      const res = await request(app)
+        .post('/fanfarons')
+        .field('dummy', '1');
       expect(res.status).toBe(201);
       const reqArg = fanfaronsCtrl.createFanfaron.mock.calls[0][0];
       expect(reqArg.file).toBeUndefined();
