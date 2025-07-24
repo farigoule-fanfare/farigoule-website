@@ -3,17 +3,20 @@ import React, { useState } from 'react';
 import { axiosWrapper } from '@services/axiosUtils';
 import { ContentPageLayout } from "@shell"
 
-const isStrongPassword = (pw) => {
-  // Minimum 12 chars with lowercase, uppercase, digit and special char
-  return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}$/.test(pw);
-};
+// Allowed special characters for strong passwords
+const SPECIALS = '@#()_+[]{}|;:,.<>?';
+const specialsEscaped = SPECIALS.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+const specialRegex = new RegExp('[' + specialsEscaped + ']');
+const strongRegex = new RegExp(`^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[${specialsEscaped}]).{12,}$`);
+
+const isStrongPassword = (pw) => strongRegex.test(pw);
 
 const evaluatePassword = (pw) => ({
   length: pw.length >= 12,
   upper: /[A-Z]/.test(pw),
   lower: /[a-z]/.test(pw),
   digit: /\d/.test(pw),
-  special: /[^A-Za-z0-9]/.test(pw)
+  special: specialRegex.test(pw)
 });
 
 export default function ChangePassword() {
@@ -44,7 +47,7 @@ export default function ChangePassword() {
     }
 
     if (!isStrongPassword(form.newPassword)) {
-      setStatus('Le mot de passe doit contenir au moins 12 caracteres, des chiffres, des majuscules, des minuscules et un caractere special.');
+      setStatus(`Le mot de passe doit contenir au moins 12 caracteres, des chiffres, des majuscules, des minuscules et un caractere special autorise (${SPECIALS}).`);
       return;
     }
 
@@ -107,7 +110,7 @@ export default function ChangePassword() {
               {checks.digit ? '✓' : '✗'} 1 chiffre
             </li>
             <li style={{color: checks.special ? 'green' : 'red'}}>
-              {checks.special ? '✓' : '✗'} 1 caractère spécial
+              {checks.special ? '✓' : '✗'} 1 caractère spécial autorisé
             </li>
           </ul>
         </div>
