@@ -13,7 +13,6 @@ const storage = multer.diskStorage({
 
 // Filtrer les fichiers vides
 const fileFilter = (req, file, cb) => {
-    console.log(file)
   // Rejeter si aucun fichier n'est sélectionné (0 byte, ou mimetype vide)
   if (!file.originalname) {
     cb(null, false);
