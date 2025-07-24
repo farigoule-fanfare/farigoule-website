@@ -1,10 +1,10 @@
-jest.mock('../services/databaseService', () => {
+jest.mock('../../services/databaseService', () => {
   global.runMock = jest.fn();
   global.getMock = jest.fn();
   return { prepare: jest.fn(() => ({ run: global.runMock, get: global.getMock })) };
 });
 
-const fanfaronRepo = require('../repositories/fanfaronRepository');
+const fanfaronRepo = require('../../repositories/fanfaronRepository');
 
 describe('fanfaronRepository.update', () => {
   beforeEach(() => {

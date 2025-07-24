@@ -1,13 +1,13 @@
-jest.mock('../repositories/userRepository', () => ({
+jest.mock('../../repositories/userRepository', () => ({
   updateProfile: jest.fn(),
   findFanfaronById: jest.fn(async id => ({ id, roles: [] })),
   findRolesById: jest.fn(),
   updateRolesById: jest.fn(),
 }));
 
-const userRepo = require('../repositories/userRepository');
+const userRepo = require('../../repositories/userRepository');
 
-const userService = require('../services/userService');
+const userService = require('../../services/userService');
 
 describe('userService.updateProfile', () => {
   beforeEach(() => {
