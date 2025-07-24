@@ -11,12 +11,14 @@ const strongRegex = new RegExp(`^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[${specials
 
 const isStrongPassword = (pw) => strongRegex.test(pw);
 
-const evaluatePassword = (pw) => ({
+// Evaluate password strength and confirmation matching
+const evaluatePassword = (pw, confirm) => ({
   length: pw.length >= 12,
   upper: /[A-Z]/.test(pw),
   lower: /[a-z]/.test(pw),
   digit: /\d/.test(pw),
-  special: specialRegex.test(pw)
+  special: specialRegex.test(pw),
+  match: pw !== '' && pw === confirm
 });
 
 export default function ChangePassword() {
@@ -27,13 +29,16 @@ export default function ChangePassword() {
   });
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [checks, setChecks] = useState(evaluatePassword(''));
+  const [checks, setChecks] = useState(evaluatePassword('', ''));
+  const allValid = Object.values(checks).every(Boolean);
 
   const handleChange = e => {
     const { name, value } = e.target;
     setForm(f => ({ ...f, [name]: value }));
-    if (name === 'newPassword') {
-      setChecks(evaluatePassword(value));
+    if (name === 'newPassword' || name === 'confirmPassword') {
+      const newPw = name === 'newPassword' ? value : form.newPassword;
+      const confirmPw = name === 'confirmPassword' ? value : form.confirmPassword;
+      setChecks(evaluatePassword(newPw, confirmPw));
     }
   };
 
@@ -96,7 +101,7 @@ export default function ChangePassword() {
             onChange={handleChange}
             required
           />
-          <ul style={{textAlign:'left', listStyle:'none', padding:0, fontSize:'0.9em'}}>
+          <ul style={{textAlign:'center', listStyle:'none', padding:0, fontSize:'0.9em'}}>
             <li style={{color: checks.length ? 'green' : 'red'}}>
               {checks.length ? '✓' : '✗'} 12 caractères minimum
             </li>
@@ -110,7 +115,10 @@ export default function ChangePassword() {
               {checks.digit ? '✓' : '✗'} 1 chiffre
             </li>
             <li style={{color: checks.special ? 'green' : 'red'}}>
-              {checks.special ? '✓' : '✗'} 1 caractère spécial autorisé
+              {checks.special ? '✓' : '✗'} 1 caractère spécial autorisé ({SPECIALS})
+            </li>
+            <li style={{color: checks.match ? 'green' : 'red'}}>
+              {checks.match ? '✓' : '✗'} mots de passe identiques
             </li>
           </ul>
         </div>
@@ -126,7 +134,7 @@ export default function ChangePassword() {
           />
         </div>
         <div className='contentPage-buttons'>
-        <button className="contentPage-button contentPage-button--submit" type="submit" disabled={loading}>
+        <button className="contentPage-button contentPage-button--submit" type="submit" disabled={loading || !allValid}>
           {loading ? 'En cours…' : 'Valider'}
         </button>
         {status && <p className="status">{status}</p>}
