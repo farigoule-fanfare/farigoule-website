@@ -1,38 +1,38 @@
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../middleware/authMiddleware', () => ({
+jest.mock('../../middleware/authMiddleware', () => ({
   protect: (_req, _res, next) => { _req.user = { roles: ['admin'] }; next(); },
   authorize: () => (_req, _res, next) => next(),
 }));
 
-jest.mock('../controllers/contratsController', () => ({
+jest.mock('../../controllers/contratsController', () => ({
   listContrats: jest.fn((req, res) => res.status(200).end()),
   addContrat: jest.fn(),
   updateContrat: jest.fn(),
   deleteContrat: jest.fn(),
 }));
-const contratsCtrl = require('../controllers/contratsController');
+const contratsCtrl = require('../../controllers/contratsController');
 
-jest.mock('../controllers/diaposController', () => ({
+jest.mock('../../controllers/diaposController', () => ({
   listDiapos: jest.fn((req, res) => res.status(200).end()),
   addDiapo: jest.fn((req, res) => res.status(201).end()),
   updateDiapo: jest.fn(),
   deleteDiapo: jest.fn(),
 }));
-const diaposCtrl = require('../controllers/diaposController');
+const diaposCtrl = require('../../controllers/diaposController');
 
-jest.mock('../controllers/fanfaronsController', () => ({
+jest.mock('../../controllers/fanfaronsController', () => ({
   listFanfarons: jest.fn((req, res) => res.status(200).end()),
   listFanfaronsAnnuaire: jest.fn((req, res) => res.status(200).end()),
   createFanfaron: jest.fn((req, res) => res.status(201).end()),
   updateFanfaron: jest.fn(),
   removeFanfaron: jest.fn(),
 }));
-const fanfaronsCtrl = require('../controllers/fanfaronsController');
+const fanfaronsCtrl = require('../../controllers/fanfaronsController');
 
 const app = express();
-app.use(require('../routes'));
+app.use(require('../../routes'));
 
 beforeEach(() => {
   jest.clearAllMocks();
