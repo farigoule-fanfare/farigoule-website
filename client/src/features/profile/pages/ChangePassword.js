@@ -52,7 +52,7 @@ export default function ChangePassword() {
     }
 
     if (!isStrongPassword(form.newPassword)) {
-      setStatus(`Le mot de passe doit contenir au moins 12 caracteres, des chiffres, des majuscules, des minuscules et un caractere special autorise (${SPECIALS}).`);
+      setStatus(`Le mot de passe doit contenir au moins 12 caracteres, des chiffres, des majuscules, des minuscules et un caractere special parmi (${SPECIALS}).`);
       return;
     }
 
@@ -106,16 +106,16 @@ export default function ChangePassword() {
               {checks.length ? '✓' : '✗'} 12 caractères minimum
             </li>
             <li style={{color: checks.upper ? 'green' : 'red'}}>
-              {checks.upper ? '✓' : '✗'} 1 majuscule
+              {checks.upper ? '✓' : '✗'} Au moins 1 majuscule
             </li>
             <li style={{color: checks.lower ? 'green' : 'red'}}>
-              {checks.lower ? '✓' : '✗'} 1 minuscule
+              {checks.lower ? '✓' : '✗'} Au moins 1 minuscule
             </li>
             <li style={{color: checks.digit ? 'green' : 'red'}}>
-              {checks.digit ? '✓' : '✗'} 1 chiffre
+              {checks.digit ? '✓' : '✗'} Au moins 1 chiffre
             </li>
             <li style={{color: checks.special ? 'green' : 'red'}}>
-              {checks.special ? '✓' : '✗'} 1 caractère spécial autorisé ({SPECIALS})
+              {checks.special ? '✓' : '✗'} Au moins 1 caractère spécial parmi ({SPECIALS})
             </li>
             <li style={{color: checks.match ? 'green' : 'red'}}>
               {checks.match ? '✓' : '✗'} mots de passe identiques
