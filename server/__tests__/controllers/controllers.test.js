@@ -1,11 +1,11 @@
 // Mock services for each controller
-jest.mock('../services/authService', () => ({
+jest.mock('../../services/authService', () => ({
   login: jest.fn(async () => ({ user: { id: 1 }, token: 't' })),
   changePassword: jest.fn(async () => {}),
   adminSetPassword: jest.fn(async () => {}),
 }));
 
-jest.mock('../services/citationService', () => ({
+jest.mock('../../services/citationService', () => ({
   list: jest.fn(async () => []),
   random: jest.fn(async () => ({})),
   addCitation: jest.fn(async d => d),
@@ -13,21 +13,21 @@ jest.mock('../services/citationService', () => ({
   deleteCitation: jest.fn(async () => ({}))
 }));
 
-jest.mock('../services/contratService', () => ({
+jest.mock('../../services/contratService', () => ({
   list: jest.fn(async () => []),
   addContrat: jest.fn(async d => d),
   updateContrat: jest.fn(async () => ({})),
   deleteContrat: jest.fn(async () => ({}))
 }));
 
-jest.mock('../services/diapoService', () => ({
+jest.mock('../../services/diapoService', () => ({
   list: jest.fn(async () => []),
   addDiapo: jest.fn(async d => d),
   updateDiapo: jest.fn(async () => ({})),
   deleteDiapo: jest.fn(async () => ({}))
 }));
 
-jest.mock('../services/fanfaronService', () => ({
+jest.mock('../../services/fanfaronService', () => ({
   getAllFanfarons: jest.fn(async () => []),
   getAllFanfaronsAnnuaire: jest.fn(async () => []),
   createFanfarons: jest.fn(async d => d),
@@ -35,7 +35,7 @@ jest.mock('../services/fanfaronService', () => ({
   deleteFanfarons: jest.fn(async () => ({}))
 }));
 
-jest.mock('../services/userService', () => ({
+jest.mock('../../services/userService', () => ({
   getCurrentPresident: jest.fn(async () => ({})),
   getAllUsersRoles: jest.fn(async () => []),
   updateProfile: jest.fn(async () => ({})),
@@ -43,12 +43,12 @@ jest.mock('../services/userService', () => ({
   removeAdminRole: jest.fn(async () => {})
 }));
 
-const authCtrl = require('../controllers/authController');
-const citationCtrl = require('../controllers/citationsController');
-const contratCtrl = require('../controllers/contratsController');
-const diapoCtrl = require('../controllers/diaposController');
-const fanfaronCtrl = require('../controllers/fanfaronsController');
-const userCtrl = require('../controllers/userController');
+const authCtrl = require('../../controllers/authController');
+const citationCtrl = require('../../controllers/citationsController');
+const contratCtrl = require('../../controllers/contratsController');
+const diapoCtrl = require('../../controllers/diaposController');
+const fanfaronCtrl = require('../../controllers/fanfaronsController');
+const userCtrl = require('../../controllers/userController');
 
 function resMock() {
   const res = {};

@@ -1,4 +1,4 @@
-jest.mock('../repositories/authRepository', () => ({
+jest.mock('../../repositories/authRepository', () => ({
   findFanfaronBy: jest.fn(),
   updatePasswordById: jest.fn(async () => true),
   findPasswordHashById: jest.fn(async () => 'old-hash'),
@@ -16,9 +16,9 @@ jest.mock('jsonwebtoken', () => ({
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const authRepo = require('../repositories/authRepository');
+const authRepo = require('../../repositories/authRepository');
 
-const authService = require('../services/authService');
+const authService = require('../../services/authService');
 
 describe('authService', () => {
   beforeEach(() => {
