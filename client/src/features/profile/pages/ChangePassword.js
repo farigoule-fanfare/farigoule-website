@@ -3,6 +3,22 @@ import React, { useState } from 'react';
 import { axiosWrapper } from '@services/axiosUtils';
 import { ContentPageLayout } from "@shell"
 
+// Allowed special characters for strong passwords
+const SPECIALS = '@#()_+[]{}|;:,.<>?';
+const specialsEscaped = SPECIALS.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+const specialRegex = new RegExp('[' + specialsEscaped + ']');
+const strongRegex = new RegExp(`^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[${specialsEscaped}]).{12,}$`);
+
+const isStrongPassword = (pw) => strongRegex.test(pw);
+
+const evaluatePassword = (pw) => ({
+  length: pw.length >= 12,
+  upper: /[A-Z]/.test(pw),
+  lower: /[a-z]/.test(pw),
+  digit: /\d/.test(pw),
+  special: specialRegex.test(pw)
+});
+
 export default function ChangePassword() {
   const [form, setForm] = useState({
     currentPassword: '',
@@ -11,10 +27,14 @@ export default function ChangePassword() {
   });
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [checks, setChecks] = useState(evaluatePassword(''));
 
   const handleChange = e => {
     const { name, value } = e.target;
     setForm(f => ({ ...f, [name]: value }));
+    if (name === 'newPassword') {
+      setChecks(evaluatePassword(value));
+    }
   };
 
   const handleSubmit = async e => {
@@ -23,6 +43,11 @@ export default function ChangePassword() {
 
     if (form.newPassword !== form.confirmPassword) {
       setStatus('Les nouveaux mots de passe ne correspondent pas.');
+      return;
+    }
+
+    if (!isStrongPassword(form.newPassword)) {
+      setStatus(`Le mot de passe doit contenir au moins 12 caracteres, des chiffres, des majuscules, des minuscules et un caractere special autorise (${SPECIALS}).`);
       return;
     }
 
@@ -71,6 +96,23 @@ export default function ChangePassword() {
             onChange={handleChange}
             required
           />
+          <ul style={{textAlign:'left', listStyle:'none', padding:0, fontSize:'0.9em'}}>
+            <li style={{color: checks.length ? 'green' : 'red'}}>
+              {checks.length ? '✓' : '✗'} 12 caractères minimum
+            </li>
+            <li style={{color: checks.upper ? 'green' : 'red'}}>
+              {checks.upper ? '✓' : '✗'} 1 majuscule
+            </li>
+            <li style={{color: checks.lower ? 'green' : 'red'}}>
+              {checks.lower ? '✓' : '✗'} 1 minuscule
+            </li>
+            <li style={{color: checks.digit ? 'green' : 'red'}}>
+              {checks.digit ? '✓' : '✗'} 1 chiffre
+            </li>
+            <li style={{color: checks.special ? 'green' : 'red'}}>
+              {checks.special ? '✓' : '✗'} 1 caractère spécial autorisé
+            </li>
+          </ul>
         </div>
         <div className="contentPage-form-group">
           <label className='contentPage-label'>Confirmer le mot de passe</label>
