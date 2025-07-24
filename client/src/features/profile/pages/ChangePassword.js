@@ -137,8 +137,8 @@ export default function ChangePassword() {
         <button className="contentPage-button contentPage-button--submit" type="submit" disabled={loading || !allValid}>
           {loading ? 'En cours…' : 'Valider'}
         </button>
-        {status && <p className="status">{status}</p>}
         </div>
+        {status && <p className="status">{status}</p>}
       </form>
     </ContentPageLayout>
   );
