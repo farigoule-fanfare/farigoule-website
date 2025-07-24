@@ -1,13 +1,13 @@
-jest.mock('../repositories/contratRepository', () => ({
+jest.mock('../../repositories/contratRepository', () => ({
   find: jest.fn(async () => []),
   create: jest.fn(),
   update: jest.fn(),
   remove: jest.fn(),
 }));
 
-const contratRepo = require('../repositories/contratRepository');
+const contratRepo = require('../../repositories/contratRepository');
 
-const contratService = require('../services/contratService');
+const contratService = require('../../services/contratService');
 
 describe('contratService.list', () => {
   beforeEach(() => {

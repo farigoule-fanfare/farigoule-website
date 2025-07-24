@@ -1,12 +1,12 @@
 const request = require('supertest');
 
-jest.mock('../middleware/authMiddleware', () => ({
+jest.mock('../../middleware/authMiddleware', () => ({
   protect: (_req, _res, next) => { _req.user = { roles: ['admin'] }; next(); },
   authorize: () => (_req, _res, next) => next()
 }));
 
 // Reuse same service mocks from controllers test
-jest.mock('../services/citationService', () => ({
+jest.mock('../../services/citationService', () => ({
   list: jest.fn(async () => []),
   random: jest.fn(async () => ({ id: 1 })),
   addCitation: jest.fn(async d => d),
@@ -14,21 +14,21 @@ jest.mock('../services/citationService', () => ({
   deleteCitation: jest.fn(async () => ({}))
 }));
 
-jest.mock('../services/contratService', () => ({
+jest.mock('../../services/contratService', () => ({
   list: jest.fn(async () => [{ id: 1, date: '2024-01-01', lieu: 'A', description: 'test' }]),
   addContrat: jest.fn(async d => d),
   updateContrat: jest.fn(async () => ({})),
   deleteContrat: jest.fn(async () => ({}))
 }));
 
-jest.mock('../services/diapoService', () => ({
+jest.mock('../../services/diapoService', () => ({
   list: jest.fn(async () => [{ id: 1, imageUrl: '/public/uploads/carousel/a.jpg' }]),
   addDiapo: jest.fn(async d => d),
   updateDiapo: jest.fn(async () => ({})),
   deleteDiapo: jest.fn(async () => ({}))
 }));
 
-jest.mock('../services/fanfaronService', () => ({
+jest.mock('../../services/fanfaronService', () => ({
   getAllFanfarons: jest.fn(async () => [{ id: 1, photoUrl: '/public/uploads/fanfarons/a.jpg' }]),
   getAllFanfaronsAnnuaire: jest.fn(async () => []),
   createFanfarons: jest.fn(async d => d),
@@ -37,7 +37,7 @@ jest.mock('../services/fanfaronService', () => ({
 }));
 
 const app = require('express')();
-app.use(require('../routes')); // mount routers
+app.use(require('../../routes')); // mount routers
 
 describe('integration routes', () => {
   it('GET /api/citations returns random citation', async () => {
