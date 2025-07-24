@@ -4,6 +4,9 @@ import AdminCrudSection from '../components/crud/AdminCrudSection';
 import { useAuth } from '@features/auth';
 import { axiosWrapper } from '@services/axiosUtils';
 
+// Allowed special characters for generated passwords
+const SPECIALS = '@#()_+[]{}|;:,.<>?';
+
 export default function GestionUtilisateurs() {
   const { currentUser } = useAuth();
   const selfId = currentUser ? String(currentUser.id) : null;
@@ -31,7 +34,7 @@ export default function GestionUtilisateurs() {
     const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const lower = 'abcdefghijklmnopqrstuvwxyz';
     const digits = '0123456789';
-    const specials = '@#()_+[]{}|;:,.<>?';
+    const specials = SPECIALS;
     const all = upper + lower + digits + specials;
     const pick = (set) => set[Math.floor(Math.random() * set.length)];
     let pass = [pick(upper), pick(lower), pick(digits), pick(specials)];
