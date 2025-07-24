@@ -3,6 +3,11 @@ import React, { useState } from 'react';
 import { axiosWrapper } from '@services/axiosUtils';
 import { ContentPageLayout } from "@shell"
 
+const isStrongPassword = (pw) => {
+  // Minimum 12 chars with lowercase, uppercase, digit and special char
+  return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}$/.test(pw);
+};
+
 export default function ChangePassword() {
   const [form, setForm] = useState({
     currentPassword: '',
@@ -23,6 +28,11 @@ export default function ChangePassword() {
 
     if (form.newPassword !== form.confirmPassword) {
       setStatus('Les nouveaux mots de passe ne correspondent pas.');
+      return;
+    }
+
+    if (!isStrongPassword(form.newPassword)) {
+      setStatus('Le mot de passe doit contenir au moins 12 caracteres, des chiffres, des majuscules, des minuscules et un caractere special.');
       return;
     }
 
