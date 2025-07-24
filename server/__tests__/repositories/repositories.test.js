@@ -1,5 +1,5 @@
 // Mock db service used by all repositories
-jest.mock('../services/databaseService', () => ({
+jest.mock('../../services/databaseService', () => ({
   prepare: jest.fn(() => ({
     get: jest.fn(() => ({ id: 1, roles: '["admin"]', password_hash: 'hash' })),
     all: jest.fn(() => [{ id: 1, roles: '["admin"]' }]),
@@ -7,12 +7,12 @@ jest.mock('../services/databaseService', () => ({
   }))
 }));
 
-const authRepo = require('../repositories/authRepository');
-const citationRepo = require('../repositories/citationRepository');
-const contratRepo = require('../repositories/contratRepository');
-const diapoRepo = require('../repositories/diapoRepository');
-const fanfaronRepo = require('../repositories/fanfaronRepository');
-const userRepo = require('../repositories/userRepository');
+const authRepo = require('../../repositories/authRepository');
+const citationRepo = require('../../repositories/citationRepository');
+const contratRepo = require('../../repositories/contratRepository');
+const diapoRepo = require('../../repositories/diapoRepository');
+const fanfaronRepo = require('../../repositories/fanfaronRepository');
+const userRepo = require('../../repositories/userRepository');
 
 describe('repositories', () => {
   it('authRepository.findFanfaronBy returns parsed user', async () => {

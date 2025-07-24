@@ -1,10 +1,10 @@
-jest.mock('../repositories/authRepository', () => ({
+jest.mock('../../repositories/authRepository', () => ({
   findFanfaronBy: jest.fn(async () => ({ id: 1, surnom: 'a', roles: ['admin'], password_hash: 'hash' })),
   updatePasswordById: jest.fn(async () => true),
   findPasswordHashById: jest.fn(async () => 'hash')
 }));
 
-jest.mock('../repositories/citationRepository', () => ({
+jest.mock('../../repositories/citationRepository', () => ({
   findAll: jest.fn(async () => []),
   findRandom: jest.fn(async () => ({})),
   create: jest.fn(async d => d),
@@ -12,21 +12,21 @@ jest.mock('../repositories/citationRepository', () => ({
   remove: jest.fn(async () => ({ deleted: 1 }))
 }));
 
-jest.mock('../repositories/contratRepository', () => ({
+jest.mock('../../repositories/contratRepository', () => ({
   find: jest.fn(async () => []),
   create: jest.fn(async d => d),
   update: jest.fn(async () => ({ changes: 1 })),
   remove: jest.fn(async () => ({ deleted: 1 }))
 }));
 
-jest.mock('../repositories/diapoRepository', () => ({
+jest.mock('../../repositories/diapoRepository', () => ({
   find: jest.fn(async () => [{ id: 1, fichier: 'f', description: 'd' }]),
   create: jest.fn(async d => ({ id: 1, ...d })),
   update: jest.fn(async () => ({ id: 1, changes: 1 })),
   remove: jest.fn(async () => ({ deleted: 1 }))
 }));
 
-jest.mock('../repositories/fanfaronRepository', () => ({
+jest.mock('../../repositories/fanfaronRepository', () => ({
   findAll: jest.fn(async () => [{ id: 1, photo: 'p' }]),
   findAllAnnuaire: jest.fn(async () => [{ id: 1, photo: 'p' }]),
   create: jest.fn(async d => ({ id: 1, ...d })),
@@ -34,7 +34,7 @@ jest.mock('../repositories/fanfaronRepository', () => ({
   remove: jest.fn(async () => ({ deleted: 1 }))
 }));
 
-jest.mock('../repositories/userRepository', () => ({
+jest.mock('../../repositories/userRepository', () => ({
   getCurrentPresident: jest.fn(async () => ({})),
   findAllUsersRoles: jest.fn(async () => []),
   findRolesById: jest.fn(async () => ({ id: 1, roles: ['user'] })),
@@ -48,12 +48,12 @@ jest.mock('bcryptjs', () => ({
   hash: jest.fn(async () => 'hashed')
 }));
 
-const authService = require('../services/authService');
-const citationService = require('../services/citationService');
-const contratService = require('../services/contratService');
-const diapoService = require('../services/diapoService');
-const fanfaronService = require('../services/fanfaronService');
-const userService = require('../services/userService');
+const authService = require('../../services/authService');
+const citationService = require('../../services/citationService');
+const contratService = require('../../services/contratService');
+const diapoService = require('../../services/diapoService');
+const fanfaronService = require('../../services/fanfaronService');
+const userService = require('../../services/userService');
 
 describe('services', () => {
   it('authService.generateToken returns token', () => {
