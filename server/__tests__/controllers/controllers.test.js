@@ -106,5 +106,7 @@ describe('controllers', () => {
     sitemapCtrl.getSitemap({}, res);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.send).toHaveBeenCalled();
+    const xml = res.send.mock.calls[0][0];
+    expect(xml).toContain('https://');
   });
 });
