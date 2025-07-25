@@ -49,12 +49,15 @@ const contratCtrl = require('../../controllers/contratsController');
 const diapoCtrl = require('../../controllers/diaposController');
 const fanfaronCtrl = require('../../controllers/fanfaronsController');
 const userCtrl = require('../../controllers/userController');
+const sitemapCtrl = require('../../controllers/sitemapController');
 
 function resMock() {
   const res = {};
   res.status = jest.fn(() => res);
   res.json = jest.fn(() => res);
   res.cookie = jest.fn(() => res);
+  res.send = jest.fn(() => res);
+  res.type = jest.fn(() => res);
   return res;
 }
 
@@ -96,5 +99,12 @@ describe('controllers', () => {
     const res = resMock();
     await userCtrl.getCurrentPresident({}, res);
     expect(res.status).toHaveBeenCalledWith(200);
+  });
+
+  it('sitemapController.getSitemap returns xml', () => {
+    const res = resMock();
+    sitemapCtrl.getSitemap({}, res);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.send).toHaveBeenCalled();
   });
 });

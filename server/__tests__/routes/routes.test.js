@@ -30,9 +30,14 @@ jest.mock('../../controllers/fanfaronsController', () => ({
   removeFanfaron: jest.fn(),
 }));
 const fanfaronsCtrl = require('../../controllers/fanfaronsController');
+jest.mock('../../controllers/sitemapController', () => ({
+  getSitemap: jest.fn((req, res) => res.status(200).end()),
+}));
+const sitemapCtrl = require('../../controllers/sitemapController');
 
 const app = express();
 app.use(require('../../routes'));
+app.use('/', require('../../routes/sitemapRoutes'));
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -141,6 +146,14 @@ describe('routes', () => {
       expect(res.status).toBe(201);
       const reqArg = fanfaronsCtrl.createFanfaron.mock.calls[0][0];
       expect(reqArg.file).toBeUndefined();
+    });
+  });
+
+  describe('sitemapRoutes', () => {
+    test('GET /sitemap.xml', async () => {
+      const res = await request(app).get('/sitemap.xml');
+      expect(res.status).toBe(200);
+      expect(sitemapCtrl.getSitemap).toHaveBeenCalled();
     });
   });
 });
