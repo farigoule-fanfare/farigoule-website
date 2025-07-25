@@ -40,7 +40,9 @@ export const AuthProvider = ({ children }) => {
         } catch (err) {
             setCurrentUser(null);
             setIsAuthenticated(false);
-            console.error("Auth status check failed:", err.message);
+            if (err?.response?.status !== 401) {
+                console.error("Auth status check failed:", err.message);
+            }
         } finally {
             setIsLoading(false);
         }

@@ -1,4 +1,7 @@
-const BASE_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
+let BASE_URL = process.env.FRONTEND_URL || 'localhost:3000';
+if (!/^https?:\/\//i.test(BASE_URL)) {
+  BASE_URL = `https://${BASE_URL}`;
+}
 
 const routes = ['/', '/nous', '/contact', '/symphonies', '/portraits'];
 
