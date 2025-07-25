@@ -27,7 +27,6 @@ COPY routes ./routes
 COPY services ./services
 COPY repositories ./repositories
 COPY database ./database
-COPY controllers ./controllers
 COPY public ./public
 COPY middleware ./middleware
 COPY index.js .
