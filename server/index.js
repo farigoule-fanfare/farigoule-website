@@ -4,6 +4,7 @@ const cors = require('cors'); // Import CORS middleware
 const cookieParser = require('cookie-parser'); // Added cookie-parser
 const path = require('path'); // Import path module
 const api = require('./routes');
+const sitemapRoutes = require('./routes/sitemapRoutes');
 
 
 const db = require('./services/databaseService'); // Ensure DB is initialized when server starts
@@ -46,9 +47,11 @@ app.use(express.urlencoded({
 // Serve files from the server/public directory at the /public URL path
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// --- Routes --- 
-// All API routes are prefixed with /route as per this setup
+// --- Routes ---
+// All API routes are prefixed with /api
 app.use('/api', api);
+// Public sitemap route
+app.use('/', sitemapRoutes);
 
 // --- Catch-all for server status (optional) ---
 // This should be after your specific API routes
