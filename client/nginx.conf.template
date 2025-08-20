@@ -51,14 +51,21 @@ http {
       proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    # ---------- SPA fallback ----------
-    # Important: ce bloc ne doit PAS matcher les .php supprimées grâce aux blocs = ci-dessus
+    # --------- SPA fallback (garde le statut 404/410) ---------
     location / {
-      try_files $uri $uri/ /index.html;
+      try_files $uri $uri/ @react_not_found;
+    }
+    location @react_not_found {
+      return 404;
     }
 
-    # ---------- 404 propre (évite soft 404) ----------
-    error_page 404 /404.html;
-    location = /404.html { internal; }
+    # --------- Pages d'erreur : on sert index.html comme body, statut conservé ---------
+    error_page 404 /index.html;
+    error_page 410 /index.html;
+
+    # Protection/serving de index.html (évite 200 fantôme si absent)
+    location = /index.html {
+      try_files /index.html =404;
+    }
   }
 }
