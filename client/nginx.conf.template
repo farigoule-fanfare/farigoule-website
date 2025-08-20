@@ -41,6 +41,12 @@ http {
         location /symphonies.php {
             return 301 $scheme://$http_host/symphonies;
         }
+
+        location = /chat.php {
+            return 410;
+
+        location = /tartiflette.php {
+            return 410;
         
 		location /static/ {
             try_files $uri =404;	expires 1y;
