@@ -11,16 +11,16 @@ http {
     access_log /dev/stdout;
 
     # ---------- Pages supprimées / anciennes .php ----------
-    # Supprimées définitivement
+    # Supprimées définitivement -> 410
     location = /chat.php        { return 410; }
     location = /tartiflette.php { return 410; }
 
-    # Anciennes routes .php qui ont un équivalent
-    location = /index.php      { return 301 $scheme://$http_host/; }
-    location = /portraits.php  { return 301 $scheme://$http_host/portraits; }
-    location = /contact.php    { return 301 $scheme://$http_host/contact; }
-    location = /nous.php       { return 301 $scheme://$http_host/nous; }
-    location = /symphonies.php { return 301 $scheme://$http_host/symphonies; }
+    # Anciennes routes .php qui ont un équivalent -> 301
+    location /index.php      { return 301 $scheme://$http_host/; }
+    location /portraits.php  { return 301 $scheme://$http_host/portraits; }
+    location /contact.php    { return 301 $scheme://$http_host/contact; }
+    location /nous.php       { return 301 $scheme://$http_host/nous; }
+    location /symphonies.php { return 301 $scheme://$http_host/symphonies; }
 
     # ---------- Static & cache ----------
     location /static/  { try_files $uri =404; expires 1y; }
@@ -51,21 +51,9 @@ http {
       proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    # --------- SPA fallback (garde le statut 404/410) ---------
+    # ---------- SPA fallback classique ----------
     location / {
-      try_files $uri $uri/ @react_not_found;
-    }
-    location @react_not_found {
-      return 404;
-    }
-
-    # --------- Pages d'erreur : on sert index.html comme body, statut conservé ---------
-    error_page 404 /index.html;
-    error_page 410 /index.html;
-
-    # Protection/serving de index.html (évite 200 fantôme si absent)
-    location = /index.html {
-      try_files /index.html =404;
+      try_files $uri $uri/ /index.html;
     }
   }
 }
