@@ -5,13 +5,6 @@ jest.mock('../../services/authService', () => ({
   adminSetPassword: jest.fn(async () => {}),
 }));
 
-jest.mock('../../services/citationService', () => ({
-  list: jest.fn(async () => []),
-  random: jest.fn(async () => ({})),
-  addCitation: jest.fn(async d => d),
-  updateCitation: jest.fn(async () => ({})),
-  deleteCitation: jest.fn(async () => ({}))
-}));
 
 jest.mock('../../services/contratService', () => ({
   list: jest.fn(async () => []),
@@ -44,7 +37,6 @@ jest.mock('../../services/userService', () => ({
 }));
 
 const authCtrl = require('../../controllers/authController');
-const citationCtrl = require('../../controllers/citationsController');
 const contratCtrl = require('../../controllers/contratsController');
 const diapoCtrl = require('../../controllers/diaposController');
 const fanfaronCtrl = require('../../controllers/fanfaronsController');
@@ -69,38 +61,7 @@ describe('controllers', () => {
     expect(res.status).toHaveBeenCalledWith(200);
   });
 
-  it('citationsController.listCitations returns 200', async () => {
-    const res = resMock();
-    await citationCtrl.listCitations({}, res);
-    expect(res.status).toHaveBeenCalledWith(200);
-  });
-    it('citationsController.randomCitation returns 200', async () => {
-      const res = resMock();
-      await citationCtrl.randomCitation({}, res);
-      expect(res.status).toHaveBeenCalledWith(200);
-    });
-
-    it('citationsController.addCitation returns 201', async () => {
-      const req = { body: { citation: 'Test', auteur_id: 1 } };
-      const res = resMock();
-      await citationCtrl.addCitation(req, res);
-      expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith({ citation: 'Test', auteur_id: 1 });
-    });
-
-    it('citationsController.updateCitation returns 200', async () => {
-      const req = { params: { id: '1' }, body: { citation: 'Updated', auteur_id: 2 } };
-      const res = resMock();
-      await citationCtrl.updateCitation(req, res);
-      expect(res.status).toHaveBeenCalledWith(200);
-    });
-
-    it('citationsController.deleteCitation returns 200', async () => {
-      const req = { params: { id: '1' } };
-      const res = resMock();
-      await citationCtrl.deleteCitation(req, res);
-      expect(res.status).toHaveBeenCalledWith(200);
-    });
+  // Tests des citations déplacés vers `citation_ctrl.test.js`
 
   it('contratsController.listContrats returns 200', async () => {
     const req = { query: {} };
