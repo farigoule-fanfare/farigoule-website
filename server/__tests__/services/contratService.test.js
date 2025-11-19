@@ -27,6 +27,18 @@ describe('contratService.list', () => {
     Date.prototype.toISOString.mockRestore();
   });
 
+  it('uses defaults for past scope', async () => {
+    jest.spyOn(Date.prototype, 'toISOString').mockReturnValue('2024-05-06T00:00:00.000Z');
+    await contratService.list({ scope: 'past' });
+    expect(contratRepo.find).toHaveBeenCalledWith({
+      since: undefined,
+      until: '2024-05-06',
+      order: 'desc',
+      limit: 3,
+    });
+    Date.prototype.toISOString.mockRestore();
+  });
+
   it('uses defaults with empty filters', async () => {
     jest.spyOn(Date.prototype, 'toISOString').mockReturnValue('2024-05-06T00:00:00.000Z');
     await contratService.list({});
