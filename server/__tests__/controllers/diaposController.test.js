@@ -66,6 +66,15 @@ describe('diaposController', () => {
     });
   });
 
+  it('addDiapo gère une erreur du service (500)', async () => {
+    diapoService.addDiapo.mockRejectedValueOnce(new Error('Add KO'));
+    const req = { file: { filename: 'boom.jpg' }, body: { description: 'Fail' } };
+    const res = resMock();
+    await diapoCtrl.addDiapo(req, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Add KO' });
+  });
+
   it('updateDiapo met à jour une diapo (200)', async () => {
     const req = { params: { id: '1' }, file: { filename: 'updated.jpg' }, body: { description: 'Diapo modifiée' } };
     const res = resMock();
@@ -79,10 +88,28 @@ describe('diaposController', () => {
     });
   });
 
+  it('updateDiapo gère une erreur du service (500)', async () => {
+    diapoService.updateDiapo.mockRejectedValueOnce(new Error('Update KO'));
+    const req = { params: { id: '2' }, file: { filename: 'oops.jpg' }, body: { description: 'Fail' } };
+    const res = resMock();
+    await diapoCtrl.updateDiapo(req, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Update KO' });
+  });
+
   it('deleteDiapo supprime une diapo (200)', async () => {
     const req = { params: { id: '1' } };
     const res = resMock();
     await diapoCtrl.deleteDiapo(req, res);
     expect(res.status).toHaveBeenCalledWith(200);
+  });
+
+  it('deleteDiapo gère une erreur du service (500)', async () => {
+    diapoService.deleteDiapo.mockRejectedValueOnce(new Error('Delete KO'));
+    const req = { params: { id: '3' } };
+    const res = resMock();
+    await diapoCtrl.deleteDiapo(req, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Delete KO' });
   });
 });
