@@ -48,6 +48,15 @@ describe('contratsController', () => {
     expect(res.json).toHaveBeenCalledWith({ id: 99, lieu: 'Marseille', date: '2026-01-10', description: 'Bal' });
   });
 
+  it('addContrat gère une erreur du service (500)', async () => {
+    contratService.addContrat.mockRejectedValueOnce(new Error('create fail'));
+    const req = { body: { lieu: 'Paris', date: '2026-01-10', description: 'Bal' } };
+    const res = resMock();
+    await contratCtrl.addContrat(req, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: 'create fail' });
+  });
+
   it('updateContrat met à jour un contrat (200)', async () => {
     const req = { params: { id: '1' }, body: { lieu: 'Paris Update', description: 'Edited' } };
     const res = resMock();
@@ -56,10 +65,28 @@ describe('contratsController', () => {
     expect(res.json).toHaveBeenCalledWith({ id: 1, lieu: 'Paris Update', description: 'Edited' });
   });
 
+  it('updateContrat gère une erreur du service (500)', async () => {
+    contratService.updateContrat.mockRejectedValueOnce(new Error('update fail'));
+    const req = { params: { id: '1' }, body: { lieu: 'Paris Update' } };
+    const res = resMock();
+    await contratCtrl.updateContrat(req, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: 'update fail' });
+  });
+
   it('deleteContrat supprime un contrat (200)', async () => {
     const req = { params: { id: '1' } };
     const res = resMock();
     await contratCtrl.deleteContrat(req, res);
     expect(res.status).toHaveBeenCalledWith(200);
+  });
+
+  it('deleteContrat gère une erreur du service (500)', async () => {
+    contratService.deleteContrat.mockRejectedValueOnce(new Error('delete fail'));
+    const req = { params: { id: '1' } };
+    const res = resMock();
+    await contratCtrl.deleteContrat(req, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: 'delete fail' });
   });
 });
