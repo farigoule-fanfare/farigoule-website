@@ -15,15 +15,15 @@ const defaultRow = {
   roles: '["member"]',
 };
 
-const allMock = jest.fn(() => [defaultRow]);
-const getMock = jest.fn(() => defaultRow);
-const runMock = jest.fn(() => ({ lastInsertRowid: 1, changes: 1 }));
+const mockAll = jest.fn(() => [defaultRow]);
+const mockGet = jest.fn(() => defaultRow);
+const mockRun = jest.fn(() => ({ lastInsertRowid: 1, changes: 1 }));
 
 jest.mock('../../services/databaseService', () => ({
   prepare: jest.fn(() => ({
-    all: allMock,
-    get: getMock,
-    run: runMock,
+    all: mockAll,
+    get: mockGet,
+    run: mockRun,
   })),
 }));
 
@@ -32,9 +32,9 @@ const fanfaronRepo = require('../../repositories/fanfaronRepository');
 const { prepare } = db;
 
 beforeEach(() => {
-  allMock.mockReset().mockReturnValue([defaultRow]);
-  getMock.mockReset().mockReturnValue(defaultRow);
-  runMock.mockReset().mockReturnValue({ lastInsertRowid: 1, changes: 1 });
+  mockAll.mockReset().mockReturnValue([defaultRow]);
+  mockGet.mockReset().mockReturnValue(defaultRow);
+  mockRun.mockReset().mockReturnValue({ lastInsertRowid: 1, changes: 1 });
   prepare.mockClear();
 });
 
@@ -43,56 +43,56 @@ describe('fanfaronRepository - lectures', () => {
     const rows = await fanfaronRepo.findAll();
     expect(Array.isArray(rows)).toBe(true);
     expect(rows.length).toBeGreaterThan(0);
-    expect(allMock).toHaveBeenCalled();
+    expect(mockAll).toHaveBeenCalled();
   });
 
   it('findAllAnnuaire returns array', async () => {
     const rows = await fanfaronRepo.findAllAnnuaire();
     expect(Array.isArray(rows)).toBe(true);
-    expect(allMock).toHaveBeenCalled();
+    expect(mockAll).toHaveBeenCalled();
   });
 });
 
 describe('fanfaronRepository - création', () => {
   it('create returns inserted fanfaron with id', async () => {
-    runMock.mockReturnValueOnce({ lastInsertRowid: 5, changes: 1 });
-    getMock.mockReturnValueOnce({ ...defaultRow, id: 5, nom: 'Test', prenom: 'User' });
+    mockRun.mockReturnValueOnce({ lastInsertRowid: 5, changes: 1 });
+    mockGet.mockReturnValueOnce({ ...defaultRow, id: 5, nom: 'Test', prenom: 'User' });
 
     const newFanfaron = await fanfaronRepo.create({ nom: 'Test', prenom: 'User' });
 
-    expect(runMock).toHaveBeenCalled();
-    expect(getMock).toHaveBeenCalledWith(5);
+    expect(mockRun).toHaveBeenCalled();
+    expect(mockGet).toHaveBeenCalledWith(5);
     expect(newFanfaron).toMatchObject({ id: 5, nom: 'Test', prenom: 'User' });
   });
 });
 
 describe('fanfaronRepository.update', () => {
   it('returns updated row from database', async () => {
-    getMock.mockReturnValueOnce({ ...defaultRow, surnom: 'Joe' });
+    mockGet.mockReturnValueOnce({ ...defaultRow, surnom: 'Joe' });
 
     const result = await fanfaronRepo.update(5, { surnom: 'Joe' });
 
-    expect(runMock).toHaveBeenCalled();
-    expect(getMock).toHaveBeenCalledWith(5);
+    expect(mockRun).toHaveBeenCalled();
+    expect(mockGet).toHaveBeenCalledWith(5);
     expect(result).toEqual({ ...defaultRow, surnom: 'Joe' });
   });
 
   it('throws when id is missing', async () => {
-    runMock.mockImplementationOnce(() => { throw new Error('id'); });
+    mockRun.mockImplementationOnce(() => { throw new Error('id'); });
     await expect(fanfaronRepo.update(undefined, {})).rejects.toThrow('id');
   });
 });
 
 describe('fanfaronRepository.remove', () => {
   it('returns number of deleted rows', async () => {
-    runMock.mockReturnValueOnce({ changes: 1 });
+    mockRun.mockReturnValueOnce({ changes: 1 });
     const result = await fanfaronRepo.remove(6);
-    expect(runMock).toHaveBeenCalledWith(6);
+    expect(mockRun).toHaveBeenCalledWith(6);
     expect(result).toEqual({ deleted: 1 });
   });
 
   it('throws when id is missing', async () => {
-    runMock.mockImplementationOnce(() => { throw new Error('id'); });
+    mockRun.mockImplementationOnce(() => { throw new Error('id'); });
     await expect(fanfaronRepo.remove()).rejects.toThrow('id');
   });
 });
