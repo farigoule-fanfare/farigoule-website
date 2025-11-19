@@ -2,7 +2,7 @@
 
 jest.mock('../../services/databaseService', () => ({
   prepare: jest.fn(() => ({
-    get: jest.fn(() => ({ id: 1, roles: '["admin"]', password_hash: 'hash123' })),
+    get: jest.fn(() => ({ id: 1, roles: '["fanfaron"]', password_hash: 'hash123' })),
     run: jest.fn(() => ({ changes: 1 }))
   }))
 }));

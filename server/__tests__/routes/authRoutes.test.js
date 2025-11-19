@@ -68,7 +68,7 @@ describe('authRoutes', () => {
 
 	it('POST /auth/admin-set-password rejette les non-admins', async () => {
 		mockProtect.mockImplementationOnce((req, _res, next) => {
-			req.user = { id: 1, roles: ['member'] };
+			req.user = { id: 1, roles: ['fanfaron'] };
 			next();
 		});
 		const res = await request(app).post('/auth/admin-set-password').send({ userId: 2 });

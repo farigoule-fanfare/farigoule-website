@@ -16,7 +16,7 @@ const db = require('../../services/databaseService');
 const { prepare } = db;
 const userRepo = require('../../repositories/userRepository');
 
-const defaultUser = { id: 1, roles: '["admin"]', nom: 'Dupont' };
+const defaultUser = { id: 1, roles: '["fanfaron"]', nom: 'Dupont' };
 
 beforeEach(() => {
   mockGet.mockReset().mockReturnValue(defaultUser);
@@ -27,9 +27,9 @@ beforeEach(() => {
 
 describe('userRepository - sélections', () => {
   it('findRolesById parse les rôles', async () => {
-    mockGet.mockReturnValueOnce({ id: 1, roles: '["admin","president"]' });
+    mockGet.mockReturnValueOnce({ id: 1, roles: '["admin","fanfaron"]' });
     const user = await userRepo.findRolesById(1);
-    expect(user).toEqual({ id: 1, roles: ['admin', 'president'] });
+    expect(user).toEqual({ id: 1, roles: ['admin', 'fanfaron'] });
     expect(prepare).toHaveBeenCalledWith('SELECT id, roles FROM fanfarons WHERE id = ?');
   });
 
@@ -48,13 +48,13 @@ describe('userRepository - sélections', () => {
 
   it('findAllUsersRoles retourne un tableau avec roles parsés', async () => {
     mockAll.mockReturnValueOnce([
-      { id: 1, surnom: 'Joe', promo: '2020', roles: '["admin"]' },
-      { id: 2, surnom: 'Ann', promo: '2021', roles: '["member","staff"]' },
+      { id: 1, surnom: 'Joe', promo: '2020', roles: '["fanfaron"]' },
+      { id: 2, surnom: 'Ann', promo: '2021', roles: '["fanfaron","admin"]' },
     ]);
     const rows = await userRepo.findAllUsersRoles();
     expect(rows).toEqual([
-      { id: 1, surnom: 'Joe', promo: '2020', roles: ['admin'] },
-      { id: 2, surnom: 'Ann', promo: '2021', roles: ['member', 'staff'] },
+      { id: 1, surnom: 'Joe', promo: '2020', roles: ['fanfaron'] },
+      { id: 2, surnom: 'Ann', promo: '2021', roles: ['fanfaron', 'admin'] },
     ]);
     expect(prepare).toHaveBeenCalledWith('SELECT id, surnom, promo, roles FROM fanfarons');
   });
@@ -90,7 +90,7 @@ describe('userRepository - updates', () => {
     userRepo.updateRolesById(2, ['admin']);
     const lastQuery = prepare.mock.calls[0][0];
     expect(lastQuery).toBe('UPDATE fanfarons SET roles = ? WHERE id = ?');
-    expect(mockRun).toHaveBeenCalledWith('["admin"]', 2);
+    expect(mockRun).toHaveBeenCalledWith('["fanfaron"]', 2);
   });
 
   it('updateRolesById remplace par tableau vide si undefined', () => {

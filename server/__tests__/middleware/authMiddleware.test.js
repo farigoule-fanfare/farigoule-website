@@ -40,7 +40,7 @@ describe('protect middleware', () => {
 		const res = resMock();
 		const next = jest.fn();
 		authService.verifyToken.mockResolvedValueOnce({ id: 9 });
-		authService.getUserById.mockResolvedValueOnce({ id: 9, roles: ['member'] });
+		authService.getUserById.mockResolvedValueOnce({ id: 9, roles: ['fanfaron'] });
 
 		await protect(req, res, next);
 
@@ -90,7 +90,7 @@ describe('protect middleware', () => {
 
 describe('authorize middleware', () => {
 	it('laisse passer quand le rôle requis est présent', () => {
-		const req = { user: { roles: ['admin', 'member'] } };
+		const req = { user: { roles: ['admin', 'fanfaron'] } };
 		const res = resMock();
 		const next = jest.fn();
 
@@ -112,7 +112,7 @@ describe('authorize middleware', () => {
 	});
 
 	it('renvoie 403 si aucun rôle requis n’est présent', () => {
-		const req = { user: { roles: ['member'] } };
+		const req = { user: { roles: ['fanfaron'] } };
 		const res = resMock();
 		const next = jest.fn();
 
@@ -122,7 +122,7 @@ describe('authorize middleware', () => {
 		expect(res.json).toHaveBeenCalledWith({
 			message: 'Forbidden, user does not have the required role.',
 			requiredOneOf: ['admin', 'super'],
-			userRoles: ['member'],
+			userRoles: ['fanfaron'],
 		});
 		expect(next).not.toHaveBeenCalled();
 	});
