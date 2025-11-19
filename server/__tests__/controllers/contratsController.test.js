@@ -1,12 +1,14 @@
 // Tests dédiés au contrôleur des contrats
+const mockContrats = [
+  { id: 1, lieu: 'Paris', date: '2025-12-01', description: 'Concert de Noël' },
+  { id: 2, lieu: 'Lyon', date: '2025-12-15', description: 'Festival d’hiver' },
+];
+
 jest.mock('../../services/contratService', () => ({
-  list: jest.fn(async () => [
-    { id: 1, lieu: 'Paris', date: '2025-12-01', type: 'Concert' },
-    { id: 2, lieu: 'Lyon', date: '2025-12-15', type: 'Festival' }
-  ]),
-  addContrat: jest.fn(async d => d),
-  updateContrat: jest.fn(async () => ({ success: true })),
-  deleteContrat: jest.fn(async () => ({ success: true }))
+  list: jest.fn(async () => mockContrats),
+  addContrat: jest.fn(async data => ({ id: 99, ...data })),
+  updateContrat: jest.fn(async (id, data) => ({ id, ...data })),
+  deleteContrat: jest.fn(async () => ({ success: true })),
 }));
 
 const contratCtrl = require('../../controllers/contratsController');
@@ -39,18 +41,19 @@ describe('contratsController', () => {
   });
 
   it('addContrat crée un contrat (201)', async () => {
-    const req = { body: { lieu: 'Marseille', date: '2026-01-10', type: 'Bal' } };
+    const req = { body: { lieu: 'Marseille', date: '2026-01-10', description: 'Bal' } };
     const res = resMock();
     await contratCtrl.addContrat(req, res);
     expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith({ lieu: 'Marseille', date: '2026-01-10', type: 'Bal' });
+    expect(res.json).toHaveBeenCalledWith({ id: 99, lieu: 'Marseille', date: '2026-01-10', description: 'Bal' });
   });
 
   it('updateContrat met à jour un contrat (200)', async () => {
-    const req = { params: { id: '1' }, body: { lieu: 'Paris Update' } };
+    const req = { params: { id: '1' }, body: { lieu: 'Paris Update', description: 'Edited' } };
     const res = resMock();
     await contratCtrl.updateContrat(req, res);
     expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({ id: 1, lieu: 'Paris Update', description: 'Edited' });
   });
 
   it('deleteContrat supprime un contrat (200)', async () => {
