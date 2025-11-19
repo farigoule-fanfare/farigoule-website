@@ -46,6 +46,12 @@ describe('userRepository - sélections', () => {
     expect(prepare).toHaveBeenCalledWith('SELECT id, nom, prenom, email, tel FROM fanfarons WHERE id = ?');
   });
 
+  it('findFanfaronById retourne null si rien trouvé', async () => {
+    mockGet.mockReturnValueOnce(null);
+    const fanfaron = await userRepo.findFanfaronById(99);
+    expect(fanfaron).toBeNull();
+  });
+
   it('findAllUsersRoles retourne un tableau avec roles parsés', async () => {
     mockAll.mockReturnValueOnce([
       { id: 1, surnom: 'Joe', promo: '2020', roles: '["fanfaron"]' },
@@ -74,6 +80,13 @@ describe('userRepository - updates', () => {
     const lastQuery = prepare.mock.calls[0][0];
     expect(lastQuery).toBe('UPDATE fanfarons SET nom = ?, tel = ? WHERE id = ?');
     expect(mockRun).toHaveBeenCalledWith('Doe', '123', 3);
+  });
+
+  it('updateProfile ignore les champs undefined mais gère plusieurs colonnes', () => {
+    userRepo.updateProfile(4, { nom: 'Dupont', prenom: undefined, email: 'dupont@test.fr', telephone: '0102' });
+    const lastQuery = prepare.mock.calls[0][0];
+    expect(lastQuery).toBe('UPDATE fanfarons SET nom = ?, email = ?, tel = ? WHERE id = ?');
+    expect(mockRun).toHaveBeenCalledWith('Dupont', 'dupont@test.fr', '0102', 4);
   });
 
   it('updateProfile lance une erreur sans champs', () => {
