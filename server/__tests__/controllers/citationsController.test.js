@@ -34,12 +34,29 @@ describe('citationsController (isolé)', () => {
 		expect(obj).toHaveProperty('citation');
 	});
 
+	it('randomCitation gère une erreur du service', async () => {
+		citationService.random.mockRejectedValueOnce(new Error('random fail'));
+		const res = resMock();
+		await citationCtrl.randomCitation({}, res);
+		expect(res.status).toHaveBeenCalledWith(500);
+		expect(res.json).toHaveBeenCalledWith({ message: 'Unable to fetch random citation' });
+	});
+
 		it('addCitation crée et renvoie la citation (201)', async () => {
 			const res = resMock();
 			const req = { body: { citation: 'Carpe diem', auteur_id: 5 } };
 			await citationCtrl.addCitation(req, res);
 			expect(res.status).toHaveBeenCalledWith(201);
 			expect(res.json).toHaveBeenCalledWith({ citation: 'Carpe diem', auteur_id: 5 });
+		});
+
+		it('addCitation gère une erreur du service', async () => {
+			citationService.addCitation.mockRejectedValueOnce(new Error('boom'));
+			const res = resMock();
+			const req = { body: { citation: 'Carpe diem', auteur_id: 5 } };
+			await citationCtrl.addCitation(req, res);
+			expect(res.status).toHaveBeenCalledWith(500);
+			expect(res.json).toHaveBeenCalledWith({ message: 'boom' });
 		});
 
 		it('updateCitation met à jour (200)', async () => {
@@ -51,6 +68,15 @@ describe('citationsController (isolé)', () => {
 			expect(payload).toHaveProperty('success');
 		});
 
+		it('updateCitation gère une erreur du service', async () => {
+			citationService.updateCitation.mockRejectedValueOnce(new Error('update fail'));
+			const res = resMock();
+			const req = { params: { id: '10' }, body: { citation: 'Tempus fugit (edit)', auteur_id: 2 } };
+			await citationCtrl.updateCitation(req, res);
+			expect(res.status).toHaveBeenCalledWith(500);
+			expect(res.json).toHaveBeenCalledWith({ message: 'update fail' });
+		});
+
 		it('deleteCitation supprime (200)', async () => {
 			const res = resMock();
 			const req = { params: { id: '10' } };
@@ -58,6 +84,15 @@ describe('citationsController (isolé)', () => {
 			expect(res.status).toHaveBeenCalledWith(200);
 			const payload = res.json.mock.calls[0][0];
 			expect(payload).toHaveProperty('success');
+		});
+
+		it('deleteCitation gère une erreur du service', async () => {
+			citationService.deleteCitation.mockRejectedValueOnce(new Error('delete fail'));
+			const res = resMock();
+			const req = { params: { id: '10' } };
+			await citationCtrl.deleteCitation(req, res);
+			expect(res.status).toHaveBeenCalledWith(500);
+			expect(res.json).toHaveBeenCalledWith({ message: 'delete fail' });
 		});
 
 	it('listCitations gère une erreur du service', async () => {
