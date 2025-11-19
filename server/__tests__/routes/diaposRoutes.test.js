@@ -3,6 +3,8 @@
 const express = require('express');
 const request = require('supertest');
 
+jest.mock('multer');
+
 jest.mock('../../middleware/authMiddleware', () => ({
   protect: (_req, _res, next) => { _req.user = { roles: ['admin'] }; next(); },
   authorize: () => (_req, _res, next) => next(),
