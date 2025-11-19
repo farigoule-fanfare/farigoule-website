@@ -1,15 +1,22 @@
 // Tests dédiés au contrôleur des fanfarons
+const baseFanfarons = [
+  { id: 1, prenom: 'Jean', nom: 'Dupont', instrument: 'Trompette', photo: 'jean.jpg' },
+  { id: 2, prenom: 'Marie', nom: 'Martin', instrument: 'Clarinette', photo: 'marie.jpg' },
+];
+
+const buildPhotoUrl = (photo) => `/public/uploads/fanfarons/${photo}`;
+const attachPhoto = (f) => ({ ...f, photoUrl: buildPhotoUrl(f.photo) });
+
 jest.mock('../../services/fanfaronService', () => ({
-  getAllFanfarons: jest.fn(async () => [
-    { id: 1, nom: 'Dupont', prenom: 'Jean', instrument: 'Trompette' },
-    { id: 2, nom: 'Martin', prenom: 'Marie', instrument: 'Clarinette' }
-  ]),
-  getAllFanfaronsAnnuaire: jest.fn(async () => [
-    { id: 1, nom: 'Dupont', prenom: 'Jean', email: 'jean@example.com' }
-  ]),
-  createFanfarons: jest.fn(async d => d),
-  updateFanfarons: jest.fn(async () => ({ success: true })),
-  deleteFanfarons: jest.fn(async () => ({ success: true }))
+  getAllFanfarons: jest.fn(async () => baseFanfarons.map(attachPhoto)),
+  getAllFanfaronsAnnuaire: jest.fn(async () => [attachPhoto(baseFanfarons[0])]),
+  createFanfarons: jest.fn(async data => attachPhoto({
+    id: 99,
+    ...data,
+    photo: data.photo ?? null,
+  })),
+  updateFanfarons: jest.fn(async (id, data) => attachPhoto({ id: Number(id), ...data })),
+  deleteFanfarons: jest.fn(async () => ({ success: true })),
 }));
 
 const fanfaronCtrl = require('../../controllers/fanfaronsController');
@@ -48,24 +55,38 @@ describe('fanfaronsController', () => {
   });
 
   it('createFanfaron crée un fanfaron (201)', async () => {
-    const req = { body: { nom: 'Nouveau', prenom: 'Fan', instrument: 'Tuba' } };
+    const req = { body: { nom: 'Nouveau', prenom: 'Fan', instrument: 'Tuba' }, file: { filename: 'new.jpg' } };
     const res = resMock();
     await fanfaronCtrl.createFanfaron(req, res);
     expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith({ nom: 'Nouveau', prenom: 'Fan', instrument: 'Tuba' });
+    expect(res.json).toHaveBeenCalledWith({
+      id: 99,
+      nom: 'Nouveau',
+      prenom: 'Fan',
+      instrument: 'Tuba',
+      photo: 'new.jpg',
+      photoUrl: '/public/uploads/fanfarons/new.jpg',
+    });
   });
 
   it('updateFanfaron met à jour un fanfaron (200)', async () => {
-    const req = { params: { id: '1' }, body: { instrument: 'Saxophone' } };
+    const req = { params: { id: '1' }, body: { instrument: 'Saxophone' }, file: { filename: 'update.jpg' } };
     const res = resMock();
     await fanfaronCtrl.updateFanfaron(req, res);
     expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      id: 1,
+      instrument: 'Saxophone',
+      photo: 'update.jpg',
+      photoUrl: '/public/uploads/fanfarons/update.jpg',
+    });
   });
 
-  it('deleteFanfaron supprime un fanfaron (200)', async () => {
+  it('removeFanfaron supprime un fanfaron (200)', async () => {
     const req = { params: { id: '1' } };
     const res = resMock();
-    await fanfaronCtrl.deleteFanfaron(req, res);
+    await fanfaronCtrl.removeFanfaron(req, res);
     expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Suppression réussie' });
   });
 });
