@@ -3,7 +3,27 @@
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('multer');
+jest.mock('multer', () => {
+  const actual = jest.requireActual('multer');
+  const mocked = (options = {}) => {
+    mocked.__lastOptions = options;
+    const normalized = { ...options, storage: actual.memoryStorage() };
+    return actual(normalized);
+  };
+  Object.keys(actual).forEach((key) => {
+    mocked[key] = actual[key];
+  });
+  const origDiskStorage = actual.diskStorage;
+  mocked.diskStorage = (config) => {
+    mocked.__storageConfig = config;
+    return origDiskStorage(config);
+  };
+  mocked.__reset = () => {
+    mocked.__lastOptions = undefined;
+    mocked.__storageConfig = undefined;
+  };
+  return mocked;
+});
 
 const mockProtect = jest.fn((req, _res, next) => {
   req.user = { id: 1, roles: ['admin', 'fanfaron'] };
@@ -133,5 +153,44 @@ describe('diaposRoutes', () => {
     expect(res.status).toBe(200);
     expect(diaposCtrl.deleteDiapo).toHaveBeenCalled();
     expect(res.body).toEqual(mockDeletedResponse);
+  });
+});
+
+describe('diaposRoutes upload configuration', () => {
+  test('storage écrit dans uploads/carousel et conserve l\'extension', () => {
+    jest.isolateModules(() => {
+      const mockedMulter = require('multer');
+      mockedMulter.__reset();
+      require('../../routes/diaposRoutes');
+      const storageCfg = mockedMulter.__storageConfig;
+      expect(storageCfg).toBeDefined();
+
+      const destinationCb = jest.fn();
+      storageCfg.destination({}, { originalname: 'slide.png' }, destinationCb);
+      expect(destinationCb).toHaveBeenCalledWith(null, 'public/uploads/carousel');
+
+      const filenameCb = jest.fn();
+      storageCfg.filename({}, { originalname: 'slide.png' }, filenameCb);
+      const generated = filenameCb.mock.calls[0][1];
+      expect(generated).toMatch(/\.png$/);
+    });
+  });
+
+  test('fileFilter refuse les fichiers sans nom', () => {
+    jest.isolateModules(() => {
+      const mockedMulter = require('multer');
+      mockedMulter.__reset();
+      require('../../routes/diaposRoutes');
+      const fileFilter = mockedMulter.__lastOptions.fileFilter;
+      expect(fileFilter).toBeInstanceOf(Function);
+
+      const cbReject = jest.fn();
+      fileFilter({}, { originalname: '' }, cbReject);
+      expect(cbReject).toHaveBeenCalledWith(null, false);
+
+      const cbAccept = jest.fn();
+      fileFilter({}, { originalname: 'ok.jpg' }, cbAccept);
+      expect(cbAccept).toHaveBeenCalledWith(null, true);
+    });
   });
 });
