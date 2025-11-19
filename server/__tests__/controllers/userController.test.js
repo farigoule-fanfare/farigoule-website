@@ -1,14 +1,13 @@
 // Tests dédiés au contrôleur des utilisateurs
 jest.mock('../../services/userService', () => ({
-
-  getCurrentPresident: jest.fn(async () => ({ id: 1, nom: 'Président', prenom: 'Actuel', role: 'president' })),
-  listUsersRoles: jest.fn(async () => [
-    { id: 1, nom: 'User1', role: ['admin', "fanfaron"] },
-    { id: 2, nom: 'User2', role: ['fanfaron'] }
-  ]),
-  updateProfile: jest.fn(async () => ({ success: true })),
-  addAdminRole: jest.fn(async () => {}),
-  removeAdminRole: jest.fn(async () => {})
+	getCurrentPresident: jest.fn(async () => ({ id: 1, nom: 'Président', prenom: 'Actuel', role: 'president' })),
+	getAllUsersRoles: jest.fn(async () => [
+		{ id: 1, nom: 'User1', roles: ['admin', 'fanfaron'] },
+		{ id: 2, nom: 'User2', roles: ['fanfaron'] },
+	]),
+	updateProfile: jest.fn(async () => ({ success: true })),
+	addAdminRole: jest.fn(async () => {}),
+	removeAdminRole: jest.fn(async () => {}),
 }));
 
 const userCtrl = require('../../controllers/userController');
@@ -52,6 +51,7 @@ describe('userController', () => {
     const payload = res.json.mock.calls[0][0];
     expect(Array.isArray(payload)).toBe(true);
     expect(payload.length).toBeGreaterThan(0);
+    expect(payload[0]).toHaveProperty('roles');
   });
 
   it('updateProfile met à jour le profil (200)', async () => {
@@ -61,14 +61,16 @@ describe('userController', () => {
   });
 
   it('addAdminRole ajoute un rôle admin (200)', async () => {
-    const req = { body: { userId: 2 } };
+    const req = { params: { id: '2' } };
     await userCtrl.addAdminRole(req, res);
     expect(res.status).toHaveBeenCalledWith(200);
+    expect(userService.addAdminRole).toHaveBeenCalledWith(2);
   });
 
   it('removeAdminRole retire un rôle admin (200)', async () => {
-    const req = { body: { userId: 2 } };
+    const req = { params: { id: '2' } };
     await userCtrl.removeAdminRole(req, res);
     expect(res.status).toHaveBeenCalledWith(200);
+    expect(userService.removeAdminRole).toHaveBeenCalledWith(2);
   });
 });
