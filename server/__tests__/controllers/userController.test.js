@@ -54,10 +54,32 @@ describe('userController', () => {
     expect(payload[0]).toHaveProperty('roles');
   });
 
+  it('listUsersRoles gère une erreur du service (500)', async () => {
+    userService.getAllUsersRoles.mockRejectedValueOnce(new Error('Roles KO'));
+    await userCtrl.listUsersRoles({}, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Roles KO' });
+  });
+
   it('updateProfile met à jour le profil (200)', async () => {
     const req = { user: { id: 1 }, body: { nom: 'Updated' } };
     await userCtrl.updateProfile(req, res);
     expect(res.status).toHaveBeenCalledWith(200);
+  });
+
+  it('updateProfile refuse sans utilisateur authentifié (401)', async () => {
+    const req = { body: { nom: 'Updated' } };
+    await userCtrl.updateProfile(req, res);
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Non authentifié.' });
+  });
+
+  it('updateProfile gère une erreur du service (500)', async () => {
+    userService.updateProfile.mockRejectedValueOnce(new Error('Update KO'));
+    const req = { user: { id: 1 }, body: { nom: 'Updated' } };
+    await userCtrl.updateProfile(req, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Update KO' });
   });
 
   it('addAdminRole ajoute un rôle admin (200)', async () => {
@@ -67,10 +89,26 @@ describe('userController', () => {
     expect(userService.addAdminRole).toHaveBeenCalledWith(2);
   });
 
+  it('addAdminRole gère une erreur du service (500)', async () => {
+    userService.addAdminRole.mockRejectedValueOnce(new Error('Add KO'));
+    const req = { params: { id: '2' } };
+    await userCtrl.addAdminRole(req, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Add KO' });
+  });
+
   it('removeAdminRole retire un rôle admin (200)', async () => {
     const req = { params: { id: '2' } };
     await userCtrl.removeAdminRole(req, res);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(userService.removeAdminRole).toHaveBeenCalledWith(2);
+  });
+
+  it('removeAdminRole gère une erreur du service (500)', async () => {
+    userService.removeAdminRole.mockRejectedValueOnce(new Error('Remove KO'));
+    const req = { params: { id: '2' } };
+    await userCtrl.removeAdminRole(req, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Remove KO' });
   });
 });
