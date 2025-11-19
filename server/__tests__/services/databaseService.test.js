@@ -19,4 +19,17 @@ describe('databaseService', () => {
 		expect(options).toEqual({ timeout: 3000 });
 		expect(typeof db.prepare).toBe('function');
 	});
+
+	it('ferme proprement sur SIGTERM et SIGINT', () => {
+		jest.resetModules();
+		const MockDatabase = require('better-sqlite3');
+		const dbInstance = MockDatabase.__instance;
+		require('../../services/databaseService');
+
+		jest.spyOn(process, 'emit').mockImplementation(() => {});
+		process.listeners('SIGTERM').forEach((handler) => handler());
+		process.listeners('SIGINT').forEach((handler) => handler());
+
+		expect(dbInstance.close).toHaveBeenCalledTimes(2);
+	});
 });
