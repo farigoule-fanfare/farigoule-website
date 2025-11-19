@@ -3,7 +3,27 @@
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('multer');
+jest.mock('multer', () => {
+  const actual = jest.requireActual('multer');
+  const mocked = (options = {}) => {
+    mocked.__lastOptions = options;
+    const normalized = { ...options, storage: actual.memoryStorage() };
+    return actual(normalized);
+  };
+  Object.keys(actual).forEach((key) => {
+    mocked[key] = actual[key];
+  });
+  const origDiskStorage = actual.diskStorage;
+  mocked.diskStorage = (config) => {
+    mocked.__storageConfig = config;
+    return origDiskStorage(config);
+  };
+  mocked.__reset = () => {
+    mocked.__lastOptions = undefined;
+    mocked.__storageConfig = undefined;
+  };
+  return mocked;
+});
 
 const mockProtect = jest.fn((req, _res, next) => {
   req.user = { id: 1, roles: ['admin', 'fanfaron'] };
@@ -152,5 +172,44 @@ describe('fanfaronsRoutes', () => {
     expect(res.status).toBe(200);
     expect(fanfaronsCtrl.removeFanfaron).toHaveBeenCalled();
     expect(res.body).toEqual({ message: 'Suppression réussie' });
+  });
+});
+
+describe('fanfaronsRoutes upload configuration', () => {
+  test('storage writes into fanfarons directory with generated filename', () => {
+    jest.isolateModules(() => {
+      const mockedMulter = require('multer');
+      mockedMulter.__reset();
+      require('../../routes/fanfaronsRoutes');
+      const storageCfg = mockedMulter.__storageConfig;
+      expect(storageCfg).toBeDefined();
+
+      const destinationCb = jest.fn();
+      storageCfg.destination({}, { originalname: 'photo.jpg' }, destinationCb);
+      expect(destinationCb).toHaveBeenCalledWith(null, 'public/uploads/fanfarons');
+
+      const filenameCb = jest.fn();
+      storageCfg.filename({}, { originalname: 'photo.jpg' }, filenameCb);
+      const generated = filenameCb.mock.calls[0][1];
+      expect(generated).toMatch(/\.jpg$/);
+    });
+  });
+
+  test('fileFilter rejects empty filenames and accepts valid ones', () => {
+    jest.isolateModules(() => {
+      const mockedMulter = require('multer');
+      mockedMulter.__reset();
+      require('../../routes/fanfaronsRoutes');
+      const fileFilter = mockedMulter.__lastOptions.fileFilter;
+      expect(fileFilter).toBeInstanceOf(Function);
+
+      const cbReject = jest.fn();
+      fileFilter({}, { originalname: '' }, cbReject);
+      expect(cbReject).toHaveBeenCalledWith(null, false);
+
+      const cbAccept = jest.fn();
+      fileFilter({}, { originalname: 'ok.png' }, cbAccept);
+      expect(cbAccept).toHaveBeenCalledWith(null, true);
+    });
   });
 });
