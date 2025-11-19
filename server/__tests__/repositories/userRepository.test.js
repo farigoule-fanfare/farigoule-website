@@ -52,6 +52,12 @@ describe('userRepository - sélections', () => {
     expect(fanfaron).toBeNull();
   });
 
+  it('findFanfaronById retourne null sans id', async () => {
+    const fanfaron = await userRepo.findFanfaronById();
+    expect(fanfaron).toBeNull();
+    expect(mockGet).not.toHaveBeenCalled();
+  });
+
   it('findAllUsersRoles retourne un tableau avec roles parsés', async () => {
     mockAll.mockReturnValueOnce([
       { id: 1, surnom: 'Joe', promo: '2020', roles: '["fanfaron"]' },
@@ -92,6 +98,13 @@ describe('userRepository - updates', () => {
   it('updateProfile lance une erreur sans champs', () => {
     expect(() => userRepo.updateProfile(1, {})).toThrow('Aucun champ à mettre à jour');
     expect(mockRun).not.toHaveBeenCalled();
+  });
+
+  it('updateProfile inclut le champ prenom lorsqu\'il est fourni', () => {
+    userRepo.updateProfile(8, { prenom: 'Jean' });
+    const lastQuery = prepare.mock.calls[0][0];
+    expect(lastQuery).toBe('UPDATE fanfarons SET prenom = ? WHERE id = ?');
+    expect(mockRun).toHaveBeenCalledWith('Jean', 8);
   });
 
   it('updateProfile lance une erreur sans id', () => {
