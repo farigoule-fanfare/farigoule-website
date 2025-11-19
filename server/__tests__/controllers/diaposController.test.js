@@ -1,10 +1,10 @@
 // Tests dédiés au contrôleur des diapos
 jest.mock('../../services/diapoService', () => ({
   list: jest.fn(async () => [
-    { id: 1, title: 'Diapo 1', image_url: '/img1.jpg' },
-    { id: 2, title: 'Diapo 2', image_url: '/img2.jpg' }
+    { id: 1, title: 'Diapo 1', description: 'Description 1', fichier: 'img1.jpg' },
+    { id: 2, title: 'Diapo 2', description: 'Description 2', fichier: 'img2.jpg' }
   ]),
-  addDiapo: jest.fn(async d => d),
+  addDiapo: jest.fn(async payload => ({ id: 99, ...payload })),
   updateDiapo: jest.fn(async () => ({ success: true })),
   deleteDiapo: jest.fn(async () => ({ success: true }))
 }));
@@ -39,11 +39,11 @@ describe('diaposController', () => {
   });
 
   it('addDiapo crée une diapo (201)', async () => {
-    const req = { body: { title: 'Nouvelle diapo', image_url: '/new.jpg' } };
+    const req = { file: { filename: 'new.jpg' }, body: { description: 'Nouvelle diapo' } };
     const res = resMock();
     await diapoCtrl.addDiapo(req, res);
     expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith({ title: 'Nouvelle diapo', image_url: '/new.jpg' });
+    expect(res.json).toHaveBeenCalledWith({ id: 99, fichier: 'new.jpg', description: 'Nouvelle diapo' });
   });
 
   it('updateDiapo met à jour une diapo (200)', async () => {
