@@ -1,9 +1,9 @@
 // Tests dédiés au contrôleur des utilisateurs
 jest.mock('../../services/userService', () => ({
   getCurrentPresident: jest.fn(async () => ({ id: 1, nom: 'Président', prenom: 'Actuel', role: 'president' })),
-  getAllUsersRoles: jest.fn(async () => [
-    { id: 1, nom: 'User1', role: 'admin' },
-    { id: 2, nom: 'User2', role: 'member' }
+  listUsersRoles: jest.fn(async () => [
+    { id: 1, nom: 'User1', role: ['admin', "fanfaron"] },
+    { id: 2, nom: 'User2', role: ['member'] }
   ]),
   updateProfile: jest.fn(async () => ({ success: true })),
   addAdminRole: jest.fn(async () => {}),
@@ -36,9 +36,9 @@ describe('userController', () => {
     expect(res.status).toHaveBeenCalledWith(500);
   });
 
-  it('getAllUsersRoles renvoie la liste des rôles (200)', async () => {
+  it('listUsersRoles renvoie la liste des rôles (200)', async () => {
     const res = resMock();
-    await userCtrl.getAllUsersRoles({}, res);
+    await userCtrl.listUsersRoles({}, res);
     expect(res.status).toHaveBeenCalledWith(200);
     const payload = res.json.mock.calls[0][0];
     expect(Array.isArray(payload)).toBe(true);
