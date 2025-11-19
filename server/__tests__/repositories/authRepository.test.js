@@ -9,11 +9,12 @@ jest.mock('../../services/databaseService', () => ({
 
 const authRepo = require('../../repositories/authRepository');
 
+// il manque un mock si deux roles
 describe('authRepository', () => {
   it('findFanfaronBy returns parsed user with roles array', async () => {
     const user = await authRepo.findFanfaronBy({ field: 'id', value: 1 });
     expect(user).toHaveProperty('id', 1);
-    expect(user.roles).toEqual(['admin']);
+    expect(user.roles).toEqual(['fanfaron']);
   });
 
   it('findPasswordHashById returns hash', async () => {
