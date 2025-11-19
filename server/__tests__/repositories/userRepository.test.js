@@ -87,10 +87,10 @@ describe('userRepository - updates', () => {
   });
 
   it('updateRolesById sérialise les rôles', () => {
-    userRepo.updateRolesById(2, ['admin']);
+    userRepo.updateRolesById(1, ['fanfaron', 'admin']);
     const lastQuery = prepare.mock.calls[0][0];
     expect(lastQuery).toBe('UPDATE fanfarons SET roles = ? WHERE id = ?');
-    expect(mockRun).toHaveBeenCalledWith('["fanfaron"]', 2);
+    expect(mockRun).toHaveBeenCalledWith('["fanfaron","admin"]', 1);
   });
 
   it('updateRolesById remplace par tableau vide si undefined', () => {
