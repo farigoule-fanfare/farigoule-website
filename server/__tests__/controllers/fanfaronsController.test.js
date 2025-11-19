@@ -54,6 +54,14 @@ describe('fanfaronsController', () => {
     expect(Array.isArray(payload)).toBe(true);
   });
 
+  it('listFanfaronsAnnuaire gère une erreur du service (500)', async () => {
+    fanfaronService.getAllFanfaronsAnnuaire.mockRejectedValueOnce(new Error('Annuaire KO'));
+    const res = resMock();
+    await fanfaronCtrl.listFanfaronsAnnuaire({}, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Annuaire KO' });
+  });
+
   it('createFanfaron crée un fanfaron (201)', async () => {
     const req = { body: { nom: 'Nouveau', prenom: 'Fan', instrument: 'Tuba' }, file: { filename: 'new.jpg' } };
     const res = resMock();
@@ -69,6 +77,15 @@ describe('fanfaronsController', () => {
     });
   });
 
+  it('createFanfaron gère une erreur du service (500)', async () => {
+    fanfaronService.createFanfarons.mockRejectedValueOnce(new Error('Création KO'));
+    const req = { body: { nom: 'Oops' }, file: { filename: 'nope.jpg' } };
+    const res = resMock();
+    await fanfaronCtrl.createFanfaron(req, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Création KO' });
+  });
+
   it('updateFanfaron met à jour un fanfaron (200)', async () => {
     const req = { params: { id: '1' }, body: { instrument: 'Saxophone' }, file: { filename: 'update.jpg' } };
     const res = resMock();
@@ -82,11 +99,29 @@ describe('fanfaronsController', () => {
     });
   });
 
+  it('updateFanfaron gère une erreur du service (500)', async () => {
+    fanfaronService.updateFanfarons.mockRejectedValueOnce(new Error('Update KO'));
+    const req = { params: { id: '42' }, body: { instrument: 'Bugle' } };
+    const res = resMock();
+    await fanfaronCtrl.updateFanfaron(req, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Update KO' });
+  });
+
   it('removeFanfaron supprime un fanfaron (200)', async () => {
     const req = { params: { id: '1' } };
     const res = resMock();
     await fanfaronCtrl.removeFanfaron(req, res);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ message: 'Suppression réussie' });
+  });
+
+  it('removeFanfaron gère une erreur du service (500)', async () => {
+    fanfaronService.deleteFanfarons.mockRejectedValueOnce(new Error('Delete KO'));
+    const req = { params: { id: '404' } };
+    const res = resMock();
+    await fanfaronCtrl.removeFanfaron(req, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Delete KO' });
   });
 });
