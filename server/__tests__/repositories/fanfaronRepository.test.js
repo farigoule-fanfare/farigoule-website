@@ -12,7 +12,7 @@ const defaultRow = {
   tel: '0102030405',
   description: 'desc',
   photo: 'photo.jpg',
-  roles: '["member"]',
+  roles: '["fanfaron"]',
 };
 
 const mockAll = jest.fn(() => [defaultRow]);

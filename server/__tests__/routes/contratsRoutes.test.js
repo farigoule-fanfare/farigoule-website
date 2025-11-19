@@ -81,7 +81,7 @@ describe('contratsRoutes', () => {
 
   test('GET /contrats refuse un non-admin', async () => {
     mockProtect.mockImplementationOnce((req, _res, next) => {
-      req.user = { id: 2, roles: ['member'] };
+      req.user = { id: 2, roles: ['fanfaron'] };
       next();
     });
     const res = await request(app).get('/contrats');

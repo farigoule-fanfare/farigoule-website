@@ -105,7 +105,7 @@ describe('diaposRoutes', () => {
 
   test('POST /diapos refuse un non-admin', async () => {
     mockProtect.mockImplementationOnce((req, _res, next) => {
-      req.user = { id: 7, roles: ['member'] };
+      req.user = { id: 7, roles: ['fanfaron'] };
       next();
     });
     const res = await request(app)
