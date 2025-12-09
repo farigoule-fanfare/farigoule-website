@@ -3,9 +3,6 @@ const authService = require('../services/authService');
 const authController = {
   handleLogin: async (req, res) => {
     const { identifier, password } = req.body;
-    if (!identifier || !password) {
-      return res.status(400).json({ message: 'Email/Surnom and password are required.' });
-    }
 
     try {
       const { user, token } = await authService.login(identifier, password);
