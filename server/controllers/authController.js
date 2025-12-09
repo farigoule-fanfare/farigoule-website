@@ -66,14 +66,18 @@ const authController = {
       return res.status(401).json({ message: 'Authentication required.' });
     }
     if (!targetUserId || !newPassword) {
-      return res.status(400).json({ message: 'targetUserId and newPassword are required.' });
+      return res.status(400).json({ message: 'userId and newPassword are required.' });
     }
-    if (targetUserId === adminId) {
+    const targetId = Number(targetUserId);
+    if (!Number.isInteger(targetId) || targetId <= 0) {
+      return res.status(400).json({ message: 'userId must be a positive integer.' });
+    }
+    if (targetId === Number(adminId)) {
       return res.status(400).json({ message: 'Admins cannot reset their own password with adminSetPassword.' });
     }
 
     try {
-      await authService.adminSetPassword(adminId, targetUserId, newPassword);
+      await authService.adminSetPassword(adminId, targetId, newPassword);
       res.status(200).json({ message: 'Mot de passe réinitialisé.' });
     } catch (e) {
       res.status(400).json({ message: e.message });

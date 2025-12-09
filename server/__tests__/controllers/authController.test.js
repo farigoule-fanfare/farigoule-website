@@ -142,7 +142,16 @@ describe('authController', () => {
     const res = resMock();
     await authCtrl.adminSetPassword(req, res);
     expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ message: 'targetUserId and newPassword are required.' });
+    expect(res.json).toHaveBeenCalledWith({ message: 'userId and newPassword are required.' });
+    expect(authService.adminSetPassword).not.toHaveBeenCalled();
+  });
+
+  it('adminSetPassword returns 400 if userId is not a positive integer', async () => {
+    const req = { user: { id: 1 }, body: { userId: 'Anticuité', newPassword: 'new' } };
+    const res = resMock();
+    await authCtrl.adminSetPassword(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ message: 'userId must be a positive integer.' });
     expect(authService.adminSetPassword).not.toHaveBeenCalled();
   });
 
@@ -157,6 +166,15 @@ describe('authController', () => {
 
   it('adminSetPassword returns 400 if admin targets self', async () => {
     const req = { user: { id: 1 }, body: { userId: 1, newPassword: 'new' } };
+    const res = resMock();
+    await authCtrl.adminSetPassword(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Admins cannot reset their own password with adminSetPassword.' });
+    expect(authService.adminSetPassword).not.toHaveBeenCalled();
+  });
+
+  it('adminSetPassword returns 400 if admin targets self even with string id', async () => {
+    const req = { user: { id: 1 }, body: { userId: '1', newPassword: 'new' } };
     const res = resMock();
     await authCtrl.adminSetPassword(req, res);
     expect(res.status).toHaveBeenCalledWith(400);
