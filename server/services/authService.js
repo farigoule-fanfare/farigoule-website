@@ -59,13 +59,6 @@ const authService = {
    * @param {string} password
    */
   async login(identifier, password) {
-    if (!identifier || !password) {
-      throw Object.assign(
-        new Error('Identifiant et mot de passe requis'),
-        { code: 'MISSING_FIELDS' },
-      );
-    }
-
     /* Détermine dynamiquement le champ à filtrer */
     const field = identifier.includes('@') ? 'email' : 'surnom';
     const fanfaron = await findFanfaronBy({ field, value: identifier });

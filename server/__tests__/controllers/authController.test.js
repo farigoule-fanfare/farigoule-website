@@ -1,8 +1,8 @@
 // Tests dédiés au contrôleur d'authentification
 jest.mock('../../services/authService', () => ({
   login: jest.fn(async () => ({ user: { id: 1, email: 'test@example.com' }, token: 'abc123' })),
-  changePassword: jest.fn(async () => {}),
-  adminSetPassword: jest.fn(async () => {})
+  changePassword: jest.fn(async (userId, currentPw, newPw) => ({ userId, currentPw, newPw })),
+  adminSetPassword: jest.fn(async (adminId, targetUserId, newPw) => ({ adminId, targetUserId, newPw }))
 }));
 
 const authCtrl = require('../../controllers/authController');
@@ -17,7 +17,7 @@ function resMock() {
 }
 
 describe('authController', () => {
-  it('handleLogin renvoie 200 et un token en cas de succès', async () => {
+  it('handleLogin returns 200 and a token on success', async () => {
     const req = { body: { identifier: 'user@test.com', password: 'pass123' } };
     const res = resMock();
     await authCtrl.handleLogin(req, res);
@@ -29,7 +29,7 @@ describe('authController', () => {
     });
   });
 
-  it('handleLogin renvoie 400 si identifier ou password manquant', async () => {
+  it('handleLogin returns 400 if identifier or password is missing', async () => {
     const req = { body: {} };
     const res = resMock();
     await authCtrl.handleLogin(req, res);
@@ -85,6 +85,7 @@ describe('authController', () => {
     await authCtrl.changePassword(req, res);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ message: 'Mot de passe mis à jour.' });
+    expect(authService.changePassword).toHaveBeenCalledWith(1, 'old', 'new');
   });
 
   it('changePassword renvoie 400 en cas d\'erreur', async () => {
@@ -102,6 +103,7 @@ describe('authController', () => {
     await authCtrl.adminSetPassword(req, res);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ message: 'Mot de passe réinitialisé.' });
+    expect(authService.adminSetPassword).toHaveBeenCalledWith(1, 2, 'adminReset123');
   });
 
   it('adminSetPassword renvoie 400 en cas d\'erreur', async () => {
