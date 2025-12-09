@@ -62,8 +62,14 @@ const authController = {
     const { userId: targetUserId, newPassword } = req.body;
     const adminId = req.user?.id;
 
-    if (!adminId || !targetUserId || !newPassword) {
-      return res.status(400).json({ message: 'adminId, targetUserId and newPassword are required.' });
+    if (!adminId) {
+      return res.status(401).json({ message: 'Authentication required.' });
+    }
+    if (!targetUserId || !newPassword) {
+      return res.status(400).json({ message: 'targetUserId and newPassword are required.' });
+    }
+    if (targetUserId === adminId) {
+      return res.status(400).json({ message: 'Admins cannot reset their own password with adminSetPassword.' });
     }
 
     try {

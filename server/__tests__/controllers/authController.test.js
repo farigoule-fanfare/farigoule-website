@@ -142,7 +142,25 @@ describe('authController', () => {
     const res = resMock();
     await authCtrl.adminSetPassword(req, res);
     expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ message: 'adminId, targetUserId and newPassword are required.' });
+    expect(res.json).toHaveBeenCalledWith({ message: 'targetUserId and newPassword are required.' });
+    expect(authService.adminSetPassword).not.toHaveBeenCalled();
+  });
+
+  it('adminSetPassword returns 401 if not authenticated', async () => {
+    const req = { user: undefined, body: { userId: 2, newPassword: 'new' } };
+    const res = resMock();
+    await authCtrl.adminSetPassword(req, res);
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Authentication required.' });
+    expect(authService.adminSetPassword).not.toHaveBeenCalled();
+  });
+
+  it('adminSetPassword returns 400 if admin targets self', async () => {
+    const req = { user: { id: 1 }, body: { userId: 1, newPassword: 'new' } };
+    const res = resMock();
+    await authCtrl.adminSetPassword(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Admins cannot reset their own password with adminSetPassword.' });
     expect(authService.adminSetPassword).not.toHaveBeenCalled();
   });
 
