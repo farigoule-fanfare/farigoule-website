@@ -32,7 +32,7 @@ describe('authController', () => {
       user: { id: 1, email: 'test@example.com' }
     });
   });
-
+  
   it('handleLogin returns 400 if identifier or password is missing', async () => {
     const req = { body: {} };
     const res = resMock();
@@ -40,7 +40,7 @@ describe('authController', () => {
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({ message: 'Email/Surnom and password are required.' });
   });
-
+  
   it('handleLogin returns 401 for invalid credentials', async () => {
     authService.login.mockRejectedValueOnce({ code: 'INVALID_CREDENTIALS', message: 'Invalid credentials' });
     const req = { body: { identifier: 'wrong', password: 'wrong' } };
@@ -49,7 +49,7 @@ describe('authController', () => {
     expect(res.status).toHaveBeenCalledWith(401);
     expect(res.json).toHaveBeenCalledWith({ message: 'Invalid credentials' });
   });
-
+  
   it('handleLogin returns 500 for server error', async () => {
     authService.login.mockRejectedValueOnce({ code: 'SERVER_ERROR', message: 'DB connection failed' });
     const req = { body: { identifier: 'user', password: 'pass' } };
@@ -66,7 +66,7 @@ describe('authController', () => {
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ message: 'Logout successful.' });
   });
-
+  
   it('handleCheckAuthStatus returns 200 if user is authenticated', () => {
     const req = { user: { id: 1, email: 'test@test.com' } };
     const res = resMock();
@@ -74,7 +74,7 @@ describe('authController', () => {
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ isAuthenticated: true, user: req.user });
   });
-
+  
   it('handleCheckAuthStatus returns 401 if not authenticated', () => {
     const req = {};
     const res = resMock();
@@ -97,7 +97,25 @@ describe('authController', () => {
     const res = resMock();
     await authCtrl.changePassword(req, res);
     expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ message: 'userId, currentPassword and newPassword are required.' });
+    expect(res.json).toHaveBeenCalledWith({ message: 'currentPassword and newPassword are required.' });
+    expect(authService.changePassword).not.toHaveBeenCalled();
+  });
+  
+  it('changePassword returns 400 if new password is the same as current', async () => {
+    const req = { user: { id: 1 }, body: { currentPassword: 'samepass', newPassword: 'samepass' } };
+    const res = resMock();
+    await authCtrl.changePassword(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ message: 'The new password must be different from the current password.' });
+    expect(authService.changePassword).not.toHaveBeenCalled();
+  });
+  
+  it('changePassword returns 401 if not authenticated', async () => {
+    const req = { user: undefined, body: { currentPassword: 'test', newPassword: 'new' } };
+    const res = resMock();
+    await authCtrl.changePassword(req, res);
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Authentication required.' });
     expect(authService.changePassword).not.toHaveBeenCalled();
   });
 

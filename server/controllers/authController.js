@@ -40,8 +40,14 @@ const authController = {
     const { currentPassword, newPassword } = req.body;
     const userId = req.user?.id;
 
-    if (!userId || !currentPassword || !newPassword) {
-      return res.status(400).json({ message: 'userId, currentPassword and newPassword are required.' });
+    if (!userId) {
+      return res.status(401).json({ message: 'Authentication required.' });
+    }
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: 'currentPassword and newPassword are required.' });
+    }
+    if (currentPassword === newPassword) {
+      return res.status(400).json({ message: 'The new password must be different from the current password.' });
     }
 
     try {
