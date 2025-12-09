@@ -28,6 +28,15 @@ function deriveFilters({ scope, since, until, order, limit }) {
   return { since, until, order, limit };
 }
 
+function isValidIsoDate(value) {
+  if (typeof value !== 'string') return false;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return false;
+  const [y, m, da] = value.split('-').map(Number);
+  return d.getUTCFullYear() === y && d.getUTCMonth() + 1 === m && d.getUTCDate() === da;
+}
+
 const contratService = {
   list(filters) {
     const derived = deriveFilters(filters);
@@ -35,12 +44,20 @@ const contratService = {
   },
 
   addContrat(data) {
-    // data : { date, lieu, description }
+    const { date } = data || {};
+    if (!isValidIsoDate(date)) {
+      throw new Error('date must be a valid ISO date (YYYY-MM-DD)');
+    }
     return contratRepo.create(data);
   },
 
-  updateContrat(id, data) {
-    return contratRepo.update(id, data);
+  async updateContrat(id, data) {
+    const { date } = data || {};
+    if (!isValidIsoDate(date)) {
+      throw new Error('date must be a valid ISO date (YYYY-MM-DD)');
+    }
+    await contratRepo.update(id, data);
+    return { id, ...data };
   },
 
   deleteContrat(id) {

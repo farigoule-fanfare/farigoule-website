@@ -24,6 +24,9 @@ const contratsController = {
   addContrat: async (req, res) => {
     try {
       const { date, lieu, description } = req.body;
+      if (!date || !lieu || !description) {
+        return res.status(400).json({ message: 'date, lieu and description are required.' });
+      }
       const newContrat = await contratService.addContrat({ date, lieu, description });
       res.status(201).json(newContrat);
     } catch (error) {
@@ -37,6 +40,9 @@ const contratsController = {
     try {
       const id = parseInt(req.params.id, 10);
       const { date, lieu, description } = req.body;
+      if (!date || !lieu || !description) {
+        return res.status(400).json({ message: 'date, lieu and description are required.' });
+      }
       const result = await contratService.updateContrat(id, { date, lieu, description });
       res.status(200).json(result);
     } catch (error) {
