@@ -39,18 +39,18 @@ describe('authService', () => {
     await expect(authService.verifyToken('t')).rejects.toThrow('Token expired');
   });
 
-  it('verifyToken rejette pour un token invalide', async () => {
+  it('verifyToken rejects for invalid token', async () => {
     jwt.verify.mockImplementation((t, _s, cb) => cb(new Error('Nope')));
     await expect(authService.verifyToken('t')).rejects.toThrow('Invalid token');
   });
 
-  it('generateToken renvoie un token signé', () => {
+  it('generateToken returns a signed token', () => {
     const token = authService.generateToken({ id: 1, surnom: 'Bob', roles: ['user'] });
     expect(jwt.sign).toHaveBeenCalledWith({ id: 1, surnom: 'Bob', roles: ['user'] }, expect.any(String), expect.any(Object));
     expect(token).toBe('token');
   });
 
-  it('generateToken rejette si données manquantes', () => {
+  it('generateToken throws if missing data', () => {
     expect(() => authService.generateToken({ id: 1 })).toThrow('Invalid fanfaron supplied to generateToken');
   });
 
@@ -65,36 +65,26 @@ describe('authService', () => {
       .rejects.toThrow('Use changePassword to modify your own password');
   });
 
-  it('adminSetPassword rejette si champs manquants', async () => {
-    await expect(authService.adminSetPassword(null, 2, 'pw'))
-      .rejects.toThrow('adminId, targetUserId, newPw required');
-  });
-
-  it('changePassword updates when old password correct', async () => {
+  it('changePassword updates when old password is correct', async () => {
     bcrypt.compare.mockResolvedValueOnce(true);
     bcrypt.hash.mockResolvedValueOnce('new-hash');
     await authService.changePassword(3, 'old', 'new');
     expect(authRepo.updatePasswordById).toHaveBeenCalledWith(3, 'new-hash');
   });
 
-  it('changePassword rejects when old password wrong', async () => {
+  it('changePassword rejects when old password is wrong', async () => {
     bcrypt.compare.mockResolvedValueOnce(false);
     await expect(authService.changePassword(3, 'wrong', 'new'))
       .rejects.toThrow('Current password incorrect');
   });
 
-  it('changePassword rejette si utilisateur introuvable', async () => {
+  it('changePassword rejects if user not found', async () => {
     authRepo.findPasswordHashById.mockResolvedValueOnce(null);
     await expect(authService.changePassword(3, 'old', 'new'))
       .rejects.toThrow('User not found');
   });
 
-  it('changePassword exige tous les champs', async () => {
-    await expect(authService.changePassword(null, 'old', 'new'))
-      .rejects.toThrow('userId, currentPw, newPw required');
-  });
-
-  it('login authentifie par email et renvoie user sans hash', async () => {
+  it('login authenticates by email and returns user without hash', async () => {
     authRepo.findFanfaronBy.mockResolvedValueOnce({ id: 5, surnom: 'Bob', email: 'bob@test.fr', roles: ['user'], password_hash: 'hash' });
     bcrypt.compare.mockResolvedValueOnce(true);
     const result = await authService.login('bob@test.fr', 'pw');
@@ -103,30 +93,26 @@ describe('authService', () => {
     expect(result.token).toBe('token');
   });
 
-  it('login bascule sur le surnom si pas d\'email', async () => {
+  it('login falls back to nickname if no email', async () => {
     authRepo.findFanfaronBy.mockResolvedValueOnce({ id: 6, surnom: 'Lulu', roles: ['user'], password_hash: 'hash' });
     bcrypt.compare.mockResolvedValueOnce(true);
     await authService.login('Lulu', 'pw');
     expect(authRepo.findFanfaronBy).toHaveBeenCalledWith({ field: 'surnom', value: 'Lulu' });
   });
 
-  it('login rejette si champs manquants', async () => {
-    await expect(authService.login('', 'pw')).rejects.toMatchObject({ code: 'MISSING_FIELDS' });
-  });
-
-  it('login rejette sur identifiants invalides', async () => {
+  it('login rejects for invalid credentials', async () => {
     authRepo.findFanfaronBy.mockResolvedValueOnce({ id: 5, surnom: 'Bob', roles: ['user'], password_hash: 'hash' });
     bcrypt.compare.mockResolvedValueOnce(false);
     await expect(authService.login('bob@test.fr', 'pw')).rejects.toMatchObject({ code: 'INVALID_CREDENTIALS' });
   });
 
-  it('getUserById renvoie null si id manquant ou introuvable', async () => {
+  it('getUserById returns null if id missing or not found', async () => {
     expect(await authService.getUserById()).toBeNull();
     authRepo.findFanfaronBy.mockResolvedValueOnce(null);
     expect(await authService.getUserById(9)).toBeNull();
   });
 
-  it('getUserById filtre le password_hash', async () => {
+  it('getUserById filters out password_hash', async () => {
     authRepo.findFanfaronBy.mockResolvedValueOnce({ id: 8, surnom: 'Neo', password_hash: 'hash', roles: [] });
     const user = await authService.getUserById(8);
     expect(authRepo.findFanfaronBy).toHaveBeenCalledWith({ field: 'id', value: 8 });

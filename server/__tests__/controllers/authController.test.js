@@ -16,6 +16,10 @@ function resMock() {
   return res;
 }
 
+beforeEach(() => {
+  jest.clearAllMocks();
+});
+
 describe('authController', () => {
   it('handleLogin returns 200 and a token on success', async () => {
     const req = { body: { identifier: 'user@test.com', password: 'pass123' } };
@@ -37,7 +41,7 @@ describe('authController', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'Email/Surnom and password are required.' });
   });
 
-  it('handleLogin renvoie 401 pour des credentials invalides', async () => {
+  it('handleLogin returns 401 for invalid credentials', async () => {
     authService.login.mockRejectedValueOnce({ code: 'INVALID_CREDENTIALS', message: 'Invalid credentials' });
     const req = { body: { identifier: 'wrong', password: 'wrong' } };
     const res = resMock();
@@ -46,7 +50,7 @@ describe('authController', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'Invalid credentials' });
   });
 
-  it('handleLogin renvoie 500 pour une erreur serveur', async () => {
+  it('handleLogin returns 500 for server error', async () => {
     authService.login.mockRejectedValueOnce({ code: 'SERVER_ERROR', message: 'DB connection failed' });
     const req = { body: { identifier: 'user', password: 'pass' } };
     const res = resMock();
@@ -55,7 +59,7 @@ describe('authController', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'DB connection failed' });
   });
 
-  it('handleLogout efface le cookie et renvoie 200', () => {
+  it('handleLogout clears cookie and returns 200', () => {
     const res = resMock();
     authCtrl.handleLogout({}, res);
     expect(res.cookie).toHaveBeenCalledWith('authToken', '', expect.objectContaining({ expires: expect.any(Date) }));
@@ -63,7 +67,7 @@ describe('authController', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'Logout successful.' });
   });
 
-  it('handleCheckAuthStatus renvoie 200 si utilisateur authentifié', () => {
+  it('handleCheckAuthStatus returns 200 if user is authenticated', () => {
     const req = { user: { id: 1, email: 'test@test.com' } };
     const res = resMock();
     authCtrl.handleCheckAuthStatus(req, res);
@@ -71,7 +75,7 @@ describe('authController', () => {
     expect(res.json).toHaveBeenCalledWith({ isAuthenticated: true, user: req.user });
   });
 
-  it('handleCheckAuthStatus renvoie 401 si non authentifié', () => {
+  it('handleCheckAuthStatus returns 401 if not authenticated', () => {
     const req = {};
     const res = resMock();
     authCtrl.handleCheckAuthStatus(req, res);
@@ -79,7 +83,7 @@ describe('authController', () => {
     expect(res.json).toHaveBeenCalledWith({ isAuthenticated: false, user: null });
   });
 
-  it('changePassword met à jour le mot de passe (200)', async () => {
+  it('changePassword updates password (200)', async () => {
     const req = { user: { id: 1 }, body: { currentPassword: 'old', newPassword: 'new' } };
     const res = resMock();
     await authCtrl.changePassword(req, res);
@@ -88,7 +92,16 @@ describe('authController', () => {
     expect(authService.changePassword).toHaveBeenCalledWith(1, 'old', 'new');
   });
 
-  it('changePassword renvoie 400 en cas d\'erreur', async () => {
+  it('changePassword returns 400 if fields are missing', async () => {
+    const req = { user: { id: 1 }, body: { currentPassword: 'test', newPassword: '' } };
+    const res = resMock();
+    await authCtrl.changePassword(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ message: 'userId, currentPassword and newPassword are required.' });
+    expect(authService.changePassword).not.toHaveBeenCalled();
+  });
+
+  it('changePassword returns 400 on error', async () => {
     authService.changePassword.mockRejectedValueOnce(new Error('Current password incorrect'));
     const req = { user: { id: 1 }, body: { currentPassword: 'wrong', newPassword: 'new' } };
     const res = resMock();
@@ -97,7 +110,7 @@ describe('authController', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'Current password incorrect' });
   });
 
-  it('adminSetPassword réinitialise le mot de passe (200)', async () => {
+  it('adminSetPassword resets password (200)', async () => {
     const req = { user: { id: 1 }, body: { userId: 2, newPassword: 'adminReset123' } };
     const res = resMock();
     await authCtrl.adminSetPassword(req, res);
@@ -106,7 +119,16 @@ describe('authController', () => {
     expect(authService.adminSetPassword).toHaveBeenCalledWith(1, 2, 'adminReset123');
   });
 
-  it('adminSetPassword renvoie 400 en cas d\'erreur', async () => {
+  it('adminSetPassword returns 400 if fields are missing', async () => {
+    const req = { user: { id: 1 }, body: { userId: null, newPassword: '' } };
+    const res = resMock();
+    await authCtrl.adminSetPassword(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ message: 'adminId, targetUserId and newPassword are required.' });
+    expect(authService.adminSetPassword).not.toHaveBeenCalled();
+  });
+
+  it('adminSetPassword returns 400 on error', async () => {
     authService.adminSetPassword.mockRejectedValueOnce(new Error('Not authorized'));
     const req = { user: { id: 1 }, body: { userId: 2, newPassword: 'new' } };
     const res = resMock();

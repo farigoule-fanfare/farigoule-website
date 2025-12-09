@@ -90,9 +90,6 @@ const authService = {
    * Admin‑only: force‑set another user’s password.
    */
   async adminSetPassword(adminId, targetUserId, newPw) {
-    if (!adminId || !targetUserId || !newPw) {
-      throw new Error('adminId, targetUserId, newPw required');
-    }
     if (adminId === targetUserId) {
       throw new Error('Use changePassword to modify your own password');
     }
@@ -103,10 +100,6 @@ const authService = {
    * User: change own password.
    */
   async changePassword(userId, currentPw, newPw) {
-    if (!userId || !currentPw || !newPw) {
-      throw new Error('userId, currentPw, newPw required');
-    }
-
     const currentHash = await findPasswordHashById(userId);
     if (!currentHash) throw new Error('User not found');
 

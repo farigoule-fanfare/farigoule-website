@@ -38,8 +38,14 @@ const authController = {
 
   changePassword: async (req, res) => {
     const { currentPassword, newPassword } = req.body;
+    const userId = req.user?.id;
+
+    if (!userId || !currentPassword || !newPassword) {
+      return res.status(400).json({ message: 'userId, currentPassword and newPassword are required.' });
+    }
+
     try {
-      await authService.changePassword(req.user.id, currentPassword, newPassword);
+      await authService.changePassword(userId, currentPassword, newPassword);
       res.status(200).json({ message: 'Mot de passe mis à jour.' });
     } catch (e) {
       res.status(400).json({ message: e.message });
@@ -48,8 +54,14 @@ const authController = {
 
   adminSetPassword: async (req, res) => {
     const { userId: targetUserId, newPassword } = req.body;
+    const adminId = req.user?.id;
+
+    if (!adminId || !targetUserId || !newPassword) {
+      return res.status(400).json({ message: 'adminId, targetUserId and newPassword are required.' });
+    }
+
     try {
-      await authService.adminSetPassword(req.user.id, targetUserId, newPassword);
+      await authService.adminSetPassword(adminId, targetUserId, newPassword);
       res.status(200).json({ message: 'Mot de passe réinitialisé.' });
     } catch (e) {
       res.status(400).json({ message: e.message });
