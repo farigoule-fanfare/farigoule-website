@@ -1,0 +1,22 @@
+meta {
+  name: auth/logout
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/api/auth/logout
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "identifier" : "Anticuité",
+      "password": "J5Tp6BTQnl"
+  }
+}
+
+settings {
+  encodeUrl: true
+}
