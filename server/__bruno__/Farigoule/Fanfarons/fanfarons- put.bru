@@ -1,17 +1,17 @@
 meta {
-  name: citations/:id
+  name: fanfarons/ put
   type: http
-  seq: 4
+  seq: 5
 }
 
-delete {
-  url: {{base_url}}/api/citations/:id
+put {
+  url: {{base_url}}/api/fanfarons/:id
   body: none
-  auth: none
+  auth: inherit
 }
 
 params:path {
-  id: 7
+  id: 4
 }
 
 settings {

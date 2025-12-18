@@ -1,17 +1,17 @@
 meta {
-  name: citations/:id
+  name: diapos/ put
   type: http
-  seq: 4
+  seq: 5
 }
 
-delete {
-  url: {{base_url}}/api/citations/:id
+put {
+  url: {{base_url}}/api/diapos/:id
   body: none
-  auth: none
+  auth: inherit
 }
 
 params:path {
-  id: 7
+  id: 3
 }
 
 settings {
