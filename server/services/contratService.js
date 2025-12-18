@@ -44,7 +44,7 @@ const contratService = {
   },
 
   addContrat(data) {
-    const { date } = data || {};
+    const { date } = data;
     if (!isValidIsoDate(date)) {
       throw new Error('date must be a valid ISO date (YYYY-MM-DD)');
     }
@@ -52,7 +52,7 @@ const contratService = {
   },
 
   async updateContrat(id, data) {
-    const { date } = data || {};
+    const { date } = data;
     if (!isValidIsoDate(date)) {
       throw new Error('date must be a valid ISO date (YYYY-MM-DD)');
     }

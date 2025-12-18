@@ -155,3 +155,38 @@ describe('contratService CRUD helpers', () => {
     expect(contratRepo.remove).toHaveBeenCalledWith(9);
   });
 });
+
+describe('contratService - Test des lignes spécifiques', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  // Test de la ligne: else if (scope === 'past') until = today;
+  it('else if (scope === "past") sets until to today', async () => {
+    jest.spyOn(Date.prototype, 'toISOString').mockReturnValue('2024-12-18T00:00:00.000Z');
+    await contratService.list({ scope: 'past' });
+    expect(contratRepo.find).toHaveBeenCalledWith({
+      since: undefined,
+      until: '2024-12-18',
+      order: 'desc',
+      limit: 3,
+    });
+    Date.prototype.toISOString.mockRestore();
+  });
+
+  // Test de la ligne: if (typeof value !== 'string') return false;
+  it('rejects non-string dates (number, null, undefined, object, array)', () => {
+    expect(() => contratService.addContrat({ date: 12345 })).toThrow('date must be a valid ISO date (YYYY-MM-DD)');
+    expect(() => contratService.addContrat({ date: null })).toThrow('date must be a valid ISO date (YYYY-MM-DD)');
+    expect(() => contratService.addContrat({ date: undefined })).toThrow('date must be a valid ISO date (YYYY-MM-DD)');
+    expect(() => contratService.addContrat({ date: {} })).toThrow('date must be a valid ISO date (YYYY-MM-DD)');
+    expect(() => contratService.addContrat({ date: [] })).toThrow('date must be a valid ISO date (YYYY-MM-DD)');
+  });
+
+  // Test de la ligne: const { date } = data
+  it('correctly extracts date from data object', async () => {
+    const payload = { date: '2025-06-15', description: 'Test event' };
+    await contratService.addContrat(payload);
+    expect(contratRepo.create).toHaveBeenCalledWith(payload);
+  });
+});
