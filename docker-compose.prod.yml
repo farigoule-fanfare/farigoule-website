@@ -1,0 +1,23 @@
+services:
+  client:
+    build:
+      args:
+        NODE_ENV: production
+    environment:
+      - NODE_ENV=production
+      - VIRTUAL_HOST=${VIRTUAL_HOST:-fanfare-farigoule.com}
+      - LETSENCRYPT_HOST=${LETSENCRYPT_HOST:-fanfare-farigoule.com}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL:-ton-email@example.com}
+    networks:
+      - farigoule-network
+
+  server:
+    build:
+      args:
+        NODE_ENV: production
+    environment:
+      - NODE_ENV=production
+      - VIRTUAL_HOST=api.${VIRTUAL_HOST:-fanfare-farigoule.com}
+      - LETSENCRYPT_HOST=api.${LETSENCRYPT_HOST:-fanfare-farigoule.com}
+    networks:
+      - farigoule-network

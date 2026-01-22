@@ -1,15 +1,11 @@
 name: Docker Compose CI/CD
 
 on:
-  # ——— Pull-requests : simple validation du build
   pull_request:
-    branches: [ "main", "preprod"]
-
-  # ——— Pushes : build + push des images
+    branches: ["main", "preprod"]
   push:
-    branches: [ "main"]
+    branches: ["main"]
 
-# Variables « techniques » communes (ne contiennent ni secrets ni vars)
 env:
   REGISTRY: ghcr.io
   IMAGE_OWNER: ${{ github.repository_owner }}
@@ -17,39 +13,28 @@ env:
   SERVER_IMAGE_NAME: farigoule-server
 
 jobs:
-#───────────────────────────────────────────────────────────────────────────────
-# 1) CI : vérifier que le build passe sur les PR
-#───────────────────────────────────────────────────────────────────────────────
+  #───────────────────────────────────────────────────────────────────────────────
+  # 1) CI : Validation du build sur les PR
+  #───────────────────────────────────────────────────────────────────────────────
   validate-build:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    environment: 'Production – farigoule-vercel-server'
-    env:
-      # tag factice pour la substitution ${TAG:-latest}
-      TAG: test-pr
     steps:
       - uses: actions/checkout@v4
 
-      # — Injecte les Repository Variables (et un JWT_SECRET bidon)
-      - name: Export runtime env (vars + dummy secret)
+      - name: Build Docker Compose (dev mode)
         run: |
-          echo "CLIENT_PORT=${{ vars.CLIENT_PORT }}"     >> $GITHUB_ENV
-          echo "SERVER_PORT=${{ vars.SERVER_PORT }}"     >> $GITHUB_ENV
-          echo "FRONTEND_URL=${{ vars.FRONTEND_URL }}"   >> $GITHUB_ENV
-          echo "API_BACKEND_URL=${{ vars.API_BACKEND_URL }}" >> $GITHUB_ENV
-          echo "JWT_EXPIRY=${{ vars.JWT_EXPIRY }}"       >> $GITHUB_ENV
-          echo "JWT_SECRET=dummy"                        >> $GITHUB_ENV   # secret indisponible sur PR fork
+          docker compose \
+            -f docker-compose.yml \
+            -f docker-compose.dev.yml \
+            build
 
-      - name: Build Docker Compose services for validation
-        run: docker compose -f docker-compose.yml build
-
-#───────────────────────────────────────────────────────────────────────────────
-# 2) CD : build + push sur GHCR lors d’un push
-#───────────────────────────────────────────────────────────────────────────────
+  #───────────────────────────────────────────────────────────────────────────────
+  # 2) CD : Build + Push des images sur GHCR (uniquement sur push)
+  #───────────────────────────────────────────────────────────────────────────────
   build-and-push:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
-    environment: 'Production – farigoule-vercel-server'
     permissions:
       contents: read
       packages: write
@@ -65,7 +50,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # — Génère deux tags : BRANCH_TAG (main→production) & SHA_TAG
+      # — Détermine les tags (branch + SHA)
       - name: Determine image tags
         id: prep_tags
         run: |
@@ -73,42 +58,40 @@ jobs:
           if [ "$branch" = "main" ]; then
             echo "BRANCH_TAG=production" >> $GITHUB_OUTPUT
           else
-            echo "BRANCH_TAG=$branch"    >> $GITHUB_OUTPUT   # ex : dev-clean
+            echo "BRANCH_TAG=$branch" >> $GITHUB_OUTPUT
           fi
           echo "SHA_TAG=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_OUTPUT
 
-      # — Build & push avec le tag de branche
-      - name: Build & push images (branch tag)
+      # — Build & push avec le tag de branche (prod)
+      - name: Build & push images (prod)
         env:
-          # —– Variables techniques
-          REGISTRY:    ${{ env.REGISTRY }}
+          NODE_ENV: production
+          REGISTRY: ${{ env.REGISTRY }}
           IMAGE_OWNER: ${{ env.IMAGE_OWNER }}
-          TAG:         ${{ steps.prep_tags.outputs.BRANCH_TAG }}
-
-          # —– Variables applicatives (repo VARIABLES)
-          CLIENT_PORT:     ${{ vars.CLIENT_PORT }}
-          SERVER_PORT:     ${{ vars.SERVER_PORT }}
-          FRONTEND_URL:    ${{ vars.FRONTEND_URL }}
+          TAG: ${{ steps.prep_tags.outputs.BRANCH_TAG }}
+          CLIENT_PORT: ${{ vars.CLIENT_PORT }}
+          SERVER_PORT: ${{ vars.SERVER_PORT }}
+          FRONTEND_URL: ${{ vars.FRONTEND_URL }}
           API_BACKEND_URL: ${{ vars.API_BACKEND_URL }}
-          JWT_EXPIRY:      ${{ vars.JWT_EXPIRY }}
-
-          # —– Secret
+          JWT_EXPIRY: ${{ vars.JWT_EXPIRY }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: |
-          docker compose -f docker-compose.yml build
-          docker compose -f docker-compose.yml push
+          docker compose \
+            -f docker-compose.yml \
+            -f docker-compose.prod.yml \
+            build
+          docker compose \
+            -f docker-compose.yml \
+            -f docker-compose.prod.yml \
+            push
 
-      # — Retag en SHA puis push
-      - name: Retag & push images (commit SHA)
-        env:
-          REGISTRY:    ${{ env.REGISTRY }}
-          IMAGE_OWNER: ${{ env.IMAGE_OWNER }}
+      # — Retag avec le SHA et push
+      - name: Retag & push images (SHA)
         run: |
-          CLIENT_BRANCH_IMG=${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ env.CLIENT_IMAGE_NAME }}:${{ steps.prep_tags.outputs.BRANCH_TAG }}
-          SERVER_BRANCH_IMG=${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ env.SERVER_IMAGE_NAME }}:${{ steps.prep_tags.outputs.BRANCH_TAG }}
-
-          CLIENT_SHA_IMG=${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ env.CLIENT_IMAGE_NAME }}:${{ steps.prep_tags.outputs.SHA_TAG }}
-          SERVER_SHA_IMG=${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ env.SERVER_IMAGE_NAME }}:${{ steps.prep_tags.outputs.SHA_TAG }}
+          CLIENT_BRANCH_IMG="${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ env.CLIENT_IMAGE_NAME }}:${{ steps.prep_tags.outputs.BRANCH_TAG }}"
+          SERVER_BRANCH_IMG="${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ env.SERVER_IMAGE_NAME }}:${{ steps.prep_tags.outputs.BRANCH_TAG }}"
+          CLIENT_SHA_IMG="${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ env.CLIENT_IMAGE_NAME }}:${{ steps.prep_tags.outputs.SHA_TAG }}"
+          SERVER_SHA_IMG="${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ env.SERVER_IMAGE_NAME }}:${{ steps.prep_tags.outputs.SHA_TAG }}"
 
           docker tag "$CLIENT_BRANCH_IMG" "$CLIENT_SHA_IMG"
           docker tag "$SERVER_BRANCH_IMG" "$SERVER_SHA_IMG"
