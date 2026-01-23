@@ -125,9 +125,9 @@ L'API utilise un système de tokens JWT pour l'authentification.
 Les endpoints suivants acceptent des uploads de fichiers :
 
 - `POST /api/diapos/` - Carousel image
-- `PUT /api/diapos/:id` - Update carousel image
+- `PATCH /api/diapos/:id` - Update carousel image
 - `POST /api/fanfarons/` - Fanfaron photo
-- `PUT /api/fanfarons/:id` - Update fanfaron photo
+- `PATCH /api/fanfarons/:id` - Update fanfaron photo
 
 Format : `multipart/form-data`
 
