@@ -1,0 +1,14 @@
+meta {
+  name: diapos/patch (admin)
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{base_url}}/api/diapos/1
+  auth: inherit
+}
+
+body:form-data {
+  file: @file
+}

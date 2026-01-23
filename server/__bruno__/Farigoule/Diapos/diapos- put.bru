@@ -1,10 +1,10 @@
 meta {
-  name: diapos/ put
+  name: diapos/ patch
   type: http
   seq: 5
 }
 
-put {
+patch {
   url: {{base_url}}/api/diapos/:id
   body: none
   auth: inherit
@@ -12,6 +12,10 @@ put {
 
 params:path {
   id: 3
+}
+
+vars:pre-request {
+  description: djdj
 }
 
 settings {
