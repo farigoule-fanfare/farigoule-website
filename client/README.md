@@ -1,70 +1,109 @@
-# Getting Started with Create React App
+# Farigoule Client
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Interface utilisateur pour le site Farigoule, construite avec React et Vite.
 
-## Available Scripts
+## Installation
 
-In the project directory, you can run:
+```bash
+npm install
+```
+
+## Scripts disponibles
 
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Lance l'application en mode développement avec Vite.\
+Ouvrir [http://localhost:3000](http://localhost:3000) pour la voir dans le navigateur.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+La page se recharge automatiquement lors des modifications.\
+Temps de démarrage ultra-rapide grâce à Vite.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Construit l'application pour la production dans le dossier `build`.\
+Optimise le build pour les meilleures performances.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Le build est minifié et les noms de fichiers incluent des hashes.\
+L'application est prête à être déployée !
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### `npm run serve`
 
-### `npm run eject`
+Prévisualise le build de production localement.\
+Utile pour tester le build avant le déploiement.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Configuration
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Alias de chemins
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Les alias suivants sont configurés dans `vite.config.js` :
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- `@` → `src/`
+- `@assets` → `src/assets/`
+- `@features` → `src/features/`
+- `@shell` → `src/shell/`
+- `@services` → `src/services/`
+- `@shared` → `src/shared/`
 
-## Learn More
+**Exemple d'utilisation :**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```javascript
+import Button from "@shared/components/Button";
+import logo from "@assets/images/logo.png";
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Proxy API
 
-### Code Splitting
+Le serveur de développement proxy automatiquement les requêtes :
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- `/api/*` → Backend server
+- `/public/*` → Fichiers statiques du backend
 
-### Analyzing the Bundle Size
+Configuration dans `vite.config.js`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Variables d'environnement
 
-### Making a Progressive Web App
+Les variables d'environnement doivent être préfixées par `VITE_` :
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```env
+VITE_API_URL=http://localhost:5000
+```
 
-### Advanced Configuration
+**Utilisation :**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```javascript
+const apiUrl = import.meta.env.VITE_API_URL;
+```
 
-### Deployment
+## Technologies
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- **React 18** - Library UI
+- **Vite 5** - Build tool & dev server
+- **React Router 6** - Routing
+- **Axios** - HTTP client
+- **Slick Carousel** - Composant carrousel
 
-### `npm run build` fails to minify
+## Structure du projet
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
+src/
+├── assets/          # Images, fonts, audio
+├── features/        # Features organisées par domaine
+│   ├── admin/       # Interface admin
+│   ├── annuaire/    # Annuaire des fanfarons
+│   ├── auth/        # Authentification
+│   ├── profile/     # Profil utilisateur
+│   └── public/      # Pages publiques
+├── services/        # Services API (axios)
+├── shared/          # Composants réutilisables
+├── shell/           # Layout et navigation
+│   ├── components/  # Header, Footer, etc.
+│   ├── hooks/       # Hooks personnalisés
+│   └── layouts/     # Layout templates
+└── index.jsx        # Point d'entrée
+```
+
+## En savoir plus
+
+- [Documentation Vite](https://vitejs.dev/)
+- [Documentation React](https://react.dev/)
+- [Documentation React Router](https://reactrouter.com/)
