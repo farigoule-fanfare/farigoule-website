@@ -32,14 +32,8 @@ services:
     networks:
       - farigoule-network
     volumes:
-      - farigoule-db-storage:/usr/app/database/
-      - farigoule-uploads-storage:/usr/app/public/uploads
-
-volumes:
-  farigoule-db-storage:
-    driver: local
-  farigoule-uploads-storage:
-    driver: local
+      - ./server/database:/usr/app/database
+      - ./server/public/uploads:/usr/app/public/uploads
 
 networks:
   farigoule-network:
