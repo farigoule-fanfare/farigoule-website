@@ -8,8 +8,6 @@ services:
     environment:
       - NODE_ENV=${NODE_ENV:-development}
       - API_BACKEND_URL=${API_BACKEND_URL:-http://localhost:5000}
-    ports:
-      - "${CLIENT_PORT:-3000}:80"
     restart: unless-stopped
     networks:
       - farigoule-network

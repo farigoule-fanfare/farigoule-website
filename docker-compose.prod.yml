@@ -1,8 +1,11 @@
 services:
   client:
     build:
+      target: production
       args:
         NODE_ENV: production
+    ports:
+      - "${CLIENT_PORT:-80}:80"
     environment:
       - NODE_ENV=production
       - VIRTUAL_HOST=${VIRTUAL_HOST:-fanfare-farigoule.com}

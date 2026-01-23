@@ -1,15 +1,17 @@
 services:
   client:
     build:
+      target: development
       args:
         NODE_ENV: development
+    ports:
+      - "${CLIENT_PORT:-3000}:3000"
     volumes:
       - ./client:/usr/app
       - /usr/app/node_modules
+    command: npm start
     environment:
       - NODE_ENV=development
-    ports:
-      - "3000:3000"
 
   server:
     build:
@@ -20,5 +22,3 @@ services:
       - /usr/app/node_modules
     environment:
       - NODE_ENV=development
-    ports:
-      - "5000:5000"

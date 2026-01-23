@@ -9,16 +9,18 @@ RUN apk update && \
     npm install --omit=dev; \
     fi
 
-FROM node@sha256:37712740dc486f179b9540be1c6703cef3f805ea932573a007db748b71189afe AS build
-ARG NODE_ENV=production
+FROM node@sha256:37712740dc486f179b9540be1c6703cef3f805ea932573a007db748b71189afe AS development
 WORKDIR /usr/app
 COPY --from=deps /usr/app/node_modules ./node_modules
 COPY . .
-RUN if [ "$NODE_ENV" = "development" ]; then \
-    npm run dev; \
-    else \
-    npm run build; \
-    fi
+EXPOSE 3000
+CMD ["npm", "start"]
+
+FROM node@sha256:37712740dc486f179b9540be1c6703cef3f805ea932573a007db748b71189afe AS build
+WORKDIR /usr/app
+COPY --from=deps /usr/app/node_modules ./node_modules
+COPY . .
+RUN npm run build
 
 FROM nginx@sha256:5e36bd7a8adfe291560a6849d3125438fbe244f29a567522099caceef32bce54 AS production
 
