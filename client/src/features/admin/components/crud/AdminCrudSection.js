@@ -54,7 +54,7 @@ export default function AdminCrudSection({
       multipart = Boolean(res.isMultipart);
     }
 
-    const method = editId ? 'put' : 'post';
+    const method = editId ? 'patch' : 'post';
     const url = editId ? updateUrl(editId) : saveUrl;
 
     await axiosWrapper({ method, url, data: payload, isMultipart: multipart });

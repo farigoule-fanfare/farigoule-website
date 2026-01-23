@@ -57,9 +57,9 @@ describe('userRoutes', () => {
 		expect(mockProtect).not.toHaveBeenCalled();
 	});
 
-	it('PUT /users/profile utilise protect et transmet le body', async () => {
+	it('PATCH /users/profile utilise protect et transmet le body', async () => {
 		const payload = { bio: 'Fanfare forever' };
-		const res = await request(app).put('/users/profile').send(payload);
+		const res = await request(app).patch('/users/profile').send(payload);
 		expect(res.status).toBe(200);
 		expect(userCtrl.updateProfile).toHaveBeenCalled();
 		const [[reqArg]] = userCtrl.updateProfile.mock.calls;

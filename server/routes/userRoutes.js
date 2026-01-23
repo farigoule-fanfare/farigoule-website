@@ -7,7 +7,7 @@ const { protect, authorize } = require('../middleware/authMiddleware');
 router.get('/current-president', ctrl.getCurrentPresident);
 
 // Protected routes (authenticated users)
-router.put('/profile', protect, ctrl.updateProfile);
+router.patch('/profile', protect, ctrl.updateProfile);
 
 // Private routes(admin only)
 router.get('/roles', [protect, authorize(['admin'])], ctrl.listUsersRoles);

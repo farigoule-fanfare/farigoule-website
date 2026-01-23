@@ -10,7 +10,7 @@ router.post('/login', ctrl.handleLogin);
 // Private routes
 router.post('/logout', protect, ctrl.handleLogout);
 router.get('/status', protect, ctrl.handleCheckAuthStatus);
-router.put('/change-password', protect, ctrl.changePassword);
+router.patch('/change-password', protect, ctrl.changePassword);
 router.post('/admin-set-password', [protect, authorize(['admin'])], ctrl.adminSetPassword);
 
 

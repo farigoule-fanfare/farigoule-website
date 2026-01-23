@@ -135,10 +135,10 @@ describe('diaposRoutes', () => {
     expect(diaposCtrl.addDiapo).not.toHaveBeenCalled();
   });
 
-  test('PUT /diapos/:id met à jour la diapo', async () => {
+  test('PATCH /diapos/:id met à jour la diapo', async () => {
     const payload = { description: 'Nouvelle desc' };
     const res = await request(app)
-      .put('/diapos/42')
+      .patch('/diapos/42')
       .attach('file', Buffer.from('b'), 'update.jpg')
       .field('description', payload.description);
     expect(res.status).toBe(200);

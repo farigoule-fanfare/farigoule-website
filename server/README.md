@@ -39,7 +39,7 @@ npm test
 | POST    | `/api/auth/login`              | Se connecter                          | ❌   | -     |
 | POST    | `/api/auth/logout`             | Se déconnecter                        | ✅   | -     |
 | GET     | `/api/auth/status`             | Vérifier le statut d'authentification | ✅   | -     |
-| PUT     | `/api/auth/change-password`    | Changer son mot de passe              | ✅   | -     |
+| PATCH   | `/api/auth/change-password`    | Changer son mot de passe              | ✅   | -     |
 | POST    | `/api/auth/admin-set-password` | Définir un mot de passe (admin)       | ✅   | admin |
 
 ### Citations (`/api/citations`)
@@ -49,7 +49,7 @@ npm test
 | GET     | `/api/citations/`        | Obtenir une citation aléatoire          | ❌   | -     |
 | GET     | `/api/citations/ordered` | Lister toutes les citations (ordonnées) | ✅   | admin |
 | POST    | `/api/citations/`        | Ajouter une citation                    | ✅   | admin |
-| PUT     | `/api/citations/:id`     | Modifier une citation                   | ✅   | admin |
+| PATCH   | `/api/citations/:id`     | Modifier une citation                   | ✅   | admin |
 | DELETE  | `/api/citations/:id`     | Supprimer une citation                  | ✅   | admin |
 
 ### Contrats (`/api/contrats`)
@@ -60,7 +60,7 @@ npm test
 | GET     | `/api/contrats/upcoming` | Lister les contrats à venir | ❌   | -     | -                                                                                 |
 | GET     | `/api/contrats/past`     | Lister les contrats passés  | ❌   | -     | -                                                                                 |
 | POST    | `/api/contrats/`         | Ajouter un contrat          | ✅   | admin | `{date: "YYYY-MM-DD", ...}`                                                       |
-| PUT     | `/api/contrats/:id`      | Modifier un contrat         | ✅   | admin | `{date: "YYYY-MM-DD", ...}`                                                       |
+| PATCH   | `/api/contrats/:id`      | Modifier un contrat         | ✅   | admin | `{date: "YYYY-MM-DD", ...}`                                                       |
 | DELETE  | `/api/contrats/:id`      | Supprimer un contrat        | ✅   | admin | -                                                                                 |
 
 ### Diapos (Carousel) (`/api/diapos`)
@@ -70,7 +70,7 @@ npm test
 | GET     | `/api/diapos/`        | Lister les diapos (publique)       | ❌   | -     | `?order=random\|asc\|desc&limit=N` |
 | GET     | `/api/diapos/ordered` | Lister toutes les diapos (admin)   | ✅   | admin | -                                  |
 | POST    | `/api/diapos/`        | Ajouter une diapo (upload fichier) | ✅   | admin | multipart/form-data: `file`        |
-| PUT     | `/api/diapos/:id`     | Modifier une diapo                 | ✅   | admin | multipart/form-data: `file`        |
+| PATCH   | `/api/diapos/:id`     | Modifier une diapo                 | ✅   | admin | multipart/form-data: `file`        |
 | DELETE  | `/api/diapos/:id`     | Supprimer une diapo                | ✅   | admin | -                                  |
 
 ### Fanfarons (`/api/fanfarons`)
@@ -80,7 +80,7 @@ npm test
 | GET     | `/api/fanfarons/`         | Lister tous les fanfarons       | ❌   | -     | -                                    |
 | GET     | `/api/fanfarons/annuaire` | Lister les fanfarons (annuaire) | ✅   | -     | -                                    |
 | POST    | `/api/fanfarons/`         | Ajouter un fanfaron             | ✅   | admin | multipart/form-data: `photoFanfaron` |
-| PUT     | `/api/fanfarons/:id`      | Modifier un fanfaron            | ✅   | admin | multipart/form-data: `photoFanfaron` |
+| PATCH   | `/api/fanfarons/:id`      | Modifier un fanfaron            | ✅   | admin | multipart/form-data: `photoFanfaron` |
 | DELETE  | `/api/fanfarons/:id`      | Supprimer un fanfaron           | ✅   | admin | -                                    |
 
 ### Utilisateurs (`/api/users`)
@@ -88,7 +88,7 @@ npm test
 | Méthode | Endpoint                         | Description                       | Auth | Role  |
 | ------- | -------------------------------- | --------------------------------- | ---- | ----- |
 | GET     | `/api/users/current-president`   | Obtenir le président actuel       | ❌   | -     |
-| PUT     | `/api/users/profile`             | Mettre à jour son profil          | ✅   | -     |
+| PATCH   | `/api/users/profile`             | Mettre à jour son profil          | ✅   | -     |
 | GET     | `/api/users/roles`               | Lister les rôles des utilisateurs | ✅   | admin |
 | POST    | `/api/users/:id/addAdminRole`    | Ajouter le rôle admin             | ✅   | admin |
 | POST    | `/api/users/:id/removeAdminRole` | Retirer le rôle admin             | ✅   | admin |

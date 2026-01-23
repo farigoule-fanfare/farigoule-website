@@ -154,9 +154,9 @@ describe('fanfaronsRoutes', () => {
     expect(fanfaronsCtrl.createFanfaron).not.toHaveBeenCalled();
   });
 
-  test('PUT /fanfarons/:id met à jour un fanfaron', async () => {
+  test('PATCH /fanfarons/:id met à jour un fanfaron', async () => {
     const res = await request(app)
-      .put('/fanfarons/5')
+      .patch('/fanfarons/5')
       .field('prenom', 'Updated')
       .attach('photoFanfaron', Buffer.from('b'), 'updated.jpg');
     expect(res.status).toBe(200);

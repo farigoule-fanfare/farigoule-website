@@ -30,6 +30,6 @@ router.get('/annuaire',                               [protect], ctrl.listFanfar
 
 // Admin routes
 router.post('/',      upload.single('photoFanfaron'), [protect, authorize(['admin'])], ctrl.createFanfaron);
-router.put('/:id',    upload.single('photoFanfaron'), [protect, authorize(['admin'])], ctrl.updateFanfaron);
+router.patch('/:id',  upload.single('photoFanfaron'), [protect, authorize(['admin'])], ctrl.updateFanfaron);
 router.delete('/:id',                                 [protect, authorize(['admin'])], ctrl.removeFanfaron);
 module.exports = router;

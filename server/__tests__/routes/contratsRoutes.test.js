@@ -100,9 +100,9 @@ describe('contratsRoutes', () => {
 		expect(mockProtect).toHaveBeenCalled();
 	});
 
-	test('PUT /contrats/:id met à jour un contrat', async () => {
+	test('PATCH /contrats/:id met à jour un contrat', async () => {
 		const payload = { date: '2026-01-01', lieu: 'Bordeaux', description: 'Nouvel an' };
-		const res = await request(app).put('/contrats/5').send(payload);
+		const res = await request(app).patch('/contrats/5').send(payload);
 		expect(res.status).toBe(200);
 		expect(contratsCtrl.updateContrat).toHaveBeenCalled();
 		const [[req]] = contratsCtrl.updateContrat.mock.calls;

@@ -19,7 +19,7 @@ const FRONT_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 const corsOptions = {
   origin: FRONT_URL,
   credentials: true,
-  methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'PATCH', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: [
     'Origin',
     'X-Requested-With',

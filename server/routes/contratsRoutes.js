@@ -10,7 +10,7 @@ router.get('/past', (req, res, next) => {req.query.scope = 'past';ctrl.listContr
 // Private routes
 router.get('/',       [protect, authorize(['admin'])], ctrl.listContrats); // get all contrats
 router.post('/',      [protect, authorize(['admin'])], ctrl.addContrat);
-router.put('/:id',    [protect, authorize(['admin'])], ctrl.updateContrat);
+router.patch('/:id',  [protect, authorize(['admin'])], ctrl.updateContrat);
 router.delete('/:id', [protect, authorize(['admin'])], ctrl.deleteContrat);
 
 module.exports = router;

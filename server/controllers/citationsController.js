@@ -43,7 +43,7 @@ const citationsController = {
   },
 
   /**
-   * PUT /citations/:id
+   * PATCH /citations/:id
    */
   updateCitation: async (req, res) => {
     try {

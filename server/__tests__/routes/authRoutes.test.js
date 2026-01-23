@@ -59,8 +59,8 @@ describe('authRoutes', () => {
 		expect(authCtrl.handleCheckAuthStatus).toHaveBeenCalled();
 	});
 
-	it('PUT /auth/change-password est protégé', async () => {
-		const res = await request(app).put('/auth/change-password').send({ current: 'a', next: 'b' });
+	it('PATCH /auth/change-password est protégé', async () => {
+		const res = await request(app).patch('/auth/change-password').send({ current: 'a', next: 'b' });
 		expect(res.status).toBe(200);
 		expect(mockProtect).toHaveBeenCalled();
 		expect(authCtrl.changePassword).toHaveBeenCalled();

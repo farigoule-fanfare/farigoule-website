@@ -88,9 +88,9 @@ describe('citationsRoutes', () => {
 		expect(res.body).toEqual({ id: 99, ...payload });
 	});
 
-	it('PUT /citations/:id met à jour la citation', async () => {
+	it('PATCH /citations/:id met à jour la citation', async () => {
 		const payload = { citation: 'Updated', auteur_id: null };
-		const res = await request(app).put('/citations/42').send(payload);
+		const res = await request(app).patch('/citations/42').send(payload);
 		expect(res.status).toBe(200);
 		expect(ctrl.updateCitation).toHaveBeenCalled();
 		const [[req]] = ctrl.updateCitation.mock.calls;

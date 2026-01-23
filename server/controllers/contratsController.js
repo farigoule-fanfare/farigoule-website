@@ -35,7 +35,7 @@ const contratsController = {
     }
   },
 
-  /** PUT /contrats/:id */
+  /** PATCH /contrats/:id */
   updateContrat: async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);

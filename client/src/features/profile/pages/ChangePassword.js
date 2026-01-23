@@ -59,7 +59,7 @@ export default function ChangePassword() {
     setLoading(true);
     try {
       await axiosWrapper({
-        method: 'put',
+        method: 'patch',
         url: 'auth/change-password',
         data: {
           currentPassword: form.currentPassword,

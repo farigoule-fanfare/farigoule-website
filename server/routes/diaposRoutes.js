@@ -41,7 +41,7 @@ router.get('/ordered',
     ctrl.listDiapos(req, res, next);
   });
 router.post('/',       upload.single('file'), [protect, authorize(['admin'])], ctrl.addDiapo);
-router.put('/:id',     upload.single('file'), [protect, authorize(['admin'])], ctrl.updateDiapo);
+router.patch('/:id',   upload.single('file'), [protect, authorize(['admin'])], ctrl.updateDiapo);
 router.delete('/:id',                         [protect, authorize(['admin'])], ctrl.deleteDiapo);
 
 module.exports = router;
