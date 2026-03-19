@@ -26,9 +26,9 @@ COPY controllers ./controllers
 COPY routes ./routes
 COPY services ./services
 COPY repositories ./repositories
-COPY database ./database
-COPY public ./public
 COPY middleware ./middleware
 COPY index.js .
+
+RUN mkdir -p ./public/uploads/carousel ./public/uploads/fanfarons ./database
 
 CMD [ "node", "index.js" ]
