@@ -1,5 +1,5 @@
 jest.mock('../../services/citationService', () => ({
-  list: jest.fn(async () => [ { id: 10, citation: 'Tempus fugit', auteur_id: 2 } ]),
+  list: jest.fn(async () => [ { id: 1, citation: 'Tempus fugit', auteur_id: 2 }, { id: 2, citation: 'Tempus fugit', auteur_id: 2 } ]),
   random: jest.fn(async () => ({ id: 10, citation: 'Tempus fugit', auteur_id: 2 })),
   addCitation: jest.fn(async d => d),
   updateCitation: jest.fn(async () => ({ success: true })),
@@ -16,7 +16,7 @@ function resMock() {
 	return res;
 }
 
-describe('citationsController (isolé)', () => {
+describe('citationsCont	roller (isolé)', () => {
 	it('listCitations retourne une liste non vide', async () => {
 		const res = resMock();
 		await citationCtrl.listCitations({}, res);

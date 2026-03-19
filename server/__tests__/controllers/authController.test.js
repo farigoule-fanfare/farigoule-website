@@ -1,4 +1,3 @@
-// Tests dédiés au contrôleur d'authentification
 jest.mock('../../services/authService', () => ({
   login: jest.fn(async () => ({ user: { id: 1, email: 'test@example.com' }, token: 'abc123' })),
   changePassword: jest.fn(async () => {}),
