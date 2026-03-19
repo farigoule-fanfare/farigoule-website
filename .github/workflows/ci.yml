@@ -3,7 +3,7 @@ name: Docker Compose CI/CD
 on:
   # ——— Pull-requests : simple validation du build
   pull_request:
-    branches: [ "main", "preprod"]
+    branches: [ "main"]
 
   # ——— Pushes : build + push des images
   push:
