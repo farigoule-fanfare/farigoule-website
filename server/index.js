@@ -62,8 +62,8 @@ app.use("/", (_req, res) => {
 // --- Start Server ---
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-    if (db && db.filename) { // Check if db object and filename property exist
-        console.log(`Connected to SQLite database at: ${db.filename}`);
+    if (db && db.name) {
+        console.log(`Connected to SQLite database at: ${db.name}`);
     } else {
         console.log("SQLite database object not fully initialized or filename not available at server start.");
     }
