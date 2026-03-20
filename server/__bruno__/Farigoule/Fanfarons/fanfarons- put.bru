@@ -1,0 +1,20 @@
+meta {
+  name: fanfarons/ patch
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{base_url}}/api/fanfarons/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 4
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,23 @@
+meta {
+  name: contrats_1
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/api/contrats/
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "date": "2025-12-02",
+      "lieu": "Marseille",
+      "description": "Un super contrat"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

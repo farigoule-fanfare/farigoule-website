@@ -1,0 +1,10 @@
+meta {
+  name: users/add-admin-role (admin)
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/api/users/1/addAdminRole
+  auth: inherit
+}

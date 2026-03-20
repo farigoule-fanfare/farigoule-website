@@ -1,0 +1,26 @@
+meta {
+  name: citations/:id_1
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{base_url}}/api/citations/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 31
+}
+
+body:json {
+  {
+      "auteur_id": 19
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,15 @@
+meta {
+  name: diapos/delete (admin)
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{base_url}}/api/diapos/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 2
+}

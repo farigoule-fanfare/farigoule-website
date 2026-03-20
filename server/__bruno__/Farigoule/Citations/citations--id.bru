@@ -1,0 +1,20 @@
+meta {
+  name: citations/:id
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{base_url}}/api/citations/:id
+  body: none
+  auth: none
+}
+
+params:path {
+  id: 7
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,14 @@
+meta {
+  name: diapos/post (admin)
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/api/diapos
+  auth: inherit
+}
+
+body:form-data {
+  file: @file
+}

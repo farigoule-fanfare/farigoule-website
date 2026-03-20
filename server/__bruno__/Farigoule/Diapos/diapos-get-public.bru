@@ -1,0 +1,16 @@
+meta {
+  name: diapos/get (public)
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/diapos
+  body: none
+  auth: inherit
+}
+
+params:query {
+  order: random
+  limit: 5
+}

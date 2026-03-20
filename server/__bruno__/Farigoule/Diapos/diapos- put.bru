@@ -1,0 +1,24 @@
+meta {
+  name: diapos/ patch
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{base_url}}/api/diapos/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 3
+}
+
+vars:pre-request {
+  description: djdj
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

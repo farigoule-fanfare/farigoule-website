@@ -1,0 +1,22 @@
+meta {
+  name: citations
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/api/citations
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "auteur": "Bituume"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

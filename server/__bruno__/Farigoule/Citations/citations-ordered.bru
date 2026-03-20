@@ -1,0 +1,21 @@
+meta {
+  name: citations/ordered
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/api/citations/ordered
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "auteur": "Bituume"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

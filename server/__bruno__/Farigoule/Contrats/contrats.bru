@@ -1,0 +1,21 @@
+meta {
+  name: contrats
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/contrats
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "auteur": "Bituume"
+  }
+}
+
+settings {
+  encodeUrl: true
+}
