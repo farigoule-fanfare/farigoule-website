@@ -3,7 +3,7 @@ WORKDIR /usr/app
 COPY package*.json ./
 RUN apk update
 RUN --mount=type=cache,target=/root/.npm \
-    npm install --omit=dev
+    npm install
 
 FROM node@sha256:37712740dc486f179b9540be1c6703cef3f805ea932573a007db748b71189afe AS build
 WORKDIR /usr/app
