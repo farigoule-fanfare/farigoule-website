@@ -1,49 +1,6 @@
 ﻿# farigoule-vercel
 
-## Database Migration (from Old Project Export)
-
-This project includes a script to migrate data (currently Fanfarons and Citations) from a JSON export of the old project's database into the new SQLite database used by the server.
-
-**Prerequisites:**
-
-1.  **JSON Export Files:** You need to have the following JSON files, containing data arrays from your old database, placed in the `farigoule-vercel/db_migration_project/` directory:
-    *   `fanfarons_export.json`: An array of fanfaron objects.
-    *   `citations_export.json`: An array of citation objects.
-
-2.  **Server Dependencies:** Ensure all server dependencies are installed by running `npm install` (or `yarn install`) inside the `farigoule-vercel/server/` directory if you haven't already.
-
-**Running the Migration Script:**
-
-1.  **Navigate to Project Root:** Open your terminal and navigate to the root of the `farigoule-vercel` project.
-    ```bash
-    cd path/to/farigoule-vercel
-    ```
-
-2.  **Clean Database (Recommended for First/Fresh Migration):**
-    Before running the migration script for the first time, or if you want to ensure a completely fresh import, it's recommended to delete any existing SQLite database file. The script (and the server itself when it starts) will recreate it with the correct schema.
-    *   Delete `farigoule-vercel/server/database/farigoule.sqlite` if it exists.
-
-3.  **Execute the Script:**
-    Run the migration script using Node.js:
-    ```bash
-    node server/service/migrationService.js
-    ```
-
-4.  **Monitor Output:**
-    The script will log its progress to the console, including the number of records read, inserted, and any warnings (e.g., for missing author IDs for citations or generated placeholder emails). It will also indicate if the migration completed successfully or if an error occurred and the transaction was rolled back.
-
-5.  **Verify Data (Optional):**
-    After a successful migration, you can use a SQLite browser tool to open the `farigoule-vercel/server/database/farigoule.sqlite` file and inspect the `fanfarons` and `citations` tables to verify the imported data.
-
-**Important Notes:**
-
-*   The migration script is designed to be run once for the initial data load. If you run it multiple times without deleting the database, you might encounter UNIQUE constraint errors if the script attempts to re-insert data that already has unique keys (like `surnom` or `email` in `fanfarons`).
-*   The script currently sets default `NULL` values for `password_hash` and default roles for fanfarons. These will need to be managed by your application's authentication system later.
-
-
-
-
-# Required Environment Variables
+## Required Environment Variables
 
 You must set the following environment variables for the client and server. Copy `.env.template` on root to `.env` 
 
@@ -60,7 +17,7 @@ JWT_EXPIRY=1h
 - `SERVER_PORT`: Port for the backend server (default: 5000)
 - `FRONTEND_URL`: URL of the frontend app (for CORS)
 - `API_BACKEND_URL`: Base URL for the backend API (for nginx.conf)
-- `JWT_SECRET` : Token to securize authentication, you can generate it with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`
+- `JWT_SECRET` : Token to securize authentication, you can generate it with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`. Changing it during a migration is OK; it just invalidates existing sessions.
 - `JWT_EXPIRY` : Time before token expires. Can be 1h, 2h, 1d ...
 
 > **Tip:** Never commit your `.env` files to version control. Both `client/.gitignore` and `server/.gitignore` should already exclude them.
