@@ -149,7 +149,7 @@ export default function Symphonies() {
       const p = audioRef.current.play();
       if (p) p.catch(console.error);
     }
-  }, [albumIdx, trackIdx]);
+  }, [albumIdx, trackIdx, isPlaying, currentTrack]);
 
   /* -- Play / Pause ------------------------------------------------- */
   const togglePlay = () => {
