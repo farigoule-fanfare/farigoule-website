@@ -1,35 +1,44 @@
-﻿# farigoule-vercel
+﻿# farigoule-website
 
-## Required Environment Variables
+## Variables d’environnement requises
 
-You must set the following environment variables for the client and server. Copy `.env.template` on root to `.env` 
+Vous devez définir les variables d’environnement pour le client et le serveur. Copiez `.env.template` à la racine vers `.env`.
 
-```
-CLIENT_PORT=3000
-SERVER_PORT=5000
-FRONTEND_URL=http://localhost:3000
-API_BACKEND_URL=http://server:5000
-JWT_SECRET= see below
-JWT_EXPIRY=1h
-```
+    CLIENT_PORT=3000
+    SERVER_PORT=5000
+    FRONTEND_URL=http://localhost:3000
+    API_BACKEND_URL=http://server:5000
+    JWT_SECRET= voir ci-dessous
 
-- `CLIENT_PORT`: Port for the React development server (default: 3000)
-- `SERVER_PORT`: Port for the backend server (default: 5000)
-- `FRONTEND_URL`: URL of the frontend app (for CORS)
-- `API_BACKEND_URL`: Base URL for the backend API (for nginx.conf)
-- `JWT_SECRET` : Token to securize authentication, you can generate it with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`. Changing it during a migration is OK; it just invalidates existing sessions.
-- `JWT_EXPIRY` : Time before token expires. Can be 1h, 2h, 1d ...
+- `CLIENT_PORT` : Port pour le serveur React en développement (défaut : 3000)
+- `SERVER_PORT` : Port pour le serveur backend (défaut : 5000)
+- `FRONTEND_URL` : URL du frontend (pour le CORS)
+- `API_BACKEND_URL` : URL de base de l’API backend (pour nginx.conf)
+- `JWT_SECRET` : Secret pour sécuriser l’authentification. Vous pouvez le générer avec `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`. Le changer pendant une migration n’est pas grave : ça invalide simplement les sessions existantes.
 
-> **Tip:** Never commit your `.env` files to version control. Both `client/.gitignore` and `server/.gitignore` should already exclude them.
+> **Astuce :** Ne committez jamais vos fichiers `.env`. Les `.gitignore` de `client` et `server` doivent déjà les exclure.
+> 
+> **Note :** en développement, le serveur et le client charge automatiquement le `.env` à la racine. En production, les variables doivent être fournies par Docker/Compose (le `.env` a la racine n’est pas lu).
 
-# Docker
-To start the containers, first do as above, then run :
-```bash
-docker compose up
-```
-The first time will take a bit longer since it will also build your containers.
-If your container keep crashing, add the following line at the end of the corresponding service : `entrypoint: sleep infinity`.
-This way, you can start your container and then run `docker exec -it <container_name> sh` the run an interactive shell in the container and run your app manually to debug.
+## Production (Docker)
 
-# Prod
-Pull the images from ghcr.io. You may use the docker-compose in the `prod` folder.
+La production utilise le `docker-compose.yml` à la racine et le fichier `.env` (copiez `.env.template` vers `.env`).
+
+    cp .env.template .env
+    docker compose up -d
+
+Le premier démarrage prendra un peu plus de temps car les images seront construites.
+Si un conteneur crash en boucle, ajoutez la ligne suivante à la fin du service concerné : `entrypoint: sleep infinity`.
+Vous pourrez ensuite faire `docker exec -it <container_name> sh` pour ouvrir un shell et lancer l’app manuellement.
+
+## Développement (Local)
+
+Lancez les apps sans Docker en démarrant chaque dossier :
+
+    cd client
+    npm run start
+
+Dans un autre terminal :
+
+    cd server
+    npm run start
