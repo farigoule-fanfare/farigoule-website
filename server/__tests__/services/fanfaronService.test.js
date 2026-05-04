@@ -14,6 +14,28 @@ describe('fanfaronService', () => {
     jest.clearAllMocks();
   });
 
+  it('createFanfarons conserve l\'email fourni et ajoute le rôle fanfaron', async () => {
+    const payload = { nom: 'Jean', email: 'jean@test.fr', photo: 'a.jpg' };
+    fanfaronRepo.create.mockResolvedValueOnce({ id: 10, ...payload });
+
+    const result = await fanfaronService.createFanfarons(payload);
+
+    expect(fanfaronRepo.create).toHaveBeenCalledWith({ ...payload, roles: JSON.stringify(['fanfaron']) });
+    expect(fanfaronRepo.update).not.toHaveBeenCalled();
+    expect(result).toEqual({ id: 10, ...payload, photoUrl: '/public/uploads/fanfarons/a.jpg' });
+  });
+
+  it('createFanfarons assigne un email par défaut quand il manque', async () => {
+    const payload = { nom: 'Marie', email: '   ', photo: 'b.jpg' };
+    fanfaronRepo.create.mockResolvedValueOnce({ id: 11, nom: 'Marie', email: null, photo: 'b.jpg' });
+
+    const result = await fanfaronService.createFanfarons(payload);
+
+    expect(fanfaronRepo.create).toHaveBeenCalledWith({ ...payload, email: null, roles: JSON.stringify(['fanfaron']) });
+    expect(fanfaronRepo.update).toHaveBeenCalledWith(11, { id: 11, nom: 'Marie', email: 'user11@local', photo: 'b.jpg' });
+    expect(result).toEqual({ id: 11, nom: 'Marie', email: 'user11@local', photo: 'b.jpg', photoUrl: '/public/uploads/fanfarons/b.jpg' });
+  });
+
   it('getAllFanfarons maps photoUrl', async () => {
     fanfaronRepo.findAll.mockResolvedValueOnce([{ id: 1, photo: 'a.jpg' }]);
     const res = await fanfaronService.getAllFanfarons();
