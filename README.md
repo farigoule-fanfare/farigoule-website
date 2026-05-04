@@ -1,78 +1,44 @@
-﻿# farigoule-vercel
+﻿# farigoule-website
 
-## Database Migration (from Old Project Export)
+## Variables d’environnement requises
 
-This project includes a script to migrate data (currently Fanfarons and Citations) from a JSON export of the old project's database into the new SQLite database used by the server.
+Vous devez définir les variables d’environnement pour le client et le serveur. Copiez `.env.template` à la racine vers `.env`.
 
-**Prerequisites:**
+    CLIENT_PORT=3000
+    SERVER_PORT=5000
+    FRONTEND_URL=http://localhost:3000
+    API_BACKEND_URL=http://server:5000
+    JWT_SECRET= voir ci-dessous
 
-1.  **JSON Export Files:** You need to have the following JSON files, containing data arrays from your old database, placed in the `farigoule-vercel/db_migration_project/` directory:
-    *   `fanfarons_export.json`: An array of fanfaron objects.
-    *   `citations_export.json`: An array of citation objects.
+- `CLIENT_PORT` : Port pour le serveur React en développement (défaut : 3000)
+- `SERVER_PORT` : Port pour le serveur backend (défaut : 5000)
+- `FRONTEND_URL` : URL du frontend (pour le CORS)
+- `API_BACKEND_URL` : URL de base de l’API backend (pour nginx.conf)
+- `JWT_SECRET` : Secret pour sécuriser l’authentification. Vous pouvez le générer avec `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`. Le changer pendant une migration n’est pas grave : ça invalide simplement les sessions existantes.
 
-2.  **Server Dependencies:** Ensure all server dependencies are installed by running `npm install` (or `yarn install`) inside the `farigoule-vercel/server/` directory if you haven't already.
+> **Astuce :** Ne committez jamais vos fichiers `.env`. Les `.gitignore` de `client` et `server` doivent déjà les exclure.
+> 
+> **Note :** en développement, le serveur et le client charge automatiquement le `.env` à la racine. En production, les variables doivent être fournies par Docker/Compose (le `.env` a la racine n’est pas lu).
 
-**Running the Migration Script:**
+## Production (Docker)
 
-1.  **Navigate to Project Root:** Open your terminal and navigate to the root of the `farigoule-vercel` project.
-    ```bash
-    cd path/to/farigoule-vercel
-    ```
+La production utilise le `docker-compose.yml` à la racine et le fichier `.env` (copiez `.env.template` vers `.env`).
 
-2.  **Clean Database (Recommended for First/Fresh Migration):**
-    Before running the migration script for the first time, or if you want to ensure a completely fresh import, it's recommended to delete any existing SQLite database file. The script (and the server itself when it starts) will recreate it with the correct schema.
-    *   Delete `farigoule-vercel/server/database/farigoule.sqlite` if it exists.
+    cp .env.template .env
+    docker compose up -d
 
-3.  **Execute the Script:**
-    Run the migration script using Node.js:
-    ```bash
-    node server/service/migrationService.js
-    ```
+Le premier démarrage prendra un peu plus de temps car les images seront construites.
+Si un conteneur crash en boucle, ajoutez la ligne suivante à la fin du service concerné : `entrypoint: sleep infinity`.
+Vous pourrez ensuite faire `docker exec -it <container_name> sh` pour ouvrir un shell et lancer l’app manuellement.
 
-4.  **Monitor Output:**
-    The script will log its progress to the console, including the number of records read, inserted, and any warnings (e.g., for missing author IDs for citations or generated placeholder emails). It will also indicate if the migration completed successfully or if an error occurred and the transaction was rolled back.
+## Développement (Local)
 
-5.  **Verify Data (Optional):**
-    After a successful migration, you can use a SQLite browser tool to open the `farigoule-vercel/server/database/farigoule.sqlite` file and inspect the `fanfarons` and `citations` tables to verify the imported data.
+Lancez les apps sans Docker en démarrant chaque dossier :
 
-**Important Notes:**
+    cd client
+    npm run start
 
-*   The migration script is designed to be run once for the initial data load. If you run it multiple times without deleting the database, you might encounter UNIQUE constraint errors if the script attempts to re-insert data that already has unique keys (like `surnom` or `email` in `fanfarons`).
-*   The script currently sets default `NULL` values for `password_hash` and default roles for fanfarons. These will need to be managed by your application's authentication system later.
+Dans un autre terminal :
 
-
-
-
-# Required Environment Variables
-
-You must set the following environment variables for the client and server. Copy `.env.template` on root to `.env` 
-
-```
-CLIENT_PORT=3000
-SERVER_PORT=5000
-FRONTEND_URL=http://localhost:3000
-API_BACKEND_URL=http://server:5000
-JWT_SECRET= see below
-JWT_EXPIRY=1h
-```
-
-- `CLIENT_PORT`: Port for the React development server (default: 3000)
-- `SERVER_PORT`: Port for the backend server (default: 5000)
-- `FRONTEND_URL`: URL of the frontend app (for CORS)
-- `API_BACKEND_URL`: Base URL for the backend API (for nginx.conf)
-- `JWT_SECRET` : Token to securize authentication, you can generate it with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`
-- `JWT_EXPIRY` : Time before token expires. Can be 1h, 2h, 1d ...
-
-> **Tip:** Never commit your `.env` files to version control. Both `client/.gitignore` and `server/.gitignore` should already exclude them.
-
-# Docker
-To start the containers, first do as above, then run :
-```bash
-docker compose up
-```
-The first time will take a bit longer since it will also build your containers.
-If your container keep crashing, add the following line at the end of the corresponding service : `entrypoint: sleep infinity`.
-This way, you can start your container and then run `docker exec -it <container_name> sh` the run an interactive shell in the container and run your app manually to debug.
-
-# Prod
-Pull the images from ghcr.io. You may use the docker-compose in the `prod` folder.
+    cd server
+    npm run start
