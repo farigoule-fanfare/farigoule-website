@@ -1,69 +1,44 @@
 services:
-  client:
-    image: ghcr.io/chibranche/farigoule-client:${TAG}
-    container_name: farigoule-client
-    environment:
-      - NODE_ENV=production
-      - VIRTUAL_HOST=fanfare-farigoule.com
-      - LETSENCRYPT_HOST=fanfare-farigoule.com
-      - API_BACKEND_URL=${API_BACKEND_URL}
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-    ports:
-      - "${CLIENT_PORT}:80"
-    restart: unless-stopped
-    networks:
-      - farigoule-network
-      - nginx-proxy-ginfo
-    depends_on:
-      - server
+    client:
+        image: ghcr.io/farigoule-fanfare/farigoule-client:production
+        container_name: farigoule-client
+        environment:
+            - NODE_ENV=production
+            - VIRTUAL_HOST=fanfare-farigoule.com
+            - LETSENCRYPT_HOST=fanfare-farigoule.com
+            - API_BACKEND_URL=${API_BACKEND_URL}
+        restart: unless-stopped
+        networks:
+            - farigoule-network
+        depends_on:
+            - server
 
-  server:
-    image: ghcr.io/chibranche/farigoule-server:${TAG}
-    container_name: farigoule-server
-    environment:
-      - NODE_ENV=production
-      - PORT=${SERVER_PORT}
-      - JWT_SECRET=${JWT_SECRET}
-      - JWT_EXPIRY=${JWT_EXPIRY}
-      - FRONTEND_URL=${FRONTEND_URL}
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-    ports:
-      - "${SERVER_PORT}:${SERVER_PORT}"
-    volumes:
-      - farigoule-db-storage:/usr/app/database/
-      - farigoule-uploads-storage:/usr/app/public/uploads
-    restart: unless-stopped
-    networks:
-      - farigoule-network
-
-  watchtower:
-      image: containrrr/watchtower:latest
-      container_name: watchtower
-      restart: unless-stopped
-      # Intervalle = 300 s (5 min) ; --cleanup supprime l’ancienne image après maj
-      # --label-enable : ne touche qu’aux conteneurs marqués ci-dessus
-      command: >
-        --interval 3600
-        --cleanup
-        --label-enable
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
-        - /home/ginfo/.docker/config.json:/config.json:ro
-      environment:
-        - TZ=Europe/Paris
-        - REGISTRY_AUTH_FILE=/config.json
+    server:
+        image: ghcr.io/farigoule-fanfare/farigoule-server:production
+        container_name: farigoule-server
+        environment:
+            - NODE_ENV=production
+            - PORT=${SERVER_PORT}
+            - JWT_SECRET=${JWT_SECRET}
+            - JWT_EXPIRY=${JWT_EXPIRY}
+            - FRONTEND_URL=${FRONTEND_URL}
+        volumes:
+            - farigoule-db-storage:/usr/app/database/
+            - farigoule-uploads-storage:/usr/app/public/uploads
+        restart: unless-stopped
+        networks:
+            - farigoule-network
 
 volumes:
-  farigoule-db-storage:
-    external: true
-    name: farigoule-db-storage
-  farigoule-uploads-storage:
-    external : true
-    name : farigoule-uploads-storage
+    farigoule-db-storage:
+        external: true
+        name: farigoule-db-storage
+    farigoule-uploads-storage:
+        external: true
+        name: farigoule-uploads-storage
 networks:
-  farigoule-network:
-    name: farigoule-network
-  nginx-proxy-ginfo:
-    external: true
+    farigoule-network:
+        name: farigoule-network
+        internal: true
+    nginx-proxy-ginfo:
+        external: true
