@@ -24,10 +24,23 @@ Vous devez définir les variables d’environnement pour le client et le serveur
 
 La production utilise le `docker-compose.yml` à la racine et le fichier `.env` (copiez `.env.template` vers `.env`).
 
+### Déploiement
+
     cp .env.template .env
+    docker compose pull
     docker compose up -d
 
-Le premier démarrage prendra un peu plus de temps car les images seront construites.
+### Nom de domaine / DNS
+
+Le nom de domaine est chez Gandi, qui sert aussi de name server. Un enregistrement DNS A pointe actuellement vers l’IP publique de **Bor**. À terme, il pointera vers **Tyr**, le nouveau serveur du Ginfo.
+
+### Mise à jour
+
+    docker compose pull
+    docker compose up -d
+
+### Dépannage
+
 Si un conteneur crash en boucle, ajoutez la ligne suivante à la fin du service concerné : `entrypoint: sleep infinity`.
 Vous pourrez ensuite faire `docker exec -it <container_name> sh` pour ouvrir un shell et lancer l’app manuellement.
 
@@ -42,3 +55,9 @@ Dans un autre terminal :
 
     cd server
     npm run start
+
+## Stack technique
+
+- Frontend : React 18 + Vite, React Router, Axios
+- Backend : Node.js + Express, SQLite (better-sqlite3), JWT, Multer
+- Infrastructure : Docker & Docker Compose (images GHCR)
