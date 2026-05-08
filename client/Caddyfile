@@ -5,19 +5,25 @@
 
 :80 {
     root * /usr/share/caddy
-    
-    # Handle API requests
-    handle_path /api/* {
+
+    # Redirige les requêtes API vers le Backend (conserve le préfixe /api/)
+    handle /api/* {
         reverse_proxy {$API_BACKEND_URL}
     }
 
-    # Handle Public uploads
-    handle_path /public/* {
+    # Redirige l'accès aux images/fichiers statiques du backend
+    handle /public/* {
         reverse_proxy {$API_BACKEND_URL}
     }
 
-    # SPA support (similar to try_files)
-    try_files {path} /index.html
-    file_server
+    # Redirige le sitemap généré par le backend
+    handle /sitemap.xml {
+        reverse_proxy {$API_BACKEND_URL}
+    }
 
+    # Fallback pour le SPA (React) : tout ce qui n'est pas API, public ou sitemap
+    handle {
+        try_files {path} /index.html
+        file_server
+    }
 }
