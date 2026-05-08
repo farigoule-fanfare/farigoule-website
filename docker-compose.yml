@@ -28,19 +28,17 @@ services:
             - JWT_SECRET=${JWT_SECRET}
             - FRONTEND_URL=https://fanfare.ginfo.centrale-med.fr
         volumes:
-            - farigoule-db-storage:/usr/app/database/
-            - farigoule-uploads-storage:/usr/app/public/uploads
+            - farigoule-db:/usr/app/database/
+            - farigoule-uploads:/usr/app/public/uploads
         restart: unless-stopped
         networks:
             - farigoule-network
 
 volumes:
-    farigoule-db-storage:
-        external: true
-        name: farigoule-db-storage
-    farigoule-uploads-storage:
-        external: true
-        name: farigoule-uploads-storage
+    farigoule-db:
+        name: farigoule-db
+    farigoule-uploads:
+        name: farigoule-uploads
 networks:
     farigoule-network:
         name: farigoule-network
