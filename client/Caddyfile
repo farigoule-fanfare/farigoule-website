@@ -1,0 +1,23 @@
+{
+	# Désactive l'attribution automatique de HTTPS car Caddy est derrière un autre proxy
+	auto_https off
+}
+
+:80 {
+    root * /usr/share/caddy
+    
+    # Handle API requests
+    handle_path /api/* {
+        reverse_proxy {$API_BACKEND_URL}
+    }
+
+    # Handle Public uploads
+    handle_path /public/* {
+        reverse_proxy {$API_BACKEND_URL}
+    }
+
+    # SPA support (similar to try_files)
+    try_files {path} /index.html
+    file_server
+
+}
