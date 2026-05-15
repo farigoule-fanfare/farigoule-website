@@ -25,7 +25,7 @@ jobs:
         runs-on: ubuntu-latest
         environment: "Production – farigoule-vercel-server"
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
 
             - name: Build Docker images for validation (no push)
               env:
@@ -53,7 +53,7 @@ jobs:
             packages: write
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
 
             # — Connexion au GitHub Container Registry
             - name: Log in to GHCR
