@@ -1,14 +1,15 @@
 services:
     client:
-        image: ghcr.io/farigoule-fanfare/farigoule-client:production
+        image: ghcr.io/farigoule-fanfare/farigoule-client:8bc8b51
         container_name: farigoule-client
         labels:
-          - "traefik.enable=true"
-          - "traefik.docker.network=dokploy-network"
-          - "traefik.http.routers.vw.rule=Host(`fanfare.ginfo.centrale-med.fr`)"
-          - "traefik.http.routers.vw.entrypoints=websecure"
-          - "traefik.http.routers.vw.tls=true"
-          - "traefik.http.services.vw.loadbalancer.server.port=80"  
+            - "traefik.enable=true"
+            - "traefik.docker.network=dokploy-network"
+            - "traefik.http.routers.farigoule-client.rule=Host(`fanfare.ginfo.centrale-med.fr`)"
+            - "traefik.http.routers.farigoule-client.entrypoints=websecure"
+            - "traefik.http.routers.farigoule-client.tls=true"
+            - "traefik.http.routers.farigoule-client.service=farigoule-client-svc"
+            - "traefik.http.services.farigoule-client-svc.loadbalancer.server.port=80"
         environment:
             - NODE_ENV=production
             - API_BACKEND_URL=http://server:80
@@ -20,7 +21,7 @@ services:
             - server
 
     server:
-        image: ghcr.io/farigoule-fanfare/farigoule-server:production
+        image: ghcr.io/farigoule-fanfare/farigoule-server:8bc8b51
         container_name: farigoule-server
         environment:
             - NODE_ENV=production
@@ -37,8 +38,10 @@ services:
 volumes:
     farigoule-db:
         name: farigoule-db
+        external: true
     farigoule-uploads:
         name: farigoule-uploads
+        external: true
 networks:
     farigoule-network:
         name: farigoule-network
