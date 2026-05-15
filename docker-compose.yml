@@ -43,9 +43,9 @@ volumes:
         name: farigoule-uploads
         external: true
 networks:
-    farigoule-network:
-        name: farigoule-network
-        internal: true
-    dokploy-network:
-        name: dokploy-network
-        external: true
+  farigoule-network:
+    name: farigoule-network
+    internal: true
+  dokploy-network:
+    name: dokploy-network
+    external: true
