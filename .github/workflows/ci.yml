@@ -23,7 +23,6 @@ jobs:
     validate-build:
         if: github.event_name == 'pull_request'
         runs-on: ubuntu-latest
-        environment: "Production – farigoule-vercel-server"
         steps:
             - uses: actions/checkout@v4
 
@@ -47,7 +46,6 @@ jobs:
     build-and-push:
         if: github.event_name == 'push'
         runs-on: ubuntu-latest
-        environment: "Production – farigoule-vercel-server"
         permissions:
             contents: read
             packages: write
