@@ -1,13 +1,16 @@
 services:
   client:
-    image: ghcr.io/farigoule-fanfare/farigoule-client:8bc8b51
+    image: ghcr.io/farigoule-fanfare/farigoule-client:2696119
     container_name: farigoule-client
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=dokploy-network"
-      - "traefik.http.routers.farigoule-client.rule=Host(`fanfare.ginfo.centrale-med.fr`)"
+      - "traefik.http.routers.farigoule-client.rule=Host(`fanfare-farigoule.com`)"
+      #- "traefik.http.routers.farigoule-client.rule=Host(`fanfare.ginfo.centrale-med.fr`)"
       - "traefik.http.routers.farigoule-client.entrypoints=websecure"
       - "traefik.http.routers.farigoule-client.tls=true"
+      - "traefik.http.routers.farigoule-client.tls.certresolver=letsencrypt"
+      # A remettre des que on a une ip publique sur tyr, et changer l'ip sur gandi
       - "traefik.http.routers.farigoule-client.service=farigoule-client-svc"
       - "traefik.http.services.farigoule-client-svc.loadbalancer.server.port=80"
     environment:
@@ -21,13 +24,13 @@ services:
       - server
 
   server:
-    image: ghcr.io/farigoule-fanfare/farigoule-server:8bc8b51
+    image: ghcr.io/farigoule-fanfare/farigoule-server:2696119
     container_name: farigoule-server
     environment:
       - NODE_ENV=production
-      - PORT=80
+      - SERVER_PORT=80
       - JWT_SECRET=${JWT_SECRET}
-      - FRONTEND_URL=https://fanfare.ginfo.centrale-med.fr
+      - FRONTEND_URL=https://fanfare-farigoule.com
     volumes:
       - farigoule-db:/usr/app/database/
       - farigoule-uploads:/usr/app/public/uploads
